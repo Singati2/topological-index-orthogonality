@@ -1,0 +1,14 @@
+# Cached datasets (re-downloadable from public sources)
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+
+# OS / editor noise
+.DS_Store
+.ipynb_checkpoints/
+*.swp
