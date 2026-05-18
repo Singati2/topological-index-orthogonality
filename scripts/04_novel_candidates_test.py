@@ -132,7 +132,9 @@ def main():
         })
 
     df_out = pd.DataFrame(rows).sort_values("partial_corr_logS", key=lambda s: s.abs(), ascending=False).reset_index(drop=True)
-    df_out.to_csv(os.path.join(PROJECT, "results", "novel_candidates.csv"), index=False)
+    out_dir = os.path.join(PROJECT, "results", "novel_candidates_experiment")
+    os.makedirs(out_dir, exist_ok=True)
+    df_out.to_csv(os.path.join(out_dir, "novel_candidates.csv"), index=False)
 
     # Summary
     n_pass = int((df_out["kill_test"] == "PASS").sum())
@@ -169,7 +171,7 @@ def main():
         })
     fam_df = pd.DataFrame(fam_rows).sort_values("n_pass", ascending=False)
     print(fam_df.to_string(index=False))
-    fam_df.to_csv(os.path.join(PROJECT, "results", "novel_candidates_by_family.csv"), index=False)
+    fam_df.to_csv(os.path.join(out_dir, "novel_candidates_by_family.csv"), index=False)
 
     # Verdict
     print()
@@ -190,7 +192,7 @@ def main():
         print("orthogonality-critique paper) is the only viable publication route,")
         print("and this negative result is itself a substantial supporting finding.")
 
-    txt_path = os.path.join(PROJECT, "results", "novel_candidates_summary.txt")
+    txt_path = os.path.join(out_dir, "novel_candidates_summary.txt")
     with open(txt_path, "w") as f:
         f.write(f"Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"Candidates tested: {len(df_out)} across 5 design families\n")

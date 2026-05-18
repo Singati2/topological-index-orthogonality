@@ -1,5 +1,5 @@
 WUZI PARAMETER SWEEP — dataset = freesolv  target = dG_hyd
-Generated: 2026-05-18 09:25:47
+Generated: 2026-05-18 17:29:08
 Grid: alpha=[-1.0, -0.5, 0.0, 0.5, 1.0], beta=[-1.0, -0.5, 0.0, 0.5, 1.0], gamma=[0.0, 0.5, 1.0, 2.0]
 Total points: 100; molecules: 639
 

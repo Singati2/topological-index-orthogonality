@@ -1,4 +1,4 @@
-Generated: 2026-05-16 07:35:50
+Generated: 2026-05-18 17:30:13
 Candidates tested: 20 across 5 design families
 PASS: 15, FAIL: 5, DEGENERATE: 0
 
