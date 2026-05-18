@@ -1,0 +1,34 @@
+Generated: 2026-05-16 07:35:50
+Candidates tested: 20 across 5 design families
+PASS: 15, FAIL: 5, DEGENERATE: 0
+
+Full ranking:
+ candidate          family  max_abs_r_baseline most_correlated_baseline  raw_corr_logS  partial_corr_logS kill_test
+ InfoH_deg  info-theoretic            0.699249                      Alb      -0.140205           0.154076      PASS
+  CutVerts           motif            0.832860                      mM1      -0.384711          -0.117785      PASS
+Bonchev_Id  info-theoretic            0.991588                  Schultz      -0.287721          -0.113053      FAIL
+   FourCyc           motif            0.188864                    Sigma      -0.049877           0.112179      PASS
+   MeanEcc    eccentricity            0.929576                      mM2      -0.559269          -0.109008      PASS
+ Rho_x_Dia spectral-hybrid            0.962778                      mM2      -0.571203          -0.076849      FAIL
+   Btw_sum      centrality            0.918283                      mM2      -0.539932          -0.072980      PASS
+    TotEcc    eccentricity            0.957318                       PI      -0.487392          -0.072526      FAIL
+ Triangles           motif            0.158041                        F      -0.122910          -0.070462      PASS
+    Radius    eccentricity            0.914312                      mM2      -0.565219          -0.070126      PASS
+    EE_x_W spectral-hybrid            0.979979                        R      -0.615258          -0.055546      FAIL
+InfoH_dist  info-theoretic            0.886888                      mM2      -0.563541          -0.049020      PASS
+ InfoH_ecc  info-theoretic            0.840725                      mM2      -0.515359          -0.038994      PASS
+ MeanClust           motif            0.051853                Balaban_J       0.010704           0.038683      PASS
+   AlgConn spectral-hybrid            0.673011                      mM2       0.452239           0.036894      PASS
+   Btw_var      centrality            0.653423                  SpecRad       0.348922           0.025856      PASS
+InfoH_spec  info-theoretic            0.943353                        H      -0.613637          -0.008813      PASS
+   Cls_sum      centrality            0.938358                  SpecRad      -0.528523          -0.001524      PASS
+   Eig_sum      centrality            0.917407                      ABC      -0.607147           0.001172      PASS
+ Harm_cent      centrality            1.000000                       HR      -0.546125           0.000000      FAIL
+
+Family-level summary:
+         family  n_tested  n_pass  best_partial_corr  min_max_r
+ info-theoretic         5       4           0.154076   0.699249
+          motif         4       4           0.117785   0.051853
+     centrality         5       4           0.072980   0.653423
+   eccentricity         3       2           0.109008   0.914312
+spectral-hybrid         3       1           0.076849   0.673011

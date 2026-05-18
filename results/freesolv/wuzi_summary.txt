@@ -1,0 +1,32 @@
+WUZI PARAMETER SWEEP — dataset = freesolv  target = dG_hyd
+Generated: 2026-05-18 09:25:47
+Grid: alpha=[-1.0, -0.5, 0.0, 0.5, 1.0], beta=[-1.0, -0.5, 0.0, 0.5, 1.0], gamma=[0.0, 0.5, 1.0, 2.0]
+Total points: 100; molecules: 639
+
+Kill-test: PASS=1, FAIL=99, DEGENERATE=0
+
+--- 10 best points by |partial corr with target| ---
+ alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target kill_test
+   1.0   0.5    2.0            0.990889                        F        -0.319321             0.036177      FAIL
+   1.0   1.0    1.0            0.996406                    redM1        -0.322876             0.019873      FAIL
+   1.0   1.0    0.0            0.993112                       M2        -0.325996            -0.019436      FAIL
+   1.0   1.0    2.0            0.987115                        F        -0.309048             0.009087      FAIL
+   1.0   1.0    0.5            0.995895                    redM1        -0.325513             0.001799      FAIL
+   0.5  -1.0    1.0            0.997707                       AG        -0.357921             0.000000      FAIL
+   0.5   0.0    2.0            0.988217                   SO_red        -0.329839             0.000000      FAIL
+   0.5   0.0    1.0            0.997733                       SO        -0.349782             0.000000      FAIL
+   0.5   0.0    0.5            0.999625                       SO        -0.353872             0.000000      FAIL
+   0.5   0.0    0.0            0.998944                       M1        -0.354761             0.000000      FAIL
+
+--- 10 failing points closest to passing (smallest max|r|) ---
+ alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target kill_test
+  -1.0  -1.0    0.0            0.952425                      mM2        -0.285365                  0.0      FAIL
+  -0.5   0.0    2.0            0.953753                      mM1        -0.314345                  0.0      FAIL
+  -1.0  -1.0    0.5            0.956421                      mM2        -0.290602                  0.0      FAIL
+  -0.5   0.5    2.0            0.956740                   SO_red        -0.311151                  0.0      FAIL
+   0.0  -1.0    2.0            0.957434                   SO_red        -0.331035                  0.0      FAIL
+  -0.5   1.0    2.0            0.960825                   SO_red        -0.306284                  0.0      FAIL
+  -1.0   0.5    1.0            0.961346                       AG        -0.330573                  0.0      FAIL
+  -1.0  -1.0    2.0            0.962352                      mM1        -0.274512                  0.0      FAIL
+  -1.0   1.0    2.0            0.962961                      mM1        -0.294656                  0.0      FAIL
+  -0.5  -0.5    2.0            0.963903                      mM1        -0.314863                  0.0      FAIL

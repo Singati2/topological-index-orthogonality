@@ -1,0 +1,39 @@
+BASELINE ORTHOGONALITY REPORT — dataset = lipophilicity
+Generated: 2026-05-18 09:25:18
+Molecules: 4200  Target: logD
+Indices:   30
+
+--- Redundancy ---
+Pairs with |r| >= 0.90: 200 / 435
+Pairs with |r| >= 0.95: 164 / 435
+
+--- PCA effective rank ---
+Components for 90% variance: 2 of 30
+Components for 95% variance: 3 of 30
+Components for 99% variance: 5 of 30
+
+--- VIF (top 10 highest) ---
+descriptor  R2_vs_rest  VIF
+        M1    1.000000  inf
+       ABC    1.000000  inf
+   Schultz    0.999999  inf
+     redM1    1.000000  inf
+     Sigma    1.000000  inf
+        M2    1.000000  inf
+    SO_red    1.000000  inf
+        SO    1.000000  inf
+       AZI    1.000000  inf
+       ABS    1.000000  inf
+
+--- Partial correlation with logD (top 10) ---
+descriptor  raw_corr_y  partial_corr_y
+    Energy    0.207567        0.085207
+    Gutman    0.092611       -0.035568
+   Schultz    0.083221        0.031818
+         W    0.073728       -0.028037
+   SpecRad    0.090023       -0.026942
+ Balaban_J   -0.300130       -0.025502
+        HR    0.165952        0.021567
+        Sz    0.084502       -0.012425
+        PI    0.142899       -0.012128
+       Alb    0.055793       -0.009312

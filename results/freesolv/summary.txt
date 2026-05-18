@@ -1,0 +1,39 @@
+BASELINE ORTHOGONALITY REPORT — dataset = freesolv
+Generated: 2026-05-18 09:25:07
+Molecules: 639  Target: dG_hyd
+Indices:   30
+
+--- Redundancy ---
+Pairs with |r| >= 0.90: 257 / 435
+Pairs with |r| >= 0.95: 162 / 435
+
+--- PCA effective rank ---
+Components for 90% variance: 2 of 30
+Components for 95% variance: 3 of 30
+Components for 99% variance: 5 of 30
+
+--- VIF (top 10 highest) ---
+descriptor  R2_vs_rest  VIF
+        M1         1.0  inf
+       ABC         1.0  inf
+     redM1         1.0  inf
+     Sigma         1.0  inf
+        M2         1.0  inf
+    SO_red         1.0  inf
+        SO         1.0  inf
+       AZI         1.0  inf
+       ABS         1.0  inf
+       Alb         1.0  inf
+
+--- Partial correlation with dG_hyd (top 10) ---
+descriptor  raw_corr_y  partial_corr_y
+         W   -0.272942        0.066900
+        WW   -0.250635       -0.057809
+    Energy   -0.358995       -0.054374
+    Gutman   -0.272131        0.052597
+        Sz   -0.278170        0.052171
+   Schultz   -0.273935       -0.051855
+        HR   -0.331050       -0.045820
+ Balaban_J    0.025759       -0.034579
+    Mostar   -0.270348        0.033167
+       Alb   -0.255913        0.022053

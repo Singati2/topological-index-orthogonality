@@ -1,0 +1,39 @@
+BASELINE ORTHOGONALITY REPORT — dataset = esol
+Generated: 2026-05-18 09:25:06
+Molecules: 1127  Target: logS
+Indices:   30
+
+--- Redundancy ---
+Pairs with |r| >= 0.90: 203 / 435
+Pairs with |r| >= 0.95: 159 / 435
+
+--- PCA effective rank ---
+Components for 90% variance: 2 of 30
+Components for 95% variance: 3 of 30
+Components for 99% variance: 5 of 30
+
+--- VIF (top 10 highest) ---
+descriptor  R2_vs_rest  VIF
+        M1         1.0  inf
+       ABC         1.0  inf
+     redM1         1.0  inf
+     Sigma         1.0  inf
+        M2         1.0  inf
+    SO_red         1.0  inf
+        SO         1.0  inf
+       AZI         1.0  inf
+       ABS         1.0  inf
+       Alb         1.0  inf
+
+--- Partial correlation with logS (top 10) ---
+descriptor  raw_corr_y  partial_corr_y
+        PI   -0.468914       -0.123466
+        HR   -0.546125        0.107992
+        WW   -0.223956       -0.107904
+   Schultz   -0.336686        0.064469
+         W   -0.346719       -0.059387
+    Gutman   -0.325934       -0.055211
+   SpecRad   -0.503871        0.048791
+        EE   -0.588738       -0.047753
+    Mostar   -0.447375        0.041641
+    Energy   -0.596445        0.037060

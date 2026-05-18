@@ -1,139 +1,186 @@
-# Topological Index Kill-Test Pilot
+# Orthogonality Screening of Topological Indices for QSPR Modeling
 
-Pre-flight infrastructure for evaluating whether a *new* topological index
-carries information not already captured by the existing ~30 standard indices,
-before committing to either a graph-theoretic bounds paper or a full QSPR
-benchmark.
+An open-source pipeline for testing whether a proposed topological index
+contributes **non-redundant information** beyond standard indices on real
+chemistry datasets, prior to any QSPR validity claim.
 
-**Status:** Baseline established 2026-05-14 on ESOL (1127 drug-like molecules).
-Awaiting a new candidate index from collaborator (Advik Natarajan, Loyola
-College Chennai) for kill-test.
+This is **not** a "new superior topological index" project. It is a
+**quality-control framework** intended to sit between formula proposal and
+QSPR application — a pre-flight check authors and reviewers can run on any
+candidate index in seconds.
+
+A parametric **Wuzi index family** is used throughout as a worked case
+study: we define it, derive its mathematical properties, run it through
+the screening pipeline, and find that — at every parameter setting tested
+— it is statistically redundant with classical degree-based indices. This
+is a feature of the paper, not a defect: it illustrates *why* such
+screening is needed.
 
 ---
 
-## Why this exists
+## What this repository contains
 
-Proposing a new topological index by tweaking an existing formula is easy.
-Showing it carries *novel* information vs. the 3000+ existing indices is the
-hard part. This pipeline runs that test in ~2 seconds on real drug-like
-chemistry. If the candidate has |r| ≥ 0.95 with any classical baseline, it is
-statistically redundant on this set and any downstream paper (bounds *or*
-applied) rests on a dead claim.
+```
+src/
+  mol_to_graph.py        SMILES → NetworkX (H-suppressed molecular graph)
+  standard_indices.py    30 baseline indices (degree-, distance-, spectral-based, Balaban J)
+  wuzi_index.py          Wuzi parametric family W(G; α, β, γ) + special-case identity tests
+  novel_candidates.py    20 candidate indices from 5 alternative design families
+                         (info-theoretic, centrality, spectral-hybrid, motif, eccentricity).
+                         All are previously-published quantities under their own
+                         literature; included to demonstrate the screening pipeline
+                         on indices outside the BID subspace.
+  load_data.py           ESOL / FreeSolv / Lipophilicity loaders (MoleculeNet)
+  orthogonality.py       Correlation matrix, PCA / effective rank, VIF, partial correlation
 
-## Headline baseline finding (n=1127 ESOL molecules)
+scripts/
+  01_baseline_correlations.py    30-index baseline orthogonality analysis
+  02_wuzi_grid_search.py         100-point sweep of (α, β, γ) under the kill-test
+  04_novel_candidates_test.py    Screening across the 20 alternative-family candidates
 
-The 30 standard indices implemented here carry the **effective rank of ~3
-dimensions** on real chemistry:
+docs/
+  theoretical_foundation.md      Edge-Degree-Pair Basis theorem
+                                 (10-D ceiling on endpoint-degree edge-sum indices)
+  [literature_notes.md, manuscript_draft.md, etc. — Phase 3]
 
-- 95% of total variance captured by **3 PCA components**
-- 99% captured by **5 components**
-- **159 of 435 pairs** of indices (37%) have |r| ≥ 0.95
-- Multiple indices have VIF = ∞ (perfect linear dependencies)
-- Partial correlations with target property (logS) max out at |r| ≈ 0.12
+results/                          Empirical outputs (CSVs + summary.txt) per dataset
+LICENSE, requirements.txt, .gitignore
+```
 
-In other words: the 30-index block is doing the work of ~3-5. Most "new"
-indices are downstream of that ceiling. This is also a publishable result on
-its own — see "Pivot option" below.
+---
+
+## The core claim
+
+For hydrogen-suppressed molecular graphs with maximum degree `Δ ≤ 4` —
+essentially all of organic chemistry — every *endpoint-degree edge-sum
+index* of the form
+
+```
+I_f(G) = Σ_{uv ∈ E(G)} f(d_u, d_v)
+```
+
+(for symmetric `f`) lies in a real vector space of dimension **at most
+10**, spanned by the ten edge-degree-pair counts `m_ij`. This is a
+restatement of the well-known **Bond-Incident-Degree (BID)** framework
+([REFERENCE NEEDED: Borovićanin et al. on BID bounds; Gutman & Tošović
+2013]). The new emphasis here is the **explicit dimension bound** and the
+**redundancy consequence**: any collection of ≥ 11 BID indices is
+necessarily linearly dependent on this graph family, so proposing a new
+BID index without a redundancy check is structurally limited.
+
+The screening pipeline operationalizes this by testing whether a candidate
+index has `|r| ≥ 0.95` (a "kill-test failure") with any of 30 standard
+classical indices on a real chemistry benchmark, and also reports
+effective rank, VIF, and partial-correlation diagnostics.
+
+Full statement, proof, and discussion: [`docs/theoretical_foundation.md`](docs/theoretical_foundation.md).
+
+---
 
 ## Quick start
 
 ```bash
+git clone https://github.com/Singati2/topological-index-orthogonality.git
+cd topological-index-orthogonality
 pip install -r requirements.txt
-python scripts/01_baseline_correlations.py
+
+# Phase-1 baseline + Wuzi screening on ESOL (default)
+python scripts/01_baseline_correlations.py --dataset esol
+python scripts/02_wuzi_grid_search.py     --dataset esol
+
+# Replicate on FreeSolv and Lipophilicity (downloads on first run)
+python scripts/01_baseline_correlations.py --dataset freesolv
+python scripts/02_wuzi_grid_search.py     --dataset freesolv
+python scripts/01_baseline_correlations.py --dataset lipophilicity
+python scripts/02_wuzi_grid_search.py     --dataset lipophilicity
 ```
 
-Outputs land in `results/`. Runs in 2 seconds.
+Outputs land in `results/<dataset>/`. ESOL takes ≈ 2 s; FreeSolv ≈ 1 s;
+Lipophilicity ≈ 8 s (4 200 molecules).
 
-## Adding a new candidate index
+### Datasets
 
-1. Implement a function `f(G: nx.Graph) -> float` for your candidate.
-2. Register it: add to `ALL_INDICES` dict in `src/standard_indices.py`
-   (or create `src/new_index.py` and merge in the script).
-3. Rerun `scripts/01_baseline_correlations.py`.
-4. Inspect:
-   - `results/correlation_matrix.csv` — look at the new index's row.
-     Max |r| with any baseline ≥ 0.95 → **redundant, redesign**.
-   - `results/partial_corr_logS.csv` — find your index. High rank means it
-     adds unique signal *after* controlling for all baselines. This is the
-     strongest possible case for a new index.
+| Name           | Property                                | n      | Source                          |
+|----------------|-----------------------------------------|--------|---------------------------------|
+| ESOL           | log aqueous solubility (mol/L)          | 1 128  | Delaney 2004 / MoleculeNet      |
+| FreeSolv       | hydration free energy (kcal/mol)        | 642    | Mobley 2014 / MoleculeNet       |
+| Lipophilicity  | octanol/water logD at pH 7.4            | 4 200  | ChEMBL extract / MoleculeNet    |
 
-## Three "good index" definitions (pick one before writing)
+All are downloaded automatically on first call to `src/load_data.load(name)`.
 
-A new index can be "better" in three non-equivalent senses. The paper should
-commit to one explicitly:
+---
 
-1. **Orthogonal information** — adds predictive signal in a regression
-   already containing the standard descriptors. Measured by partial
-   correlation; pipeline reports this directly.
-2. **Higher standalone correlation** with target property, consistent across
-   multiple datasets (not one cherry-picked n=20 set).
-3. **Interpretable** — has a clean chemical meaning (branching, electronic
-   structure, surface area) that existing indices muddle.
+## How to test your own candidate index
 
-Definition (1) is the strongest, hardest, and most defensible at JCIM / J.
-Cheminformatics tier.
+1. Implement a function `f(G: nx.Graph) -> float` taking a NetworkX graph
+   (the H-suppressed molecular graph produced by
+   `src.mol_to_graph.smiles_to_graph`).
+2. Register it in the `ALL_INDICES` dict in `src/standard_indices.py`
+   (or add to `CANDIDATE_INDICES` in `src/novel_candidates.py`).
+3. Rerun `scripts/01_baseline_correlations.py` on each dataset.
 
-## Pivot option (if the new-index path looks unpromising)
+Interpretation of outputs:
 
-The baseline results above (3 effective dimensions out of 30 indices,
-n=1127, real chemistry) already constitute a publishable empirical critique
-of the index-proliferation literature. Reframing the paper as:
+- `correlation_matrix.csv`: look at your index's row. If `max |r| ≥ 0.95`
+  with **any** baseline, your index is statistically redundant with that
+  baseline on this chemistry — the "kill-test failure" verdict.
+- `partial_corr_target.csv`: rank of your index. A high rank means it
+  adds unique signal *after* controlling for all baselines — the
+  strongest case for a new index.
+- `vif.csv`: VIF > 10 indicates heavy collinearity; VIF = ∞ indicates
+  exact linear dependence (i.e., the index is a linear combination of
+  the others within numerical precision).
+- `pca_variance.csv`: how many PCA components your block needs for 95 %
+  variance is the effective rank of the descriptor set.
 
-> *"Empirical orthogonality analysis of 30 commonly-used topological indices
-> on real drug-like chemistry shows the family carries the predictive
-> information of ~3 dimensions and contains 159 statistically redundant
-> pairs (|r| ≥ 0.95). We argue that new indices should clear an orthogonality
-> bar before publication."*
+If your candidate is an **endpoint-degree edge-sum index** (BID family),
+the basis theorem implies it lies in a ≤ 10-dimensional subspace; the
+screening will quantify how much of that subspace existing indices
+already cover.
 
-...lands cleanly in J. Chem. Inf. Model. or J. Cheminformatics, uses
-Ganesh's biostat methodology training, and is more useful to the field than
-yet another tweaked-formula paper.
+---
 
-## Files
+## What this framework does *not* prove
+
+- Orthogonality is **necessary but not sufficient** for QSPR usefulness.
+  An index can pass the screening and still add no predictive value.
+- A single dataset is **not** evidence of general redundancy; we
+  replicate across three independent QSPR benchmarks (ESOL, FreeSolv,
+  Lipophilicity) precisely because cross-dataset consistency is the
+  load-bearing claim.
+- The pipeline targets **scalar topological indices**. Modern descriptor
+  blocks (Mordred ≈ 1 800 descriptors, RDKit ≈ 200, fingerprints, graph
+  neural networks) are out of scope here — the screening is intended for
+  the math-chem / cheminformatics tradition of proposing named scalar
+  invariants.
+- Bond order is ignored (standard convention for classical topological
+  indices). Weighting by bond order is an open extension.
+
+---
+
+## Status
+
+| Phase | Scope                                                                  | Status         |
+|-------|------------------------------------------------------------------------|----------------|
+| 1     | BID basis theorem; multi-dataset replication; reframed README          | **in progress**|
+| 2     | Wuzi family bounds, extremal-graph characterization, relations to known indices | pending  |
+| 3     | Manuscript drafting, figures, journal targeting                        | pending        |
+
+See [`docs/project_status.md`](docs/project_status.md) once Phase 3 begins.
+
+---
+
+## Citation
 
 ```
-src/mol_to_graph.py        SMILES -> NetworkX (H-suppressed molecular graph)
-src/standard_indices.py    30 baseline indices (degree, distance, spectral, other)
-src/load_data.py           ESOL dataset loader (Delaney, 1128 molecules)
-src/orthogonality.py       Correlation, PCA, VIF, partial correlation tools
-scripts/01_baseline_correlations.py   End-to-end runner
-results/                    Outputs (CSVs + summary.txt)
-data/                       Cached ESOL CSV
+[CITATION PLACEHOLDER — manuscript in preparation]
+
+Singati2 (GitHub), Natarajan, A., Arockiaraj, M., and collaborators.
+"Orthogonality Screening of Topological Indices for QSPR Modeling:
+An Open-Source Redundancy Benchmark with a Parametric Index Case Study."
+In preparation, 2026.
 ```
 
-## Implemented indices (30)
+## License
 
-**Degree-based (18):** First & Second Zagreb (M1, M2), Modified Zagreb (mM1,
-mM2), Forgotten (F), Randić (R), Sum-connectivity (SCI), Harmonic (H),
-Geometric-arithmetic (GA), Arithmetic-geometric (AG), Atom-bond-connectivity
-(ABC), Atom-bond-sum-connectivity (ABS), Augmented Zagreb (AZI), Sombor
-(SO), Reduced Sombor (SO_red), Albertson irregularity (Alb), Sigma, Reduced
-First Zagreb (redM1)
-
-**Distance-based (8):** Wiener (W), Hyper-Wiener (WW), Harary (HR), Schultz
-(MTI), Gutman, Mostar, Szeged (Sz), Padmakar–Ivan (PI)
-
-**Spectral (3):** Estrada (EE), Graph Energy, Spectral Radius
-
-**Other (1):** Balaban J
-
-## Methodology notes
-
-- H-suppressed molecular graph (heavy atoms only, bonds as unweighted edges)
-  — standard convention for classical topological indices.
-- Multi-component SMILES (salts) reduced to largest fragment.
-- Single-atom / disconnected graphs dropped.
-- Floyd–Warshall for all-pairs shortest paths (fast enough for ≤50-atom
-  molecules; ESOL run completes in 2s on a laptop).
-- Mostar / Szeged / PI use strict-inequality vertex partitioning (standard).
-- VIF = ∞ values indicate exact linear dependence within the descriptor
-  block; this is a real signal of severe redundancy, not a numerical error.
-
-## What is *not* yet built (next phases)
-
-- Phase 2: scaffold-split k-fold CV on ESOL + FreeSolv + Lipophilicity
-- Phase 3: Modern baselines (Chemprop, RDKit2D+RF, Mordred+XGB)
-- Phase 4: Graph-theoretic bounds for new index (parallel track)
-- Phase 5: OECD QSAR applicability domain (leverage / Williams plot)
-
-Each is conditional on the new index passing the kill-test in phase 1.
+See [`LICENSE`](LICENSE).
