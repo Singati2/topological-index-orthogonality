@@ -7,11 +7,29 @@ parameter setting.
 
 The core observation is **not new**: the **Bond-Incident-Degree (BID)** index
 family has been studied for decades by Gutman, Borovićanin, Furtula and
-collaborators (see [REFERENCE NEEDED: Borovićanin et al. on BID indices and
-their bounds; Gutman & Tošović 2013 on edge-partition framing]). What this
-document does is **state the dimension bound explicitly** and **draw the
-redundancy consequence** that motivates an orthogonality-screening pipeline
-for QSPR work.
+collaborators (see [REFERENCE NEEDED: Borovićanin, Das, Furtula, Gutman,
+"Bounds for Zagreb indices," MATCH Commun. Math. Comput. Chem. 78, 2017]
+and [REFERENCE NEEDED: Gutman & Tošović, "Testing the quality of molecular
+structure descriptors," J. Serb. Chem. Soc. 78, 2013] for the canonical
+edge-partition framing). Gutman's own survey [I. Gutman, "Degree-based
+topological indices," *Croatica Chem. Acta* 86(4), 2013, 351-361] catalogs
+the family.
+
+The redundancy implication is foreshadowed by the explicit intercorrelation
+observation in [F. Movahedi, I. Gutman, I. Redžepović, B. Furtula,
+"Diminished Sombor Index," *MATCH Commun. Math. Comput. Chem.* 95(1),
+2026, 141-162], Section 5.2, where the authors report correlations
+0.92–0.99 between the Diminished Sombor index and other Sombor variants
+on octanes (n = 18) and infer informally that the lower correlation
+"indicates that the diminished Sombor index captures some additional
+information." Our pipeline replicates and formalizes this kind of
+analysis on three independent QSPR benchmark datasets (ESOL n = 1127,
+FreeSolv n = 639, Lipophilicity n = 4200) with a defined |r| ≥ 0.95
+threshold, partial-correlation diagnostics, and PCA-based effective rank.
+
+What this document does is therefore: **state the dimension bound
+explicitly** in the form of Theorem 1 below, and **draw the redundancy
+consequence** that motivates the orthogonality-screening pipeline.
 
 ---
 
