@@ -304,7 +304,6 @@ docs/
   paper2_wuzi_manuscript_skeleton.md   Full Paper-2 skeleton with math gaps marked
   literature_notes.md            Bibliographic discipline document
   advisor_update.md              Two-page update for Arockiaraj sir
-  email_to_adviK_update.md       Email draft for Advik
   collaboration.md               Contributor workflow
 
 results/                          Reproducible outputs by dataset
