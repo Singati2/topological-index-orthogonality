@@ -37,15 +37,10 @@ baseline on real chemistry datasets.
 ### Wuzi index family
 
 For a simple connected graph $G = (V, E)$ with vertex degrees
-$d_u, d_v$ on each edge $uv \in E(G)$, the **Wuzi index family** is
-the three-parameter scalar functional
+$d_u, d_v$ on each edge $uv \in E(G)$, the **Wuzi index family**
+is the three-parameter scalar functional
 
-$$
-W(G;\ \alpha, \beta, \gamma) \;=\; \sum_{uv \in E(G)}
-  (d_u \, d_v)^{\alpha}
-  \;(d_u + d_v)^{\beta}
-  \;\exp\!\left(\gamma \cdot \frac{|d_u - d_v|}{d_u + d_v}\right),
-$$
+$$W(G; \alpha, \beta, \gamma) = \sum_{uv \in E(G)} (d_u d_v)^{\alpha} (d_u + d_v)^{\beta} \exp\!\left( \gamma \cdot \frac{|d_u - d_v|}{d_u + d_v} \right),$$
 
 with $\alpha, \beta, \gamma \in \mathbb{R}$. The family is a strict
 generalization of several classical bond-incident-degree (BID)
@@ -53,10 +48,10 @@ indices recovered as special cases:
 
 | Parameters | Recovered index |
 |---|---|
-| $\alpha = 1,\ \beta = 0,\ \gamma = 0$        | Second Zagreb $M_2$ |
-| $\alpha = -\tfrac{1}{2},\ \beta = 0,\ \gamma = 0$ | Randić $R$ |
-| $\alpha = 0,\ \beta = -\tfrac{1}{2},\ \gamma = 0$ | Sum-connectivity $\mathrm{SCI}$ |
-| $\alpha = 0,\ \beta = -1,\ \gamma = 0$        | (Half) Harmonic $H/2$ |
+| $\alpha = 1$, $\beta = 0$, $\gamma = 0$        | Second Zagreb $M_2$ |
+| $\alpha = -1/2$, $\beta = 0$, $\gamma = 0$     | Randić $R$ |
+| $\alpha = 0$, $\beta = -1/2$, $\gamma = 0$     | Sum-connectivity $\mathrm{SCI}$ |
+| $\alpha = 0$, $\beta = -1$, $\gamma = 0$       | (Half) Harmonic $H/2$ |
 
 When $\gamma = 0$ the family reduces to the standard two-parameter
 $(\alpha, \beta)$ degree-based family; the $\gamma$ term introduces
@@ -69,30 +64,25 @@ Let $\mathcal{F}_{\mathrm{BID}}$ denote the class of
 **bond-incident-degree** scalar indices, i.e. real-valued functionals
 on graphs of the form
 
-$$
-I(G) \;=\; \sum_{uv \in E(G)} f(d_u, d_v)
-\qquad
-\text{for some symmetric } f : \mathbb{N}^2 \to \mathbb{R}.
-$$
+$$I(G) = \sum_{uv \in E(G)} f(d_u, d_v), \quad \text{for some symmetric } f : \mathbb{N}^2 \to \mathbb{R}.$$
 
 On the subclass of **H-suppressed molecular graphs** with maximum
 degree $\Delta \le 4$, the only possible unordered degree pairs on an
 edge are $(i, j)$ with $1 \le i \le j \le 4$, giving 10 admissible
-edge-degree pairs. Hence every $I \in \mathcal{F}_{\mathrm{BID}}$ is
-a linear functional of the 10 edge-degree-pair counts
-$m_{ij}(G) = \big|\{uv \in E(G) : \{d_u, d_v\} = \{i, j\}\}\big|$,
-i.e.
+edge-degree pairs. Define the **edge-degree-pair counts**
 
-$$
-I(G) \;=\; \sum_{1 \le i \le j \le 4}
-  f(i, j) \cdot m_{ij}(G).
-$$
+$$m_{ij}(G) = \#\{\, uv \in E(G) \,:\, \{d_u, d_v\} = \{i, j\} \,\}, \qquad 1 \le i \le j \le 4.$$
 
-**Consequence.** On Δ ≤ 4 graphs the vector space spanned by all BID
-indices has dimension at most 10; any 11 BID indices are necessarily
-linearly dependent. This is the structural reason why high empirical
-redundancy is *unsurprising*, and motivates the orthogonality
-screening protocol.
+Then every $I \in \mathcal{F}_{\mathrm{BID}}$ is a linear functional
+of these 10 counts:
+
+$$I(G) = \sum_{1 \le i \le j \le 4} f(i, j) \cdot m_{ij}(G).$$
+
+**Consequence.** On $\Delta \le 4$ graphs the vector space spanned by
+all BID indices has dimension at most $10$; any $11$ BID indices are
+necessarily linearly dependent. This is the structural reason why
+high empirical redundancy is *unsurprising*, and motivates the
+orthogonality-screening protocol.
 
 See `docs/theoretical_foundation.md` for the full statement and proof.
 
@@ -110,12 +100,12 @@ Graphs, and Redundancy Analysis"*
 Follows the mathematical-chemistry tradition (analog of Movahedi,
 Gutman, Redžepović & Furtula, *MATCH* 95(1), 2026, 141–162). Includes:
 
-- Definition + closed-form values on K_n / C_n / P_n / S_n / K_{p,q} /
-  Q_k / W_n / F_p / regular graphs (✅ done)
+- Definition + closed-form values on $K_n$, $C_n$, $P_n$, $S_n$,
+  $K_{p,q}$, $Q_k$, $W_n$, $F_p$, and regular graphs (✅ done)
 - Edge-contribution function analysis (✅ done)
-- Bounds in terms of (n, m, Δ, δ) (⏳ pending — math)
-- Bounds in terms of classical indices (M_1, M_2, R, SO, GA, H, …)
-  (⏳ pending — math)
+- Bounds in terms of $(n, m, \Delta, \delta)$ (⏳ pending — math)
+- Bounds in terms of classical indices ($M_1$, $M_2$, $R$, $SO$,
+  $GA$, $H$, ...) (⏳ pending — math)
 - Extremal-graph characterization for trees, unicyclic, bicyclic
   (⏳ pending — math)
 - Numerical Section 6: octane prediction, intercorrelations across
@@ -141,7 +131,7 @@ landing first.
 
 | Component                                       | Status      |
 |---|---|
-| Wuzi definition + identity tests vs M_2, R, SCI, H | ✅ done    |
+| Wuzi definition + identity tests vs $M_2$, $R$, SCI, $H$ | ✅ done |
 | Closed-form Wuzi values on 9 standard graph classes | ✅ done (numerically verified) |
 | Edge-contribution function ψ analysis              | ✅ done   |
 | Edge-Degree-Pair Basis theorem                     | ✅ done   |
@@ -268,12 +258,14 @@ All download automatically via `src/load_data.load(name)` on first use.
 
 ## Implemented baseline indices (30)
 
-**Degree-based (18):** First & Second Zagreb (M_1, M_2), Modified Zagreb
-(mM_1, mM_2), Forgotten (F), Randić (R), Sum-connectivity (SCI),
-Harmonic (H), Geometric-arithmetic (GA), Arithmetic-geometric (AG),
-Atom-bond-connectivity (ABC), Atom-bond-sum-connectivity (ABS),
-Augmented Zagreb (AZI), Sombor (SO), Reduced Sombor (SO_red),
-Albertson irregularity (Alb), Sigma (σ), Reduced First Zagreb (redM_1)
+**Degree-based (18):** First & Second Zagreb ($M_1$, $M_2$), Modified
+Zagreb ($mM_1$, $mM_2$), Forgotten ($F$), Randić ($R$),
+Sum-connectivity (SCI), Harmonic ($H$), Geometric-arithmetic ($GA$),
+Arithmetic-geometric ($AG$), Atom-bond-connectivity (ABC),
+Atom-bond-sum-connectivity (ABS), Augmented Zagreb (AZI),
+Sombor ($SO$), Reduced Sombor ($SO_{\mathrm{red}}$),
+Albertson irregularity (Alb), Sigma ($\sigma$), Reduced First Zagreb
+($\mathrm{redM}_1$)
 
 **Distance-based (8):** Wiener (W), Hyper-Wiener (WW), Harary (HR),
 Schultz (MTI), Gutman, Mostar, Szeged (Sz), Padmakar–Ivan (PI)
