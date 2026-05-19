@@ -43,3 +43,32 @@ This behavior is consistent with the BID-basis observation
 edge-sum index lies in a vector space of dimension at most
 10 on Δ ≤ 4 graphs, so high empirical redundancy with the
 30-index baseline is the expected outcome.
+
+
+## Threshold sensitivity of the Wuzi screening verdict
+
+For each dataset, the number of Wuzi grid points (out of 100)
+that pass each variant of the screen at varying thresholds.
+$\tau_r$ is the pairwise correlation threshold; $\tau_p$ is
+the partial-correlation threshold. The combined criterion is
+$\max|r| < \tau_r$ AND $|\mathrm{pcor}| \ge \tau_p$.
+
+### Pairwise-only verdict
+
+| Dataset | $\tau_r = 0.90$ | $\tau_r = 0.95$ | $\tau_r = 0.99$ |
+|---|---:|---:|---:|
+| esol | 0 | 0 | 27 |
+| freesolv | 0 | 1 | 37 |
+| lipophilicity | 0 | 0 | 30 |
+
+The pairwise pass count grows sharply with the relaxation of $\tau_r$ from 0.95 to 0.99 because most Wuzi grid points have $\max|r|$ in $[0.95, 0.99]$ with at least one classical baseline. This is the behaviour the combined criterion is designed to detect: pairwise alone is over-permissive at $\tau_r = 0.99$.
+
+### Combined-criterion verdict (pairwise AND partial-correlation)
+
+| Dataset | $\tau_r=0.90, \tau_p=0.10$ | $\tau_r=0.95, \tau_p=0.10$ | $\tau_r=0.99, \tau_p=0.10$ | $\tau_r=0.95, \tau_p=0.05$ | $\tau_r=0.95, \tau_p=0.20$ |
+|---|---:|---:|---:|---:|---:|
+| esol | 0 | 0 | 0 | 0 | 0 |
+| freesolv | 0 | 0 | 0 | 0 | 0 |
+| lipophilicity | 0 | 0 | 0 | 0 | 0 |
+
+The combined-criterion pass count is robustly zero across $\tau_r \in \{0.90, 0.95, 0.99\}$ and $\tau_p \in \{0.05, 0.10, 0.20\}$ on every dataset: no Wuzi grid point in the 100-point sweep combines low pairwise correlation with meaningful partial correlation with the target. The pairwise-only verdict is threshold-sensitive; the combined verdict is not.

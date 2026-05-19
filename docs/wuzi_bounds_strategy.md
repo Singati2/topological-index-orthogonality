@@ -365,42 +365,53 @@ This empirical evidence is **conjecture-generating**, not proof.
 |---|---|---|
 | $\alpha, \beta, \gamma \ge 0$ (four triples sampled) | $P_n$ (every $n$) | $S_n$ (every $n$) |
 | $\alpha \le 0$ or $\beta \le 0$ with $\gamma = 0$ (three triples) | $S_n$ (every $n$) | $P_n$ (every $n$) |
-| $(\alpha, \beta, \gamma) = (-1, -1, 1)$ (mixed-sign) | $S_n$ for $n \ge 6$ | **caterpillar**, $n \ge 6$ |
+| $(\alpha, \beta, \gamma) = (-1, -1, 1)$ (mixed-sign) | $S_n$ for $n \ge 6$ | non-classical (see §D.5) |
 
-### D.5 The caterpillar regime at $(-1, -1, 1)$
+### D.5 The non-classical regime at $(-1, -1, 1)$
 
 The most interesting empirical finding of the computational search.
 For $n \ge 6$ the observed maximizer of $W(T; -1, -1, 1)$ is
-*neither* $P_n$ *nor* $S_n$ but a **caterpillar tree** --- a tree
-whose internal vertices form a path, with pendant vertices attached
-along that path. Representative degree sequences of the observed
-maximizers (descending) are:
+*neither* $P_n$ *nor* $S_n$. An is-caterpillar check on the
+observed maximizer (verified by `is_caterpillar` in
+`scripts/10_wuzi_extremal_search.py`) further distinguishes two
+sub-cases:
 
-| $n$ | Argmax degree sequence | Caterpillar shape |
+| $n$ | Argmax degree sequence | Is caterpillar? |
 |---|---|---|
-| $6$  | $(3, 2, 2, 1, 1, 1)$               | one branch vertex of degree 3 |
-| $7$  | $(3, 2, 2, 2, 1, 1, 1)$            | one branch vertex, longer chain |
-| $8$  | $(3, 2, 2, 2, 2, 1, 1, 1)$         | one branch vertex, longer chain |
-| $9$  | $(4, 2, 2, 2, 2, 1, 1, 1, 1)$      | one branch vertex of degree 4 |
-| $10$ | $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$   | two branch vertices of degree 3 |
-| $11$ | $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$| one branch vertex of degree 5 |
-| $12$ | $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ | mixed (degree 4 + degree 3) |
+| $6$  | $(3, 2, 2, 1, 1, 1)$               | yes |
+| $7$  | $(3, 2, 2, 2, 1, 1, 1)$            | no  |
+| $8$  | $(3, 2, 2, 2, 2, 1, 1, 1)$         | no  |
+| $9$  | $(4, 2, 2, 2, 2, 1, 1, 1, 1)$      | no  |
+| $10$ | $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$   | no  |
+| $11$ | $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$| no  |
+| $12$ | $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ | no  |
 
-**Conjecture D.5 (Mixed-sign caterpillar maximum).**
+For $n = 6$ the observed argmax is a caterpillar (specifically a
+broom-like tree with a single branch vertex of degree 3 on a chain
+of length 2). For every $n \ge 7$ tested the argmax is NOT a
+caterpillar: removing the leaves leaves a non-path subgraph.
+Inspection of the search-script output (canonical labels in the
+CSV) shows that the argmax for $n \ge 7$ is a *spider*-like or
+*branched* tree where multiple short paths meet at one or two
+internal vertices. The full structural description is left for
+the formal derivation.
+
+**Conjecture D.5 (Mixed-sign non-classical extremal).**
 For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-and tree order $n \ge 6$, the maximum of $W$ over all trees of
-order $n$ is attained by a caterpillar tree. The precise
-characterization (which caterpillar, with what equality
-conditions) is an open problem.
+and tree order $n \ge 7$, the maximum of $W$ over all trees of
+order $n$ is attained at a tree that is neither the path $P_n$,
+the star $S_n$, nor a caterpillar. The precise structural
+characterization is an open problem.
 
 This conjecture is the most plausibly *new* mathematical
 observation that the parametric Wuzi family produces: a parameter
-triple in which the standard star / path extremals fail and a
-caterpillar regime takes over. A formal characterization should
-adapt the Kelmans transformation and the pendant-shift argument
-of the classical extremal-trees literature to the joint
-$(d_u d_v)^{-1}(d_u + d_v)^{-1} \exp(|d_u - d_v|/(d_u + d_v))$
-weight at $(\alpha, \beta, \gamma) = (-1, -1, 1)$.
+triple in which the standard star / path extremals fail and the
+maximizer escapes the caterpillar class entirely. A formal
+characterization should adapt the Kelmans transformation and the
+pendant-shift argument of the classical extremal-trees literature
+to the joint weight
+$\psi(d_u, d_v; -1, -1, 1) = (d_u d_v)^{-1}(d_u + d_v)^{-1} \exp(|d_u - d_v|/(d_u + d_v))$
+at $(\alpha, \beta, \gamma) = (-1, -1, 1)$.
 
 ---
 

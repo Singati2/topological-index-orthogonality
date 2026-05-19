@@ -166,8 +166,8 @@ This paper presents the methodology. The companion mathematical
 paper~\cite{Paper2_Wuzi} develops the Wuzi index family in detail
 (closed forms, bounds, extremal graphs). The two papers share the
 numerical work in Sections~\ref{sec:wuzi_case}--\ref{sec:novel_case}
-of this manuscript with the corresponding Section~6 of
-\cite{Paper2_Wuzi}.
+of this manuscript with the corresponding Numerical work section
+of~\cite{Paper2_Wuzi}.
 
 % =====================================================================
 \section{Related work}\label{sec:related}
@@ -439,20 +439,37 @@ and three principal components capture $95\%$ of the variance
 
 \subsection{Wuzi-family screening verdict and the multi-dimensional redundancy at $(-1,-1,1)$}
 
-The full numerical workup of the Wuzi family --- $100$ grid points
-per dataset, $300$ grid points across the three datasets, with per-
-grid-point $\max|r|$ and partial-correlation values --- is reported
-in the companion mathematical paper~\cite{Paper2_Wuzi},
-Section~6.2 (Table~6.2 and Figure~5b therein). We summarize the
-verdict and isolate the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-because it is methodologically central for the present paper.
+The full per-grid-point numerical workup of the Wuzi family ---
+$100$ grid points per dataset, $300$ grid points across the three
+datasets --- is reported in the Numerical work section of the
+companion mathematical paper~\cite{Paper2_Wuzi}. We reproduce the
+compact verdict in Table~\ref{tab:wuzi_verdict_paper1} so that the
+present paper is self-contained, and isolate the parameter triple
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$ because it is
+methodologically central for the present paper.
+
+\begin{table}[h]
+\centering
+\caption{Wuzi $100$-point grid screening verdict across three QSPR datasets. ``Pass'' means $\max|r|$ with every classical baseline strictly $<0.95$. Max $|\mathrm{pcor}|$ is the maximum across all $100$ grid points of $|\mathrm{pcor}(W, y \mid X)|$.}
+\label{tab:wuzi_verdict_paper1}
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & Grid points & Pass & Fail & Min $\max|r|$ & Max $|\mathrm{pcor}|$\\
+\midrule
+ESOL          & 100 & 0 & 100 & 0.965 & 0.028\\
+FreeSolv      & 100 & 1 & 99  & 0.943 & 0.036\\
+Lipophilicity & 100 & 0 & 100 & 0.965 & 0.009\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \textbf{Verdict.} Across the $300$ grid points the Wuzi family
 clears the pairwise $\max|r| < 0.95$ screen at exactly one grid
-point (FreeSolv at $(-1, -1, 1)$, $\max|r| = 0.943$ with $mM_2$);
-the maximum partial correlation with the target across all $300$
-grid points is $0.036$ (FreeSolv) and below $0.10$ on every grid
-point on every dataset, so by the combined criterion of
+point (FreeSolv at $(-1, -1, 1)$, $\max|r| = 0.943$ with $mM_2$).
+The maximum partial correlation with the target across the $300$
+grid points is $0.036$ (FreeSolv); the corresponding maxima on
+ESOL and Lipophilicity are $0.028$ and $0.009$ respectively, all
+below $0.10$. By the combined criterion of
 Table~\ref{tab:decision} no Wuzi parameter triple in the grid is
 classified as adding meaningful independent QSPR signal.
 

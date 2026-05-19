@@ -72,7 +72,7 @@ graph $G=(V,E)$ with edge degree pairs $(d_u,d_v)$,
 \quad
 \alpha,\beta,\gamma\in\mathbb{R}.
 \]
-The family is a strict generalization of several classical
+The family is a common generalization of several classical
 bond-incident-degree (BID) indices: the second Zagreb index $M_{2}$,
 the Randi\'c index $R$, the sum-connectivity index $\chi$, and the
 harmonic index $H$ all appear as special cases. Closed-form values
@@ -95,8 +95,9 @@ $\alpha, \beta, \gamma \ge 0$ the path $P_n$ and star $S_n$ are
 the observed minimizer and maximizer respectively; in the
 Randi\'c / sum-connectivity / harmonic sign region the extremals
 flip; and at the mixed-sign triple $(-1, -1, 1)$ the maximum is
-attained for $n \ge 6$ by a non-classical caterpillar tree whose
-formal characterization is left as an open problem.
+attained for $n \ge 6$ by a non-classical tree --- neither the
+path nor the star, and for $n \ge 7$ also not a caterpillar ---
+whose formal characterization is left as an open problem.
 
 In a numerical companion section, the family is screened against a
 30-index classical baseline on three QSPR benchmarks (ESOL,
@@ -578,7 +579,7 @@ $\sum_e \sqrt{\psi_e^{(1)}\psi_e^{(2)}}\le
 which is exactly the statement.
 \end{proof}
 
-\subsection{Bounds involving $M_1$ and $m$ (proof skeletons)}
+\subsection{Bounds involving $M_1$ and $m$}
 
 \begin{theorem}[Bound in $M_1$ and $m$, $\beta\ge 1$]\label{thm:m1_bound}
 Let $\alpha=\gamma=0$ and $\beta\ge 1$. Then
@@ -586,7 +587,9 @@ Let $\alpha=\gamma=0$ and $\beta\ge 1$. Then
 \Wuzi=\sum_{e}(d_u+d_v)^{\beta}\;\ge\; m^{1-\beta}\,M_1(G)^{\beta},
 \]
 where $M_1(G)=\sum_{v\in V}d_v^{2}=\sum_{uv\in E}(d_u+d_v)$.
-Equality holds iff $d_u+d_v$ is constant on every edge of~$G$.
+At $\beta = 1$ both sides equal $M_1(G)$ identically; for
+$\beta > 1$ equality holds if and only if $d_u + d_v$ is constant
+on every edge of~$G$.
 \end{theorem}
 
 \begin{proof}
@@ -594,8 +597,11 @@ The convexity of $t\mapsto t^\beta$ on $\mathbb{R}_{>0}$ for
 $\beta\ge 1$ and Jensen (Lemma~\ref{lem:jensen}) give
 $\frac{1}{m}\sum_e(d_u+d_v)^\beta\ge
 \bigl(\frac{1}{m}\sum_e(d_u+d_v)\bigr)^\beta=(M_1/m)^\beta$.
-Multiplying both sides by $m$ gives the stated bound. Equality
-follows from the equality condition of Jensen.
+Multiplying both sides by $m$ gives the stated bound. At
+$\beta = 1$ the function $t \mapsto t^\beta = t$ is linear, so
+$\sum_e (d_u + d_v) = M_1(G)$ identically and equality is
+automatic. For $\beta > 1$, strict convexity of $t^\beta$ gives
+equality if and only if $d_u + d_v$ is constant on every edge.
 \end{proof}
 
 \begin{theorem}[Bound in $M_1$ and $m$, $0<\beta<1$]
@@ -871,7 +877,7 @@ Each flavour requires a separate transformation analysis. See
 \cite{HansenMelot2005bicyclicBounds} for an analogous treatment in
 the classical case.
 
-\subsection{Computational evidence and a non-classical caterpillar regime}
+\subsection{Computational evidence: a non-classical extremal regime at $(-1, -1, 1)$}
 \label{sec:caterpillar}
 
 The tree-extremal conjectures of Section~\ref{sec:extremal} are
@@ -900,14 +906,19 @@ the general Randi\'c index $R_\alpha$ with $\alpha < 0$.
 
 \item \textbf{Mixed-sign region.} At $(\alpha, \beta, \gamma) = (-1, -1, 1)$,
 the observed minimizer is still $S_n$, but the observed maximizer
-is \emph{neither} $P_n$ nor $S_n$ for $n \ge 6$. The argmax is a
-caterpillar tree with one or two branch vertices; representative
-degree sequences are listed in Table~\ref{tab:caterpillar_argmax}.
+is \emph{neither} $P_n$ nor $S_n$ for $n \ge 6$. For $n = 6$ the
+argmax is in fact a caterpillar, but for every $n \in \{7, \ldots, 12\}$
+the argmax is also \emph{not a caterpillar} --- the non-leaf
+vertices of the argmax tree do not form a path. Representative
+degree sequences are listed in
+Table~\ref{tab:caterpillar_argmax}, and the explicit
+``is-caterpillar'' flag at each $n$ is in
+\texttt{results/wuzi\_extremal\_trees.csv}.
 \end{enumerate}
 
 \begin{table}[h]
 \centering
-\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, identified by degree sequence (descending). For $n = 5$ the maximum is attained at the path $P_5$; for $n \ge 6$ the maximum is a non-classical caterpillar tree.}
+\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, identified by degree sequence (descending). For $n = 5$ the maximum is attained at the path $P_5$; for $n = 6$ the maximum is a caterpillar tree; for every $n \in \{7, \ldots, 12\}$ the maximum is neither a path, a star, nor a caterpillar.}
 \label{tab:caterpillar_argmax}
 \begin{tabular}{rl}
 \toprule
@@ -925,21 +936,24 @@ $12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$\\
 \end{tabular}
 \end{table}
 
-\begin{conjecture}[Mixed-sign extremal trees]
+\begin{conjecture}[Mixed-sign non-classical extremal trees]
 \label{conj:caterpillar_max}
 For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-and tree order $n \ge 6$, the maximum of $W$ over all trees of
-order $n$ is attained by a caterpillar tree: a tree whose internal
-vertices form a path, with pendant vertices attached only along
-that path.
+and tree order $n \ge 7$, the maximum of $W$ over all trees of
+order $n$ is attained at a tree that is neither the path $P_n$,
+the star $S_n$, nor a caterpillar.
 \end{conjecture}
 
-The conjecture, if true, is the genuinely new mathematical
-phenomenon of this parametric family: a parameter triple in which
-the standard star / path extremals fail and a caterpillar regime
-takes over. A formal extremal-graph characterization in this
-regime --- which caterpillar attains the maximum, and what are the
-equality conditions --- is left for the formal derivation.
+This is a strictly empirical conjecture in the present state of
+the manuscript: the computational evidence in
+Table~\ref{tab:caterpillar_argmax} is conjecture-generating, not
+proof. The conjecture, if confirmed, would be the most plausibly
+novel mathematical phenomenon of this parametric family: a
+parameter triple in which the standard star/path extremals fail
+and the observed maximum is not even a caterpillar tree. A
+formal extremal-graph characterization in this regime --- which
+tree structure attains the maximum at each $n$, and what are
+the equality conditions --- is left for the formal derivation.
 
 \subsection{Summary table of extremal conjectures}
 
@@ -953,7 +967,7 @@ Graph class & $\alpha$ & $\beta$ & $\gamma$ & Conjectured extremals (max / min)\
 \midrule
 Trees, $n\ge 3$ & $+$ & $+$ & $+$ & $S_n$ / $P_n$\\
 Trees, $n\ge 3$ & $-$ & $-$ & $0$ & $P_n$ / $S_n$ (mirror)\\
-Trees, $n\ge 6$ & $\circ$ & $\circ$ & $\circ$ & caterpillar / $S_n$\\
+Trees, $n\ge 7$ & $\circ$ & $\circ$ & $\circ$ & non-classical (not $P_n$, $S_n$, or caterpillar) / $S_n$\\
                 & \multicolumn{4}{l}{\quad (at $(\alpha,\beta,\gamma)=(-1,-1,1)$; Conjecture~\ref{conj:caterpillar_max})}\\
 Unicyclic, $n\ge 4$ & $+$ & $+$ & $+$ & $U_n^{(1)}$ / $C_n$\\
 Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & open\\
@@ -982,13 +996,15 @@ Figure~\ref{fig:octanes} shows the signed Pearson $r$ between each
 of $27$ indices (Wuzi at canonical $(\alpha,\beta,\gamma)$
 plus the $30$-index classical baseline, less three indices
 constant on the $18$ octanes) and each of the eight properties.
-Padmakar--Ivan ($PI$) is degenerate on the $18$ octanes
-($\sigma=0$, mean $42$) and is excluded. The degeneracy is
-structural: on any tree of order $n$ and size $m = n - 1$,
-$PI(T) = m(m - 1)$ because for every edge $e$ removal disconnects
-the tree into two parts and every other edge lies entirely in one
-of those two parts; the $18$ octanes are all trees on $8$ vertices,
-giving $PI \equiv 7 \cdot 6 = 42$. Strong performance on this
+The edge-Padmakar--Ivan index $PI$ is degenerate on the $18$
+octanes ($\sigma = 0$, mean $42$) and is excluded. The degeneracy
+is structural: for every tree $T$ of size $m$, removing any edge
+$e$ disconnects $T$ into two components, and because trees have
+unique shortest paths every other edge lies entirely in one
+component or the other (no equidistant edges arise on a tree).
+Hence the edge-PI contribution from $e$ is $m - 1$, and summing
+over the $m$ edges gives $PI(T) = m(m - 1)$. The $18$ octanes
+are all trees on $8$ vertices, giving $PI \equiv 7 \cdot 6 = 42$. Strong performance on this
 small dataset is necessary but not sufficient for general QSPR
 utility (cf.\ Section~\ref{sec:cross_dataset}).
 

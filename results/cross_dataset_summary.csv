@@ -1,4 +1,4 @@
-dataset,n_molecules,n_pairs_total,pairs_r_ge_090,pairs_r_ge_095,pct_pairs_r_ge_090,pct_pairs_r_ge_095,pca_components_90,pca_components_95,pca_components_99,wuzi_grid_points,wuzi_pass,wuzi_fail,wuzi_min_max_r,wuzi_max_partial
-esol,1127,435,203,159,46.666666666666664,36.55172413793103,2,3,5,100,0,100,0.9648201514790123,0.0282252996550703
-freesolv,639,435,257,162,59.08045977011494,37.241379310344826,2,3,5,100,1,99,0.9426297228280288,0.0361769057947997
-lipophilicity,4200,435,200,164,45.97701149425287,37.701149425287355,2,3,5,100,0,100,0.9653884678301884,0.0093276418156282
+dataset,n_molecules,n_pairs_total,pairs_r_ge_090,pairs_r_ge_095,pct_pairs_r_ge_090,pct_pairs_r_ge_095,pca_components_90,pca_components_95,pca_components_99,wuzi_grid_points,wuzi_pass,wuzi_fail,wuzi_min_max_r,wuzi_max_partial,wuzi_pair_pass_tau_90,wuzi_pair_pass_tau_95,wuzi_pair_pass_tau_99,wuzi_combined_pass_taur_90_taup_005,wuzi_combined_pass_taur_90_taup_010,wuzi_combined_pass_taur_90_taup_020,wuzi_combined_pass_taur_95_taup_005,wuzi_combined_pass_taur_95_taup_010,wuzi_combined_pass_taur_95_taup_020,wuzi_combined_pass_taur_99_taup_005,wuzi_combined_pass_taur_99_taup_010,wuzi_combined_pass_taur_99_taup_020
+esol,1127,435,203,159,46.666666666666664,36.55172413793103,2,3,5,100,0,100,0.9648201514790123,0.0282252996550703,0,0,27,0,0,0,0,0,0,0,0,0
+freesolv,639,435,257,162,59.08045977011494,37.241379310344826,2,3,5,100,1,99,0.9426297228280288,0.0361769057947997,0,1,37,0,0,0,0,0,0,0,0,0
+lipophilicity,4200,435,200,164,45.97701149425287,37.701149425287355,2,3,5,100,0,100,0.9653884678301884,0.0093276418156282,0,0,30,0,0,0,0,0,0,0,0,0

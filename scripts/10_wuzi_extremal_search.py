@@ -77,6 +77,33 @@ def degree_sequence(G: nx.Graph) -> tuple[int, ...]:
     return tuple(sorted((d for _, d in G.degree()), reverse=True))
 
 
+def is_caterpillar(T: nx.Graph) -> bool:
+    """True iff T is a caterpillar tree.
+
+    A caterpillar is a tree whose non-leaf vertices induce a path
+    (possibly empty or a single vertex). Equivalently: remove all
+    leaves and the remaining graph is a path P_k for some k >= 0.
+
+    For T with at most 2 vertices the property holds vacuously.
+    """
+    if T.number_of_nodes() <= 2:
+        return True
+    leaves = [v for v, d in T.degree() if d == 1]
+    interior = T.copy()
+    interior.remove_nodes_from(leaves)
+    n_int = interior.number_of_nodes()
+    if n_int == 0:
+        # All vertices were leaves -> T was a star K_{1, m} or P_2; caterpillar.
+        return True
+    if n_int == 1:
+        # Single interior vertex; the leaves all attach to it -> star.
+        return True
+    # interior must be a path: connected, every vertex of degree <= 2.
+    if not nx.is_connected(interior):
+        return False
+    return max(d for _, d in interior.degree()) <= 2
+
+
 def path_label(n: int) -> str:
     return canonical_label(nx.path_graph(n))
 
@@ -120,6 +147,8 @@ def main() -> None:
             max_is_path = argmax_lbl == path_lbl
             argmin_degseq = degree_sequence(trees[argmin_idx])
             argmax_degseq = degree_sequence(trees[argmax_idx])
+            argmin_is_caterpillar = is_caterpillar(trees[argmin_idx])
+            argmax_is_caterpillar = is_caterpillar(trees[argmax_idx])
             classical_match = (
                 "P_n=min,S_n=max" if (min_is_path and max_is_star) else
                 "S_n=min,P_n=max" if (min_is_star and max_is_path) else
@@ -144,6 +173,8 @@ def main() -> None:
                 "classical_match": classical_match,
                 "argmin_degree_seq": ",".join(str(d) for d in argmin_degseq),
                 "argmax_degree_seq": ",".join(str(d) for d in argmax_degseq),
+                "argmin_is_caterpillar": argmin_is_caterpillar,
+                "argmax_is_caterpillar": argmax_is_caterpillar,
             })
 
     df = pd.DataFrame(rows)

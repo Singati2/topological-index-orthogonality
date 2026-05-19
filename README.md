@@ -30,8 +30,10 @@ The repository accompanies two related manuscripts in preparation:
   family is statistically redundant with the classical baseline by
   the combined criterion. Computational extremal search across
   trees of order $5 \le n \le 12$ identifies a non-classical
-  caterpillar regime at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-  whose formal characterization is an open problem.
+  extremal regime at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+  --- for $n \ge 7$ the observed maximizer is neither a path,
+  a star, nor a caterpillar --- whose formal characterization is
+  an open problem.
 
 A structural observation — the *Edge-Degree-Pair Basis* — gives a
 $10$-dimensional ceiling on the BID family on hydrogen-suppressed

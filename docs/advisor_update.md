@@ -8,29 +8,34 @@
 
 ## TL;DR (three sentences)
 
-We have a complete numerical pipeline + LaTeX-ready Paper 1 (methodology)
-+ Paper 2 (Wuzi mathematical case study with closed forms, bracket bound,
-ratio bound, and a verified-by-computation conjecture about a non-classical
-caterpillar extremal at the parameter triple $(\alpha,\beta,\gamma)=(-1,-1,1)$).
-What we need from you, sir, is the formal proof / refinement of Sections 3,
-4, and 5 of Paper 2 (bounds in $(n, m, \Delta, \delta)$, bounds via
-classical indices, and the extremal-graph characterization including the
-caterpillar conjecture). With those sections completed Paper 2 is
-submittable to a math-chem venue within a few weeks; Paper 1 follows once
+We have a complete numerical pipeline plus LaTeX-ready Paper 1
+(methodology) and Paper 2 (Wuzi mathematical case study with closed
+forms, bracket bound, ratio bound, and an empirical observation
+about a non-classical extremal at $(\alpha,\beta,\gamma)=(-1,-1,1)$).
+What we need from you, sir, is the formal proof / refinement of
+Sections 4, 5, and 6 of Paper 2 (bounds in $(n, m, \Delta, \delta)$,
+bounds via classical indices, and the extremal-graph
+characterization, including the non-classical extremal at
+$(-1,-1,1)$). With those sections completed Paper 2 is submittable
+to a math-chem venue within a few weeks; Paper 1 follows once
 Paper 2 has at minimum an arXiv ID.
 
 ## Most interesting finding to-date (one paragraph)
 
-An exhaustive enumeration of non-isomorphic trees of order $5 \le n \le 12$
-shows that the path / star extremal pattern (path = minimizer, star =
-maximizer) holds in the positive-parameter region $\alpha,\beta,\gamma \ge 0$;
-the extremals flip in the Randić-style sign region; and at the mixed-sign
-triple $(\alpha,\beta,\gamma) = (-1,-1,1)$ the maximizer is *neither* the
-path *nor* the star for $n \ge 6$ but a caterpillar tree with one or two
-branch vertices on a chain. The conjectured caterpillar characterization
-(`docs/paper2_wuzi.tex`, Conjecture 5.4) is the most plausibly novel
-mathematical observation in the project and is the natural anchor for
-Section 5 of Paper 2.
+An exhaustive enumeration of non-isomorphic trees of order
+$5 \le n \le 12$ shows that the path / star extremal pattern (path
+= minimizer, star = maximizer) holds in the positive-parameter
+region $\alpha,\beta,\gamma \ge 0$; the extremals flip in the
+Randić-style sign region; and at the mixed-sign triple
+$(\alpha,\beta,\gamma) = (-1,-1,1)$ the maximizer is *neither*
+the path *nor* the star for $n \ge 6$, and for $n \ge 7$ it is
+also *not a caterpillar* (verified by the `is_caterpillar`
+predicate in `scripts/10_wuzi_extremal_search.py`). The structural
+characterization of this non-classical extremal regime
+(`docs/paper2_wuzi.tex`, Conjecture 6.4 / label
+`conj:caterpillar_max`) is the most plausibly novel mathematical
+observation in the project and is the natural anchor for
+Section 6 of Paper 2.
 
 ---
 
