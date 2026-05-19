@@ -1,0 +1,729 @@
+% !TEX program = pdflatex
+% Paper 1: Orthogonality Screening of Topological Indices for QSPR Modeling
+% Compile with: pdflatex paper1_orthogonality_screening.tex (twice for cross-refs)
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\graphicspath{{../figures/}}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\setlist[itemize]{topsep=2pt,itemsep=2pt}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small,frame=single,breaklines=true,xleftmargin=1em,xrightmargin=1em,numbers=none}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
+\newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
+
+\title{\bfseries Orthogonality Screening of Topological Indices for QSPR Modeling:\\ A Structural and Empirical Redundancy Analysis}
+
+\author{
+  Ganesh Shiwakoti\thanks{Department of Biostatistics, Florida Atlantic University, USA. \texttt{mpcrlab@gmail.com}} \and
+  Advik Natarajan\thanks{Department of Mathematics, Loyola College, Chennai, India.} \and
+  Michael Arockiaraj\footnotemark[2]
+}
+
+\date{Draft of \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The chemical graph theory literature contains many hundreds of
+scalar topological indices proposed for QSPR/QSAR modeling. A
+recurring methodological question is whether any \emph{new}
+proposed index actually contributes information not already
+captured by the existing classical zoo. We present an open-source,
+reproducible \emph{orthogonality-screening pipeline} that operationalizes
+this question: it computes the pairwise correlation matrix between
+a candidate index and a $30$-index classical baseline, the
+principal-component spectrum of the baseline, the
+partial correlation of the candidate with the QSPR target after
+controlling for the baseline, and the variance inflation factor of
+each baseline descriptor. The full pipeline runs in seconds per
+benchmark on commodity hardware. On three independent QSPR
+benchmarks (ESOL, FreeSolv, Lipophilicity; total $5\,966$ molecules)
+the $30$-index baseline has an effective rank of~$3$ for $95\%$
+explained variance and $5$ for $99\%$, with approximately $37\%$ of
+the $\binom{30}{2}=435$ pairwise correlations exceeding $|r|\ge 0.95$
+on every dataset.
+
+A structural observation, the \emph{Edge-Degree-Pair Basis}, gives
+a $10$-dimensional ceiling for the bond-incident-degree (BID) family
+on hydrogen-suppressed molecular graphs with maximum degree
+$\Delta\le 4$. We use the pipeline to screen two case studies:
+(i)~the three-parameter \emph{Wuzi index family} (Paper 2 of this
+series), tested at $300$ grid points across the three datasets;
+only one grid point on FreeSolv, at $(\alpha,\beta,\gamma)=(-1,-1,1)$,
+clears the $\max|r|<0.95$ pairwise screen, and at that point the
+Wuzi value is exactly captured by a linear combination of the $30$
+baseline indices, so the partial correlation with the target is zero.
+(ii)~Twenty alternative-family candidate indices (information-theoretic,
+centrality, motif, eccentricity, spectral-hybrid), screened on
+ESOL; $15$ of the $20$ pass the $\max|r|<0.95$ pairwise screen, but
+only $4$ also clear the combined criterion
+$|\mathrm{pcor}(z,y\mid X)|\ge 0.10$, illustrating that the pairwise
+screen alone is over-permissive when applied as a standalone
+QSPR-utility decision.
+
+We emphasize that orthogonality with the classical baseline is a
+\emph{necessary but not sufficient} condition for QSPR usefulness:
+an index can clear the redundancy threshold and still add zero
+predictive signal. The pipeline is therefore positioned as a
+pre-flight redundancy check for any proposed scalar topological
+index, not as a verdict on QSPR usefulness itself.
+
+\medskip
+\noindent\textbf{Keywords.} Topological index, orthogonality
+screening, redundancy analysis, QSPR, principal component analysis,
+partial correlation, bond-incident-degree (BID) family.
+
+\medskip
+\noindent\textbf{Code and data.}
+\url{https://github.com/Singati2/topological-index-orthogonality}
+\end{abstract}
+
+% =====================================================================
+\section{Introduction}
+% =====================================================================
+
+The vocabulary of scalar topological indices used in QSPR/QSAR
+modeling has grown over six decades from a handful of
+proposals \cite{Wiener1947, Randic1975, Gutman1972} to several
+hundred. Many indices are interrelated by exact identity (e.g.\
+the harmonic index $H$ is $2$ times the special case
+$\beta=-1$ of the general sum-connectivity index $\chi_\beta$), and
+in practice the empirical Pearson correlations between proposed
+indices on a fixed dataset can exceed $|r|=0.95$ for the majority
+of pairs.
+
+This raises a recurring methodological question. \emph{What does a
+newly proposed scalar topological index need to demonstrate to be
+treated as a meaningful contribution to QSPR modeling?} Three
+weak forms of justification appear frequently in the literature:
+\begin{enumerate}[label=(\roman*)]
+\item Strong correlation with a chemical property on a small dataset
+(e.g.\ $18$ octanes, $75$ decanes), often without reference to a
+classical-baseline comparison.
+\item A closed-form value on standard graph classes, framed as
+mathematical novelty.
+\item Parametric generality (a new parameter that subsumes the
+classical case at one specific parameter value).
+\end{enumerate}
+None of these by themselves is sufficient to demonstrate
+\emph{independent} predictive value beyond the classical baseline.
+
+This paper proposes an explicit pre-flight check for the
+``does it carry independent information'' question, framed
+operationally so that any author can apply it.
+
+\subsection{Contributions}
+
+\begin{enumerate}[label=(\arabic*)]
+\item An open-source orthogonality-screening pipeline
+(Section~\ref{sec:protocol}) covering correlation matrix,
+PCA, VIF, and partial correlation with the QSPR target, using
+a fixed redundancy threshold $|r|\ge 0.95$.
+\item Replication across three independent MoleculeNet
+benchmarks (Section~\ref{sec:datasets}).
+\item A structural observation (Section~\ref{sec:bid}, the
+\emph{Edge-Degree-Pair Basis}) giving a dimension-$10$ ceiling on
+the BID family on $\mathcal{G}_4$ (hydrogen-suppressed molecular
+graphs).
+\item Two case studies: the parametric Wuzi index family
+(Section~\ref{sec:wuzi_case}, $300$ grid points) and twenty
+alternative-family candidate indices
+(Section~\ref{sec:novel_case}).
+\item Explicit positioning of orthogonality as \emph{necessary but
+not sufficient} for QSPR usefulness, with empirical evidence
+(Section~\ref{sec:discussion}).
+\end{enumerate}
+
+\subsection{Relation to Paper 2}
+This paper presents the methodology. The companion mathematical
+paper~\cite{Paper2_Wuzi} develops the Wuzi index family in detail
+(closed forms, bounds, extremal graphs). The two papers share the
+numerical work in Sections~\ref{sec:wuzi_case}--\ref{sec:novel_case}
+of this manuscript with the corresponding Section~6 of
+\cite{Paper2_Wuzi}.
+
+% =====================================================================
+\section{Related work}\label{sec:related}
+% =====================================================================
+
+\subsection{Orthogonality and redundancy of topological indices}
+
+The recognition that many topological indices are mutually highly
+correlated is not new. \cite{MovahediGutmanRedzepovicFurtula2026}
+Section~5.2 includes an intercorrelation analysis among
+Sombor-family variants showing pairwise $r$-values above $0.9$ on
+the octane data. Other intercorrelation observations appear
+sporadically in the BID-bounds literature. The present work
+extends this style of observation in three ways: (i)~by fixing a
+threshold $|r|\ge 0.95$ and applying it uniformly across datasets;
+(ii)~by replicating across three independent QSPR benchmarks rather
+than a single small dataset; and (iii)~by combining
+PCA, partial correlation, and VIF with the pairwise correlation
+analysis to assess different aspects of redundancy.
+
+\subsection{The bond-incident-degree (BID) family}
+
+\emph{Bond-incident-degree} (BID) indices are functionals of the
+form $I_f(G)=\sum_{uv\in E(G)} f(d_u,d_v)$ for a symmetric
+function $f$. This unifies the bulk of the classical degree-based
+topological-index literature: Zagreb $M_1,M_2$, modified Zagreb,
+forgotten $F$, Randi\'c $R$ and general $R_\alpha$,
+sum-connectivity $\chi$ and general $\chi_\beta$, harmonic $H$,
+geometric-arithmetic $GA$, arithmetic-geometric $AG$, atom-bond
+connectivity $ABC$, augmented Zagreb $AZI$, Sombor $SO$ and its
+variants, Albertson irregularity $\mathrm{Alb}$, sigma $\sigma$,
+and reduced Zagreb $\mathrm{redM}_1$. The observation that BID
+indices are linear functionals of the edge-degree-pair counts
+$m_{ij}$ is standard~\cite{GutmanBorovicanin2018BID}; what we
+contribute is the explicit dimension bound on $\mathcal{G}_4$ and
+the redundancy-screening consequence.
+
+\subsection{QSPR benchmarks and reproducibility}
+
+The QSPR benchmarks used here (ESOL, FreeSolv, Lipophilicity) are
+drawn from the MoleculeNet collection~\cite{MoleculeNet}, a
+standard reference for molecular property prediction. We use the
+versions distributed via MoleculeNet without resplitting; SMILES
+are processed through RDKit~\cite{RDKit} and converted to
+hydrogen-suppressed molecular graphs through a thin NetworkX
+wrapper.
+
+% =====================================================================
+\section{Datasets and implementation}\label{sec:datasets}
+% =====================================================================
+
+\begin{table}[h]
+\centering
+\caption{QSPR benchmark datasets used in this study.}
+\label{tab:datasets}
+\begin{tabular}{llrl}
+\toprule
+Name & Target property & $n$ & Source\\
+\midrule
+ESOL          & $\log S$ (aqueous solubility, mol/L) & $1\,127$ & \cite{Delaney2004ESOL} via \cite{MoleculeNet}\\
+FreeSolv      & $\Delta G_{\mathrm{hyd}}$ (hydration free energy, kcal/mol) & $639$ & \cite{Mobley2014FreeSolv} via \cite{MoleculeNet}\\
+Lipophilicity & $\log D$ at pH 7.4 & $4\,200$ & \cite{Wang2009ChEMBL} via \cite{MoleculeNet}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The $30$-index classical baseline (Table~\ref{tab:baseline}) is
+implemented in the reference codebase
+(\texttt{src/standard\_indices.py}); each index admits a $\le 20$-line
+Python implementation, and the full $30$-index computation for a
+single graph takes a few milliseconds. The reference
+implementation is open-source under MIT license.
+
+\begin{table}[h]
+\centering
+\caption{$30$-index classical baseline used for orthogonality screening.}
+\label{tab:baseline}
+\small
+\begin{tabular}{ll}
+\toprule
+Family & Indices\\
+\midrule
+Degree-based (18) & $M_1$, $M_2$, $mM_1$, $mM_2$, $F$, $R$, SCI, $H$, $GA$, $AG$, ABC, ABS, AZI, $SO$, $SO_{\mathrm{red}}$, Alb, $\sigma$, $\mathrm{redM}_1$\\
+Distance-based (8) & $W$, WW, HR, MTI (Schultz), Gutman, Mostar, $Sz$, $PI$\\
+Spectral (3) & EE, Energy, Spectral Radius\\
+Other (1) & Balaban $J$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
+\section{The Edge-Degree-Pair Basis observation}\label{sec:bid}
+% =====================================================================
+
+We isolate a structural reason why the BID family on
+hydrogen-suppressed molecular graphs is redundancy-prone.
+
+\begin{theorem}[Edge-Degree-Pair Basis]\label{thm:bid}
+Let $\mathcal{G}_\Delta$ denote the class of finite simple graphs
+with maximum degree at most $\Delta$. For any BID index
+$I_f\in\bid$ and any $G\in\mathcal{G}_\Delta$,
+\begin{equation}\label{eq:bid_linear}
+I_f(G)=\sum_{1\le i\le j\le\Delta} f(i,j)\cdot m_{ij}(G),
+\end{equation}
+where $m_{ij}(G)=\bigl|\{uv\in E(G):\{d_u,d_v\}=\{i,j\}\}\bigr|$.
+Restricted to $\mathcal{G}_4$, the vector space spanned by all BID
+indices has dimension at most $\binom{4+1}{2}=10$.
+\end{theorem}
+
+\begin{proof}
+The summand $f(d_u,d_v)$ depends only on the unordered pair
+$\{d_u,d_v\}$ because $f$ is symmetric. Grouping edges by their
+unordered degree pair yields~\eqref{eq:bid_linear}. The admissible
+pairs on $\mathcal{G}_\Delta$ are
+$\{(i,j):1\le i\le j\le\Delta\}$, of cardinality
+$\binom{\Delta+1}{2}$; for $\Delta=4$ this equals $10$.
+\end{proof}
+
+\begin{remark}\label{rem:bid_credit}
+The observation that BID indices are linear in $m_{ij}$ counts is
+standard~\cite{GutmanBorovicanin2018BID}. The contribution here is
+(i)~the explicit dimension-$10$ bound on $\mathcal{G}_4$ and
+(ii)~its operational use in the screening pipeline: any new BID
+index proposed for molecular chemistry must justify its
+independence from the existing zoo within a $10$-dimensional
+subspace.
+\end{remark}
+
+\begin{corollary}\label{cor:bid_redundancy}
+On $\mathcal{G}_4$, any $11$ BID indices are linearly dependent.
+Parametric BID families (general Randi\'c $R_\alpha$, general
+sum-connectivity $\chi_\beta$, Wuzi, etc.) cannot escape the
+$10$-dimensional ceiling by adding parameters.
+\end{corollary}
+
+In practice, the rank of the matrix $M$ with rows
+$(m_{11}, m_{12}, \ldots, m_{44})$ over a chemistry dataset is
+strictly less than $10$ because several $m_{ij}$ are sparse or
+near-constant. For example, $m_{14}$ and $m_{44}$ require
+quaternary carbons connected to methyl groups (rare),
+$m_{11}$ requires an isolated bond (extremely rare in drug-like
+chemistry).
+
+% =====================================================================
+\section{The screening protocol}\label{sec:protocol}
+% =====================================================================
+
+Let $X\in\mathbb{R}^{n\times p}$ be a matrix of $p$ baseline indices
+on $n$ molecules, $y\in\mathbb{R}^n$ the target property, and
+$z\in\mathbb{R}^n$ the candidate index values on the same molecules.
+The screening pipeline produces four diagnostics.
+
+\subsection{Pairwise correlation and redundancy threshold}
+Compute the $p\times p$ Pearson correlation matrix $\mathrm{Cor}(X)$
+and the vector of correlations $\mathrm{cor}(z,X_b)$ for
+$b=1,\ldots,p$. The candidate is \emph{statistically redundant} if
+$\max_b|\mathrm{cor}(z,X_b)|\ge\tau$ for a threshold $\tau$ (we
+report $\tau=0.95$ as the primary threshold and also
+$\tau=0.90$ as a secondary check). The redundant-pair count
+inside the baseline,
+$|\{(b_1,b_2):|\mathrm{Cor}(X)_{b_1,b_2}|\ge\tau\}|$, is a
+companion summary statistic of baseline redundancy.
+
+\subsection{Principal-component effective rank}
+Compute the PCA of the standardized baseline $X$. Let
+$\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_p$ be the eigenvalues of
+$\mathrm{Cor}(X)$ and $C_k=\sum_{i\le k}\lambda_i/\sum_i\lambda_i$
+the cumulative variance fraction. The
+$\mathrm{PC}_{1-\alpha}$ effective rank is the smallest $k$ with
+$C_k\ge 1-\alpha$; we report $\mathrm{PC}_{95}, \mathrm{PC}_{99}$.
+
+\subsection{Variance Inflation Factor}
+For each baseline index $b$, $\mathrm{VIF}_b=(1-R_b^2)^{-1}$ where
+$R_b^2$ is the coefficient of determination of $X_b$ regressed on
+the other $p-1$ baseline columns. $\mathrm{VIF}_b>10$ is the
+conventional ``high collinearity'' threshold;
+$\mathrm{VIF}_b=\infty$ indicates exact linear dependence within
+the baseline.
+
+\subsection{Partial correlation with target}
+Compute $z^{\mathrm{res}}=z-\hat z$ and $y^{\mathrm{res}}=y-\hat y$
+where $\hat z, \hat y$ are the OLS fits regressing $z$ and $y$ on
+the baseline $X$. The partial correlation
+$\mathrm{pcor}(z,y\mid X)=\mathrm{cor}(z^{\mathrm{res}},y^{\mathrm{res}})$
+measures the signal in $z$ relative to the target $y$ \emph{after}
+controlling for everything the baseline already captures. We use
+$|\mathrm{pcor}|<0.10$ as the conventional ``negligible
+additional signal'' band.
+
+\subsection{Decision summary}
+
+\begin{table}[h]
+\centering
+\caption{Screening pipeline decision summary. Both conditions must hold for the candidate to be flagged as adding meaningful QSPR signal.}
+\label{tab:decision}
+\begin{tabular}{lll}
+\toprule
+Diagnostic & Pass condition & Interpretation\\
+\midrule
+$\max_b|\mathrm{cor}(z,X_b)|$ & $<\tau=0.95$ & not statistically redundant with the baseline\\
+$|\mathrm{pcor}(z,y\mid X)|$  & $\ge 0.10$  & adds non-negligible target-relevant signal\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The strict requirement that \emph{both} conditions hold is the
+operational definition of ``meaningful new index'' adopted in this
+work. Passing the redundancy threshold alone is \emph{necessary
+but not sufficient} for QSPR usefulness.
+
+% =====================================================================
+\section{Case study 1: the Wuzi parametric family}\label{sec:wuzi_case}
+% =====================================================================
+
+The Wuzi index family~\cite{Paper2_Wuzi} is defined as
+\[
+W(G;\alpha,\beta,\gamma)=\sum_{uv\in E(G)}
+(d_u d_v)^\alpha(d_u+d_v)^\beta
+\exp\!\left(\gamma\,\frac{|d_u-d_v|}{d_u+d_v}\right),
+\]
+a three-parameter generalization that contains $M_2$, Randi\'c,
+sum-connectivity, and harmonic as special cases. We screen the
+family on a $100$-point grid
+$(\alpha,\beta,\gamma)\in\{-1,-0.5,0,0.5,1\}^2\times\{0,0.5,1,2\}$
+on each of the three QSPR datasets.
+
+\subsection{Baseline redundancy on the three datasets}
+
+\begin{table}[h]
+\centering
+\caption{Baseline redundancy across the three QSPR datasets. Pair counts are out of $\binom{30}{2}=435$.}
+\label{tab:baseline_redundancy}
+\begin{tabular}{lrrrrrr}
+\toprule
+Dataset & $n$ & $|r|\ge 0.90$ & $|r|\ge 0.95$ & PC$_{90}$ & PC$_{95}$ & PC$_{99}$\\
+\midrule
+ESOL          & 1127 & 203 (46.7\%) & 159 (36.6\%) & 2 & 3 & 5\\
+FreeSolv      &  639 & 257 (59.1\%) & 162 (37.2\%) & 2 & 3 & 5\\
+Lipophilicity & 4200 & 200 (46.0\%) & 164 (37.7\%) & 2 & 3 & 5\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Across three independent datasets the pattern is consistent: about
+$37\%$ of the $435$ baseline pairs are above the $0.95$ threshold,
+and three principal components capture $95\%$ of the variance
+(Figs.~\ref{fig:pca},~\ref{fig:redundancy_bars}).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\linewidth]{fig2_pca_scree.pdf}
+\caption{Cumulative explained variance of PCA on the $30$-index baseline.}
+\label{fig:pca}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.65\linewidth]{fig3_redundancy_bars.pdf}
+\caption{Redundant index-pair counts out of $\binom{30}{2}=435$ baseline pairs at two thresholds.}
+\label{fig:redundancy_bars}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.6\linewidth]{fig8_correlation_heatmap.pdf}
+\caption{$30\times 30$ baseline correlation matrix on ESOL. The dense red core is the degree-based index block.}
+\label{fig:corr_heatmap}
+\end{figure}
+
+\subsection{Wuzi-family screening verdict}
+
+\begin{table}[h]
+\centering
+\caption{Wuzi $100$-point grid screening verdict. ``Pass'' means $\max|r|$ with every classical baseline strictly $<0.95$.}
+\label{tab:wuzi_verdict}
+\begin{tabular}{lrrrrr}
+\toprule
+Dataset & Grid points & Pass & Fail & Min max $|r|$ & Max $|\mathrm{pcor}|$\\
+\midrule
+ESOL          & 100 & 0 & 100 & 0.965 & 0.028\\
+FreeSolv      & 100 & 1 & 99  & 0.943 & 0.036\\
+Lipophilicity & 100 & 0 & 100 & 0.965 & 0.009\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig5b_wuzi_param_heatmaps_all.pdf}
+\caption{$\max|r|$ between the Wuzi index at each $(\alpha,\beta,\gamma)$
+grid point and any of the $30$ classical baseline indices, across
+three datasets (rows) and four $\gamma$ slices (columns).
+The single starred cell (FreeSolv, $(-1,-1,1)$) falls below
+$|r|=0.95$ with $\max|r|=0.943$; its partial correlation with the
+target is $\approx 0.036$.}
+\label{fig:wuzi_grid_all}
+\end{figure}
+
+At the single borderline grid point on FreeSolv
+($(\alpha,\beta,\gamma)=(-1,-1,1)$, $\max|r|=0.943$ with $mM_2$),
+the Wuzi value is exactly captured by a linear combination of the
+$30$ baseline indices --- the residual after regressing the Wuzi
+value on the baseline has variance below numerical precision ---
+so the partial correlation with $\Delta G_{\mathrm{hyd}}$ is
+identically zero. The maximum $|\mathrm{pcor}|$ across all $100$
+FreeSolv grid points (achieved at a different non-passing point) is
+$0.036$. Either way the FreeSolv ``pass'' fails the combined
+criterion of Table~\ref{tab:decision} and is classified as not
+adding meaningful QSPR signal. This example illustrates the
+methodological point of Section~\ref{sec:protocol}: the pairwise
+$|r|$ screen catches only one-dimensional redundancy.
+
+\subsection{Consistency with the BID-basis observation}
+
+Corollary~\ref{cor:bid_redundancy} predicts that no parametric BID
+family can have effective dimension above $10$ on $\mathcal{G}_4$.
+With three principal components capturing $95\%$ of the baseline
+variance, the empirical effective rank is much lower than $10$; a
+new BID index has at most a $7$-dimensional ``budget''
+within which to be statistically independent of the leading PCA
+factors. The empirical screening verdict that no Wuzi parameter
+point clears $|r|<0.95$ \emph{and} provides meaningful partial
+correlation is consistent with this structural constraint.
+
+% =====================================================================
+\section{Case study 2: alternative-family candidates on ESOL}\label{sec:novel_case}
+% =====================================================================
+
+To demonstrate that the screening pipeline applies beyond the BID
+family, we screen $20$ candidate indices on ESOL ($n=1\,127$,
+target $\log S$), drawn from five alternative design families.
+
+\begin{table}[h]
+\centering
+\caption{Twenty candidate indices grouped by design family.}
+\label{tab:candidates}
+\begin{tabular}{ll}
+\toprule
+Family & Candidate indices (working names)\\
+\midrule
+Information-theoretic (5) & InfoH\_deg, InfoH\_dist, InfoH\_spec, InfoH\_ecc, Bonchev\_Id\\
+Centrality (5) & Btw\_sum, Cls\_sum, Eig\_sum, Harm\_cent, Btw\_var\\
+Motif (4) & Triangles, MeanClust, FourCyc, CutVerts\\
+Eccentricity (3) & TotEcc, Radius, MeanEcc\\
+Spectral-hybrid (3) & AlgConn, Rho$\times$Dia, EE$\times$W\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\emph{Disclaimer.} None of the $20$ candidates is claimed
+to be newly invented. Each has prior chemistry literature
+\todo{[REFERENCES TO BE FILLED FROM literature\_notes.md]} (Cao--Dehmer--Shi,
+Ghorbani et al., Aslam et al., Bonchev--Mekenyan--Trinajsti\'c,
+MOLTOP, and others); they appear here purely as screening targets
+to test whether candidates from different design philosophies
+escape the redundancy ceiling on ESOL.
+
+\subsection{Screening verdict}
+
+Of the $20$ candidates, $15$ clear the $\max|r|<0.95$ pairwise
+screen on ESOL and $5$ fail it (Table~\ref{tab:novel_combined}).
+Of the $15$ that clear the pairwise screen, only $4$ also clear
+the partial-correlation condition $|\mathrm{pcor}|\ge 0.10$:
+$\mathrm{InfoH\_deg}$ (information-theoretic, $|\mathrm{pcor}|=0.154$),
+CutVerts (motif, $|\mathrm{pcor}|=0.118$),
+FourCyc (motif, $|\mathrm{pcor}|=0.112$), and
+MeanEcc (eccentricity, $|\mathrm{pcor}|=0.109$).
+The remaining $11$ candidates that clear the pairwise screen have
+$|\mathrm{pcor}|<0.10$ on $\log S$.
+
+Among the $5$ candidates that fail the pairwise screen,
+$\mathrm{Bonchev\_Id}$ is the most strongly correlated with the
+classical baseline (max $|r|=0.992$ with Schultz).
+
+\begin{table}[h]
+\centering
+\caption{Combined screening verdict on the $20$ candidates against the $30$-index baseline on ESOL ($n=1\,127$, target $\log S$). $\mathrm{PASS}_{\mathrm{pair}}$ = max $|r| < 0.95$; $\mathrm{PASS}_{\mathrm{combined}}$ = max $|r| < 0.95$ AND $|\mathrm{pcor}|\ge 0.10$.}
+\label{tab:novel_combined}
+\begin{tabular}{lcc}
+\toprule
+Family & $\mathrm{PASS}_{\mathrm{pair}}$ / total & $\mathrm{PASS}_{\mathrm{combined}}$ / total\\
+\midrule
+Information-theoretic (5) & 4 / 5 & 1 / 5\\
+Centrality (5)            & 4 / 5 & 0 / 5\\
+Motif (4)                 & 4 / 4 & 2 / 4\\
+Eccentricity (3)          & 2 / 3 & 1 / 3\\
+Spectral-hybrid (3)       & 1 / 3 & 0 / 3\\
+\midrule
+Total                     & 15 / 20 & 4 / 20\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The headline pattern: the pairwise $|r|<0.95$ screen alone is
+over-permissive on this dataset --- $75\%$ of candidates clear it
+--- but the combined criterion that additionally requires
+$|\mathrm{pcor}|\ge 0.10$ leaves only $4$ candidates as plausible
+carriers of independent QSPR signal on ESOL. Of the $4$,
+none reach $|\mathrm{pcor}|>0.2$; the largest absolute partial
+correlation across all $20$ candidates is $\mathrm{InfoH\_deg}$ at
+$|\mathrm{pcor}|=0.154$. Detailed numerical results are in
+\texttt{results/novel\_candidates\_experiment/novel\_candidates.csv}.
+
+These numbers are for a single dataset (ESOL) and target ($\log S$).
+We do not generalize to other QSPR targets, and we do not claim that
+any of the $4$ combined-criterion-passing candidates is a useful
+descriptor in absolute terms; the criterion is a redundancy filter,
+not a utility certification.
+
+% =====================================================================
+\section{Discussion}\label{sec:discussion}
+% =====================================================================
+
+\subsection{Necessary but not sufficient}
+
+The empirical pattern across the two case studies makes a single
+methodological point: \emph{passing the orthogonality screen is a
+necessary but not sufficient condition for QSPR usefulness}. The
+Wuzi FreeSolv borderline point illustrates the failure mode
+sharply: a parameter setting that clears the $|r|<0.95$
+threshold can still have negligible partial correlation with the
+target. The combined criterion (Table~\ref{tab:decision}) is more
+faithful to the QSPR-utility question than the bare
+correlation threshold.
+
+\subsection{Limitations}
+
+\begin{enumerate}
+\item \textbf{Linearity.} The screening pipeline is built on
+Pearson correlation, OLS partial correlation, and PCA. Non-linear
+relationships between a candidate index and the target, or between
+the candidate and the baseline, are not captured. Future work
+could replace these with rank-based equivalents (Spearman,
+distance correlation), with the trade-off of looser
+interpretability.
+\item \textbf{Dataset choice.} Three MoleculeNet QSPR benchmarks
+were used; the pattern may differ for other target properties (toxicity,
+biological activity), where information-theoretic and motif-based
+features are known to behave differently.
+\item \textbf{Threshold convention.} $|r|=0.95$ is a conventional but
+arbitrary cutoff. The empirical pattern (Table~\ref{tab:wuzi_verdict})
+is stable across $|r|\in[0.90, 0.99]$, but a different downstream
+QSPR workflow may justify a different threshold.
+\item \textbf{Hydrogen-suppressed molecular graphs only.} The
+Edge-Degree-Pair Basis bound (Theorem~\ref{thm:bid}) is sharp at
+$\Delta\le 4$ which covers C/N/O/halogen/some S chemistry;
+organometallics, hypervalent species, and inorganic chemistry are
+outside scope.
+\item \textbf{Single-scalar indices only.} The pipeline screens one
+scalar at a time; a vector descriptor, or a small set of jointly
+designed scalars, may be redundant individually but informative
+collectively.
+\end{enumerate}
+
+\subsection{Future work}
+
+\begin{enumerate}
+\item Extension of the structural observation
+(Theorem~\ref{thm:bid}) to non-BID parametric families (distance,
+spectral, mixed-family generalizations).
+\item Sensitivity of conclusions to the redundancy threshold via
+formal change-point analysis.
+\item Inclusion of nonlinear redundancy measures (distance
+correlation, mutual information) as complementary diagnostics.
+\item A web-deployed version of the pipeline accepting a SMILES
+file and a candidate-index Python function and returning the
+four diagnostics in seconds.
+\end{enumerate}
+
+% =====================================================================
+\section{Conclusion}
+% =====================================================================
+
+We have introduced an open-source orthogonality-screening pipeline
+for scalar topological indices and demonstrated it on two case
+studies (the Wuzi parametric family across three datasets, and
+twenty alternative-family candidates on ESOL). The combined
+criterion of low maximum correlation with classical baselines and
+non-negligible partial correlation with the QSPR target gives an
+operationally clear pre-flight check for proposed new indices. The
+Edge-Degree-Pair Basis observation provides a structural reason
+why bond-incident-degree indices cluster into a low-dimensional
+subspace on hydrogen-suppressed molecular graphs of $\Delta\le 4$,
+which explains the empirical redundancy pattern observed across
+the three benchmarks.
+
+% =====================================================================
+\section*{Data and code availability}
+% =====================================================================
+
+Code, datasets, and figures are publicly available at
+\url{https://github.com/Singati2/topological-index-orthogonality}.
+The pipeline runs in seconds per benchmark on a single laptop;
+adding a candidate index requires no more than a $20$-line Python
+function.
+
+% =====================================================================
+\begin{thebibliography}{99}
+% =====================================================================
+\small
+
+\bibitem{Wiener1947}
+H.~Wiener,
+\emph{Structural determination of paraffin boiling points},
+J.~Am.~Chem.~Soc.~\textbf{69} (1947), 17--20.
+
+\bibitem{Randic1975}
+M.~Randi\'c,
+\emph{On characterization of molecular branching},
+J.~Am.~Chem.~Soc.~\textbf{97} (1975), 6609--6615.
+
+\bibitem{Gutman1972}
+I.~Gutman and N.~Trinajsti\'c,
+\emph{Graph theory and molecular orbitals},
+Chem.~Phys.~Lett.~\textbf{17} (1972), 535--538.
+
+\bibitem{ZhouTrinajstic2009sumconn}
+B.~Zhou and N.~Trinajsti\'c,
+\emph{On a novel connectivity index},
+J.~Math.~Chem.~\textbf{46} (2009), 1252--1270.
+
+\bibitem{MovahediGutmanRedzepovicFurtula2026}
+F.~Movahedi, I.~Gutman, I.~Red\v{z}epovi\'c, and B.~Furtula,
+\emph{Diminished Sombor index of graphs},
+MATCH Commun.~Math.~Comput.~Chem.~\textbf{95} (2026), 141--162.
+
+\bibitem{GutmanBorovicanin2018BID}
+I.~Gutman and B.~Borovi\'canin,
+\emph{Edge-degree-based topological indices and their applications}
+(survey paper), \todo{[FULL CITATION REFERENCE NEEDED]}.
+
+\bibitem{Paper2_Wuzi}
+A.~Natarajan, G.~Shiwakoti, M.~Arockiaraj,
+\emph{The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal Graphs, and Redundancy Analysis},
+in preparation, 2026.
+(Companion mathematical paper.)
+
+\bibitem{MoleculeNet}
+Z.~Wu, B.~Ramsundar, E.~N.~Feinberg, J.~Gomes, C.~Geniesse,
+A.~S.~Pappu, K.~Leswing, V.~Pande,
+\emph{MoleculeNet: A benchmark for molecular machine learning},
+Chem.~Sci.~\textbf{9} (2018), 513--530.
+
+\bibitem{Delaney2004ESOL}
+J.~S.~Delaney,
+\emph{ESOL: Estimating aqueous solubility directly from molecular structure},
+J.~Chem.~Inf.~Comput.~Sci.~\textbf{44} (2004), 1000--1005.
+
+\bibitem{Mobley2014FreeSolv}
+D.~L.~Mobley and J.~P.~Guthrie,
+\emph{FreeSolv: A database of experimental and calculated hydration free energies},
+J.~Comput.~Aided Mol.~Des.~\textbf{28} (2014), 711--720.
+
+\bibitem{Wang2009ChEMBL}
+\todo{[LIPOPHILICITY DATASET CITATION REFERENCE NEEDED]}.
+
+\bibitem{RDKit}
+G.~Landrum et al.,
+\emph{RDKit: Open-source cheminformatics},
+\url{https://www.rdkit.org}.
+
+\end{thebibliography}
+\end{document}

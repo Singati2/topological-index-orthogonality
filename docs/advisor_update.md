@@ -135,6 +135,40 @@ Each is comparable in scope to a single section of the MATCH DSO paper.
 The numerical sections (§6) and all infrastructure are already in place
 so the math sections can drop directly into a prepared manuscript skeleton.
 
+## 5a. Mathematical scaffolding added (2026-05-19)
+
+To make it as easy as possible for Advik and yourself, sir, to fill
+in Sections 3, 4, and 5, we have added rigorous templates,
+ratio-bound calculations, and computational extremal searches.
+These are **not** final theorem replacements for the bounds work;
+they are starting material.
+
+| Artifact | What it provides |
+|---|---|
+| `docs/wuzi_bounds_strategy.md` | Bracket bound (rigorous), ratio-bound theorem (rigorous), parameter monotonicity, extremal-graph conjectures with heuristic motivation, list of proof techniques. |
+| `scripts/09_wuzi_bounds_tables.py` | Brute-forces the ratio constants $c_{\min}^h, c_{\max}^h$ for $h \in \{M_1, M_2, R, SO, GA, H, ABC\}$ on $\Delta \le 4$ at eight parameter triples; sanity-checks against exact Wuzi-classical reductions. |
+| `scripts/10_wuzi_extremal_search.py` | Enumerates all non-isomorphic trees of order $5 \le n \le 12$ and identifies the observed minimizer / maximizer of $W$ at each parameter triple. |
+| `results/wuzi_bounds_ratio_tables.{csv,md}` | Output of script 09. |
+| `results/wuzi_extremal_trees.{csv,md}` | Output of script 10; includes whether the observed extremals match $P_n / S_n$. |
+
+**Empirical findings of the extremal search** (trees only, $5 \le n \le 12$):
+- For $(\alpha, \beta, \gamma) \in \{(1,0,0),\ (0,0,1),\ (0,0,2),\ (1,1,1)\}$:
+  observed minimizer = $P_n$ and observed maximizer = $S_n$ at every $n$.
+- For $(\alpha, \beta, \gamma) \in \{(-1/2,0,0),\ (0,-1/2,0),\ (0,-1,0)\}$
+  (the Randić / sum-connectivity / harmonic sign region):
+  observed minimizer = $S_n$ and observed maximizer = $P_n$ at every $n$
+  (the extremals flip with the sign of the parameters).
+- For the mixed-sign triple $(-1, -1, 1)$: observed extremals are
+  *neither* $P_n$ nor $S_n$. This is the most interesting case
+  computationally and the natural target for a "genuinely new"
+  result in Section 5 of Paper 2.
+
+**What this still does not provide.** Formal proofs of any of the
+extremal conjectures above; equality-condition analysis for the
+Jensen / Cauchy-Schwarz bounds; bounds in the full $(\alpha, \beta, \gamma)$
+parameter region rather than just at the eight sampled triples.
+These are exactly the contributions reserved for the senior author.
+
 ## 6. Honest publishability status
 
 - Paper 2 **is not currently publishable**. Sections 3–5 (the math) are

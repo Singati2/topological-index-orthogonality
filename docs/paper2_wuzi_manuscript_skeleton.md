@@ -119,55 +119,130 @@ power-mean. Same set used in Movahedi 2025.
 
 ## 3. Bounds in terms of n, m, Δ, δ
 
-`[NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR — ~3 pages]`
+Companion strategy document: `docs/wuzi_bounds_strategy.md` (sections A, C).
 
-Template: Section 3 of MATCH 95:141-162 has 13 theorems of this kind.
-Suggested goals:
+**Rigorous results available to drop in:**
 
-- **Theorem 3.1.** Sharp upper and lower bounds of the form
-  m · ψ_min(δ, Δ) ≤ W ≤ m · ψ_max(δ, Δ) with regular-graph equality.
-- **Theorem 3.2.** Bounds when α, β, γ are restricted to specific
-  sign regions (positive, negative).
-- **Theorem 3.3 (Cauchy-Schwarz type).** W² ≤ (something) ·
-  (something), using one of the standard lemmas.
-- **Theorem 3.4 (Nordhaus-Gaddum type).** W(G) + W(Ḡ) ≥ f(n).
-- **Theorem 3.5–3.6.** Sharper bounds for trees / specific structures.
+- **Theorem 3.1 (Bracket bound, rigorous).** m · ψ_min(δ, Δ) ≤ W ≤
+  m · ψ_max(δ, Δ), with equality iff every edge of G has the same
+  unordered degree pair. Proof: trivial sum bracket. Already
+  stated as Theorem A.1 in `docs/wuzi_bounds_strategy.md` and as
+  Theorem~\ref{thm:bracket} in `docs/paper2_wuzi.tex`.
+- **Theorem 3.2 (Jensen on $M_1$, rigorous for $\beta \ge 1$).**
+  For $\alpha = \gamma = 0$, $\beta \ge 1$: $W \ge m^{1-\beta} M_1^\beta$.
+  Proof in `docs/paper2_wuzi.tex` Theorem~\ref{thm:m1_bound}.
+- **Theorem 3.3 (Geometric mean inequality, rigorous).** For
+  $\alpha_1+\alpha_2 = 2\alpha$, etc., $W(G; \alpha, \beta, \gamma)
+  \le \sqrt{W(G; \alpha_1, \beta_1, \gamma_1) \cdot W(G; \alpha_2, \beta_2, \gamma_2)}$.
+  Proof: Cauchy–Schwarz, in `docs/paper2_wuzi.tex` Theorem~\ref{thm:cs}.
+
+**Still needed (NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR):**
+
+- **Theorem 3.4 (sharper upper bound in $\Delta$).** Bounds tighter
+  than the bracket, depending on the sign region of $(\alpha,\beta,\gamma)$.
+- **Theorem 3.5 (Nordhaus–Gaddum type).** $W(G) + W(\bar G) \ge f_n(\alpha,\beta,\gamma)$.
+- **Theorem 3.6 (Polya–Szegő type).** Inverse-Cauchy-Schwarz bounds
+  using $\delta, \Delta$ as Polya–Szegő input.
+- Equality conditions for the Jensen bounds in $0 < \beta < 1$ and
+  $0 < \alpha < 1$.
 
 ## 4. Bounds in terms of classical topological indices
 
-`[NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR — ~3-4 pages]`
+Companion strategy document: `docs/wuzi_bounds_strategy.md` (section B).
 
-Template: Movahedi 2025 arXiv preprint (DSO bounds paper). Suggested
-goals:
+**Verified ratio-bound theorem (rigorous).**
 
-- **Theorem 4.1.** W in terms of M_1 (first Zagreb).
-- **Theorem 4.2.** W in terms of M_2 (second Zagreb).
-- **Theorem 4.3.** W in terms of Randić R.
-- **Theorem 4.4.** W in terms of geometric-arithmetic GA.
-- **Theorem 4.5.** W in terms of Sombor SO.
-- **Theorem 4.6.** W in terms of harmonic H and ABC.
-- **Theorem 4.7.** W in terms of Albertson irregularity Alb (the
-  γ-axis pairing).
+For every classical BID index $I_h$ with strictly positive edge
+contribution $h(i, j)$ on the admissible degree pairs of $G$, the
+following holds:
 
-For special parameter values where Wuzi reduces to a classical
-index, these bounds collapse to exact identities — flag those.
+> **Theorem (Ratio bound, rigorous).** $c_{\min}^h \cdot I_h(G) \le
+> W(G; \alpha, \beta, \gamma) \le c_{\max}^h \cdot I_h(G)$, where
+> $c_{\min}^h, c_{\max}^h$ are the extrema of $\psi(i, j)/h(i, j)$
+> over the admissible degree pairs.
+
+This is rigorously stated and proved as Theorem B.1 in
+`docs/wuzi_bounds_strategy.md`. The constants $c_{\min}^h$ and
+$c_{\max}^h$ are computed by `scripts/09_wuzi_bounds_tables.py`
+for $h \in \{M_1, M_2, R, SO, GA, H, ABC\}$ and a list of parameter
+triples; output in `results/wuzi_bounds_ratio_tables.{csv,md}`.
+
+The ratio bound is rigorous and ready to include in Paper 2 with
+minimal further work: it covers all seven classical indices in one
+unified statement (one theorem + one table per index), and at
+exact Wuzi-classical reductions the constants collapse to a single
+identity (sanity-checked in the output: e.g.\ $(\alpha,\beta,\gamma) = (1,0,0)$
+gives $c_{\min}^{M_2} = c_{\max}^{M_2} = 1$).
+
+**Still needed (NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR):**
+
+- **Theorem 4.x (sharper than ratio bound).** Bounds that interpolate
+  over the distribution of $m_{ij}$ counts rather than using a
+  single $c_{\min}, c_{\max}$ pair. These would be tight on a wider
+  family of graphs than just the regular ones.
+- **Theorem 4.y (Albertson irregularity Alb pairing).** The
+  $\gamma$-axis of Wuzi pairs naturally with the irregularity index
+  $\mathrm{Alb}(G) = \sum_e |d_u - d_v|$; a clean bound here is the
+  natural opening for the $\gamma$ component of the family.
 
 ## 5. Extremal graphs
 
-`[NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR — ~2-3 pages]`
+Companion strategy document: `docs/wuzi_bounds_strategy.md` (section D).
+Computational support: `scripts/10_wuzi_extremal_search.py`
+exhaustively enumerates trees of order $5 \le n \le 12$ and tests
+the path-vs-star conjecture at each parameter triple. Output:
+`results/wuzi_extremal_trees.{csv,md}`.
 
-Template: Section 4 of MATCH 95:141-162. Suggested goals:
+**Empirically verified across $5 \le n \le 12$ (Conjecture D.1).**
 
-- **Theorem 5.1.** Extremal graphs in the class of all connected
-  graphs of order n.
-- **Theorem 5.2.** Extremal trees of order n.
-- **Theorem 5.3.** Extremal unicyclic graphs of order n.
-- **Theorem 5.4.** Extremal bicyclic graphs of order n.
+For trees of order $n \ge 3$ in the sign region
+$\alpha \ge 0, \beta \ge 0, \gamma \ge 0$:
 
-Identify which structures (path P_n, star S_n, cycle C_n, specific
-"caterpillar" or "broom" trees) attain the min/max in each parameter
-region. Many of these mirror the Albertson / Randić extremal
-literature when γ dominates / α dominates respectively.
+> **Conjecture 5.1 (Extremal trees, positive parameter region).**
+> The star $S_n$ uniquely attains $\max W$; the path $P_n$ uniquely
+> attains $\min W$.
+
+Empirical verification at $(\alpha, \beta, \gamma) \in \{(1,0,0),
+(0,0,1), (0,0,2), (1,1,1)\}$ over all $5 \le n \le 12$ shows
+$P_n$ as observed minimizer and $S_n$ as observed maximizer in
+$100\%$ of cases. See `results/wuzi_extremal_trees.md` for the full
+table. This is empirical evidence, *not* proof; the formal proof
+requires an edge-transformation argument.
+
+**Empirically observed sign-flip behaviour.**
+
+For the Randić-region triples $(-0.5, 0, 0)$, $(0, -0.5, 0)$,
+$(0, -1, 0)$, the path $P_n$ becomes the observed *maximizer* and
+the star $S_n$ the observed *minimizer*. This is consistent with
+the classical Bollobás–Erdős extremal-trees result for general
+Randić $R_\alpha$ with $\alpha < 0$.
+
+**Mixed-sign region $(-1, -1, 1)$.**
+
+In this region (the FreeSolv "borderline pass" triple) the
+observed extremals are *neither* $P_n$ nor $S_n$ for $n \ge 5$.
+This is the most interesting case for genuine new mathematics in
+Paper 2 §5: the extremal structures here are not the classical
+ones and require characterization. The script output identifies
+specific extremal trees by structure for each $n$.
+
+**Still needed (NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR):**
+
+- **Theorem 5.1 (formal proof of Conjecture 5.1).** Edge-shifting
+  argument moving a pendant from a low-degree vertex to a
+  high-degree vertex; equality conditions.
+- **Theorem 5.2 (extremal unicyclic graphs).** Compare $C_n$ to
+  hub-concentrated unicyclic graphs in each sign region. Enumeration
+  for unicyclic / bicyclic is *not* done by script 10 (networkx has
+  no built-in non-isomorphic unicyclic enumerator); a SageMath
+  or nauty implementation is left as a follow-up.
+- **Theorem 5.3 (extremal bicyclic graphs).** Three sub-classes
+  (θ-graph, bowtie-like, two-cycles-joined-by-path) and their
+  pendant-augmented variants must be considered separately.
+- **Characterization in the mixed-sign region.** What is the
+  extremal tree of order $n$ for $(\alpha, \beta, \gamma) = (-1, -1, 1)$?
+  The script identifies it computationally; the formal
+  characterization is open.
 
 ## 6. Numerical work
 
