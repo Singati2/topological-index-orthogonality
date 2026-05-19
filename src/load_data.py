@@ -1,14 +1,16 @@
-"""Dataset loaders for ESOL, FreeSolv, Lipophilicity (MoleculeNet).
+"""Dataset loaders for ESOL, FreeSolv, Lipophilicity, BBBP (MoleculeNet).
 
-All three are public, freely downloadable, and standard QSPR benchmarks.
-We download on first call and cache under data/.
+All four are public, freely downloadable, and standard QSPR/QSAR
+benchmarks. We download on first call and cache under data/.
 
-  ESOL (Delaney 2004) — aqueous solubility, n ≈ 1128
-  FreeSolv (Mobley 2014, via DeepChem SAMPL) — hydration free energy, n ≈ 642
-  Lipophilicity (Wenlock 2015, via DeepChem ChEMBL extract) — logD, n ≈ 4200
+  ESOL (Delaney 2004) — aqueous solubility, n ≈ 1128 — regression
+  FreeSolv (Mobley 2014, via DeepChem SAMPL) — hydration free energy, n ≈ 642 — regression
+  Lipophilicity (Wenlock 2015, via DeepChem ChEMBL extract) — logD, n ≈ 4200 — regression
+  BBBP (Martins 2012, via MoleculeNet) — blood-brain barrier penetration, n ≈ 2039 — binary classification
 
 After loading, the returned DataFrame has columns: smiles, target.
-The target name is recorded in df.attrs["target_name"] and df.attrs["dataset"].
+The target name is recorded in df.attrs["target_name"], df.attrs["dataset"],
+and the task type in df.attrs["task_type"] ("regression" or "classification").
 """
 from __future__ import annotations
 import os
@@ -41,8 +43,22 @@ DATASETS = {
         "target_col":  "exp",
         "target_name": "logD",
         "description": "Octanol/water distribution logD at pH 7.4, ChEMBL extract",
+        "task_type":   "regression",
+    },
+    "bbbp": {
+        "url":         "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/BBBP.csv",
+        "filename":    "bbbp.csv",
+        "smiles_col":  "smiles",
+        "target_col":  "p_np",
+        "target_name": "BBB_penetration",
+        "description": "Blood-brain barrier penetration (binary), Martins 2012",
+        "task_type":   "classification",
     },
 }
+
+# Backfill task_type for the original three regression datasets.
+for _name in ("esol", "freesolv", "lipophilicity"):
+    DATASETS[_name].setdefault("task_type", "regression")
 
 
 def _download_if_missing(name: str) -> str:
@@ -73,6 +89,7 @@ def load(name: str) -> pd.DataFrame:
     df.attrs["dataset"] = name
     df.attrs["target_name"] = spec["target_name"]
     df.attrs["description"] = spec["description"]
+    df.attrs["task_type"] = spec.get("task_type", "regression")
     return df
 
 

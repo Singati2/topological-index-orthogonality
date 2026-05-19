@@ -178,6 +178,30 @@ BID-family indices on this graph class.
 Full per-dataset tables are in `results/<dataset>/` and the
 cross-dataset summary in `results/cross_dataset_summary.md`.
 
+### Downstream ML benchmark
+
+Whether redundancy screening actually matters for predictive
+performance is tested in `scripts/11_ml_benchmark.py`, which
+trains a RandomForest on each dataset (including the
+classification dataset BBBP, $n=2039$) under four feature
+configurations: full $30$-index baseline, top-$k$ PCA at $95\%$
+variance, pairwise-pruned at $|r| < 0.95$, and combined
+(pairwise + $|\mathrm{pcor}| \ge 0.10$). The headline finding is
+
+| Dataset | Task | RMSE / ROC-AUC `full` (30 feats) | `pairwise_pruned` |
+|---|---|---|---|
+| ESOL          | regression       | RMSE 1.45, $R^2$ 0.56 | RMSE 1.45 (7 feats) |
+| FreeSolv      | regression       | RMSE 3.89, $R^2$ 0.23 | RMSE 3.88 (8 feats) |
+| Lipophilicity | regression       | RMSE 1.04, $R^2$ 0.27 | RMSE 1.04 (8 feats) |
+| BBBP          | classification   | ROC-AUC 0.835         | ROC-AUC 0.864 (6 feats) |
+
+i.e.\ the pairwise screen matches or marginally improves
+RandomForest performance with $4$--$5\times$ fewer features.
+The stricter combined screen kills all features on Lipophilicity
+(every pairwise-pruned index has $|\mathrm{pcor}| < 0.10$ with
+$\log D$), an honest failure mode that the paper reports. Full
+table: `results/ml_benchmark.md`.
+
 ---
 
 ## How to reproduce results
@@ -210,6 +234,7 @@ python scripts/05_octane_prediction.py         # results/octane_prediction.{csv,
 python scripts/06_wuzi_degeneracy.py           # results/wuzi_degeneracy.{csv,md}
 python scripts/07_structure_sensitivity.py     # results/structure_sensitivity.{csv,md}
 python scripts/08_make_figures.py              # figures/*.{png,pdf}
+python scripts/11_ml_benchmark.py              # results/ml_benchmark.{csv,md} on 4 datasets incl. BBBP
 ```
 
 ### Adding a new candidate index
@@ -232,11 +257,12 @@ screening pipeline quantifies how much of that subspace the
 
 ## Datasets
 
-| Name          | Property                                  | $n$    | Source                       |
-|---|---|---:|---|
-| ESOL          | log aqueous solubility (mol / L)          | 1 128  | Delaney 2004 / MoleculeNet   |
-| FreeSolv      | hydration free energy (kcal / mol)        | 642    | Mobley 2014 / MoleculeNet    |
-| Lipophilicity | octanol-water $\log D$ at pH 7.4          | 4 200  | ChEMBL / MoleculeNet         |
+| Name          | Property                                  | Task           | $n$    | Source                       |
+|---|---|---|---:|---|
+| ESOL          | log aqueous solubility (mol / L)          | regression     | 1 128  | Delaney 2004 / MoleculeNet   |
+| FreeSolv      | hydration free energy (kcal / mol)        | regression     | 642    | Mobley 2014 / MoleculeNet    |
+| Lipophilicity | octanol-water $\log D$ at pH 7.4          | regression     | 4 200  | ChEMBL / MoleculeNet         |
+| BBBP          | blood-brain barrier penetration (yes / no)| classification | 2 050  | Martins 2012 / MoleculeNet   |
 
 All datasets download automatically via `src.load_data.load(name)`
 on first use; cached CSVs are written to `data/` (gitignored).
@@ -285,6 +311,9 @@ scripts/
   06_wuzi_degeneracy.py          MATCH §5.3 analog on 106 trees of order 10
   07_structure_sensitivity.py    MATCH §5.4 analog on 75 decane isomers
   08_make_figures.py             Generates the 8 manuscript figures
+  09_wuzi_bounds_tables.py       Brute-forces ratio-bound constants c_min^h / c_max^h
+  10_wuzi_extremal_search.py     Enumerates trees of order 5..12; observed extremals
+  11_ml_benchmark.py             RandomForest on 4 datasets with 4 feature configurations
 
 docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation
