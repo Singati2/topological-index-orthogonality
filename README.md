@@ -71,7 +71,7 @@ degree $\Delta \le 4$, the only possible unordered degree pairs on an
 edge are $(i, j)$ with $1 \le i \le j \le 4$, giving 10 admissible
 edge-degree pairs. Define the **edge-degree-pair counts**
 
-$$m_{ij}(G) = \#\{\, uv \in E(G) \,:\, \{d_u, d_v\} = \{i, j\} \,\}, \qquad 1 \le i \le j \le 4.$$
+$$m_{ij}(G) = \bigl| \{\, uv \in E(G) \,:\, \{d_u, d_v\} = \{i, j\} \,\} \bigr|, \qquad 1 \le i \le j \le 4.$$
 
 Then every $I \in \mathcal{F}_{\mathrm{BID}}$ is a linear functional
 of these 10 counts:
