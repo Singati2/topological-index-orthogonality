@@ -62,15 +62,18 @@ $$\psi_{\max}(\delta, \Delta) = \max\{\psi(i, j; \alpha, \beta, \gamma) : \delta
 
 $$m \cdot \psi_{\min}(\delta, \Delta) \le W(G; \alpha, \beta, \gamma) \le m \cdot \psi_{\max}(\delta, \Delta).$$
 
-*Equality on either side holds if and only if every edge of $G$
-carries the same unordered degree pair* $\{d_u, d_v\}$
-*(which occurs for regular graphs and for some biregular graphs).*
+*The upper inequality is an equality if and only if every edge of
+$G$ has a degree pair* $\{d_u, d_v\}$ *attaining $\psi_{\max}$ over
+the admissible set; the lower inequality is dual. If the
+extremum is attained at a unique admissible pair, this collapses to
+"every edge of $G$ has the same unordered degree pair", which holds
+for regular graphs and some biregular graphs.*
 
 **Proof.** Per-edge, $\psi_{\min} \le \psi(d_u, d_v; \cdot) \le \psi_{\max}$.
-Summing over the $m$ edges yields the inequalities. Equality on the
-upper side forces every term in the sum to equal $\psi_{\max}$,
-i.e. every edge to have the maximizing degree pair; lower side is
-dual.  $\blacksquare$
+Summing over the $m$ edges yields the inequalities. Equality on
+the upper side forces every term in the sum to equal $\psi_{\max}$,
+i.e. every edge to have a degree pair achieving the maximum; lower
+side is dual.  $\blacksquare$
 
 > The bracket is tight on $K_n$, $C_n$, $Q_k$, and any $r$-regular
 > graph. It is usually loose on chemistry datasets because most
@@ -300,9 +303,12 @@ natural extremal candidates:
 - $C_n$: the cycle of order $n$; $2$-regular, all edge degree
   pairs $(2, 2)$.
 - $U_n^{(1)}$: the unicyclic graph obtained by attaching $n - 3$
-  pendant vertices to one vertex of $C_3$; degree pairs are
-  $(2, 2)$ on two of the triangle edges, $(2, n - 1)$ for the
-  third triangle edge, and $(1, n - 1)$ for each pendant edge.
+  pendant vertices to one vertex (the "hub") of $C_3$. The hub
+  then has degree $2 + (n - 3) = n - 1$, while the two non-hub
+  triangle vertices have degree $2$. The triangle edges are
+  therefore $(2, n - 1)$ (hub-to-non-hub, two such edges) and
+  $(2, 2)$ (the single non-hub triangle edge); each of the $n - 3$
+  pendant edges has degree pair $(1, n - 1)$.
 
 **Conjecture D.2 (Unicyclic, $\alpha \ge 0$, $\beta \ge 0$, $\gamma \ge 0$).**
 *Among unicyclic graphs of order $n \ge 4$:*

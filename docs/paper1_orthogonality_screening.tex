@@ -30,7 +30,9 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
+% \todo{...} markers are kept in the source but suppressed in PDF.
+% Restore by swapping for: \newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
+\newcommand{\todo}[1]{}
 \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
 
 \title{\bfseries Orthogonality Screening of Topological Indices for QSPR Modeling:\\ A Structural and Empirical Redundancy Analysis}
@@ -225,7 +227,7 @@ Name & Target property & $n$ & Source\\
 \midrule
 ESOL          & $\log S$ (aqueous solubility, mol/L) & $1\,127$ & \cite{Delaney2004ESOL} via \cite{MoleculeNet}\\
 FreeSolv      & $\Delta G_{\mathrm{hyd}}$ (hydration free energy, kcal/mol) & $639$ & \cite{Mobley2014FreeSolv} via \cite{MoleculeNet}\\
-Lipophilicity & $\log D$ at pH 7.4 & $4\,200$ & \cite{Wang2009ChEMBL} via \cite{MoleculeNet}\\
+Lipophilicity & $\log D$ at pH 7.4 & $4\,200$ & \cite{LipophilicityChEMBL} via \cite{MoleculeNet}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -462,17 +464,22 @@ target is $\approx 0.036$.}
 \label{fig:wuzi_grid_all}
 \end{figure}
 
-At the single borderline grid point on FreeSolv
-($(\alpha,\beta,\gamma)=(-1,-1,1)$, $\max|r|=0.943$ with $mM_2$),
+At the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
 the Wuzi value is exactly captured by a linear combination of the
-$30$ baseline indices --- the residual after regressing the Wuzi
-value on the baseline has variance below numerical precision ---
-so the partial correlation with $\Delta G_{\mathrm{hyd}}$ is
-identically zero. The maximum $|\mathrm{pcor}|$ across all $100$
-FreeSolv grid points (achieved at a different non-passing point) is
-$0.036$. Either way the FreeSolv ``pass'' fails the combined
-criterion of Table~\ref{tab:decision} and is classified as not
-adding meaningful QSPR signal. This example illustrates the
+$30$ baseline indices on \emph{all three} QSPR datasets (the
+regression residual has variance below numerical precision on
+ESOL, FreeSolv, and Lipophilicity alike), so the partial
+correlation with the respective target is identically zero in each
+case. The pairwise $\max|r|$ at this parameter triple is dataset-
+dependent ($0.965$, $0.943$, $0.977$ for ESOL / FreeSolv / Lipo;
+the most-correlated baseline is $mM_2$ in all three cases): the
+FreeSolv value alone falls below the conventional pairwise
+threshold, but the multi-dimensional redundancy is structural and
+identical across datasets. The maximum $|\mathrm{pcor}|$ across
+all $100$ FreeSolv grid points (achieved at a different non-passing
+point) is $0.036$, which is below the partial-correlation threshold
+$0.10$, so the FreeSolv ``pass'' fails the combined criterion of
+Table~\ref{tab:decision}. This example illustrates the
 methodological point of Section~\ref{sec:protocol}: the pairwise
 $|r|$ screen catches only one-dimensional redundancy.
 
@@ -717,8 +724,12 @@ D.~L.~Mobley and J.~P.~Guthrie,
 \emph{FreeSolv: A database of experimental and calculated hydration free energies},
 J.~Comput.~Aided Mol.~Des.~\textbf{28} (2014), 711--720.
 
-\bibitem{Wang2009ChEMBL}
-\todo{[LIPOPHILICITY DATASET CITATION REFERENCE NEEDED]}.
+\bibitem{LipophilicityChEMBL}
+AstraZeneca, \emph{Experimental in vitro DMPK and physicochemical data
+on a set of publicly disclosed compounds},
+ChEMBL document CHEMBL3301361 (2015);
+distributed via MoleculeNet~\cite{MoleculeNet}. Curated set of
+4\,200 compound--$\log D_{7.4}$ pairs.
 
 \bibitem{RDKit}
 G.~Landrum et al.,

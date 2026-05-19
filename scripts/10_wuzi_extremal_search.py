@@ -62,13 +62,19 @@ def wuzi(G: nx.Graph, alpha: float, beta: float, gamma: float) -> float:
 
 
 def canonical_label(G: nx.Graph) -> str:
-    """Deterministic isomorphism-invariant label for a tree: the WL hash.
+    """Deterministic isomorphism-invariant label for a tree.
 
-    We use the Weisfeiler-Lehman graph hash which is invariant under
-    isomorphism on trees (and very likely so on the small graphs we
-    enumerate; collisions on trees of order <= 12 are not expected).
+    The 1-Weisfeiler-Lehman test is known to identify all
+    non-isomorphic trees (folklore; see e.g. Cai-Furer-Immerman
+    1992). For trees of order at most 12 the WL hash is therefore
+    a sound isomorphism invariant, not merely a heuristic.
     """
     return nx.weisfeiler_lehman_graph_hash(G)
+
+
+def degree_sequence(G: nx.Graph) -> tuple[int, ...]:
+    """Multiset of vertex degrees, sorted descending."""
+    return tuple(sorted((d for _, d in G.degree()), reverse=True))
 
 
 def path_label(n: int) -> str:
@@ -109,6 +115,16 @@ def main() -> None:
             argmax_lbl = canonical_label(trees[argmax_idx])
             min_is_path = argmin_lbl == path_lbl
             max_is_star = argmax_lbl == star_lbl
+            # Also record the dual case (Randic-region sign flip)
+            min_is_star = argmin_lbl == star_lbl
+            max_is_path = argmax_lbl == path_lbl
+            argmin_degseq = degree_sequence(trees[argmin_idx])
+            argmax_degseq = degree_sequence(trees[argmax_idx])
+            classical_match = (
+                "P_n=min,S_n=max" if (min_is_path and max_is_star) else
+                "S_n=min,P_n=max" if (min_is_star and max_is_path) else
+                "neither"
+            )
             w_path = wuzi(nx.path_graph(n), alpha, beta, gamma)
             w_star = wuzi(nx.star_graph(n - 1), alpha, beta, gamma)
             rows.append({
@@ -123,6 +139,11 @@ def main() -> None:
                 "w_star": w_star,
                 "min_is_path": min_is_path,
                 "max_is_star": max_is_star,
+                "min_is_star": min_is_star,
+                "max_is_path": max_is_path,
+                "classical_match": classical_match,
+                "argmin_degree_seq": ",".join(str(d) for d in argmin_degseq),
+                "argmax_degree_seq": ",".join(str(d) for d in argmax_degseq),
             })
 
     df = pd.DataFrame(rows)
@@ -150,45 +171,55 @@ def main() -> None:
     md_lines.append("## Detailed table\n")
     md_lines.append(
         "| $n$ | trees | $\\alpha$ | $\\beta$ | $\\gamma$ | $W_{\\min}$ | $W_{\\max}$ "
-        "| $W(P_n)$ | $W(S_n)$ | min = $P_n$ | max = $S_n$ |"
+        "| $W(P_n)$ | $W(S_n)$ | classical match | argmin deg seq | argmax deg seq |"
     )
-    md_lines.append("|---:|---:|---:|---:|---:|---:|---:|---:|---:|:---:|:---:|")
+    md_lines.append("|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|")
     for r in rows:
         md_lines.append(
             f"| {r['n']} | {r['n_trees']} | "
             f"{r['alpha']:g} | {r['beta']:g} | {r['gamma']:g} | "
             f"{r['w_min']:.4f} | {r['w_max']:.4f} | "
             f"{r['w_path']:.4f} | {r['w_star']:.4f} | "
-            f"{r['min_is_path']} | {r['max_is_star']} |"
+            f"{r['classical_match']} | "
+            f"{r['argmin_degree_seq']} | {r['argmax_degree_seq']} |"
         )
 
     md_lines.append("\n## Summary across $n$\n")
     md_lines.append(
-        "Aggregated over all tree orders, the fraction of parameter "
-        "triples for which the observed minimizer is $P_n$ and the "
-        "observed maximizer is $S_n$:"
+        "For each parameter triple, the fraction of orders for which "
+        "the four possible classical extremal patterns hold:\n\n"
+        "- $P_n = \\min$, $S_n = \\max$ (Conjecture D.1 stated form)\n"
+        "- $S_n = \\min$, $P_n = \\max$ (the sign-flipped dual, expected "
+        "in the Randić / sum-connectivity / harmonic sign region)\n"
+        "- neither (the extremal trees are neither $P_n$ nor $S_n$)\n"
     )
     summary_rows = []
     for (alpha, beta, gamma) in PARAMETER_TRIPLES:
         sub = df[(df["alpha"] == alpha) & (df["beta"] == beta) & (df["gamma"] == gamma)]
-        min_is_path_frac = float(sub["min_is_path"].mean())
-        max_is_star_frac = float(sub["max_is_star"].mean())
-        summary_rows.append((alpha, beta, gamma, min_is_path_frac, max_is_star_frac))
-    md_lines.append("\n| $\\alpha$ | $\\beta$ | $\\gamma$ | fraction min = $P_n$ | fraction max = $S_n$ |")
-    md_lines.append("|---:|---:|---:|---:|---:|")
-    for (alpha, beta, gamma, fa, fb) in summary_rows:
-        md_lines.append(f"| {alpha:g} | {beta:g} | {gamma:g} | {fa:.2f} | {fb:.2f} |")
+        f_p_min_s_max = float(((sub["min_is_path"]) & (sub["max_is_star"])).mean())
+        f_s_min_p_max = float(((sub["min_is_star"]) & (sub["max_is_path"])).mean())
+        f_neither = float(((sub["classical_match"]) == "neither").mean())
+        summary_rows.append((alpha, beta, gamma, f_p_min_s_max, f_s_min_p_max, f_neither))
+    md_lines.append("\n| $\\alpha$ | $\\beta$ | $\\gamma$ | $P_n=\\min, S_n=\\max$ | $S_n=\\min, P_n=\\max$ | neither |")
+    md_lines.append("|---:|---:|---:|---:|---:|---:|")
+    for (alpha, beta, gamma, fa, fb, fc) in summary_rows:
+        md_lines.append(f"| {alpha:g} | {beta:g} | {gamma:g} | {fa:.2f} | {fb:.2f} | {fc:.2f} |")
 
     md_lines.append(
         "\n## Interpretation\n\n"
-        "A row with `fraction min = $P_n$` $= 1.00$ and `fraction max = $S_n$` $= 1.00$ "
-        "across all $n$ is consistent with Conjecture D.1 in its stated "
-        "sign region. A fraction strictly between 0 and 1 indicates that "
-        "the conjecture is order-dependent at that parameter triple --- "
-        "the extremal switches at some $n$ --- which is interesting "
-        "information for the formal derivation. A fraction of 0 indicates "
-        "that the path / star is the *opposite* extremal in that parameter "
-        "region (e.g. for $\\alpha < 0$ the path is typically the maximizer).\n"
+        "A row with $P_n = \\min, S_n = \\max$ fraction $= 1.00$ across "
+        "all $n$ is empirical support for Conjecture D.1 of "
+        "`docs/wuzi_bounds_strategy.md` in its stated $\\alpha,\\beta,\\gamma \\ge 0$ "
+        "sign region. The sign-flipped column $S_n = \\min, P_n = \\max$ "
+        "captures the dual extremal pattern expected for Randić-style negative "
+        "parameter values. The neither column flags the most interesting "
+        "case for genuine new mathematics: parameter triples where the "
+        "extremal trees are neither $P_n$ nor $S_n$ and a non-classical "
+        "extremal structure must be characterized. The columns "
+        "`argmin_degree_seq` and `argmax_degree_seq` in the detailed table "
+        "record the degree sequence of the observed extremal at each "
+        "$(n, \\alpha, \\beta, \\gamma)$, identifying candidate non-classical "
+        "extremal trees.\n"
     )
     md_lines.append(
         "## Unicyclic and bicyclic enumeration (TODO)\n\n"

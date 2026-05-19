@@ -37,9 +37,13 @@ at every grid point on every dataset).
 A literature check then confirmed that several alternative "novel index"
 candidates we considered (Shannon degree entropy, mean clustering
 coefficient, network-science centralities, etc.) are also already
-published as named chemical-graph invariants ([REFERENCE NEEDED:
-Ghorbani et al. 2018, Cao-Dehmer-Shi 2014, Aslam et al. 2023,
-Bonchev-Mekenyan-Trinajstić 1981 "superindex," MOLTOP ECAI 2024]).
+published as named chemical-graph invariants in the
+information-theoretic, centrality, and motif-based topological-index
+literature (Bonchev and collaborators on information indices;
+Cao--Dehmer--Shi on entropy indices; Ghorbani and collaborators
+on degree-entropy variants; the MOLTOP graph-classification
+descriptor). A curated reference list is maintained in
+`docs/literature_notes.md`.
 
 We therefore **do not claim** that:
 
