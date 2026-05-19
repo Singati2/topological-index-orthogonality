@@ -4,7 +4,33 @@
 **Repository:** <https://github.com/Singati2/topological-index-orthogonality>
 **Collaborators:** Advik Natarajan (Loyola College, Chennai), Ganesh Shiwakoti
 (FAU, Biostatistics PhD)
-**Date:** 2026-05-18
+**Date:** 2026-05-19
+
+## TL;DR (three sentences)
+
+We have a complete numerical pipeline + LaTeX-ready Paper 1 (methodology)
++ Paper 2 (Wuzi mathematical case study with closed forms, bracket bound,
+ratio bound, and a verified-by-computation conjecture about a non-classical
+caterpillar extremal at the parameter triple $(\alpha,\beta,\gamma)=(-1,-1,1)$).
+What we need from you, sir, is the formal proof / refinement of Sections 3,
+4, and 5 of Paper 2 (bounds in $(n, m, \Delta, \delta)$, bounds via
+classical indices, and the extremal-graph characterization including the
+caterpillar conjecture). With those sections completed Paper 2 is
+submittable to a math-chem venue within a few weeks; Paper 1 follows once
+Paper 2 has at minimum an arXiv ID.
+
+## Most interesting finding to-date (one paragraph)
+
+An exhaustive enumeration of non-isomorphic trees of order $5 \le n \le 12$
+shows that the path / star extremal pattern (path = minimizer, star =
+maximizer) holds in the positive-parameter region $\alpha,\beta,\gamma \ge 0$;
+the extremals flip in the Randić-style sign region; and at the mixed-sign
+triple $(\alpha,\beta,\gamma) = (-1,-1,1)$ the maximizer is *neither* the
+path *nor* the star for $n \ge 6$ but a caterpillar tree with one or two
+branch vertices on a chain. The conjectured caterpillar characterization
+(`docs/paper2_wuzi.tex`, Conjecture 5.4) is the most plausibly novel
+mathematical observation in the project and is the natural anchor for
+Section 5 of Paper 2.
 
 ---
 
@@ -106,22 +132,26 @@ through smoothly.
 
 ## 4. What is already complete
 
-| Component                                       | Status      | Location |
-|---|---|---|
-| Wuzi definition + identity tests vs M_2/R/SCI/H | ✅ done     | `src/wuzi_index.py` |
-| Closed-form Wuzi values: K_n, C_n, P_n, S_n, K_{p,q}, Q_k, W_n, F_p, regular | ✅ done (numerically verified) | `src/wuzi_analytical.py` |
-| Edge-contribution function ψ(x,y; α,β,γ) analysis | ✅ done   | `docs/edge_contribution_analysis.md` |
-| Edge-Degree-Pair Basis theorem (Δ ≤ 4: dim ≤ 10) | ✅ done   | `docs/theoretical_foundation.md` |
-| 30-index baseline on ESOL (n=1127)              | ✅ done     | `results/esol/` |
-| 30-index baseline on FreeSolv (n=639)           | ✅ done     | `results/freesolv/` |
-| 30-index baseline on Lipophilicity (n=4200)     | ✅ done     | `results/lipophilicity/` |
-| Wuzi 100-point grid sweep on each dataset       | ✅ done     | `results/<dataset>/wuzi_grid.csv` |
-| Cross-dataset redundancy comparison             | ✅ done     | `results/cross_dataset_summary.md` |
-| Octane prediction (n=18, MATCH §5.1 analog)     | ✅ done     | `results/octane_prediction.md` |
-| Degeneracy on trees of order 10 (§5.3 analog)   | ✅ done     | `results/wuzi_degeneracy.md` |
-| Structure sensitivity on 75 decanes (§5.4 analog) | ✅ done   | `results/structure_sensitivity.md` |
-| Open-source pipeline (Python; runs in seconds)  | ✅ done     | `scripts/*.py` |
-| Bibliographic discipline document               | ✅ done     | `docs/literature_notes.md` |
+All numerical infrastructure is in place: the $30$-index baseline,
+the $100$-point Wuzi grid sweep, the cross-dataset comparison, the
+octane prediction (MATCH §5.1 analog on the $18$ octane isomers),
+the degeneracy analysis on $106$ non-isomorphic trees of order
+$10$, the structure-sensitivity analysis on the $75$ decane
+isomers, and the reproducible end-to-end pipeline (runs in well
+under a minute on a single laptop). The Wuzi family closed-form
+values on nine standard graph classes have been derived
+analytically and verified numerically by the test code in
+`src/wuzi_analytical.py`. The edge-contribution function $\psi$
+and the Edge-Degree-Pair Basis observation (dimension $\le 10$
+on $\Delta \le 4$) are documented in
+`docs/edge_contribution_analysis.md` and
+`docs/theoretical_foundation.md` respectively. A scaffolding doc
+(`docs/wuzi_bounds_strategy.md`) gives rigorous templates for
+the bracket bound, the ratio-bound theorem in terms of any
+classical BID index, and parameter-monotonicity statements;
+computational extremal searches are in
+`scripts/10_wuzi_extremal_search.py`. The bibliographic
+discipline is maintained in `docs/literature_notes.md`.
 
 ## 5. What remains — the math sections of Paper 2
 

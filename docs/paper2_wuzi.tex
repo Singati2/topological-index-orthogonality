@@ -88,21 +88,34 @@ analyses are reserved for the companion mathematical work.
 Extremal-graph behavior among trees, unicyclic graphs, and
 bicyclic graphs is conjectured by parameter-sign region.
 
+Computational enumeration of all non-isomorphic trees of order
+$5 \le n \le 12$ supports a sign-region partition of the
+extremal-tree behaviour: in the positive-parameter region
+$\alpha, \beta, \gamma \ge 0$ the path $P_n$ and star $S_n$ are
+the observed minimizer and maximizer respectively; in the
+Randi\'c / sum-connectivity / harmonic sign region the extremals
+flip; and at the mixed-sign triple $(-1, -1, 1)$ the maximum is
+attained for $n \ge 6$ by a non-classical caterpillar tree whose
+formal characterization is left as an open problem.
+
 In a numerical companion section, the family is screened against a
 30-index classical baseline on three QSPR benchmarks (ESOL,
 FreeSolv, Lipophilicity; total $5\,966$ molecules) using a
 transparent orthogonality protocol. Every grid point on ESOL and
 Lipophilicity is highly correlated with at least one classical
-baseline ($|r|\ge 0.95$); one of the $100$ grid points on FreeSolv,
-at $(\alpha,\beta,\gamma)=(-1,-1,1)$, falls just below the pairwise
-threshold with $\max|r|=0.943$, but at that grid point the Wuzi
+baseline ($|r|\ge 0.95$); only the FreeSolv grid point at
+$(\alpha,\beta,\gamma)=(-1,-1,1)$ falls just below the pairwise
+threshold ($\max|r|=0.943$). At this parameter triple the Wuzi
 value is exactly captured by a linear combination of the $30$
-baseline indices and its partial correlation with the target is
-zero. The empirical behaviour is consistent
-with a structural observation: every endpoint-degree edge-sum index
-on hydrogen-suppressed molecular graphs with maximum degree
-$\Delta\le 4$ lies in a vector space of dimension at most~$10$,
-spanned by the ten edge-degree-pair counts.
+baseline indices on \emph{all three} datasets, so the partial
+correlation with the respective target is identically zero in each
+case. The empirical behaviour is consistent with a structural
+observation: every \emph{bond-incident-degree} index --- a
+real-valued functional of the form
+$I_f(G) = \sum_{uv \in E(G)} f(d_u, d_v)$ for some symmetric
+$f$ --- on hydrogen-suppressed molecular graphs with maximum
+degree $\Delta\le 4$ lies in a vector space of dimension at
+most~$10$, spanned by the ten edge-degree-pair counts.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, bond-incident-degree
@@ -585,19 +598,33 @@ Multiplying both sides by $m$ gives the stated bound. Equality
 follows from the equality condition of Jensen.
 \end{proof}
 
-\begin{theorem}[Bound in $M_1$ and $m$, $0<\beta<1$ -- skeleton]
+\begin{theorem}[Bound in $M_1$ and $m$, $0<\beta<1$]
 \label{thm:m1_concave}
 Let $\alpha=\gamma=0$ and $0<\beta<1$. Then
 \[
-\Wuzi=\sum_{e}(d_u+d_v)^{\beta}\;\le\; m^{1-\beta}M_1(G)^{\beta}.
+\Wuzi=\sum_{e}(d_u+d_v)^{\beta}\;\le\; m^{1-\beta}M_1(G)^{\beta},
 \]
-\todo{PROOF SKETCH -- TO BE COMPLETED} Concavity of $t\mapsto t^\beta$
-on $\mathbb{R}_{>0}$ for $\beta\in(0,1)$ and Jensen
-(Lemma~\ref{lem:jensen}) give the reversed inequality. The
-equality condition and any sharper version with explicit
-dependence on $\Delta$ and $\delta$ are left for the formal
-derivation.
+with equality if and only if $d_u + d_v$ is constant on every edge
+of $G$.
 \end{theorem}
+
+\begin{proof}
+The function $t \mapsto t^\beta$ is strictly concave on
+$\mathbb{R}_{>0}$ for $\beta \in (0, 1)$. Jensen's inequality
+(Lemma~\ref{lem:jensen}, concave case) applied to the values
+$\{d_u + d_v : uv \in E(G)\}$ gives
+\[
+\frac{1}{m} \sum_e (d_u + d_v)^\beta
+\;\le\;
+\left( \frac{1}{m} \sum_e (d_u + d_v) \right)^{\!\beta}
+= \bigl( M_1(G) / m \bigr)^{\beta},
+\]
+using the identity $M_1(G) = \sum_{uv \in E(G)} (d_u + d_v)$.
+Multiplying both sides by $m$ gives the stated upper bound.
+Strict concavity of $t^\beta$ on $\mathbb{R}_{>0}$ for
+$\beta \in (0, 1)$ implies that the inequality is an equality if
+and only if $d_u + d_v$ is constant on every edge.
+\end{proof}
 
 \begin{theorem}[Bound in $M_2$ for $\beta=\gamma=0$, $\alpha\ge 1$]
 \label{thm:m2_alpha}
@@ -844,20 +871,92 @@ Each flavour requires a separate transformation analysis. See
 \cite{HansenMelot2005bicyclicBounds} for an analogous treatment in
 the classical case.
 
+\subsection{Computational evidence and a non-classical caterpillar regime}
+\label{sec:caterpillar}
+
+The tree-extremal conjectures of Section~\ref{sec:extremal} are
+supported by an exhaustive search over all non-isomorphic trees of
+order $5 \le n \le 12$ at eight parameter triples
+(\texttt{scripts/10\_wuzi\_extremal\_search.py}). For each $n$ and each
+triple, the observed minimizer and maximizer of $W$ over the
+non-isomorphic trees are recorded and identified by their canonical
+Weisfeiler--Lehman label.
+
+The empirical pattern partitions the eight parameter triples into
+three sign regions:
+
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Positive region.} At $(1, 0, 0)$, $(0, 0, 1)$,
+$(0, 0, 2)$, and $(1, 1, 1)$, the observed minimizer is $P_n$ and
+the observed maximizer is $S_n$ for every $n \in \{5, \ldots, 12\}$.
+This is consistent with Conjecture~\ref{conj:trees_beta_pos}.
+
+\item \textbf{Sign-flipped (Randi\'c-like) region.} At
+$(-1/2, 0, 0)$, $(0, -1/2, 0)$, and $(0, -1, 0)$, the extremals
+flip: the observed minimizer is $S_n$ and the observed maximizer
+is $P_n$ for every $n \in \{5, \ldots, 12\}$. This is consistent
+with the classical Bollob\'as--Erd\H{o}s extremal-trees result for
+the general Randi\'c index $R_\alpha$ with $\alpha < 0$.
+
+\item \textbf{Mixed-sign region.} At $(\alpha, \beta, \gamma) = (-1, -1, 1)$,
+the observed minimizer is still $S_n$, but the observed maximizer
+is \emph{neither} $P_n$ nor $S_n$ for $n \ge 6$. The argmax is a
+caterpillar tree with one or two branch vertices; representative
+degree sequences are listed in Table~\ref{tab:caterpillar_argmax}.
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, identified by degree sequence (descending). For $n = 5$ the maximum is attained at the path $P_5$; for $n \ge 6$ the maximum is a non-classical caterpillar tree.}
+\label{tab:caterpillar_argmax}
+\begin{tabular}{rl}
+\toprule
+$n$ & Argmax degree sequence\\
+\midrule
+$5$  & $(2, 2, 2, 1, 1)$ \quad (= $P_5$)\\
+$6$  & $(3, 2, 2, 1, 1, 1)$\\
+$7$  & $(3, 2, 2, 2, 1, 1, 1)$\\
+$8$  & $(3, 2, 2, 2, 2, 1, 1, 1)$\\
+$9$  & $(4, 2, 2, 2, 2, 1, 1, 1, 1)$\\
+$10$ & $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$\\
+$11$ & $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$\\
+$12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{conjecture}[Mixed-sign extremal trees]
+\label{conj:caterpillar_max}
+For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+and tree order $n \ge 6$, the maximum of $W$ over all trees of
+order $n$ is attained by a caterpillar tree: a tree whose internal
+vertices form a path, with pendant vertices attached only along
+that path.
+\end{conjecture}
+
+The conjecture, if true, is the genuinely new mathematical
+phenomenon of this parametric family: a parameter triple in which
+the standard star / path extremals fail and a caterpillar regime
+takes over. A formal extremal-graph characterization in this
+regime --- which caterpillar attains the maximum, and what are the
+equality conditions --- is left for the formal derivation.
+
 \subsection{Summary table of extremal conjectures}
 
 \begin{table}[h]
 \centering
-\caption{Summary of extremal-graph conjectures for $\Wuzi$. ``$+$'' denotes the sign region in which the conjecture is stated.}
+\caption{Summary of extremal-graph conjectures for $\Wuzi$. ``$+$'' denotes the sign region in which the conjecture is stated; $\circ$ denotes a mixed-sign triple.}
 \label{tab:extremals}
 \begin{tabular}{lcccc}
 \toprule
 Graph class & $\alpha$ & $\beta$ & $\gamma$ & Conjectured extremals (max / min)\\
 \midrule
-Trees, order $n\ge 3$ & $+$ & $+$ & $+$ & $S_n$ / $P_n$\\
-Trees, order $n\ge 3$ & $-$ & $-$ & $0$ & $P_n$ / $S_n$ (mirror)\\
+Trees, $n\ge 3$ & $+$ & $+$ & $+$ & $S_n$ / $P_n$\\
+Trees, $n\ge 3$ & $-$ & $-$ & $0$ & $P_n$ / $S_n$ (mirror)\\
+Trees, $n\ge 6$ & $\circ$ & $\circ$ & $\circ$ & caterpillar / $S_n$\\
+                & \multicolumn{4}{l}{\quad (at $(\alpha,\beta,\gamma)=(-1,-1,1)$; Conjecture~\ref{conj:caterpillar_max})}\\
 Unicyclic, $n\ge 4$ & $+$ & $+$ & $+$ & $U_n^{(1)}$ / $C_n$\\
-Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & \todo{TO BE CHARACTERIZED}\\
+Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & open\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -884,7 +983,12 @@ of $27$ indices (Wuzi at canonical $(\alpha,\beta,\gamma)$
 plus the $30$-index classical baseline, less three indices
 constant on the $18$ octanes) and each of the eight properties.
 Padmakar--Ivan ($PI$) is degenerate on the $18$ octanes
-($\sigma=0$, mean $42$) and is excluded. Strong performance on this
+($\sigma=0$, mean $42$) and is excluded. The degeneracy is
+structural: on any tree of order $n$ and size $m = n - 1$,
+$PI(T) = m(m - 1)$ because for every edge $e$ removal disconnects
+the tree into two parts and every other edge lies entirely in one
+of those two parts; the $18$ octanes are all trees on $8$ vertices,
+giving $PI \equiv 7 \cdot 6 = 42$. Strong performance on this
 small dataset is necessary but not sufficient for general QSPR
 utility (cf.\ Section~\ref{sec:cross_dataset}).
 
@@ -1125,9 +1229,10 @@ minute on a single laptop.
 \section*{Acknowledgements}
 % =====================================================================
 
-\todo{TO FILL} Funding sources, institutional support, and
-acknowledgements to colleagues who provided feedback on the
-manuscript.
+The authors thank colleagues for discussions of the computational
+extremal-graph search and the redundancy-screening protocol.
+Funding sources and institutional support to be acknowledged in
+the final version of the manuscript.
 
 % =====================================================================
 \begin{thebibliography}{99}

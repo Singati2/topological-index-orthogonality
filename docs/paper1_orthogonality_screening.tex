@@ -53,45 +53,47 @@ The chemical graph theory literature contains many hundreds of
 scalar topological indices proposed for QSPR/QSAR modeling. A
 recurring methodological question is whether any \emph{new}
 proposed index actually contributes information not already
-captured by the existing classical zoo. We present an open-source,
-reproducible \emph{orthogonality-screening pipeline} that operationalizes
-this question: it computes the pairwise correlation matrix between
-a candidate index and a $30$-index classical baseline, the
-principal-component spectrum of the baseline, the
-partial correlation of the candidate with the QSPR target after
-controlling for the baseline, and the variance inflation factor of
-each baseline descriptor. The full pipeline runs in seconds per
-benchmark on commodity hardware. On three independent QSPR
-benchmarks (ESOL, FreeSolv, Lipophilicity; total $5\,966$ molecules)
-the $30$-index baseline has an effective rank of~$3$ for $95\%$
-explained variance and $5$ for $99\%$, with approximately $37\%$ of
-the $\binom{30}{2}=435$ pairwise correlations exceeding $|r|\ge 0.95$
-on every dataset.
+captured by the existing classical zoo. The conventional answer
+--- ``check pairwise Pearson $|r|$ against a baseline set and
+declare orthogonal if $|r| < 0.95$'' --- is shown empirically to
+be over-permissive on real QSPR chemistry. Across twenty
+alternative-family candidate topological indices (information-
+theoretic, centrality, motif, eccentricity, spectral-hybrid)
+screened on the ESOL solubility benchmark ($n = 1\,127$), $15 / 20$
+candidates clear the conventional pairwise $|r| < 0.95$ threshold,
+but only $4 / 20$ also clear a partial-correlation threshold
+$|\mathrm{pcor}(z, y \mid X)| \ge 0.10$ once the $30$-index baseline
+is regressed out. Eleven candidates that ``look orthogonal'' in the
+pairwise sense add no measurable QSPR signal.
 
+We present an open-source, reproducible
+\emph{orthogonality-screening pipeline} that combines the four
+diagnostics (pairwise correlation, PCA effective rank, partial
+correlation with the target, variance inflation factor) into a
+single \emph{combined criterion} (Table~\ref{tab:decision}). The
+pipeline runs in seconds per benchmark on commodity hardware.
 A structural observation, the \emph{Edge-Degree-Pair Basis}, gives
-a $10$-dimensional ceiling for the bond-incident-degree (BID) family
-on hydrogen-suppressed molecular graphs with maximum degree
-$\Delta\le 4$. We use the pipeline to screen two case studies:
-(i)~the three-parameter \emph{Wuzi index family} (Paper 2 of this
-series), tested at $300$ grid points across the three datasets;
-only one grid point on FreeSolv, at $(\alpha,\beta,\gamma)=(-1,-1,1)$,
-clears the $\max|r|<0.95$ pairwise screen, and at that point the
-Wuzi value is exactly captured by a linear combination of the $30$
-baseline indices, so the partial correlation with the target is zero.
-(ii)~Twenty alternative-family candidate indices (information-theoretic,
-centrality, motif, eccentricity, spectral-hybrid), screened on
-ESOL; $15$ of the $20$ pass the $\max|r|<0.95$ pairwise screen, but
-only $4$ also clear the combined criterion
-$|\mathrm{pcor}(z,y\mid X)|\ge 0.10$, illustrating that the pairwise
-screen alone is over-permissive when applied as a standalone
-QSPR-utility decision.
+a $10$-dimensional ceiling for the bond-incident-degree (BID)
+family on hydrogen-suppressed molecular graphs with maximum degree
+$\Delta\le 4$, which provides a complementary upper bound on the
+information a new BID index can add.
+
+Replication across three independent QSPR benchmarks (ESOL,
+FreeSolv, Lipophilicity; total $5\,966$ molecules) gives a stable
+baseline-redundancy pattern: $\binom{30}{2} = 435$ pairwise
+correlations, approximately $37\%$ above $|r| \ge 0.95$ on every
+dataset; effective rank $3$ for $95\%$ explained variance; effective
+rank $5$ for $99\%$. The three-parameter Wuzi index family of the
+companion paper, screened at $300$ grid points across the three
+datasets, fails the combined criterion at every grid point sampled.
 
 We emphasize that orthogonality with the classical baseline is a
 \emph{necessary but not sufficient} condition for QSPR usefulness:
 an index can clear the redundancy threshold and still add zero
-predictive signal. The pipeline is therefore positioned as a
-pre-flight redundancy check for any proposed scalar topological
-index, not as a verdict on QSPR usefulness itself.
+predictive signal, as the eleven false-positive candidates above
+illustrate. The pipeline is therefore positioned as a pre-flight
+redundancy check for any proposed scalar topological index, not as
+a verdict on QSPR usefulness itself.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, orthogonality
@@ -435,53 +437,57 @@ and three principal components capture $95\%$ of the variance
 \label{fig:corr_heatmap}
 \end{figure}
 
-\subsection{Wuzi-family screening verdict}
+\subsection{Wuzi-family screening verdict and the multi-dimensional redundancy at $(-1,-1,1)$}
 
-\begin{table}[h]
-\centering
-\caption{Wuzi $100$-point grid screening verdict. ``Pass'' means $\max|r|$ with every classical baseline strictly $<0.95$.}
-\label{tab:wuzi_verdict}
-\begin{tabular}{lrrrrr}
-\toprule
-Dataset & Grid points & Pass & Fail & Min max $|r|$ & Max $|\mathrm{pcor}|$\\
-\midrule
-ESOL          & 100 & 0 & 100 & 0.965 & 0.028\\
-FreeSolv      & 100 & 1 & 99  & 0.943 & 0.036\\
-Lipophilicity & 100 & 0 & 100 & 0.965 & 0.009\\
-\bottomrule
-\end{tabular}
-\end{table}
+The full numerical workup of the Wuzi family --- $100$ grid points
+per dataset, $300$ grid points across the three datasets, with per-
+grid-point $\max|r|$ and partial-correlation values --- is reported
+in the companion mathematical paper~\cite{Paper2_Wuzi},
+Section~6.2 (Table~6.2 and Figure~5b therein). We summarize the
+verdict and isolate the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+because it is methodologically central for the present paper.
+
+\textbf{Verdict.} Across the $300$ grid points the Wuzi family
+clears the pairwise $\max|r| < 0.95$ screen at exactly one grid
+point (FreeSolv at $(-1, -1, 1)$, $\max|r| = 0.943$ with $mM_2$);
+the maximum partial correlation with the target across all $300$
+grid points is $0.036$ (FreeSolv) and below $0.10$ on every grid
+point on every dataset, so by the combined criterion of
+Table~\ref{tab:decision} no Wuzi parameter triple in the grid is
+classified as adding meaningful independent QSPR signal.
+
+\textbf{The multi-dimensional redundancy at $(-1, -1, 1)$.}
+At this parameter triple the Wuzi value is exactly captured by a
+linear combination of the $30$ baseline indices on \emph{all three}
+QSPR datasets (the regression residual has variance below numerical
+precision on ESOL, FreeSolv, and Lipophilicity alike), so the
+partial correlation with the respective target is identically zero
+in each case. The pairwise $\max|r|$ at this parameter triple is
+dataset-dependent ($0.965, 0.943, 0.977$ for ESOL / FreeSolv / Lipo;
+$mM_2$ is the most-correlated baseline in all three cases): only
+the FreeSolv value falls below the conventional pairwise threshold,
+but the multi-dimensional redundancy is structural and identical
+across datasets. This illustrates the methodological point of
+Section~\ref{sec:protocol}: the pairwise $|r|$ screen catches only
+one-dimensional redundancy, and a parameter setting that ``passes''
+the pairwise screen because of one dataset's particular degree
+distribution can still be exactly captured by the baseline in the
+regression sense. Figure~\ref{fig:wuzi_grid_all} shows the full
+$\max|r|$ grid across all three datasets.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{fig5b_wuzi_param_heatmaps_all.pdf}
 \caption{$\max|r|$ between the Wuzi index at each $(\alpha,\beta,\gamma)$
 grid point and any of the $30$ classical baseline indices, across
-three datasets (rows) and four $\gamma$ slices (columns).
-The single starred cell (FreeSolv, $(-1,-1,1)$) falls below
-$|r|=0.95$ with $\max|r|=0.943$; its partial correlation with the
-target is $\approx 0.036$.}
+the three datasets (rows) and four $\gamma$ slices (columns).
+The starred cell (FreeSolv, $(-1,-1,1)$) is the only grid point
+that falls below $|r|=0.95$; at the same parameter triple the
+partial correlation with the target is identically zero on all three
+datasets. Reproduced from~\cite{Paper2_Wuzi} for the convenience of
+the methodological discussion.}
 \label{fig:wuzi_grid_all}
 \end{figure}
-
-At the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-the Wuzi value is exactly captured by a linear combination of the
-$30$ baseline indices on \emph{all three} QSPR datasets (the
-regression residual has variance below numerical precision on
-ESOL, FreeSolv, and Lipophilicity alike), so the partial
-correlation with the respective target is identically zero in each
-case. The pairwise $\max|r|$ at this parameter triple is dataset-
-dependent ($0.965$, $0.943$, $0.977$ for ESOL / FreeSolv / Lipo;
-the most-correlated baseline is $mM_2$ in all three cases): the
-FreeSolv value alone falls below the conventional pairwise
-threshold, but the multi-dimensional redundancy is structural and
-identical across datasets. The maximum $|\mathrm{pcor}|$ across
-all $100$ FreeSolv grid points (achieved at a different non-passing
-point) is $0.036$, which is below the partial-correlation threshold
-$0.10$, so the FreeSolv ``pass'' fails the combined criterion of
-Table~\ref{tab:decision}. This example illustrates the
-methodological point of Section~\ref{sec:protocol}: the pairwise
-$|r|$ screen catches only one-dimensional redundancy.
 
 \subsection{Consistency with the BID-basis observation}
 
@@ -610,10 +616,19 @@ interpretability.
 were used; the pattern may differ for other target properties (toxicity,
 biological activity), where information-theoretic and motif-based
 features are known to behave differently.
-\item \textbf{Threshold convention.} $|r|=0.95$ is a conventional but
-arbitrary cutoff. The empirical pattern (Table~\ref{tab:wuzi_verdict})
-is stable across $|r|\in[0.90, 0.99]$, but a different downstream
-QSPR workflow may justify a different threshold.
+\item \textbf{Threshold convention.} $|r| = 0.95$ for the pairwise
+screen and $|\mathrm{pcor}| \ge 0.10$ for the partial-correlation
+condition are conventional but arbitrary cutoffs. The qualitative
+empirical pattern (Wuzi family fails the combined criterion at
+every grid point; pairwise alone is over-permissive on alternative-
+family candidates) is stable across $|r| \in [0.90, 0.99]$ and
+$|\mathrm{pcor}| \in [0.05, 0.20]$ on the three benchmarks tested.
+Lowering the pairwise threshold tightens the pairwise screen but
+does not change the necessary-but-not-sufficient observation, since
+the partial-correlation values for the Wuzi family are well below
+$0.05$ at every grid point. A different downstream QSPR workflow
+may justify a different threshold; the choice should be tied to the
+QSPR utility loss that the analyst is willing to tolerate.
 \item \textbf{Hydrogen-suppressed molecular graphs only.} The
 Edge-Degree-Pair Basis bound (Theorem~\ref{thm:bid}) is sharp at
 $\Delta\le 4$ which covers C/N/O/halogen/some S chemistry;
@@ -664,8 +679,17 @@ the three benchmarks.
 Code, datasets, and figures are publicly available at
 \url{https://github.com/Singati2/topological-index-orthogonality}.
 The pipeline runs in seconds per benchmark on a single laptop;
-adding a candidate index requires no more than a $20$-line Python
-function.
+adding a candidate index requires a short Python function on the
+hydrogen-suppressed molecular graph.
+
+% =====================================================================
+\section*{Acknowledgements}
+% =====================================================================
+
+The authors thank colleagues for discussions of the screening
+protocol and the alternative-family candidate index set. Funding
+sources and institutional support to be acknowledged in the final
+version of the manuscript.
 
 % =====================================================================
 \begin{thebibliography}{99}

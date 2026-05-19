@@ -1,80 +1,69 @@
 # Orthogonality Screening of Topological Indices for QSPR Modeling
 
-A reproducible pipeline and a parametric case study for assessing
-whether a proposed scalar topological index contributes
-**non-redundant** information beyond the standard classical baseline
-on real chemistry datasets.
+An open-source pipeline for testing whether a proposed scalar
+topological index contributes **non-redundant** information beyond
+the classical 30-index baseline on QSPR chemistry. Combines pairwise
+Pearson correlation, principal-component analysis, partial
+correlation with the QSPR target, and variance inflation factor
+into a single combined criterion. Runs in seconds per benchmark on
+commodity hardware.
 
-The repository combines (i) a fast open-source screening pipeline
-(correlation, PCA, partial correlation, VIF) replicated across three
-QSPR benchmarks, with (ii) a worked parametric case study — the
-**Wuzi index family** — used as the running example.
+The repository accompanies two related manuscripts in preparation:
+
+- **Paper 1 (methodology).** *Orthogonality Screening of Topological
+  Indices for QSPR Modeling.* Develops the pipeline, replicates the
+  baseline-redundancy pattern across three independent QSPR
+  benchmarks (ESOL, FreeSolv, Lipophilicity), and demonstrates that
+  the conventional pairwise $|r|<0.95$ screen alone is
+  over-permissive: across $20$ alternative-family candidate indices
+  on ESOL, $15$ pass the pairwise screen but only $4$ also clear
+  $|\mathrm{pcor}(z,y\mid X)|\ge 0.10$.
+
+- **Paper 2 (parametric case study).** *The Wuzi Index Family.*
+  Develops a three-parameter bond-incident-degree (BID) family that
+  contains $M_2$, Randić, sum-connectivity, and harmonic as special
+  cases; derives closed-form values on nine standard graph classes;
+  proves a bracket bound and a ratio-bound theorem; conjectures
+  extremal graphs for trees, unicyclic, and bicyclic graphs;
+  applies the screening pipeline of Paper 1 at $300$ parameter grid
+  points across the three QSPR datasets. At every grid point the
+  family is statistically redundant with the classical baseline by
+  the combined criterion. Computational extremal search across
+  trees of order $5 \le n \le 12$ identifies a non-classical
+  caterpillar regime at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+  whose formal characterization is an open problem.
+
+A structural observation — the *Edge-Degree-Pair Basis* — gives a
+$10$-dimensional ceiling on the BID family on hydrogen-suppressed
+molecular graphs of $\Delta \le 4$. The observation is not new to
+the mathematical-chemistry community; this repository's contribution
+is the explicit dimension-bound framing and its operational use in
+the screening pipeline.
+
+### Scope statement
+
+This repository does **not** claim that the Wuzi family is a
+superior topological index, that classical indices are uninformative,
+or that orthogonality screening alone certifies QSPR usefulness.
+Orthogonality with the classical baseline is necessary but not
+sufficient.
 
 ---
 
-## What this repository is
+## Two-paper plan and target venues
 
-- A reproducible orthogonality- / redundancy-screening pipeline that
-  anyone proposing a new scalar topological index can run, in
-  seconds, before claiming QSPR utility.
-- A parametric case study — the Wuzi index family — used as a worked
-  example of how a multi-parameter bond-incident-degree (BID)
-  generalization can be screened against a 30-index classical
-  baseline.
-- An explicit *Edge-Degree-Pair Basis* observation giving a
-  structural reason why endpoint-degree edge-sum indices on hydrogen-
-  suppressed molecular graphs with maximum degree $\Delta\le 4$ lie
-  in a vector space of dimension at most $10$.
+Paper 2 (the mathematical case study) is drafted first; Paper 1
+(the methodology) follows once Paper 2 has at least an arXiv
+identifier, so that Paper 1 can cite it as the worked example.
 
-## What this repository is *not*
+| Paper | Target venues (realistic) | Draft |
+|---|---|---|
+| Paper 2 — Wuzi Index Family | *J. Math. Chem.*, *MATCH Commun. Math. Comput. Chem.*, *AKCE Int. J. Graphs Comb.*, *SAR & QSAR Env. Res.* | `docs/paper2_wuzi.tex` |
+| Paper 1 — Orthogonality Screening | *Molecular Informatics*, *J. Cheminformatics*, *J. Chem. Inf. Model.* | `docs/paper1_orthogonality_screening.tex` |
 
-- It is **not** a claim that the Wuzi family is a superior
-  topological index. Across the three benchmarks tested, the family
-  is statistically redundant with the classical 30-index baseline
-  at every grid point examined except one borderline case on
-  FreeSolv (which does not carry independent QSPR signal).
-- It is **not** a claim that classical topological indices are
-  useless. Many of them are widely used, well-studied, and
-  appropriate for specific problems.
-- It is **not** a claim that orthogonality alone proves QSPR
-  usefulness. Orthogonality with the baseline is **necessary but
-  not sufficient** — an index can clear the redundancy threshold
-  and still add effectively zero predictive signal once partial
-  correlations are inspected.
-- The BID dimension-bound observation is not itself new to the
-  mathematical-chemistry community; the contribution is the
-  **explicit framing** plus the **redundancy-screening consequence**
-  implemented end-to-end here.
-
----
-
-## Two-paper strategy
-
-This repository supports two related papers, developed in sequence.
-
-**Paper 2 — prioritized, drafted first.**
-*"The Wuzi Index Family: Graph-Theoretic Properties, Bounds,
-Extremal Graphs, and Redundancy Analysis."*
-
-A mathematical-chemistry paper in the tradition of Movahedi, Gutman,
-Redžepović & Furtula, *MATCH Commun. Math. Comput. Chem.* 95(1),
-2026, 141–162. Includes the definition, closed-form values on
-standard graph families, bounds in graph parameters and in
-classical indices, extremal graph characterizations, and a
-numerical section reporting the orthogonality-screening results.
-Target venues: *J. Math. Chem.*, *MATCH*, *AKCE Int. J. Graphs
-Comb.*, *SAR & QSAR Env. Res.*
-
-**Paper 1 — drafted after Paper 2.**
-*"Orthogonality Screening of Topological Indices for QSPR Modeling:
-A Structural and Empirical Redundancy Analysis."*
-
-The broader methodology and benchmark paper. Cites Paper 2 as the
-worked case study. Target venues: *Molecular Informatics*,
-*J. Cheminformatics*.
-
-See `docs/phase2_plan.md` and `docs/paper2_wuzi_manuscript_skeleton.md`
-for current section drafts.
+Section plans and remaining math gaps are tracked in
+`docs/paper2_wuzi_manuscript_skeleton.md` and
+`docs/wuzi_bounds_strategy.md`.
 
 ---
 
