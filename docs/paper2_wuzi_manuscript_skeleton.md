@@ -259,17 +259,23 @@ must be resolved before submission. Do NOT submit with placeholders.]`
 
 | Figure / Table         | Source                                                  | Status |
 |---|---|---|
-| Fig. 1 — BID lattice diagram (Δ ≤ 4)              | `[NEEDS DRAWING — TikZ]`           | pending |
-| Fig. 2 — PCA scree plot, three datasets            | `results/<dataset>/pca_variance.csv` | data ready |
-| Fig. 3 — Cross-dataset redundancy bars             | `results/cross_dataset_summary.csv`  | data ready |
-| Fig. 4 — Octane correlation heatmap                | `results/octane_descriptors.csv`     | data ready |
-| Fig. 5 — Wuzi parameter sweep heatmaps (γ slices)  | `results/<dataset>/wuzi_grid.csv`    | data ready (script TBD) |
-| Fig. 6 — Degeneracy bar chart (trees of order 10)  | `results/wuzi_degeneracy.csv`        | data ready |
-| Fig. 7 — Structure sensitivity bar chart (decanes) | `results/structure_sensitivity.csv`  | data ready |
+| Fig. 1 — BID lattice diagram (Δ ≤ 4)              | `[TO CREATE — TikZ]`                 | pending |
+| Fig. 2 — PCA scree plot, three datasets            | `results/<dataset>/pca_variance.csv` | `figures/fig2_pca_scree.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 3 — Cross-dataset redundancy bars             | `results/cross_dataset_summary.csv`  | `figures/fig3_redundancy_bars.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 4 — Octane correlation heatmap                | `results/octane_descriptors.csv`     | `figures/fig4_octane_heatmap.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 5 — Wuzi parameter sweep heatmaps (γ slices, ESOL) | `results/esol/wuzi_grid.csv`    | `figures/fig5_wuzi_param_heatmaps.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 5b — Wuzi parameter sweep across three datasets | `results/<dataset>/wuzi_grid.csv`  | `figures/fig5b_wuzi_param_heatmaps_all.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 6 — Degeneracy bar chart (trees of order 10)  | `results/wuzi_degeneracy.csv`        | `figures/fig6_degeneracy_bars.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 7 — Structure sensitivity bar chart (decanes) | `results/structure_sensitivity.csv`  | `figures/fig7_structure_sensitivity.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 8 — Full 30-index correlation matrix (ESOL)   | `results/esol/correlation_matrix.csv`| `figures/fig8_correlation_heatmap.{png,pdf}` [VERIFIED AGAINST CSV] |
 | Table 1 — Special-case identities table            | `docs/edge_contribution_analysis.md` | done |
 | Table 2 — Closed-form values on standard graphs    | `src/wuzi_analytical.py`             | done |
-| Table 3 — Bounds in (n, m, Δ, δ) summary           | `[NEEDS DERIVATION + TABLE]`         | pending |
+| Table 3 — Bounds in (n, m, Δ, δ) summary           | [NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR] | pending |
 | Table 4 — Octane prediction R values               | `results/octane_prediction.md`       | done |
+
+Figure captions are kept manuscript-ready in
+`docs/figure_captions.md`; the figure ↔ data consistency record is
+in `docs/figure_audit.md`.
 
 ---
 
