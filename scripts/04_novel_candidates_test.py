@@ -1,16 +1,17 @@
-"""Test 20 candidate indices from 5 alternative design philosophies against
-the 30-baseline orthogonality kill-test on ESOL.
+"""Apply the 30-baseline orthogonality screen on ESOL to 20 candidate
+indices drawn from 5 alternative design families (information-theoretic,
+centrality, spectral-hybrid, motif, eccentricity).
 
 For each candidate compute:
   - max |r| with any baseline (PASS if < 0.95)
   - raw Pearson correlation with logS
   - partial correlation with logS controlling for the 30 baselines
 
-This is the decisive experiment for Path A vs Path B:
-  - if 0 candidates pass --> Path B is the only viable paper
-  - if >=1 candidates pass --> Path A is viable with one of them as the
-    "new index" proposal, and Path B can include the negative result for
-    the failing families as supporting evidence
+The experiment is purely empirical: it quantifies how much independent
+QSPR signal these alternative families add on ESOL relative to the
+classical 30-index baseline. It is *not* a claim that the candidate
+indices themselves are new — every one of them has prior chemistry
+literature (see docs/literature_notes.md).
 """
 from __future__ import annotations
 import os
@@ -49,8 +50,8 @@ FAMILY_OF = {
 def main():
     t0 = time.time()
     print("=" * 62)
-    print("DECISIVE EXPERIMENT: do alternative design philosophies escape")
-    print("the orthogonality ceiling that killed the Wuzi family?")
+    print("Orthogonality screen on ESOL: do alternative design families")
+    print("provide independent signal beyond the 30-index baseline?")
     print("=" * 62)
 
     print("\n[1/4] Loading ESOL and building graphs ...")
@@ -89,7 +90,7 @@ def main():
             cand_data[name] = v
     print("      Done.")
 
-    print("\n[4/4] Evaluating kill-test for each candidate ...")
+    print("\n[4/4] Evaluating redundancy screen for each candidate ...")
     rows = []
     for name, vals in cand_data.items():
         if np.std(vals) < 1e-12:
@@ -101,7 +102,7 @@ def main():
                 "most_correlated_baseline": "(constant)",
                 "raw_corr_logS": float("nan"),
                 "partial_corr_logS": float("nan"),
-                "kill_test": "DEGENERATE",
+                "screen_verdict": "DEGENERATE",
             })
             continue
         # max |r| with baselines
@@ -128,7 +129,7 @@ def main():
             "most_correlated_baseline": best_baseline,
             "raw_corr_logS": raw_corr,
             "partial_corr_logS": partial,
-            "kill_test": "PASS" if max_r < 0.95 else "FAIL",
+            "screen_verdict": "PASS" if max_r < 0.95 else "FAIL",
         })
 
     df_out = pd.DataFrame(rows).sort_values("partial_corr_logS", key=lambda s: s.abs(), ascending=False).reset_index(drop=True)
@@ -137,9 +138,9 @@ def main():
     df_out.to_csv(os.path.join(out_dir, "novel_candidates.csv"), index=False)
 
     # Summary
-    n_pass = int((df_out["kill_test"] == "PASS").sum())
-    n_fail = int((df_out["kill_test"] == "FAIL").sum())
-    n_degen = int((df_out["kill_test"] == "DEGENERATE").sum())
+    n_pass = int((df_out["screen_verdict"] == "PASS").sum())
+    n_fail = int((df_out["screen_verdict"] == "FAIL").sum())
+    n_degen = int((df_out["screen_verdict"] == "DEGENERATE").sum())
 
     print()
     print("=" * 62)
@@ -151,7 +152,7 @@ def main():
     print(f"  DEGENERATE: {n_degen} (constant or near-constant on ESOL)")
     print()
     cols = ["candidate", "family", "max_abs_r_baseline", "most_correlated_baseline",
-            "raw_corr_logS", "partial_corr_logS", "kill_test"]
+            "raw_corr_logS", "partial_corr_logS", "screen_verdict"]
     print("Full ranking by |partial correlation with logS|:")
     print(df_out[cols].to_string(index=False))
     print()
@@ -161,11 +162,11 @@ def main():
     fam_rows = []
     for fam in df_out["family"].unique():
         sub = df_out[df_out["family"] == fam]
-        passing = sub[sub["kill_test"] == "PASS"]
+        passing = sub[sub["screen_verdict"] == "PASS"]
         fam_rows.append({
             "family": fam,
             "n_tested": len(sub),
-            "n_pass": int((sub["kill_test"] == "PASS").sum()),
+            "n_pass": int((sub["screen_verdict"] == "PASS").sum()),
             "best_partial_corr": float(sub["partial_corr_logS"].abs().max()) if len(sub) else float("nan"),
             "min_max_r": float(sub["max_abs_r_baseline"].min(skipna=True)) if len(sub) else float("nan"),
         })
@@ -173,24 +174,28 @@ def main():
     print(fam_df.to_string(index=False))
     fam_df.to_csv(os.path.join(out_dir, "novel_candidates_by_family.csv"), index=False)
 
-    # Verdict
+    # Summary
     print()
     print("=" * 62)
-    print("VERDICT")
+    print("SUMMARY")
     print("=" * 62)
     if n_pass >= 1:
-        winners = df_out[df_out["kill_test"] == "PASS"].sort_values(
+        winners = df_out[df_out["screen_verdict"] == "PASS"].sort_values(
             "partial_corr_logS", key=lambda s: s.abs(), ascending=False)
-        print(f"PATH A IS VIABLE: {n_pass} candidate(s) escape the orthogonality ceiling.")
-        print("Top candidates by orthogonal predictive value:")
+        print(f"{n_pass} candidate(s) pass the |r| < 0.95 screen on ESOL.")
+        print("Top candidates by |partial correlation with logS|:")
         print(winners[cols].head(5).to_string(index=False))
+        print()
+        print("Note: passing the screen is necessary but not sufficient for QSPR")
+        print("usefulness. Inspect the partial correlation with logS to gauge")
+        print("how much independent target-relevant signal each candidate carries.")
     else:
-        print("PATH A FAILS: 0 candidates across 5 design philosophies escape the")
-        print("orthogonality ceiling. This is conclusive evidence that the 30-index")
-        print("standard zoo already saturates the meaningful design space for")
-        print("single-scalar topological indices on real chemistry. PATH B (the")
-        print("orthogonality-critique paper) is the only viable publication route,")
-        print("and this negative result is itself a substantial supporting finding.")
+        print("0 of the 20 candidate indices pass the |r| < 0.95 screen on ESOL.")
+        print("Every candidate is highly correlated with at least one classical")
+        print("baseline index. This is consistent with the documented overlap")
+        print("between alternative-family descriptors and the 30-index baseline")
+        print("on drug-like chemistry; it is a single-dataset empirical finding,")
+        print("not a general impossibility result.")
 
     txt_path = os.path.join(out_dir, "novel_candidates_summary.txt")
     with open(txt_path, "w") as f:

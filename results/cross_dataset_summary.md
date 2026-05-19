@@ -17,7 +17,14 @@ index dimension under Δ≤4: **10**. Observed effective
 rank (PC₉₅) is consistently 3 across all three benchmarks.
 
 
-## Wuzi parameter sweep verdict
+## Wuzi parameter sweep — redundancy-screen verdict
+
+Verdict is **PASS** if max |r| with every classical baseline
+is strictly below 0.95, **FAIL** otherwise. The threshold
+|r| = 0.95 is conventional; the substantive question is
+whether the partial correlation with the target property
+is meaningfully different from zero after controlling for
+the baseline (rightmost column).
 
 | Dataset | Grid points | Pass | Fail | Min max\|r\| | Max \|partial corr w/ target\| |
 |---|---:|---:|---:|---:|---:|
@@ -25,6 +32,14 @@ rank (PC₉₅) is consistently 3 across all three benchmarks.
 | freesolv | 100 | 1 | 99 | 0.943 | 0.0362 |
 | lipophilicity | 100 | 0 | 100 | 0.965 | 0.0093 |
 
-The Wuzi family fails the kill-test at every parameter
-setting on every dataset, consistent with Corollary 3 of
-the BID basis theorem.
+On ESOL and Lipophilicity, every one of the 100 grid
+points is highly correlated with at least one classical
+baseline (|r| ≥ 0.95). On FreeSolv, a single grid point
+falls just below the threshold, but its partial correlation
+with the target after controlling for the 30 baselines is
+≈ 0.04, so it does not provide useful independent QSPR signal.
+This behavior is consistent with the BID-basis observation
+(`docs/theoretical_foundation.md`): every endpoint-degree
+edge-sum index lies in a vector space of dimension at most
+10 on Δ ≤ 4 graphs, so high empirical redundancy with the
+30-index baseline is the expected outcome.

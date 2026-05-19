@@ -1,8 +1,11 @@
 # Literature notes — references and positioning
 
-This document keeps the citation discipline that our prior lit-kills
-demanded. **Every claim of novelty must point to a `[REFERENCE NEEDED]`
-slot that someone fills in by reading the cited paper, not by guessing.**
+This document enforces citation discipline for the project. **Every
+claim of novelty must point to a `[REFERENCE NEEDED]` slot that someone
+fills in by reading the cited paper, not by guessing.** Several
+candidate "novel" framings considered during early scoping turned out
+to overlap substantially with prior literature; the entries below
+record those checks so the same ground does not get re-walked.
 
 Citations below are grouped by topic. Where a citation has been verified
 from a PDF in this repo's reference materials, it is marked **[verified]**.

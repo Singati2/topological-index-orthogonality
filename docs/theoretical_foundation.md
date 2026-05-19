@@ -191,9 +191,11 @@ the BID block in our empirical baseline.
 
 2. **Parametric BID families (general Randić, general Sombor, Wuzi, …)
    cannot escape the 10-D subspace by adding knobs.** The knobs change
-   the coefficients `f(i, j)` but not the basis. The kill-test result
-   we observed for Wuzi (0 of 100 parameter points pass the |r|<0.95
-   threshold) is a direct empirical confirmation.
+   the coefficients `f(i, j)` but not the basis. The empirical screening
+   result we observed for Wuzi — every one of the 100 grid points has
+   max |r| with at least one of the 30 classical baselines above 0.95
+   on ESOL and Lipophilicity, and 99 of 100 on FreeSolv — is consistent
+   with this structural ceiling.
 
 3. **Genuinely novel indices must use structure beyond endpoint degrees**:
    distance, spectrum, centrality, motif, eccentricity, information
@@ -227,8 +229,9 @@ the BID block in our empirical baseline.
 
 - We do not claim the screening pipeline guarantees QSPR usefulness.
   Orthogonality is **necessary but not sufficient** for predictive value.
-  An index can pass the kill-test and still add zero predictive
-  signal (cf. our partial-correlation analyses).
+  An index can clear the |r|<0.95 redundancy threshold and still add
+  effectively zero predictive signal (cf. our partial-correlation
+  analyses).
 
 ---
 

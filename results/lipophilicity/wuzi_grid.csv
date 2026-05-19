@@ -1,4 +1,4 @@
-alpha,beta,gamma,max_abs_r_baseline,most_correlated_baseline,raw_corr_target,partial_corr_target,kill_test
+alpha,beta,gamma,max_abs_r_baseline,most_correlated_baseline,raw_corr_target,partial_corr_target,screen_verdict
 -1.0,-1.0,0.0,0.9927428190695735,mM2,0.16888045636927645,0.0,FAIL
 -1.0,-1.0,0.5,0.9895586270353484,mM2,0.1476086921866076,0.0,FAIL
 -1.0,-1.0,1.0,0.9766326361187906,mM2,0.12383557442542119,0.0,FAIL

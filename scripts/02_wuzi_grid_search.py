@@ -7,9 +7,14 @@ Usage:
     python scripts/02_wuzi_grid_search.py --dataset lipophilicity
 
 For each grid point (α, β, γ):
-  - max |r| with any baseline index ("kill-test verdict")
+  - max |r| with any baseline index (redundancy-screen verdict)
   - raw Pearson correlation with the target property
   - partial correlation with target controlling for the 30 baselines
+
+Verdict semantics:
+  PASS       -> max |r| with every baseline index is strictly below 0.95
+  FAIL       -> at least one baseline index has |r| >= 0.95
+  DEGENERATE -> Wuzi value is constant on the dataset (zero variance)
 """
 from __future__ import annotations
 import argparse
@@ -84,7 +89,7 @@ def main():
                          "most_correlated_baseline": "(constant)",
                          "raw_corr_target": float("nan"),
                          "partial_corr_target": float("nan"),
-                         "kill_test": "DEGENERATE"})
+                         "screen_verdict": "DEGENERATE"})
             continue
         abs_corrs = {col: abs(float(np.corrcoef(w, baseline[col].values)[0, 1]))
                      for col in baseline.columns
@@ -99,15 +104,15 @@ def main():
                      "most_correlated_baseline": best,
                      "raw_corr_target": raw_corr,
                      "partial_corr_target": partial,
-                     "kill_test": "PASS" if max_r < 0.95 else "FAIL"})
+                     "screen_verdict": "PASS" if max_r < 0.95 else "FAIL"})
         if (i + 1) % 25 == 0:
             print(f"      {i+1}/{total_pts}")
     grid = pd.DataFrame(rows)
     grid.to_csv(os.path.join(out_dir, "wuzi_grid.csv"), index=False)
 
-    n_pass = int((grid["kill_test"] == "PASS").sum())
-    n_fail = int((grid["kill_test"] == "FAIL").sum())
-    n_degen = int((grid["kill_test"] == "DEGENERATE").sum())
+    n_pass = int((grid["screen_verdict"] == "PASS").sum())
+    n_fail = int((grid["screen_verdict"] == "FAIL").sum())
+    n_degen = int((grid["screen_verdict"] == "DEGENERATE").sum())
 
     summary = []
     summary.append(f"WUZI PARAMETER SWEEP — dataset = {dataset}  target = {target_name}")
@@ -115,17 +120,20 @@ def main():
     summary.append(f"Grid: alpha={ALPHA_GRID}, beta={BETA_GRID}, gamma={GAMMA_GRID}")
     summary.append(f"Total points: {total_pts}; molecules: {len(graphs)}")
     summary.append("")
-    summary.append(f"Kill-test: PASS={n_pass}, FAIL={n_fail}, DEGENERATE={n_degen}")
+    summary.append(f"Screen verdict: PASS={n_pass}, FAIL={n_fail}, DEGENERATE={n_degen}")
+    summary.append("  (PASS = max |r| with every baseline is strictly below 0.95;")
+    summary.append("   FAIL = highly correlated with at least one classical baseline;")
+    summary.append("   DEGENERATE = Wuzi value is constant on this dataset.)")
     summary.append("")
     summary.append("--- 10 best points by |partial corr with target| ---")
     cols = ["alpha","beta","gamma","max_abs_r_baseline","most_correlated_baseline",
-            "raw_corr_target","partial_corr_target","kill_test"]
+            "raw_corr_target","partial_corr_target","screen_verdict"]
     summary.append(grid.assign(_a=grid["partial_corr_target"].abs())
                        .sort_values("_a", ascending=False)
                        .head(10)[cols].to_string(index=False))
     summary.append("")
     summary.append("--- 10 failing points closest to passing (smallest max|r|) ---")
-    fails = grid[grid["kill_test"] == "FAIL"].sort_values("max_abs_r_baseline").head(10)
+    fails = grid[grid["screen_verdict"] == "FAIL"].sort_values("max_abs_r_baseline").head(10)
     summary.append(fails[cols].to_string(index=False))
 
     txt = "\n".join(summary)

@@ -44,8 +44,8 @@ def stats_for(dataset: str) -> dict:
         "pca_components_95":   pc95,
         "pca_components_99":   pc99,
         "wuzi_grid_points":    len(wuzi),
-        "wuzi_pass":           int((wuzi["kill_test"] == "PASS").sum()),
-        "wuzi_fail":           int((wuzi["kill_test"] == "FAIL").sum()),
+        "wuzi_pass":           int((wuzi["screen_verdict"] == "PASS").sum()),
+        "wuzi_fail":           int((wuzi["screen_verdict"] == "FAIL").sum()),
         "wuzi_min_max_r":      float(wuzi["max_abs_r_baseline"].min(skipna=True)),
         "wuzi_max_partial":    float(wuzi["partial_corr_target"].abs().max(skipna=True)),
     }
@@ -80,7 +80,13 @@ def main():
     md_lines.append("\nTheoretical upper bound on endpoint-degree edge-sum (BID)\n"
                     "index dimension under Δ≤4: **10**. Observed effective\n"
                     "rank (PC₉₅) is consistently 3 across all three benchmarks.\n")
-    md_lines.append("\n## Wuzi parameter sweep verdict\n")
+    md_lines.append("\n## Wuzi parameter sweep — redundancy-screen verdict\n")
+    md_lines.append("Verdict is **PASS** if max |r| with every classical baseline\n"
+                    "is strictly below 0.95, **FAIL** otherwise. The threshold\n"
+                    "|r| = 0.95 is conventional; the substantive question is\n"
+                    "whether the partial correlation with the target property\n"
+                    "is meaningfully different from zero after controlling for\n"
+                    "the baseline (rightmost column).\n")
     md_lines.append("| Dataset | Grid points | Pass | Fail | Min max\\|r\\| | "
                     "Max \\|partial corr w/ target\\| |")
     md_lines.append("|---|---:|---:|---:|---:|---:|")
@@ -90,9 +96,17 @@ def main():
             f"{r['wuzi_pass']} | {r['wuzi_fail']} | "
             f"{r['wuzi_min_max_r']:.3f} | {r['wuzi_max_partial']:.4f} |"
         )
-    md_lines.append("\nThe Wuzi family fails the kill-test at every parameter\n"
-                    "setting on every dataset, consistent with Corollary 3 of\n"
-                    "the BID basis theorem.\n")
+    md_lines.append("\nOn ESOL and Lipophilicity, every one of the 100 grid\n"
+                    "points is highly correlated with at least one classical\n"
+                    "baseline (|r| ≥ 0.95). On FreeSolv, a single grid point\n"
+                    "falls just below the threshold, but its partial correlation\n"
+                    "with the target after controlling for the 30 baselines is\n"
+                    "≈ 0.04, so it does not provide useful independent QSPR signal.\n"
+                    "This behavior is consistent with the BID-basis observation\n"
+                    "(`docs/theoretical_foundation.md`): every endpoint-degree\n"
+                    "edge-sum index lies in a vector space of dimension at most\n"
+                    "10 on Δ ≤ 4 graphs, so high empirical redundancy with the\n"
+                    "30-index baseline is the expected outcome.\n")
 
     out_md = os.path.join(PROJECT, "results", "cross_dataset_summary.md")
     with open(out_md, "w") as f:

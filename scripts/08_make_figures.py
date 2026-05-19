@@ -112,8 +112,8 @@ def fig3_redundancy_bars():
     bars2 = ax.bar(x + width/2, summary["pairs_r_ge_095"], width,
                    label=r"$|r| \geq 0.95$", color="#d62728", edgecolor="#8c0000")
     ax.axhline(435, color="gray", linestyle=":", linewidth=1, alpha=0.7)
-    ax.text(-0.45, 437, "Total = 435 pairs", fontsize=8, color="gray", ha="left",
-            va="bottom")
+    ax.text(len(summary) - 0.55, 437, "Total = 435 pairs",
+            fontsize=8, color="gray", ha="right", va="bottom")
     ax.set_xticks(x)
     ax.set_xticklabels([DATASET_DISPLAY[s] for s in summary["dataset"]])
     ax.set_ylabel("Number of pairs")
@@ -178,9 +178,9 @@ def _wuzi_heatmap_panel(ax, ds, gamma, vmin=0.9, vmax=1.0):
     slice_df = (df[df["gamma"] == gamma]
                 .pivot(index="beta", columns="alpha", values="max_abs_r_baseline"))
     slice_df = slice_df.sort_index(ascending=False)  # high β at top
-    # Diverging at the kill threshold 0.95: green = pass, red = fail
+    # Diverging at the |r|=0.95 screening threshold: green = below, red = above
     cmap = LinearSegmentedColormap.from_list(
-        "killtest", ["#2ca02c", "#a1d99b", "#fdae61", "#d62728", "#8c0000"])
+        "screen", ["#2ca02c", "#a1d99b", "#fdae61", "#d62728", "#8c0000"])
     im = ax.imshow(slice_df.values, cmap=cmap, vmin=vmin, vmax=vmax, aspect="auto")
     ax.set_xticks(range(len(slice_df.columns)))
     ax.set_xticklabels([f"{v:g}" for v in slice_df.columns])
@@ -208,19 +208,19 @@ def fig5_wuzi_param_heatmaps():
     gammas = [0.0, 0.5, 1.0, 2.0]
     for ax, gamma in zip(axes.flat, gammas):
         im = _wuzi_heatmap_panel(ax, "esol", gamma)
-    fig.suptitle(r"Wuzi family kill-test on ESOL ($n=1127$): "
+    fig.suptitle(r"Wuzi family — redundancy screen on ESOL ($n=1127$): "
                  r"$\max|r|$ with the 30-index"
                  "\n"
                  r"baseline at each $(\alpha,\beta,\gamma)$. "
-                 r"All 100 points fail the $|r|<0.95$ threshold.",
+                 r"All 100 grid points are highly correlated with at least one baseline ($|r|\geq 0.95$).",
                  fontsize=10.5, y=1.00)
     cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
     cbar = fig.colorbar(im, cax=cbar_ax)
     cbar.set_label(r"$\max|r|$")
-    # Add the kill threshold line in colorbar coordinates (it spans [0.9, 1.0])
+    # Reference the |r|=0.95 screening threshold inside the colorbar
     cbar.ax.plot([0, 1], [0.95, 0.95], color="black", linewidth=1.2,
                  transform=cbar.ax.transAxes if False else cbar.ax.transData)
-    fig.text(0.945, 0.50, "kill threshold (0.95)",
+    fig.text(0.945, 0.50, "screening threshold (0.95)",
              rotation=270, va="center", fontsize=8)
     plt.tight_layout(rect=[0, 0, 0.9, 0.95])
     save_both(fig, "fig5_wuzi_param_heatmaps")
@@ -233,7 +233,7 @@ def fig5b_wuzi_param_heatmaps_all():
     pass_locations = []
     for ds, _ in DATASETS:
         d = pd.read_csv(os.path.join(PROJECT, "results", ds, "wuzi_grid.csv"))
-        p = d[d["kill_test"] == "PASS"]
+        p = d[d["screen_verdict"] == "PASS"]
         total_pass += len(p)
         total_pts += len(d)
         for _, r in p.iterrows():
@@ -249,17 +249,17 @@ def fig5b_wuzi_param_heatmaps_all():
         for col, gamma in enumerate(gammas):
             im = _wuzi_heatmap_panel(axes[row, col], ds, gamma)
         axes[row, 0].set_ylabel(f"{label}\n\n" + r"$\beta$", fontsize=9)
-    # Honest title: report exact pass count and the one marginal case
+    # Honest title: report exact pass count and any marginal cases
     if total_pass == 0:
-        sup = (rf"Wuzi family kill-test across three QSPR datasets — "
-               rf"0 of {total_pts} parameter points pass the $|r|<0.95$ threshold.")
+        sup = (rf"Wuzi family — redundancy screen across three QSPR datasets: "
+               rf"0 of {total_pts} grid points fall below the $|r|=0.95$ threshold.")
     elif total_pass == 1:
-        sup = (rf"Wuzi family kill-test across three QSPR datasets — "
-               rf"only 1 of {total_pts} parameter points marginally passes the "
-               rf"$|r|<0.95$ threshold (starred cell, FreeSolv).")
+        sup = (rf"Wuzi family — redundancy screen across three QSPR datasets: "
+               rf"only 1 of {total_pts} grid points falls below the "
+               rf"$|r|=0.95$ threshold (starred cell, FreeSolv).")
     else:
-        sup = (rf"Wuzi family kill-test across three QSPR datasets — "
-               rf"{total_pass} of {total_pts} parameter points pass the $|r|<0.95$ threshold (starred cells).")
+        sup = (rf"Wuzi family — redundancy screen across three QSPR datasets: "
+               rf"{total_pass} of {total_pts} grid points fall below the $|r|=0.95$ threshold (starred cells).")
     fig.suptitle(sup, fontsize=10.5, y=0.995)
     cbar_ax = fig.add_axes([0.93, 0.15, 0.012, 0.7])
     cbar = fig.colorbar(im, cax=cbar_ax)

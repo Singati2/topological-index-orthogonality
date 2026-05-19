@@ -84,9 +84,9 @@ Redžepović & Furtula, *MATCH Commun. Math. Comput. Chem.* 95(1), 2026,
   datasets, PCA effective rank, degeneracy, structure sensitivity
 
 The redundancy analysis is included **inside Paper 2** as Section 6
-("Numerical work"), framed constructively — not as a takedown — and
-positioned the same way the MATCH DSO paper Section 5.2 positions its
-own intercorrelation observation.
+("Numerical work"), framed constructively, and positioned the same way
+the MATCH DSO paper Section 5.2 positions its own intercorrelation
+observation.
 
 Target venues: J. Math. Chem., MATCH, AKCE, Iranian J. Math. Chem.,
 SAR & QSAR Env. Res. Realistic.

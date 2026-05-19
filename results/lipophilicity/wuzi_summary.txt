@@ -1,32 +1,35 @@
 WUZI PARAMETER SWEEP — dataset = lipophilicity  target = logD
-Generated: 2026-05-18 17:29:24
+Generated: 2026-05-19 01:12:42
 Grid: alpha=[-1.0, -0.5, 0.0, 0.5, 1.0], beta=[-1.0, -0.5, 0.0, 0.5, 1.0], gamma=[0.0, 0.5, 1.0, 2.0]
 Total points: 100; molecules: 4200
 
-Kill-test: PASS=0, FAIL=100, DEGENERATE=0
+Screen verdict: PASS=0, FAIL=100, DEGENERATE=0
+  (PASS = max |r| with every baseline is strictly below 0.95;
+   FAIL = highly correlated with at least one classical baseline;
+   DEGENERATE = Wuzi value is constant on this dataset.)
 
 --- 10 best points by |partial corr with target| ---
- alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target kill_test
-   1.0   0.5    2.0            0.990716                        F         0.155887             0.009328      FAIL
-   0.5   1.0    2.0            0.986778                        F         0.146640            -0.008611      FAIL
-   0.5   1.0    1.0            0.999083                        F         0.175951            -0.007475      FAIL
-   1.0   0.0    1.0            0.998554                        F         0.184904            -0.007096      FAIL
-   1.0   1.0    1.0            0.996650                    redM1         0.173957            -0.003031      FAIL
-   1.0   1.0    2.0            0.986215                        F         0.151516             0.001969      FAIL
-   1.0   0.0    0.5            0.998620                       M2         0.194598             0.001911      FAIL
-   0.5   1.0    0.0            0.999501                       M2         0.196479            -0.001480      FAIL
-   0.0   1.0    2.0            0.980870                   SO_red         0.133729            -0.001411      FAIL
-   1.0   1.0    0.5            0.996964                    redM1         0.182256            -0.000872      FAIL
+ alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target screen_verdict
+   1.0   0.5    2.0            0.990716                        F         0.155887             0.009328           FAIL
+   0.5   1.0    2.0            0.986778                        F         0.146640            -0.008611           FAIL
+   0.5   1.0    1.0            0.999083                        F         0.175951            -0.007475           FAIL
+   1.0   0.0    1.0            0.998554                        F         0.184904            -0.007096           FAIL
+   1.0   1.0    1.0            0.996650                    redM1         0.173957            -0.003031           FAIL
+   1.0   1.0    2.0            0.986215                        F         0.151516             0.001969           FAIL
+   1.0   0.0    0.5            0.998620                       M2         0.194598             0.001911           FAIL
+   0.5   1.0    0.0            0.999501                       M2         0.196479            -0.001480           FAIL
+   0.0   1.0    2.0            0.980870                   SO_red         0.133729            -0.001411           FAIL
+   1.0   1.0    0.5            0.996964                    redM1         0.182256            -0.000872           FAIL
 
 --- 10 failing points closest to passing (smallest max|r|) ---
- alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target kill_test
-  -0.5   0.5    2.0            0.965388                   SO_red         0.111387                  0.0      FAIL
-  -0.5   0.0    2.0            0.966729                      mM1         0.108302                  0.0      FAIL
-  -0.5   1.0    2.0            0.967524                   SO_red         0.113892                  0.0      FAIL
-  -0.5  -0.5    2.0            0.970451                      mM1         0.104700                  0.0      FAIL
-   0.0  -1.0    2.0            0.970707                   SO_red         0.126599                  0.0      FAIL
-  -0.5  -1.0    2.0            0.971290                      mM1         0.100642                  0.0      FAIL
-   0.0  -0.5    2.0            0.976448                   SO_red         0.129446                  0.0      FAIL
-  -1.0  -1.0    1.0            0.976633                      mM2         0.123836                  0.0      FAIL
-  -1.0  -1.0    2.0            0.977045                      mM1         0.072896                  0.0      FAIL
-  -1.0   1.0    2.0            0.978077                      mM1         0.089116                  0.0      FAIL
+ alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target screen_verdict
+  -0.5   0.5    2.0            0.965388                   SO_red         0.111387                  0.0           FAIL
+  -0.5   0.0    2.0            0.966729                      mM1         0.108302                  0.0           FAIL
+  -0.5   1.0    2.0            0.967524                   SO_red         0.113892                  0.0           FAIL
+  -0.5  -0.5    2.0            0.970451                      mM1         0.104700                  0.0           FAIL
+   0.0  -1.0    2.0            0.970707                   SO_red         0.126599                  0.0           FAIL
+  -0.5  -1.0    2.0            0.971290                      mM1         0.100642                  0.0           FAIL
+   0.0  -0.5    2.0            0.976448                   SO_red         0.129446                  0.0           FAIL
+  -1.0  -1.0    1.0            0.976633                      mM2         0.123836                  0.0           FAIL
+  -1.0  -1.0    2.0            0.977045                      mM1         0.072896                  0.0           FAIL
+  -1.0   1.0    2.0            0.978077                      mM1         0.089116                  0.0           FAIL
