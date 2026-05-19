@@ -32,6 +32,72 @@ baseline on real chemistry datasets.
 
 ---
 
+## Mathematical formulation
+
+### Wuzi index family
+
+For a simple connected graph $G = (V, E)$ with vertex degrees
+$d_u, d_v$ on each edge $uv \in E(G)$, the **Wuzi index family** is
+the three-parameter scalar functional
+
+$$
+W(G;\ \alpha, \beta, \gamma) \;=\; \sum_{uv \in E(G)}
+  (d_u \, d_v)^{\alpha}
+  \;(d_u + d_v)^{\beta}
+  \;\exp\!\left(\gamma \cdot \frac{|d_u - d_v|}{d_u + d_v}\right),
+$$
+
+with $\alpha, \beta, \gamma \in \mathbb{R}$. The family is a strict
+generalization of several classical bond-incident-degree (BID)
+indices recovered as special cases:
+
+| Parameters | Recovered index |
+|---|---|
+| $\alpha = 1,\ \beta = 0,\ \gamma = 0$        | Second Zagreb $M_2$ |
+| $\alpha = -\tfrac{1}{2},\ \beta = 0,\ \gamma = 0$ | Randić $R$ |
+| $\alpha = 0,\ \beta = -\tfrac{1}{2},\ \gamma = 0$ | Sum-connectivity $\mathrm{SCI}$ |
+| $\alpha = 0,\ \beta = -1,\ \gamma = 0$        | (Half) Harmonic $H/2$ |
+
+When $\gamma = 0$ the family reduces to the standard two-parameter
+$(\alpha, \beta)$ degree-based family; the $\gamma$ term introduces
+explicit dependence on the *normalized degree imbalance*
+$|d_u - d_v| / (d_u + d_v) \in [0, 1)$ along each edge.
+
+### Edge-Degree-Pair Basis theorem (informal)
+
+Let $\mathcal{F}_{\mathrm{BID}}$ denote the class of
+**bond-incident-degree** scalar indices, i.e. real-valued functionals
+on graphs of the form
+
+$$
+I(G) \;=\; \sum_{uv \in E(G)} f(d_u, d_v)
+\qquad
+\text{for some symmetric } f : \mathbb{N}^2 \to \mathbb{R}.
+$$
+
+On the subclass of **H-suppressed molecular graphs** with maximum
+degree $\Delta \le 4$, the only possible unordered degree pairs on an
+edge are $(i, j)$ with $1 \le i \le j \le 4$, giving 10 admissible
+edge-degree pairs. Hence every $I \in \mathcal{F}_{\mathrm{BID}}$ is
+a linear functional of the 10 edge-degree-pair counts
+$m_{ij}(G) = \big|\{uv \in E(G) : \{d_u, d_v\} = \{i, j\}\}\big|$,
+i.e.
+
+$$
+I(G) \;=\; \sum_{1 \le i \le j \le 4}
+  f(i, j) \cdot m_{ij}(G).
+$$
+
+**Consequence.** On Δ ≤ 4 graphs the vector space spanned by all BID
+indices has dimension at most 10; any 11 BID indices are necessarily
+linearly dependent. This is the structural reason why high empirical
+redundancy is *unsurprising*, and motivates the orthogonality
+screening protocol.
+
+See `docs/theoretical_foundation.md` for the full statement and proof.
+
+---
+
 ## Two-paper strategy
 
 This repository supports two related papers being developed in
@@ -92,7 +158,7 @@ landing first.
 | Paper 2 § 5 extremal graphs                        | ⏳ awaiting math |
 | Paper 2 § 1 introduction + § 7 discussion          | ⏳ writing |
 | Paper 1 manuscript                                  | ⏳ scheduled after Paper 2 |
-| Figures (production quality)                       | ⏳ pending |
+| Figures (production quality, PNG + PDF, 8 figures)  | ✅ done    |
 
 ---
 
@@ -102,11 +168,9 @@ landing first.
    bounds in classical indices, extremal graphs). These require
    graph-theoretic derivations following the MATCH 95:141-162 template.
 2. Manuscript writing (intro, discussion, conclusion) for Paper 2.
-3. Production-quality figures (currently we have CSV/Markdown tables;
-   need TikZ / matplotlib figures for the manuscript).
-4. Full reference bibliography (every `[REFERENCE NEEDED]` placeholder
+3. Full reference bibliography (every `[REFERENCE NEEDED]` placeholder
    in `docs/literature_notes.md` must be resolved by reading the source).
-5. Paper 1 manuscript (deliberately deferred until Paper 2 lands).
+4. Paper 1 manuscript (deliberately deferred until Paper 2 lands).
 
 ---
 
@@ -252,6 +316,15 @@ docs/
   collaboration.md               Contributor workflow
 
 results/                          Reproducible outputs by dataset
+figures/                          Publication-quality figures (PNG + PDF)
+  fig2_pca_scree                  Cross-dataset PCA scree (3 components ⇒ 95%)
+  fig3_redundancy_bars            Per-dataset redundant-pair counts at three |r| thresholds
+  fig4_octane_heatmap             Octane prediction: signed correlation with 8 properties
+  fig5_wuzi_param_heatmaps        Wuzi kill-test on ESOL (γ ∈ {0, 0.5, 1, 2})
+  fig5b_wuzi_param_heatmaps_all   Same kill-test across all three datasets
+  fig6_degeneracy_bars            Index degeneracy on 106 trees of order 10
+  fig7_structure_sensitivity      Structure sensitivity on 75 decane isomers
+  fig8_correlation_heatmap        30-index pairwise correlation heatmap (ESOL)
 data/                             Cached download CSVs (gitignored)
 ```
 

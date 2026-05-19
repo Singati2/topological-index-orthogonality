@@ -46,6 +46,27 @@ plt.rcParams.update({
 DATASETS = [("esol", "ESOL  (n=1127)"), ("freesolv", "FreeSolv  (n=639)"),
             ("lipophilicity", "Lipophilicity  (n=4200)")]
 
+DATASET_DISPLAY = {"esol": "ESOL", "freesolv": "FreeSolv",
+                   "lipophilicity": "Lipophilicity"}
+
+
+def _wuzi_label(name: str) -> str:
+    """Convert programmatic names like 'Wuzi_a1.0_b0.0_g0.0' or
+    'Wuzi(α=1.0, β=0.0, γ=0.0)' to a clean publication-ready form
+    W(1, 0, 0)."""
+    if name.startswith("Wuzi_a"):
+        # parse "Wuzi_a<α>_b<β>_g<γ>"
+        rest = name[len("Wuzi_a"):]
+        a_str, rest = rest.split("_b", 1)
+        b_str, g_str = rest.split("_g", 1)
+        a, b, g = float(a_str), float(b_str), float(g_str)
+        return f"$W({a:g},\\, {b:g},\\, {g:g})$"
+    if name.startswith("Wuzi(α="):
+        s = name.replace("Wuzi(α=", "").replace(", β=", ",").replace(", γ=", ",").rstrip(")")
+        a, b, g = (float(x) for x in s.split(","))
+        return f"$W({a:g},\\, {b:g},\\, {g:g})$"
+    return name
+
 
 def save_both(fig, name):
     fig.savefig(os.path.join(FIG_DIR, f"{name}.png"))
@@ -83,28 +104,28 @@ def fig2_pca_scree():
 
 def fig3_redundancy_bars():
     summary = pd.read_csv(os.path.join(PROJECT, "results", "cross_dataset_summary.csv"))
-    fig, ax = plt.subplots(figsize=(6, 4))
+    fig, ax = plt.subplots(figsize=(6.5, 4.2))
     x = np.arange(len(summary))
     width = 0.35
     bars1 = ax.bar(x - width/2, summary["pairs_r_ge_090"], width,
-                   label="|r| ≥ 0.90", color="#aec7e8", edgecolor="#1f77b4")
+                   label=r"$|r| \geq 0.90$", color="#aec7e8", edgecolor="#1f77b4")
     bars2 = ax.bar(x + width/2, summary["pairs_r_ge_095"], width,
-                   label="|r| ≥ 0.95", color="#d62728", edgecolor="#8c0000")
-    ax.axhline(435, color="gray", linestyle=":", linewidth=1, alpha=0.6)
-    ax.text(2.4, 440, "Total = 435 pairs", fontsize=8, color="gray", ha="right")
+                   label=r"$|r| \geq 0.95$", color="#d62728", edgecolor="#8c0000")
+    ax.axhline(435, color="gray", linestyle=":", linewidth=1, alpha=0.7)
+    ax.text(-0.45, 437, "Total = 435 pairs", fontsize=8, color="gray", ha="left",
+            va="bottom")
     ax.set_xticks(x)
-    ax.set_xticklabels([s.replace("_", " ").title() for s in summary["dataset"]])
+    ax.set_xticklabels([DATASET_DISPLAY[s] for s in summary["dataset"]])
     ax.set_ylabel("Number of pairs")
     ax.set_ylim(0, 480)
-    ax.set_title("Redundant pairs out of C(30, 2) = 435 baseline index pairs",
-                 fontsize=10)
-    ax.legend(loc="upper right")
-    for bar in bars1:
-        ax.annotate(f"{int(bar.get_height())}", xy=(bar.get_x() + bar.get_width()/2, bar.get_height()),
-                    xytext=(0, 3), textcoords="offset points", ha="center", fontsize=8)
-    for bar in bars2:
-        ax.annotate(f"{int(bar.get_height())}", xy=(bar.get_x() + bar.get_width()/2, bar.get_height()),
-                    xytext=(0, 3), textcoords="offset points", ha="center", fontsize=8)
+    ax.set_title(r"Redundant index pairs out of $\binom{30}{2}=435$ "
+                 "baseline pairs", fontsize=10)
+    ax.legend(loc="upper left", bbox_to_anchor=(0.01, 0.98), frameon=True)
+    for bar in list(bars1) + list(bars2):
+        ax.annotate(f"{int(bar.get_height())}",
+                    xy=(bar.get_x() + bar.get_width()/2, bar.get_height()),
+                    xytext=(0, 3), textcoords="offset points",
+                    ha="center", fontsize=8)
     save_both(fig, "fig3_redundancy_bars")
 
 
@@ -113,23 +134,40 @@ def fig3_redundancy_bars():
 def fig4_octane_heatmap():
     df = pd.read_csv(os.path.join(PROJECT, "results", "octane_prediction.csv"))
     df = df.set_index("index")
-    # Reorder: sort by max |r|
-    df["__rank"] = df[["r_T_B", "r_dHf", "r_dHvap", "r_S", "r_omega"]].abs().max(axis=1)
+    cols = ["r_T_B", "r_dHf", "r_dHvap", "r_S", "r_omega"]
+    # Drop indices that are degenerate (constant) on the 18 octanes — their
+    # correlation is mathematically undefined (NaN). Currently this is PI.
+    finite = df[cols].notna().all(axis=1)
+    degenerate = df.index[~finite].tolist()
+    df = df.loc[finite].copy()
+    # Reorder by max |r|
+    df["__rank"] = df[cols].abs().max(axis=1)
     df = df.sort_values("__rank", ascending=False).drop(columns="__rank")
-    fig, ax = plt.subplots(figsize=(4, 9))
-    im = ax.imshow(df.abs().values, cmap="Reds", aspect="auto", vmin=0, vmax=1)
-    ax.set_xticks(range(len(df.columns)))
-    ax.set_xticklabels(["T_B", "ΔH_f", "ΔH_vap", "S", "ω"], rotation=0)
+    # Relabel Wuzi entries
+    df.index = [_wuzi_label(n) for n in df.index]
+
+    fig, ax = plt.subplots(figsize=(5.2, 9))
+    im = ax.imshow(df[cols].abs().values, cmap="Reds", aspect="auto",
+                   vmin=0, vmax=1)
+    ax.set_xticks(range(len(cols)))
+    ax.set_xticklabels([r"$T_B$", r"$\Delta H_f$", r"$\Delta H_{\mathrm{vap}}$",
+                        r"$S$", r"$\omega$"], rotation=0, fontsize=10)
     ax.set_yticks(range(len(df.index)))
     ax.set_yticklabels(df.index, fontsize=7)
     for i in range(df.shape[0]):
-        for j in range(df.shape[1]):
-            v = df.iloc[i, j]
+        for j, c in enumerate(cols):
+            v = df.iloc[i][c]
             color = "white" if abs(v) > 0.6 else "black"
-            ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=6, color=color)
+            ax.text(j, i, f"{v:+.2f}", ha="center", va="center",
+                    fontsize=6, color=color)
     cbar = plt.colorbar(im, ax=ax, fraction=0.04, pad=0.04)
-    cbar.set_label("|r|")
-    ax.set_title("Octane prediction:\n|r| of each index with each property (n=18)", fontsize=10)
+    cbar.set_label(r"$|r|$")
+    note = ""
+    if degenerate:
+        note = (f"\nDegenerate (constant on the 18 octanes, |r| undefined): "
+                f"{', '.join(degenerate)}.")
+    ax.set_title("Octane prediction: signed Pearson $r$ "
+                 "(color encodes $|r|$) — $n=18$" + note, fontsize=9)
     save_both(fig, "fig4_octane_heatmap")
 
 
@@ -140,21 +178,28 @@ def _wuzi_heatmap_panel(ax, ds, gamma, vmin=0.9, vmax=1.0):
     slice_df = (df[df["gamma"] == gamma]
                 .pivot(index="beta", columns="alpha", values="max_abs_r_baseline"))
     slice_df = slice_df.sort_index(ascending=False)  # high β at top
+    # Diverging at the kill threshold 0.95: green = pass, red = fail
     cmap = LinearSegmentedColormap.from_list(
-        "rg", ["#2ca02c", "#fdae61", "#d62728", "#8c0000"])
+        "killtest", ["#2ca02c", "#a1d99b", "#fdae61", "#d62728", "#8c0000"])
     im = ax.imshow(slice_df.values, cmap=cmap, vmin=vmin, vmax=vmax, aspect="auto")
     ax.set_xticks(range(len(slice_df.columns)))
     ax.set_xticklabels([f"{v:g}" for v in slice_df.columns])
     ax.set_yticks(range(len(slice_df.index)))
     ax.set_yticklabels([f"{v:g}" for v in slice_df.index])
-    ax.set_xlabel("α")
-    ax.set_ylabel("β")
-    ax.set_title(f"γ = {gamma:g}")
+    ax.set_xlabel(r"$\alpha$")
+    ax.set_ylabel(r"$\beta$")
+    ax.set_title(rf"$\gamma = {gamma:g}$")
     for i in range(slice_df.shape[0]):
         for j in range(slice_df.shape[1]):
             v = slice_df.iloc[i, j]
             color = "white" if v > 0.97 else "black"
-            ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7, color=color)
+            # Mark the one passing point in bold/italic
+            if v < 0.95:
+                ax.text(j, i, f"{v:.2f}*", ha="center", va="center",
+                        fontsize=7, color="white", fontweight="bold")
+            else:
+                ax.text(j, i, f"{v:.2f}", ha="center", va="center",
+                        fontsize=7, color=color)
     return im
 
 
@@ -163,57 +208,92 @@ def fig5_wuzi_param_heatmaps():
     gammas = [0.0, 0.5, 1.0, 2.0]
     for ax, gamma in zip(axes.flat, gammas):
         im = _wuzi_heatmap_panel(ax, "esol", gamma)
-    fig.suptitle("Wuzi family kill-test on ESOL (n=1127):\n"
-                 "max |r| with classical 30-index baseline at each (α, β, γ)",
-                 fontsize=11, y=1.00)
+    fig.suptitle(r"Wuzi family kill-test on ESOL ($n=1127$): "
+                 r"$\max|r|$ with the 30-index"
+                 "\n"
+                 r"baseline at each $(\alpha,\beta,\gamma)$. "
+                 r"All 100 points fail the $|r|<0.95$ threshold.",
+                 fontsize=10.5, y=1.00)
     cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
     cbar = fig.colorbar(im, cax=cbar_ax)
-    cbar.set_label("max |r|")
-    cbar.ax.axhline(0.95, color="black", linewidth=1)
-    fig.text(0.94, 0.50, "kill threshold",
+    cbar.set_label(r"$\max|r|$")
+    # Add the kill threshold line in colorbar coordinates (it spans [0.9, 1.0])
+    cbar.ax.plot([0, 1], [0.95, 0.95], color="black", linewidth=1.2,
+                 transform=cbar.ax.transAxes if False else cbar.ax.transData)
+    fig.text(0.945, 0.50, "kill threshold (0.95)",
              rotation=270, va="center", fontsize=8)
-    plt.tight_layout(rect=[0, 0, 0.9, 0.96])
+    plt.tight_layout(rect=[0, 0, 0.9, 0.95])
     save_both(fig, "fig5_wuzi_param_heatmaps")
 
 
 def fig5b_wuzi_param_heatmaps_all():
+    # Honest count of passing points across all three datasets
+    total_pass = 0
+    total_pts = 0
+    pass_locations = []
+    for ds, _ in DATASETS:
+        d = pd.read_csv(os.path.join(PROJECT, "results", ds, "wuzi_grid.csv"))
+        p = d[d["kill_test"] == "PASS"]
+        total_pass += len(p)
+        total_pts += len(d)
+        for _, r in p.iterrows():
+            pass_locations.append(
+                f"{DATASET_DISPLAY[ds]} at $(\\alpha,\\beta,\\gamma)=({r['alpha']:g},{r['beta']:g},{r['gamma']:g})$"
+                f": $\\max|r|={r['max_abs_r_baseline']:.3f}$, "
+                f"partial $r$ w/ target $={r['partial_corr_target']:.3f}$"
+            )
+
     fig, axes = plt.subplots(3, 4, figsize=(13, 9))
     gammas = [0.0, 0.5, 1.0, 2.0]
     for row, (ds, label) in enumerate(DATASETS):
         for col, gamma in enumerate(gammas):
             im = _wuzi_heatmap_panel(axes[row, col], ds, gamma)
-        axes[row, 0].set_ylabel(f"{label}\n\nβ", fontsize=9)
-    fig.suptitle("Wuzi family kill-test across three QSPR datasets — "
-                 "no parameter point passes |r| < 0.95 on any dataset",
-                 fontsize=11, y=0.995)
+        axes[row, 0].set_ylabel(f"{label}\n\n" + r"$\beta$", fontsize=9)
+    # Honest title: report exact pass count and the one marginal case
+    if total_pass == 0:
+        sup = (rf"Wuzi family kill-test across three QSPR datasets — "
+               rf"0 of {total_pts} parameter points pass the $|r|<0.95$ threshold.")
+    elif total_pass == 1:
+        sup = (rf"Wuzi family kill-test across three QSPR datasets — "
+               rf"only 1 of {total_pts} parameter points marginally passes the "
+               rf"$|r|<0.95$ threshold (starred cell, FreeSolv).")
+    else:
+        sup = (rf"Wuzi family kill-test across three QSPR datasets — "
+               rf"{total_pass} of {total_pts} parameter points pass the $|r|<0.95$ threshold (starred cells).")
+    fig.suptitle(sup, fontsize=10.5, y=0.995)
     cbar_ax = fig.add_axes([0.93, 0.15, 0.012, 0.7])
     cbar = fig.colorbar(im, cax=cbar_ax)
-    cbar.set_label("max |r| with baseline")
+    cbar.set_label(r"$\max|r|$ with baseline")
     plt.tight_layout(rect=[0, 0, 0.92, 0.97])
     save_both(fig, "fig5b_wuzi_param_heatmaps_all")
+    # Print honest pass details so they can also go in the manuscript caption
+    if pass_locations:
+        print("    Marginal passing points (starred in figure):")
+        for loc in pass_locations:
+            print(f"      - {loc}")
 
 
 # ===== Figure 6: Degeneracy bars =====
 
 def fig6_degeneracy_bars():
     df = pd.read_csv(os.path.join(PROJECT, "results", "wuzi_degeneracy.csv"))
-    # Show all entries, sorted by degeneracy
+    df["display"] = [_wuzi_label(n) for n in df["index"]]
     df = df.sort_values("degeneracy_pct").reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(8, 0.25 * len(df) + 1))
     colors = ["#d62728" if f == "wuzi" else "#1f77b4" for f in df["family"]]
     ax.barh(range(len(df)), df["degeneracy_pct"], color=colors,
             edgecolor="black", linewidth=0.3)
     ax.set_yticks(range(len(df)))
-    ax.set_yticklabels(df["index"], fontsize=7)
+    ax.set_yticklabels(df["display"], fontsize=7)
     ax.set_xlabel("% degeneracy on 106 non-isomorphic trees of order 10")
     ax.set_xlim(0, 100)
     ax.invert_yaxis()
-    # Color legend
     from matplotlib.patches import Patch
     leg = [Patch(facecolor="#1f77b4", label="baseline (classical)"),
-           Patch(facecolor="#d62728", label="Wuzi parameter triple")]
+           Patch(facecolor="#d62728", label=r"Wuzi $W(\alpha,\beta,\gamma)$")]
     ax.legend(handles=leg, loc="lower right", frameon=True)
-    ax.set_title("Index degeneracy on trees(10): lower is more discriminating",
+    ax.set_title("Index degeneracy on trees of order 10\n"
+                 "(lower = better discrimination among 106 distinct structures)",
                  fontsize=10)
     save_both(fig, "fig6_degeneracy_bars")
 
@@ -222,18 +302,21 @@ def fig6_degeneracy_bars():
 
 def fig7_structure_sensitivity():
     df = pd.read_csv(os.path.join(PROJECT, "results", "structure_sensitivity.csv"))
+    df["display"] = [_wuzi_label(n) for n in df["index"]]
     df = df.sort_values("SS", ascending=False).head(20).reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(11, 5.5))
     x = np.arange(len(df))
     width = 0.27
-    ax.bar(x - width, df["SS"],  width, label="SS",  color="#1f77b4")
-    ax.bar(x,         df["Abr"], width, label="Abr", color="#ff7f0e")
-    ax.bar(x + width, df["SA"],  width, label="SA",  color="#2ca02c")
+    ax.bar(x - width, df["SS"],  width, label=r"$SS$",  color="#1f77b4")
+    ax.bar(x,         df["Abr"], width, label=r"$Abr$", color="#ff7f0e")
+    ax.bar(x + width, df["SA"],  width, label=r"$SA$",  color="#2ca02c")
     ax.set_xticks(x)
-    ax.set_xticklabels(df["index"], rotation=45, ha="right", fontsize=8)
+    ax.set_xticklabels(df["display"], rotation=45, ha="right", fontsize=8)
     ax.set_ylabel("Value")
-    ax.set_title("Structure sensitivity metrics on 75 decane isomers "
-                 "(top 20 by SS)", fontsize=10)
+    ax.set_title(r"Structure sensitivity on 75 decane isomers — "
+                 r"top 20 by $SS$ "
+                 r"($SS=\sigma/\mu$, $Abr=(\max-\min)/\mu$, $SA=SS/Abr$)",
+                 fontsize=9.5)
     ax.legend(loc="upper right")
     save_both(fig, "fig7_structure_sensitivity")
 
