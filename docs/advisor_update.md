@@ -105,23 +105,25 @@ audiences:
 
 **Paper 1 (we recommend writing first):**
 *"The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal
-Graphs, and Redundancy Analysis"*
+Graphs, and Sensitivity Analysis"*
 
 Follows the mathematical-chemistry tradition (analog of Movahedi, Gutman,
 Redžepović & Furtula, *MATCH Commun. Math. Comput. Chem.* 95(1), 2026,
 141–162):
 
 - Definition + special-graph closed-forms + edge-contribution analysis
+- BID-basis observation (10-dim ceiling on Δ ≤ 4)
 - Bounds in (n, m, Δ, δ)
-- Bounds in classical indices
-- Extremal graph characterization (trees, unicyclic, bicyclic)
-- Numerical Section: octane prediction, intercorrelations across three
-  datasets, PCA effective rank, degeneracy, structure sensitivity
+- Bounds via classical indices (ratio-bound theorem)
+- Extremal graph characterization (trees, unicyclic, bicyclic; the
+  headline non-classical extremal at (−1, −1, 1))
+- Sensitivity Section: octane physicochemical-property correlations,
+  degeneracy on 106 trees of order 10, structure sensitivity on
+  the 75 decane isomers
 
-The redundancy analysis is included **inside Paper 1** as Section 6
-("Numerical work"), framed constructively, and positioned the same way
-the MATCH DSO paper Section 5.2 positions its own intercorrelation
-observation.
+The cross-dataset redundancy analysis and the orthogonality-screening
+pipeline are NOT in Paper 1 — they are the central content of the
+methodology paper (Paper 2).
 
 Target venues: J. Math. Chem., MATCH, AKCE, Iranian J. Math. Chem.,
 SAR & QSAR Env. Res. Realistic.
@@ -166,13 +168,14 @@ and Movahedi (2025) arXiv preprint:
 
 | Section | Content needed                                                     |
 |---|---|
-| **3** | Bounds on W(G; α, β, γ) in terms of (n, m, Δ, δ), with sharp regular-graph extremals |
-| **4** | Bounds on W in terms of M_1, M_2, R, SO, GA, H, ABC (Movahedi 2025 template) |
-| **5** | Extremal-graph characterization among trees, unicyclic graphs, bicyclic graphs |
+| **4** | Sharp $\Delta$-dependent and $\delta$-dependent bounds, Nordhaus–Gaddum, Polya–Szego (currently `[PROOF SKETCH]` placeholders) |
+| **5** | Sharp per-index bounds for $R$, $SO$, $GA$, $H$, $ABC$ (ratio-bound theorem is rigorous; per-index sharp forms are `[PROOF SKETCH]` placeholders) |
+| **6** | Extremal-graph characterization among trees, unicyclic, bicyclic graphs, and the non-classical extremal at $(-1,-1,1)$ (Conjecture 6.4) |
 
 Each is comparable in scope to a single section of the MATCH DSO paper.
-The numerical sections (§6) and all infrastructure are already in place
-so the math sections can drop directly into a prepared manuscript skeleton.
+The sensitivity-analysis section (§7) and all numerical infrastructure
+are already in place so the math sections can drop directly into a
+prepared manuscript skeleton.
 
 ## 5a. Mathematical scaffolding added (2026-05-19)
 

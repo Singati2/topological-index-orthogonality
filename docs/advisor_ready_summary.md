@@ -17,10 +17,12 @@ If you have time for only three actions in this round:
    we will drop it and present the result only as a remark.
 
 2. **Decide whether you want to co-author Paper 1 §4 (Nordhaus-Gaddum
-   and sharp $\Delta$-dependent bounds) and §6 (formal extremal
+   and sharp $\Delta$-dependent bounds), §5 (sharp per-index bounds
+   for $R$, $SO$, $GA$, $H$, $ABC$), and §6 (formal extremal
    characterizations) with Advik**, or whether to ship Paper 1
-   with the current proof-sketch placeholders converted to
-   "open problem" remarks. Either choice unblocks submission.
+   with the current `[PROOF SKETCH]` placeholders (now made visible
+   in the rendered PDF) converted to "open problem" remarks or
+   numbered Conjectures. Either choice unblocks submission.
 
 3. **Confirm the affiliation line** "Department of Mathematics and
    Statistics, Florida Atlantic University" (Ganesh) and "Department

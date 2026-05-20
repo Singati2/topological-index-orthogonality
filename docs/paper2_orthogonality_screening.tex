@@ -30,9 +30,9 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-% \todo{...} markers are kept in the source but suppressed in PDF.
-% Restore by swapping for: \newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
-\newcommand{\todo}[1]{}
+% Working-draft markers visible in this draft; submission-ready
+% compile swaps to \newcommand{\todo}[1]{} after stub resolution.
+\newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
 \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
 
 \title{\bfseries Orthogonality Screening of Topological Indices for QSPR Modeling:\\ A Structural and Empirical Redundancy Analysis}
@@ -86,6 +86,15 @@ dataset; effective rank $3$ for $95\%$ explained variance; effective
 rank $5$ for $99\%$. The three-parameter Wuzi index family of the
 companion paper, screened at $300$ grid points across the three
 datasets, fails the combined criterion at every grid point sampled.
+
+A five-fold cross-validated RandomForest benchmark across all four
+datasets (ESOL, FreeSolv, Lipophilicity regression; BBBP
+classification) compares three feature configurations
+(\texttt{full}, \texttt{pairwise\_pruned}, \texttt{combined\_pruned})
+and confirms that the combined criterion matches the full feature
+set within CV noise on three of the four datasets while exposing
+honest failure modes on Lipophilicity (Figure~\ref{fig:ml_benchmark},
+Table~\ref{tab:ml_benchmark}).
 
 We emphasize that orthogonality with the classical baseline is a
 \emph{necessary but not sufficient} condition for QSPR usefulness:

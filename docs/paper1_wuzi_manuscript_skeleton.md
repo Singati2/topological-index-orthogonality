@@ -167,8 +167,8 @@ $c_{\max}^h$ are computed by `scripts/09_wuzi_bounds_tables.py`
 for $h \in \{M_1, M_2, R, SO, GA, H, ABC\}$ and a list of parameter
 triples; output in `results/wuzi_bounds_ratio_tables.{csv,md}`.
 
-The ratio bound is rigorous and ready to include in Paper 2 with
-minimal further work: it covers all seven classical indices in one
+The ratio bound is rigorous and now included in Paper 1 (§5,
+Theorem~5.1): it covers all seven classical indices in one
 unified statement (one theorem + one table per index), and at
 exact Wuzi-classical reductions the constants collapse to a single
 identity (sanity-checked in the output: e.g.\ $(\alpha,\beta,\gamma) = (1,0,0)$
@@ -222,7 +222,7 @@ Randić $R_\alpha$ with $\alpha < 0$.
 In this region (the FreeSolv "borderline pass" triple) the
 observed extremals are *neither* $P_n$ nor $S_n$ for $n \ge 5$.
 This is the most interesting case for genuine new mathematics in
-Paper 2 §5: the extremal structures here are not the classical
+Paper 1 §6: the extremal structures here are not the classical
 ones and require characterization. The script output identifies
 specific extremal trees by structure for each $n$.
 

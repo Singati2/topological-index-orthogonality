@@ -40,14 +40,15 @@
 \newcommand{\Wuzi}{W(G;\alpha,\beta,\gamma)}
 \newcommand{\edgepsi}{\psi(x,y;\alpha,\beta,\gamma)}
 \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
-% \todo{...} markers are kept in the source for the working draft but
-% suppressed in the compiled PDF so that no red [TO DO] flags reach an
-% external reader (Arockiaraj sir or a journal). To restore them while
-% editing, swap the definition below for:
-%   \newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
-\newcommand{\todo}[1]{}
+% Working-draft markers are VISIBLE in this draft so Arockiaraj sir
+% and a careful reader can see exactly which theorems are still proof
+% sketches vs fully proved. Submission-ready compile swaps the
+% definition to \newcommand{\todo}[1]{} (suppressed) AFTER converting
+% every visible [PROOF SKETCH] theorem to either a complete proof or
+% a Conjecture environment.
+\newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
 
-\title{\bfseries The Wuzi Index Family:\\ Graph-Theoretic Properties, Bounds, Extremal Graphs,\\ and Redundancy Analysis on QSPR Benchmarks}
+\title{\bfseries The Wuzi Index Family:\\ Graph-Theoretic Properties, Bounds, Extremal Graphs,\\ and Sensitivity Analysis}
 
 \author{
   Advik Natarajan\thanks{Department of Mathematics, Loyola College, Chennai, India.} \and
@@ -79,25 +80,31 @@ harmonic index $H$ all appear as special cases. Closed-form values
 of the family are derived on nine standard graph classes
 ($K_n,\,C_n,\,P_n,\,S_n,\,K_{p,q},\,Q_k,\,W_n,\,F_p$, and
 $r$-regular graphs). A bracket bound via the edge-contribution
-function is established and is tight on regular graphs. Further
-bounds in terms of order $n$, size $m$, and degree extremes
-$(\Delta,\delta)$, as well as in terms of classical degree-based
-indices, are stated as theorem templates with explicit proof
-strategies; their fully sharp formulations and equality-condition
-analyses are reserved for the companion mathematical work.
+function is established and is tight on regular graphs.
+A \emph{ratio-bound theorem} (Theorem~\ref{thm:ratio_bound}) proves
+that for every classical BID index $I_h$ with strictly positive
+edge contribution on the pairs realised in $G$, the family is
+sandwiched as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
+with explicit equality conditions. Further sharp bounds in terms of
+order $n$, size $m$, and degree extremes $(\Delta,\delta)$, and per-
+index bounds for $R$, $SO$, $GA$, $H$, $ABC$, are stated as theorem
+templates with explicit proof strategies; their fully sharp
+formulations and equality-condition analyses are reserved for joint
+work with the senior author.
 Extremal-graph behavior among trees, unicyclic graphs, and
 bicyclic graphs is conjectured by parameter-sign region.
 
-Computational enumeration of all non-isomorphic trees of order
-$5 \le n \le 12$ supports a sign-region partition of the
-extremal-tree behaviour: in the positive-parameter region
-$\alpha, \beta, \gamma \ge 0$ the path $P_n$ and star $S_n$ are
-the observed minimizer and maximizer respectively; in the
-Randi\'c / sum-connectivity / harmonic sign region the extremals
-flip; and at the mixed-sign triple $(-1, -1, 1)$ the maximum is
-attained for $n \ge 6$ by a non-classical tree --- neither the
-path nor the star, and for $n \ge 7$ also not a caterpillar ---
-whose formal characterization is left as an open problem.
+The headline computational finding is a non-classical extremal
+regime: at the mixed-sign parameter triple
+$(\alpha,\beta,\gamma)=(-1,-1,1)$, exhaustive enumeration of all
+non-isomorphic trees of order $5 \le n \le 12$ shows that the
+maximum is attained for $n \ge 6$ by a tree that is
+\emph{neither the path nor the star, and for $n \ge 7$ also not a
+caterpillar} (Conjecture~\ref{conj:caterpillar_max}). The structural
+characterization of this maximizer is the central open problem of
+the paper. Two flanking sign-region patterns confirm the
+classical extremals in the positive-parameter region and in the
+Randi\'c / sum-connectivity / harmonic region.
 
 A sensitivity-analysis section evaluates the family against eight
 classical bond-incident-degree indices on the $18$ octane isomers
@@ -773,13 +780,20 @@ forces $\psi(d_u, d_v) / h(d_u, d_v) = c_{\max}^{h}$ for every edge.
 \end{proof}
 
 \begin{remark}\label{rem:ratio_bound_practice}
-On the hydrogen-suppressed molecular graphs $\mathcal{G}_4$, the
-ratio extrema $c_{\min}^{h}, c_{\max}^{h}$ are finite-set extrema
-over the ten admissible degree pairs $\{(i, j) : 1 \le i \le j \le 4\}$
-and are computable by brute force given any parameter triple
-$(\alpha, \beta, \gamma)$. For each classical index $I_h$ in
-$\{M_1, M_2, R, SO, GA, H, ABC\}$ (with $ABC$ restricted to graphs
-without a $(1, 1)$ edge, since $h_{ABC}(1, 1) = 0$), the
+The graph-specific extrema in Theorem~\ref{thm:ratio_bound} can be
+replaced by uniform $\mathcal{G}_4$-wide extrema at the cost of a
+looser (but $G$-independent) bound: on hydrogen-suppressed molecular
+graphs $\mathcal{G}_4$, the ratio extrema $c_{\min}^{h}, c_{\max}^{h}$
+are finite-set extrema over the ten admissible degree pairs
+$\{(i, j) : 1 \le i \le j \le 4\}$ and are computable by brute force
+given any parameter triple $(\alpha, \beta, \gamma)$. More generally,
+whenever $h$ vanishes on some admissible pair (for example
+$h_{ABC}(1, 1) = 0$), $c_{\max}^{h}$ becomes infinite on any graph
+that realises that pair and the upper ratio bound is vacuous; the
+hypothesis ``$h(i, j) > 0$ on every pair appearing in $G$'' in
+Theorem~\ref{thm:ratio_bound} is the correct restriction. For each
+classical index $I_h$ in $\{M_1, M_2, R, SO, GA, H, ABC\}$ (the $ABC$
+case with the natural $(1,1)$-free restriction), the
 script \texttt{scripts/09\_wuzi\_bounds\_tables.py} tabulates
 $c_{\min}^{h}, c_{\max}^{h}$ at eight canonical parameter triples;
 output in \texttt{results/wuzi\_bounds\_ratio\_tables.\{csv,md\}}.

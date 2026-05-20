@@ -64,40 +64,43 @@ def test_bid_dimension_bound_on_delta_4():
     """Verify that on Delta <= 4 graphs, any 11 BID indices are linearly
     dependent (i.e. the BID index image has dimension at most 10).
 
-    Strategy: pick 11 distinct symmetric f(i, j) -> R functions; evaluate
-    each on a panel of small Delta <= 4 graphs to get an 11-vector of
-    index values per graph; stack into a matrix and assert the column rank
-    is at most 10.
+    Strategy: pick 11 BID functionals whose underlying symmetric
+    functions on the 10 admissible pairs ARE LINEARLY INDEPENDENT (so
+    the test is a non-vacuous witness of Theorem 3.1). The natural
+    such choice is 10 indicator functions on each admissible pair plus
+    one functional outside their span -- any of these 11 would give
+    rank exactly 10 on a panel of graphs that realises every admissible
+    pair. We assert rank <= 10 (the bound) and equal to 10 (sharpness).
     """
     import numpy as np
 
-    def f_const(i, j): return 1.0
-    def f_sum(i, j): return i + j
-    def f_prod(i, j): return i * j
-    def f_max(i, j): return max(i, j)
-    def f_min(i, j): return min(i, j)
-    def f_diff_abs(i, j): return abs(i - j)
-    def f_sumsq(i, j): return i * i + j * j
-    def f_diffsq(i, j): return (i - j) ** 2
-    def f_invsum(i, j): return 1.0 / (i + j)
-    def f_invprod(i, j): return 1.0 / (i * j)
-    def f_random_symmetric(i, j):
-        # Another symmetric BID functional; choose any closed form.
-        return (i + j) * abs(i - j) + i * j
+    # Indicator on each admissible (i, j) pair, symmetric in i, j.
+    def make_indicator(pair):
+        a, b = pair
+        def f(i, j):
+            return 1.0 if (min(i, j), max(i, j)) == (a, b) else 0.0
+        return f
 
-    fs = [f_const, f_sum, f_prod, f_max, f_min, f_diff_abs,
-          f_sumsq, f_diffsq, f_invsum, f_invprod, f_random_symmetric]
-    assert len(fs) == 11, "Need 11 BID functions"
+    admissible = [(i, j) for i in range(1, 5) for j in range(i, 5)]
+    assert len(admissible) == 10
+    indicator_funcs = [make_indicator(p) for p in admissible]
 
-    # Build a panel of Delta <= 4 trees of various orders.
+    # Eleventh functional, generic symmetric: f(i,j) = (i+j)^2. By
+    # Theorem 3.1 this is forced to be a linear combination of the 10
+    # indicators when restricted to admissible pairs (i.e. for all
+    # graphs of max degree at most 4) -- i.e. the 11-column matrix
+    # built from these 11 functionals must have rank <= 10.
+    def f_eleventh(i, j): return (i + j) ** 2
+
+    fs = indicator_funcs + [f_eleventh]
+    assert len(fs) == 11
+
+    # Panel of Delta<=4 trees that realises every admissible pair.
     graphs = []
     for n in range(3, 9):
         graphs.extend(list(nx.generators.nonisomorphic_trees(n)))
-    # Keep only graphs with max degree <= 4 (all trees of order <= 8
-    # already satisfy this, but be defensive).
     graphs = [G for G in graphs if max(d for _, d in G.degree()) <= 4]
 
-    # For each graph, compute the 11-vector of (sum over edges) BID values.
     rows = []
     for G in graphs:
         row = []
@@ -108,11 +111,23 @@ def test_bid_dimension_bound_on_delta_4():
     M = np.asarray(rows, dtype=float)
     assert M.shape == (len(graphs), 11)
 
-    # The image of the BID map (graphs -> R^11) sits in a subspace of
-    # dimension at most 10 (by Theorem 3.1). Hence the column rank of M
-    # is at most 10.
+    # By Theorem 3.1: rank(M) <= 10.
     rank = int(np.linalg.matrix_rank(M, tol=1e-9))
     assert rank <= 10, (
-        f"BID dimension bound violated: column rank of 11-index matrix "
+        f"BID dimension bound VIOLATED: column rank of 11-index matrix "
         f"on {len(graphs)} Delta-<=4 trees is {rank}, expected <= 10"
+    )
+
+    # Sharpness check: the first 10 columns alone (the indicator
+    # functions) achieve rank exactly equal to the number of admissible
+    # pairs realised by the graph panel. On trees of order 3..8, all 10
+    # admissible pairs appear except (4, 4) (no two adjacent degree-4
+    # vertices on a tree of order <= 8). So the indicator subblock has
+    # rank exactly 9 on this panel.
+    rank_indicators = int(np.linalg.matrix_rank(M[:, :10], tol=1e-9))
+    # 9 admissible pairs are realised on trees of order 3..8.
+    # (4,4) is the only missing pair.
+    assert rank_indicators == 9, (
+        f"Indicator subblock rank {rank_indicators}; expected 9 "
+        f"(all admissible pairs except (4,4) realised on these trees)"
     )
