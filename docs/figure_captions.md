@@ -87,3 +87,23 @@ degree-based block. Balaban $J$ sits apart from both groups. The
 visualization motivates the use of partial-correlation and
 PCA-based screening (Figures 2–3) rather than relying on simple
 counts of redundant pairs.
+
+**Figure 9.** Downstream ML benchmark: RandomForest performance
+(top row) and feature count (bottom row) under four feature
+configurations on four datasets (ESOL, FreeSolv, Lipophilicity
+regression; BBBP classification, $n=2050$). The primary metric is
+RMSE on the three regression panels and ROC-AUC on the BBBP panel.
+The four configurations are: `full` (all 30 baseline indices),
+`PCA-95` (top-$k$ principal components capturing $\ge 95\%$ of
+the baseline variance), `pair` (greedy redundancy filter at
+$|r| < 0.95$), and `combined` (pairwise filter plus
+$|\mathrm{pcor}(z, y \mid X)| \ge 0.10$). The pairwise screen
+matches or marginally improves the full-baseline RandomForest on
+every dataset with $4$--$5\times$ fewer features. On BBBP the
+pairwise-pruned model attains ROC-AUC $0.864$, marginally exceeding
+the full-baseline $0.835$. The strict combined screen removes
+every feature on Lipophilicity (no pairwise-pruned index has
+$|\mathrm{pcor}|\ge 0.10$ with $\log D$); this is reported as
+"killed" in the figure and discussed in the manuscript as an
+honest failure mode of the strict combined criterion on
+weakly-target-correlated regression tasks.

@@ -200,7 +200,13 @@ RandomForest performance with $4$--$5\times$ fewer features.
 The stricter combined screen kills all features on Lipophilicity
 (every pairwise-pruned index has $|\mathrm{pcor}| < 0.10$ with
 $\log D$), an honest failure mode that the paper reports. Full
-table: `results/ml_benchmark.md`.
+table: `results/ml_benchmark.md`; visual summary:
+
+![ML benchmark](figures/fig9_ml_benchmark.png)
+
+*Top: primary metric (RMSE for the three regression datasets,
+ROC-AUC for BBBP). Bottom: feature count under each
+configuration.*
 
 ---
 
@@ -335,6 +341,7 @@ figures/                          Publication-quality figures (PNG + PDF)
   fig6_degeneracy_bars            Index degeneracy on 106 trees of order 10
   fig7_structure_sensitivity      Structure sensitivity on 75 decane isomers
   fig8_correlation_heatmap        Full 30-index pairwise correlation matrix (ESOL)
+  fig9_ml_benchmark               RandomForest performance and feature count across 4 datasets and 4 configurations
 
 results/                          Reproducible outputs by dataset
 data/                             Cached download CSVs (gitignored)

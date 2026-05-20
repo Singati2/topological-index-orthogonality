@@ -341,6 +341,97 @@ def fig8_correlation_heatmap():
     save_both(fig, "fig8_correlation_heatmap")
 
 
+def fig9_ml_benchmark():
+    """ML benchmark figure: per-dataset performance vs feature
+    configuration, plus the corresponding feature count.
+
+    Two-row layout: top row plots the primary task-appropriate metric
+    (RMSE for regression, ROC-AUC for classification); bottom row
+    plots the feature count. One column per dataset. The point of
+    the figure is the methodology paper's headline finding:
+    ``pairwise_pruned`` matches ``full`` while using 4-5x fewer
+    features, on three regression tasks and one classification task.
+    """
+    df = pd.read_csv(os.path.join(PROJECT, "results", "ml_benchmark.csv"))
+    config_order = ["full", "pca_95", "pairwise_pruned", "combined_pruned"]
+    config_label = {
+        "full": "full\n(30)",
+        "pca_95": "PCA-95",
+        "pairwise_pruned": "pair\n|r|<0.95",
+        "combined_pruned": "combined\n+|pcor|>=0.10",
+    }
+    config_color = {
+        "full":            "#4c72b0",
+        "pca_95":          "#dd8452",
+        "pairwise_pruned": "#55a868",
+        "combined_pruned": "#c44e52",
+    }
+    datasets = ["esol", "freesolv", "lipophilicity", "bbbp"]
+    metric_for = {
+        "regression": ("rmse", "RMSE (lower is better)"),
+        "classification": ("roc_auc", "ROC-AUC (higher is better)"),
+    }
+    display_name = {
+        "esol": "ESOL", "freesolv": "FreeSolv",
+        "lipophilicity": "Lipophilicity", "bbbp": "BBBP",
+    }
+
+    fig, axes = plt.subplots(2, 4, figsize=(14, 6.5),
+                             gridspec_kw={"hspace": 0.55, "wspace": 0.35})
+    for col, ds in enumerate(datasets):
+        sub = df[df["dataset"] == ds].set_index("config")
+        task = sub["task_type"].iloc[0]
+        metric_col, metric_label = metric_for[task]
+        xs = np.arange(len(config_order))
+        ys = [sub.loc[c, metric_col] if c in sub.index else np.nan
+              for c in config_order]
+        colors = [config_color[c] for c in config_order]
+        ax_top = axes[0, col]
+        bars = ax_top.bar(xs, ys, color=colors, edgecolor="black", linewidth=0.5)
+        for x, y in zip(xs, ys):
+            if np.isnan(y):
+                ax_top.text(x, 0.5, "killed",
+                            ha="center", va="center",
+                            fontsize=8, color="#c44e52",
+                            transform=ax_top.get_xaxis_transform())
+            else:
+                ax_top.text(x, y, f"{y:.3f}", ha="center", va="bottom",
+                            fontsize=8)
+        ax_top.set_xticks(xs)
+        ax_top.set_xticklabels([config_label[c] for c in config_order],
+                               fontsize=7)
+        ax_top.set_title(f"{display_name[ds]}\n({task})", fontsize=10)
+        if col == 0:
+            ax_top.set_ylabel(metric_label, fontsize=9)
+        if task == "classification":
+            ax_top.set_ylim(0.5, 1.0)
+            # The BBBP panel uses a different metric than the regression
+            # panels (ROC-AUC, not RMSE), so it gets its own y-axis label
+            # even when it's not the leftmost column.
+            ax_top.set_ylabel(metric_label, fontsize=9)
+        # Bottom row: feature count.
+        ax_bot = axes[1, col]
+        ns = [int(sub.loc[c, "n_features"]) if c in sub.index else 0
+              for c in config_order]
+        ax_bot.bar(xs, ns, color=colors, edgecolor="black", linewidth=0.5)
+        for x, n in zip(xs, ns):
+            ax_bot.text(x, n, str(n), ha="center", va="bottom", fontsize=8)
+        ax_bot.set_xticks(xs)
+        ax_bot.set_xticklabels([config_label[c] for c in config_order],
+                               fontsize=7)
+        ax_bot.set_ylim(0, 33)
+        if col == 0:
+            ax_bot.set_ylabel("Number of features", fontsize=9)
+    fig.suptitle(
+        "ML benchmark: redundancy screening preserves RandomForest performance "
+        "while reducing input dimension\n"
+        "Top: primary metric (RMSE for regression, ROC-AUC for classification).  "
+        "Bottom: feature count per configuration.",
+        fontsize=11, y=1.00,
+    )
+    save_both(fig, "fig9_ml_benchmark")
+
+
 def main():
     print("Generating publication figures →", FIG_DIR)
     fig2_pca_scree()
@@ -351,6 +442,7 @@ def main():
     fig6_degeneracy_bars()
     fig7_structure_sensitivity()
     fig8_correlation_heatmap()
+    fig9_ml_benchmark()
     print("Done.")
 
 

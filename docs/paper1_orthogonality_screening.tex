@@ -604,6 +604,95 @@ descriptor in absolute terms; the criterion is a redundancy filter,
 not a utility certification.
 
 % =====================================================================
+\section{Downstream ML benchmark: does screening preserve predictive performance?}\label{sec:ml_benchmark}
+% =====================================================================
+
+The case studies of Sections~\ref{sec:wuzi_case} and~\ref{sec:novel_case}
+demonstrate that the combined criterion is more selective than the
+pairwise screen alone. They do not yet demonstrate that the criterion
+is useful for building predictive QSPR models. This section closes
+that gap: we train a RandomForest (300 trees, fixed seed,
+\texttt{class\_weight="balanced"} for classification) on each of four
+datasets under four feature configurations, and report whether the
+screened feature set matches the full-baseline model's predictive
+performance.
+
+\textbf{Datasets.} The three QSPR regression benchmarks of
+Section~\ref{sec:datasets} are augmented with a fourth dataset to
+test that the pipeline generalizes beyond regression:
+\textbf{BBBP} (Martins~2012 via~\cite{MoleculeNet}),
+$n = 2050$ molecules, binary target ``blood-brain barrier
+penetration''. The class distribution is approximately $3{:}1$
+(positive:negative), handled with a class-balanced RandomForest.
+
+\textbf{Configurations.} An identical $80/20$ split (stratified for
+the classification task) is used across all configurations so the
+comparison isolates the effect of feature selection.
+\begin{itemize}
+\item \textbf{full}: all $30$ baseline indices.
+\item \textbf{pca\_95}: top-$k$ principal components of the
+standardized baseline at $95\%$ cumulative variance ($k=3$ on all
+four datasets).
+\item \textbf{pairwise\_pruned}: greedy redundancy filter at
+$|r| < 0.95$ (keep one representative per correlation cluster).
+\item \textbf{combined\_pruned}: pairwise filter plus
+$|\mathrm{pcor}(z, y \mid X)| \ge 0.10$ on the pairwise-pruned set.
+\end{itemize}
+
+\textbf{Results.} Table~\ref{tab:ml_benchmark} and
+Figure~\ref{fig:ml_benchmark} summarize the per-dataset, per-configuration
+RandomForest performance and feature count.
+
+\begin{table}[h]
+\centering
+\caption{RandomForest test-set performance under four feature configurations. Regression metric is RMSE (lower is better); classification metric is ROC-AUC (higher is better). Identical splits across configurations.}
+\label{tab:ml_benchmark}
+\begin{tabular}{llrrrrrr}
+\toprule
+Dataset & Task & full & pca\_95 & pairwise\_pruned & combined\_pruned & full $n_{\mathrm{feat}}$ & pruned $n_{\mathrm{feat}}$\\
+\midrule
+ESOL          & regression       & 1.454 & 1.503 & 1.445 & 1.508 & 30 & 7\\
+FreeSolv      & regression       & 3.890 & 3.896 & 3.875 & 3.963 & 30 & 8\\
+Lipophilicity & regression       & 1.037 & 1.064 & 1.037 & ---   & 30 & 8\\
+BBBP          & classification   & 0.835 & 0.813 & 0.864 & 0.859 & 30 & 6\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig9_ml_benchmark.pdf}
+\caption{Downstream ML benchmark on four datasets. Top row: primary
+metric (RMSE for the three regression panels, ROC-AUC for BBBP).
+Bottom row: number of features in each configuration. The pairwise
+screen matches or marginally improves the full-baseline RandomForest
+on every dataset while using $4$--$5\times$ fewer features. On
+Lipophilicity the strict combined screen retains zero features
+(no pairwise-pruned index has $|\mathrm{pcor}| \ge 0.10$ with $\log D$),
+which is reported as a failure mode rather than hidden.}
+\label{fig:ml_benchmark}
+\end{figure}
+
+\textbf{Interpretation.} The \texttt{pairwise\_pruned} configuration
+matches \texttt{full} within $0.02$ RMSE on every regression dataset
+and marginally improves ROC-AUC on BBBP ($0.835 \to 0.864$), using
+$6$--$8$ features rather than $30$. This is the methodology paper's
+operational claim: redundancy screening at $|r| < 0.95$ preserves
+predictive performance while substantially reducing the input
+dimension. The stricter \texttt{combined\_pruned} configuration
+trades some performance for more aggressive feature reduction; on
+Lipophilicity it removes all features, an honest failure mode that
+reflects the dataset's weak topology-to-$\log D$ partial-correlation
+structure (no pairwise-pruned index has $|\mathrm{pcor}| \ge 0.10$).
+The threshold $|\mathrm{pcor}| = 0.10$ should be relaxed (or replaced
+with a target-correlation rank cut) on datasets where the underlying
+topology-target relationship is weak. We do not recommend the
+combined screen as a hard filter; it is best read as a diagnostic
+that flags ``low pairwise correlation but low partial correlation
+too'' --- which is exactly the failure mode the Wuzi family at
+$(-1,-1,1)$ exhibits.
+
+% =====================================================================
 \section{Discussion}\label{sec:discussion}
 % =====================================================================
 
