@@ -1,5 +1,7 @@
 # Orthogonality Screening of Topological Indices for QSPR Modeling
 
+[![tests](https://github.com/Singati2/topological-index-orthogonality/actions/workflows/test.yml/badge.svg)](https://github.com/Singati2/topological-index-orthogonality/actions/workflows/test.yml)
+
 An open-source pipeline for testing whether a proposed scalar
 topological index contributes **non-redundant** information beyond
 the classical 30-index baseline on QSPR chemistry. Combines pairwise

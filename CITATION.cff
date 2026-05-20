@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the manuscript and this repository."
+title: "Orthogonality Screening of Topological Indices for QSPR Modeling"
+authors:
+  - family-names: "Natarajan"
+    given-names: "Advik"
+    affiliation: "Department of Mathematics, Loyola College, Chennai"
+  - family-names: "Shiwakoti"
+    given-names: "Ganesh"
+    affiliation: "Department of Mathematics and Statistics, Florida Atlantic University"
+    email: "ganshiwakoti@gmail.com"
+  - family-names: "Arockiaraj"
+    given-names: "Michael"
+    affiliation: "Department of Mathematics, Loyola College, Chennai"
+repository-code: "https://github.com/Singati2/topological-index-orthogonality"
+license: MIT
+keywords:
+  - "topological indices"
+  - "QSPR"
+  - "orthogonality screening"
+  - "bond-incident-degree"
+  - "Wuzi index family"
+  - "cheminformatics"
+abstract: >-
+  An open-source pipeline for screening proposed scalar topological indices
+  against a 30-index classical baseline on three QSPR regression benchmarks
+  (ESOL, FreeSolv, Lipophilicity) and one classification benchmark (BBBP).
+  Combines pairwise correlation, principal-component effective rank,
+  partial correlation with the target, and variance inflation factor into
+  a single combined criterion. Includes a parametric case study, the Wuzi
+  index family, and computational extremal-graph searches.
+version: "0.1.0"
+date-released: "2026-05-19"

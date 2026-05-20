@@ -1,0 +1,29 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependencies
+        # RDKit is NOT installed in CI: tests are pure-math and do not
+        # touch SMILES parsing or dataset downloads.
+        run: |
+          python -m pip install --upgrade pip
+          pip install networkx numpy pandas pytest
+
+      - name: Run pytest
+        run: pytest tests/ -v
