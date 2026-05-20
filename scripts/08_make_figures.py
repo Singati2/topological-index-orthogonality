@@ -2,15 +2,15 @@
 
 Reads CSVs from results/ and writes figures/{name}.png and figures/{name}.pdf.
 
-Figures generated (numbering matches docs/paper1_wuzi_manuscript_skeleton.md):
+Figures generated:
   fig2_pca_scree                — PCA cumulative variance, 3 datasets overlaid
   fig3_redundancy_bars          — # redundant pairs at |r|>=0.90/0.95, 3 datasets
   fig4_octane_heatmap           — |r| of each index vs each property on octanes
-  fig5_wuzi_param_heatmaps      — max|r|(α,β) for 4 γ slices on ESOL
-  fig5b_wuzi_param_heatmaps_all — same but 3 datasets × 4 γ slices (supplementary)
+  fig5b_wuzi_param_heatmaps_all — max|r|(α,β) on 3 datasets × 4 γ slices
   fig6_degeneracy_bars          — % degeneracy of indices on 106 trees(10)
   fig7_structure_sensitivity    — SS, Abr, SA on 75 decanes
   fig8_correlation_heatmap      — 30x30 baseline correlation matrix (ESOL)
+  fig9_ml_benchmark             — 5-fold CV RandomForest, 4 datasets, 3 configs
 
 Usage: python scripts/08_make_figures.py
 """
@@ -201,29 +201,6 @@ def _wuzi_heatmap_panel(ax, ds, gamma, vmin=0.9, vmax=1.0):
                 ax.text(j, i, f"{v:.2f}", ha="center", va="center",
                         fontsize=7, color=color)
     return im
-
-
-def fig5_wuzi_param_heatmaps():
-    fig, axes = plt.subplots(2, 2, figsize=(9, 7))
-    gammas = [0.0, 0.5, 1.0, 2.0]
-    for ax, gamma in zip(axes.flat, gammas):
-        im = _wuzi_heatmap_panel(ax, "esol", gamma)
-    fig.suptitle(r"Wuzi family — redundancy screen on ESOL ($n=1127$): "
-                 r"$\max|r|$ with the 30-index"
-                 "\n"
-                 r"baseline at each $(\alpha,\beta,\gamma)$. "
-                 r"All 100 grid points are highly correlated with at least one baseline ($|r|\geq 0.95$).",
-                 fontsize=10.5, y=1.00)
-    cbar_ax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
-    cbar = fig.colorbar(im, cax=cbar_ax)
-    cbar.set_label(r"$\max|r|$")
-    # Reference the |r|=0.95 screening threshold inside the colorbar
-    cbar.ax.plot([0, 1], [0.95, 0.95], color="black", linewidth=1.2,
-                 transform=cbar.ax.transAxes if False else cbar.ax.transData)
-    fig.text(0.945, 0.50, "screening threshold (0.95)",
-             rotation=270, va="center", fontsize=8)
-    plt.tight_layout(rect=[0, 0, 0.9, 0.95])
-    save_both(fig, "fig5_wuzi_param_heatmaps")
 
 
 def fig5b_wuzi_param_heatmaps_all():
@@ -456,7 +433,6 @@ def main():
     fig2_pca_scree()
     fig3_redundancy_bars()
     fig4_octane_heatmap()
-    # fig5_wuzi_param_heatmaps()  # archived: superseded by fig5b (all 3 datasets)
     fig5b_wuzi_param_heatmaps_all()
     fig6_degeneracy_bars()
     fig7_structure_sensitivity()

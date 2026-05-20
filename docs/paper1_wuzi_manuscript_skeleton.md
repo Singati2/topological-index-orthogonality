@@ -23,7 +23,7 @@ gaps awaiting Advik + Arockiaraj sir's input.
 
 Advik Natarajan¹, Ganesh Shiwakoti², Michael Arockiaraj¹
 ¹ Department of Mathematics, Loyola College, Chennai
-² Department of Biostatistics, Florida Atlantic University
+² Department of Mathematics and Statistics, Florida Atlantic University
 
 (Author order to be confirmed with Arockiaraj sir; placeholder above.)
 
@@ -42,16 +42,21 @@ Advik Natarajan¹, Ganesh Shiwakoti², Michael Arockiaraj¹
 > recovered as special cases. Closed-form values are derived for the
 > Wuzi family on standard graph classes (complete, cycle, path, star,
 > complete bipartite, hypercube, wheel, friendship, and regular
-> graphs). Sharp upper and lower bounds are established in terms of
-> the graph order n, size m, maximum and minimum degrees Δ and δ, and
-> in terms of classical degree-based topological indices. Extremal
-> graphs achieving equality are characterized among trees, unicyclic
-> graphs, and bicyclic graphs. We additionally apply a transparent
-> orthogonality-screening protocol to a 100-point grid in (α, β, γ)
-> against a 30-index classical baseline on three QSPR benchmark
-> datasets (ESOL, FreeSolv, Lipophilicity) totaling 6 000 molecules
-> and report the empirical redundancy structure of the family. The
-> open-source code and all numerical results are publicly available.
+> graphs). A rigorous ratio-bound theorem and a Cauchy–Schwarz
+> geometric-mean inequality are established for the family in terms
+> of any classical BID index with strictly positive edge contribution;
+> further sharp bounds in (n, m, Δ, δ) and per-classical-index
+> bounds are stated with proof strategies. Extremal-graph behaviour
+> among trees, unicyclic, and bicyclic graphs is conjectured by
+> parameter-sign region; a non-classical extremal regime at
+> (α, β, γ) = (−1, −1, 1) is documented computationally and stated
+> as Conjecture 6.4. A sensitivity-analysis section reports octane
+> property correlations, degeneracy on the 106 trees of order 10,
+> and structure sensitivity on the 75 decane isomers. The
+> open-source code and numerical results are publicly available.
+> (Cross-dataset orthogonality screening — ESOL, FreeSolv,
+> Lipophilicity, BBBP — is the subject of the companion methodology
+> paper, not this paper.)
 
 (~ 220 words. To be tightened for the venue limit.)
 

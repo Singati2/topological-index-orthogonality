@@ -137,9 +137,10 @@ QSPR, redundancy analysis, extremal graph.
 % =====================================================================
 
 The literature on degree-based topological indices in chemical
-graph theory has grown substantially since the original
-Randi\'c index~\cite{Randic1975} and the Zagreb indices of
-Gutman and Trinajsti\'c~\cite{Gutman1972}. Among the many
+graph theory has grown substantially since the seminal Wiener
+index~\cite{Wiener1947}, the Randi\'c index~\cite{Randic1975},
+and the Zagreb indices of Gutman and
+Trinajsti\'c~\cite{Gutman1972}. Among the many
 parametric extensions are the general Randi\'c index $R_\alpha$
 \cite{BollobasErdos1998}, the general sum-connectivity index
 $\chi_\alpha$~\cite{ZhouTrinajstic2009sumconn}, the Sombor index and
@@ -680,20 +681,24 @@ $\sum_e (d_u d_v)^\alpha$ in terms of $M_1, M_2, R_\alpha$ and
 applying Polya--Szeg\H{o} (Lemma~\ref{lem:ps}).
 \end{theorem}
 
-\begin{theorem}[Nordhaus--Gaddum type]\label{thm:NG}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-For a graph $G$ of order $n$ and its complement $\bar G$,
+\begin{conjecture}[Nordhaus--Gaddum type]\label{conj:NG}
+\todo{PROOF STRATEGY}
+For every $n \ge 2$ and every parameter triple
+$(\alpha, \beta, \gamma)$, there exists an explicit function
+$f_n(\alpha, \beta, \gamma)$ depending only on $n$ and the
+parameters such that, for every graph $G$ of order $n$ and its
+complement $\bar G$,
 \[
 W(G;\alpha,\beta,\gamma)+W(\bar G;\alpha,\beta,\gamma)
-\;\ge\; f_{n}(\alpha,\beta,\gamma)
+\;\ge\; f_{n}(\alpha,\beta,\gamma).
 \]
-for an explicit function $f_n$ to be determined. The classical
-Nordhaus--Gaddum case for the Zagreb indices $M_1, M_2$
-\cite{NordhausGaddumOrig1956}~is the template; the
+The classical Nordhaus--Gaddum case for the Zagreb indices
+$M_1, M_2$ \cite{NordhausGaddumOrig1956} is the template; the
 $\gamma$-factor requires extending the argument by an explicit
 estimate of $\sum_e\mathrm{imb}(d_u,d_v)$ on $G$ and $\bar G$
-combined.
-\end{theorem}
+combined. We state this as a conjecture pending the explicit form
+of $f_n$ in the mixed-sign parameter regime.
+\end{conjecture}
 
 \subsection{Tight regions}
 
@@ -810,14 +815,22 @@ The following theorems lift classical-index bounds to the broader
 parameter region via the Cauchy--Schwarz extension and the bracket.
 Proofs are written as sketches and are reserved for completion.
 
-\begin{theorem}[Bound via $R$ and $\chi$ -- skeleton]\label{thm:R_chi}
+\begin{theorem}[Bound via generalized $R$ and $\chi$ -- skeleton]\label{thm:R_chi}
 \todo{PROOF SKETCH -- TO BE COMPLETED}
-Let $\gamma=0$ and $\alpha=\alpha_1+\alpha_2$, $\beta=\beta_1+\beta_2$
-with $\alpha_1=-1/2$, $\beta_2=-1/2$ chosen so that $W(\cdot;\alpha_1,0,0)=R$
-and $W(\cdot;0,\beta_2,0)=\chi$. Theorem~\ref{thm:cs} then gives
-\[W(G;\alpha,\beta,0)\le \sqrt{R_{2\alpha+1}(G)\cdot \chi_{2\beta+1}(G)},\]
+Let $\gamma = 0$. Define the generalized Randi\'c and
+sum-connectivity indices by
+$R_{a}(G) = \sum_{uv \in E(G)} (d_u d_v)^{a}$ and
+$\chi_{b}(G) = \sum_{uv \in E(G)} (d_u + d_v)^{b}$, so that the
+classical cases are $R = R_{-1/2}$ and $\chi = \chi_{-1/2}$.
+Applying Theorem~\ref{thm:cs} with the split $(\alpha_1, \beta_1, 0)
+= (2\alpha, 0, 0)$ and $(\alpha_2, \beta_2, 0) = (0, 2\beta, 0)$
+(so that $\alpha_1 + \alpha_2 = 2\alpha$ and
+$\beta_1 + \beta_2 = 2\beta$),
+\[W(G;\alpha,\beta,0)\;\le\; \sqrt{R_{2\alpha}(G)\cdot \chi_{2\beta}(G)},\]
 the right-hand side being a product of generalized classical
-indices.
+indices. For the classical case
+$(\alpha, \beta) = (-1/4, -1/4)$ this specialises to
+$W \le \sqrt{R \cdot \chi}$.
 \end{theorem}
 
 \begin{theorem}[Bound via Sombor $SO$ -- skeleton]\label{thm:sombor}
@@ -1134,8 +1147,8 @@ still be multivariately redundant with the classical baseline.
 \end{enumerate}
 
 Figure~\ref{fig:octanes} shows the full heatmap of signed Pearson
-$r$ on the eight-property version of the octane table, including
-all indices in the implemented baseline.
+$r$ on the five-property octane table, including all indices in
+the implemented baseline.
 
 \begin{remark}\label{rem:pi_octanes}
 The edge-Padmakar--Ivan index $PI$ is degenerate on the $18$
@@ -1154,9 +1167,11 @@ giving $PI \equiv 7 \cdot 6 = 42$.
 \centering
 \includegraphics[width=0.95\linewidth]{fig4_octane_heatmap.pdf}
 \caption{Signed Pearson $r$ between each Wuzi/classical index and
-each of 8 octane properties (18 isomers). Color encodes $|r|$;
-values are printed with sign. $PI$ is degenerate on the dataset and
-removed (Remark~\ref{rem:pi_octanes}).}
+each of the five octane physicochemical properties ($T_B$,
+$\Delta H_f$, $\Delta H_\mathrm{vap}$, $S$, $\omega$) on the $18$
+isomers. Color encodes $|r|$; values are printed with sign. $PI$
+is degenerate on the dataset and removed
+(Remark~\ref{rem:pi_octanes}).}
 \label{fig:octanes}
 \end{figure}
 
@@ -1230,7 +1245,7 @@ complete; the [PROOF SKETCH] markers indicate the formal results
 that remain to be derived. Specifically:
 \begin{enumerate}
 \item Sharp Nordhaus--Gaddum bounds for $\Wuzi(G)+\Wuzi(\bar G)$
-(Theorem~\ref{thm:NG}).
+(Conjecture~\ref{conj:NG}).
 \item Tight bounds via $SO,\,GA,\,H,\,ABC$ in the full
 $(\alpha,\beta,\gamma)$ region (Theorems~\ref{thm:sombor}--\ref{thm:H_ABC}).
 \item Formal extremal-graph characterization for trees, unicyclic,

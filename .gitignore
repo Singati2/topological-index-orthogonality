@@ -1,4 +1,5 @@
-# Cached datasets (re-downloadable from public sources)
+# Cached datasets — re-downloadable via src/load_data.py from
+# MoleculeNet; kept locally for fast iteration but not committed.
 data/
 
 # Python

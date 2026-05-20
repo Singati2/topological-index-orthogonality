@@ -203,7 +203,7 @@ they are starting material.
 - For the mixed-sign triple $(-1, -1, 1)$: observed extremals are
   *neither* $P_n$ nor $S_n$. This is the most interesting case
   computationally and the natural target for a "genuinely new"
-  result in Section 5 of Paper 1.
+  result in Section 6 of Paper 1 (Conjecture 6.4).
 
 **What this still does not provide.** Formal proofs of any of the
 extremal conjectures above; equality-condition analysis for the

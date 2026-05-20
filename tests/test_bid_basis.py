@@ -120,14 +120,15 @@ def test_bid_dimension_bound_on_delta_4():
 
     # Sharpness check: the first 10 columns alone (the indicator
     # functions) achieve rank exactly equal to the number of admissible
-    # pairs realised by the graph panel. On trees of order 3..8, all 10
-    # admissible pairs appear except (4, 4) (no two adjacent degree-4
-    # vertices on a tree of order <= 8). So the indicator subblock has
+    # pairs realised by the graph panel. On a CONNECTED tree of order
+    # >= 3, no edge can be a (1, 1) edge (a (1, 1) edge means both
+    # endpoints have degree 1, which on a connected tree of order >= 3
+    # is impossible). The other 9 admissible pairs are all realised
+    # (e.g. (4, 4) appears in the double-star on 8 vertices with two
+    # adjacent degree-4 centres). Hence the indicator subblock has
     # rank exactly 9 on this panel.
     rank_indicators = int(np.linalg.matrix_rank(M[:, :10], tol=1e-9))
-    # 9 admissible pairs are realised on trees of order 3..8.
-    # (4,4) is the only missing pair.
     assert rank_indicators == 9, (
         f"Indicator subblock rank {rank_indicators}; expected 9 "
-        f"(all admissible pairs except (4,4) realised on these trees)"
+        f"(all admissible pairs except (1,1) realised on these trees)"
     )

@@ -1,4 +1,4 @@
-# §2.3 — Edge-contribution function analysis
+# Edge-contribution function analysis (Paper 1 §2)
 
 This document is the Wuzi analog of the γ(x, y) analysis in
 **Movahedi, Gutman, Redžepović, Furtula 2026** (MATCH 95:141-162),
@@ -134,7 +134,7 @@ This is the special case where every edge has `|x − y| = 0`, so the
 irregularity exponential is `exp(0) = 1` and the parameter γ drops
 out. *On regular graphs, the Wuzi family is degenerate in γ.*
 
-**Implication for Section 5 (extremal graphs):** the regular-graph
+**Implication for §6 (extremal graphs):** the regular-graph
 "all γ collapse" degeneracy means that any γ ≠ 0 sensitivity has to
 manifest on irregular graphs — pendants on trees, hub-rim distinction
 on wheels, etc. The γ axis is what distinguishes Wuzi from a pure

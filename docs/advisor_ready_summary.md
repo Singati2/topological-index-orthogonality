@@ -181,7 +181,7 @@ scaffolding.
   breakdown
 - 5-fold CV ML benchmark across 4 datasets (regression and
   classification), reported as mean $\pm$ std
-- Software-reproducibility scaffolding: `tests/` (98 passing
+- Software-reproducibility scaffolding: `tests/` (124 passing
   assertions), `.github/workflows/test.yml` (pytest-only CI),
   `CITATION.cff`
 

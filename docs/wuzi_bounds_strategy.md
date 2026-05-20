@@ -2,9 +2,12 @@
 
 This document records the **rigorous theorem templates**, the
 **ratio-bound principle**, the **monotonicity discussion**, and the
-**candidate extremal graph list** that should help Sections 3, 4,
-and 5 of Paper 1 be completed by Advik Natarajan and
-Dr. Michael Arockiaraj.
+**candidate extremal graph list** that should help Sections 4, 5,
+and 6 of Paper 1 (`docs/paper1_wuzi.tex`) be completed by Advik
+Natarajan and Dr. Michael Arockiaraj. (The .tex section numbering
+is the authoritative one: §3 is the BID-basis observation, §4 is
+bounds in $(n, m, \Delta, \delta)$, §5 is bounds via classical
+indices, §6 is extremal graphs.)
 
 > **Position.** This document is scaffolding. It contains theorem
 > statements that are *true and rigorously proved* (ratio bounds and
@@ -438,15 +441,16 @@ formal derivations of Paper 1 Sections 3, 4, and 5.
 
 4. **Jensen's inequality.** For convex / concave functions of the
    edge degree pair, Jensen gives the kind of bound used in
-   Theorem 5.2 of Paper 1 (the $M_1$-via-Jensen bound).
+   the $M_1$-via-Jensen bound of Paper 1 §4 (label `thm:m1_bound`).
 
 5. **Chebyshev's sum inequality.** For two similarly-ordered
    sequences $(a_i), (b_i)$,
    $N \sum a_i b_i \ge (\sum a_i)(\sum b_i)$. Useful for products
    of edge contributions.
 
-6. **Cauchy-Schwarz inequality.** Used in Theorem 5.1 of Paper 1
-   to derive the geometric-mean inequality
+6. **Cauchy-Schwarz inequality.** Used in the Cauchy–Schwarz
+   theorem of Paper 1 §4 (label `thm:cs`) to derive the
+   geometric-mean inequality
    $W(G; \bar\alpha, \bar\beta, \bar\gamma) \le \sqrt{W(G; \alpha_1, \beta_1, \gamma_1) \cdot W(G; \alpha_2, \beta_2, \gamma_2)}$
    where the bars denote arithmetic averages.
 
@@ -473,9 +477,9 @@ formal derivations of Paper 1 Sections 3, 4, and 5.
 
 ## F. What is *not* in this document
 
-- A final theorem statement for any bound of Paper 1 §3 (bounds in
+- A final theorem statement for any bound of Paper 1 §4 (bounds in
   $n, m, \Delta, \delta$ other than the bracket).
-- A final extremal-graph characterization for Paper 1 §5.
+- A final extremal-graph characterization for Paper 1 §6.
 - Specific numerical constants in upper / lower bounds beyond what
   $c_{\min}^h, c_{\max}^h$ provide.
 - Equality-condition analysis for any bound other than the bracket

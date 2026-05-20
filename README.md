@@ -386,14 +386,18 @@ data/                             Cached download CSVs (gitignored)
 
 ## What remains unfinished
 
-1. Paper 2 §3, §4, §5 — bounds in graph parameters, bounds in
-   classical indices, and extremal-graph characterizations.
-   Graph-theoretic derivations following the MATCH 95:141–162
-   template.
-2. Paper 2 manuscript prose — Introduction, Discussion, Conclusion.
+1. Paper 1 §4, §5, §6 — sharp bounds in $(n, m, \Delta, \delta)$,
+   sharp per-classical-index bounds for $R, \chi, SO, GA, H, ABC$,
+   and formal extremal-graph characterizations for trees,
+   unicyclic and bicyclic graphs. Each section currently contains
+   visible `[PROOF SKETCH]` markers awaiting joint work with the
+   senior author following the MATCH 95:141–162 template.
+2. Paper 2 final prose polish in §9 (Discussion) and §10
+   (Conclusion).
 3. Resolution of every `[REFERENCE NEEDED]` placeholder in
    `docs/literature_notes.md` by reading the source.
-4. Paper 1 manuscript, scheduled after Paper 2 lands.
+4. Paper 2 submission, scheduled after Paper 1 has at least an
+   arXiv identifier.
 
 ---
 
@@ -404,7 +408,11 @@ data/                             Cached download CSVs (gitignored)
 
 A. Natarajan, G. Shiwakoti, M. Arockiaraj.
 "The Wuzi Index Family: Graph-Theoretic Properties, Bounds,
- Extremal Graphs, and Redundancy Analysis."
+ Extremal Graphs, and Sensitivity Analysis."
+In preparation, 2026.
+
+G. Shiwakoti, A. Natarajan, M. Arockiaraj.
+"Orthogonality Screening of Topological Indices for QSPR Modeling."
 In preparation, 2026.
 ```
 
