@@ -26,7 +26,7 @@ $\binom{30}{2} = 435$.
 
 - Figure 1 in the manuscript skeleton (BID-lattice diagram, Δ ≤ 4)
   is a hand-drawn TikZ figure not yet created. It appears in
-  `docs/paper2_wuzi_manuscript_skeleton.md` as `[TO CREATE]`.
+  `docs/paper1_wuzi_manuscript_skeleton.md` as `[TO CREATE]`.
 
 - All figures are produced by a single script
   (`scripts/08_make_figures.py`). Regenerating from a clean checkout

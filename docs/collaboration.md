@@ -22,7 +22,7 @@ collaborator can work on the project alongside the maintainer
 5. Make changes (edit files, add new scripts, etc.). Use commits in
    small logical units; meaningful commit messages help reviewers.
    ```
-   git add docs/paper2_wuzi_manuscript_skeleton.md
+   git add docs/paper1_wuzi_manuscript_skeleton.md
    git commit -m "Section 3: add Theorem 3.1 with proof"
    ```
 6. Push the branch and open a pull request:

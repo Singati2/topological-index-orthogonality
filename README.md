@@ -56,17 +56,36 @@ sufficient.
 
 ## Two-paper plan and target venues
 
-Paper 2 (the mathematical case study) is drafted first; Paper 1
-(the methodology) follows once Paper 2 has at least an arXiv
-identifier, so that Paper 1 can cite it as the worked example.
+The work is deliberately split into two non-overlapping papers per
+advisor direction:
+
+- **Paper 1 (Wuzi index)** is a mathematical-chemistry / graph-theory
+  paper. It contains the family definition, closed-form values on
+  standard graph classes, bounds in graph parameters and via
+  classical indices, extremal-graph analysis, and a sensitivity
+  analysis on the $18$ octanes / $106$ trees of order $10$ / $75$
+  decanes. It does **not** contain the QSPR cross-dataset
+  redundancy screening, the BBBP dataset, or the downstream
+  RandomForest ML benchmark.
+- **Paper 2 (Orthogonality screening)** is a software / methodology
+  paper. It contains the screening pipeline, cross-dataset
+  redundancy across ESOL / FreeSolv / Lipophilicity / BBBP, the
+  Wuzi parametric family as one screened candidate, the
+  alternative-family candidate analysis, and the $5$-fold CV ML
+  benchmark. It does **not** re-derive the Wuzi closed forms,
+  bounds, or extremal-graph conjectures.
+
+Paper 1 is drafted first; Paper 2 follows once Paper 1 has at
+least an arXiv identifier, so that Paper 2 can cite it as the
+companion mathematical work.
 
 | Paper | Target venues (realistic) | Draft |
 |---|---|---|
-| Paper 2 — Wuzi Index Family | *J. Math. Chem.*, *MATCH Commun. Math. Comput. Chem.*, *AKCE Int. J. Graphs Comb.*, *SAR & QSAR Env. Res.* | `docs/paper2_wuzi.tex` |
-| Paper 1 — Orthogonality Screening | *Molecular Informatics*, *J. Cheminformatics*, *J. Chem. Inf. Model.* | `docs/paper1_orthogonality_screening.tex` |
+| Paper 1 — Wuzi Index Family (graph theory + sensitivity analysis) | *J. Math. Chem.*, *MATCH Commun. Math. Comput. Chem.*, *AKCE Int. J. Graphs Comb.*, *SAR & QSAR Env. Res.* | `docs/paper1_wuzi.tex` |
+| Paper 2 — Orthogonality Screening (software / methodology) | *Molecular Informatics*, *J. Cheminformatics*, *J. Chem. Inf. Model.* | `docs/paper2_orthogonality_screening.tex` |
 
 Section plans and remaining math gaps are tracked in
-`docs/paper2_wuzi_manuscript_skeleton.md` and
+`docs/paper1_wuzi_manuscript_skeleton.md` and
 `docs/wuzi_bounds_strategy.md`.
 
 ---
@@ -335,7 +354,7 @@ docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation
   edge_contribution_analysis.md  Edge-contribution function analysis
   phase2_plan.md                 Section-by-section paper plan
-  paper2_wuzi_manuscript_skeleton.md   Paper 2 skeleton with math gaps marked
+  paper1_wuzi_manuscript_skeleton.md   Paper 2 skeleton with math gaps marked
   literature_notes.md            Citation discipline document
   figure_audit.md                Figure-by-figure consistency record
   figure_captions.md             Manuscript-ready figure captions

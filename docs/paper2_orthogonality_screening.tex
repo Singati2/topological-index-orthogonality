@@ -1,6 +1,6 @@
 % !TEX program = pdflatex
-% Paper 1: Orthogonality Screening of Topological Indices for QSPR Modeling
-% Compile with: pdflatex paper1_orthogonality_screening.tex (twice for cross-refs)
+% Paper 2: Orthogonality Screening of Topological Indices for QSPR Modeling
+% Compile with: pdflatex paper2_orthogonality_screening.tex (twice for cross-refs)
 
 \documentclass[11pt,a4paper]{article}
 
@@ -161,13 +161,17 @@ not sufficient} for QSPR usefulness, with empirical evidence
 (Section~\ref{sec:discussion}).
 \end{enumerate}
 
-\subsection{Relation to Paper 2}
-This paper presents the methodology. The companion mathematical
-paper~\cite{Paper2_Wuzi} develops the Wuzi index family in detail
-(closed forms, bounds, extremal graphs). The two papers share the
-numerical work in Sections~\ref{sec:wuzi_case}--\ref{sec:novel_case}
-of this manuscript with the corresponding Numerical work section
-of~\cite{Paper2_Wuzi}.
+\subsection{Relation to the companion Wuzi paper}
+This paper presents the screening methodology. The companion
+graph-theory paper~\cite{Paper1_Wuzi} develops the Wuzi index
+family in detail (definition, closed-form values on standard graph
+classes, bounds in $(n, m, \Delta, \delta)$, bounds via classical
+indices, extremal-graph analysis, and sensitivity analysis on
+octane / decane / trees-of-order-10). The present paper uses the
+Wuzi family only as a screened candidate in a multi-dataset case
+study; the Wuzi mathematical material is not re-derived here, and
+the octane / decane / standalone-tree sensitivity material is not
+re-reported here.
 
 % =====================================================================
 \section{Related work}\label{sec:related}
@@ -382,17 +386,19 @@ but not sufficient} for QSPR usefulness.
 \section{Case study 1: the Wuzi parametric family}\label{sec:wuzi_case}
 % =====================================================================
 
-The Wuzi index family~\cite{Paper2_Wuzi} is defined as
-\[
-W(G;\alpha,\beta,\gamma)=\sum_{uv\in E(G)}
-(d_u d_v)^\alpha(d_u+d_v)^\beta
-\exp\!\left(\gamma\,\frac{|d_u-d_v|}{d_u+d_v}\right),
-\]
-a three-parameter generalization that contains $M_2$, Randi\'c,
-sum-connectivity, and harmonic as special cases. We screen the
-family on a $100$-point grid
-$(\alpha,\beta,\gamma)\in\{-1,-0.5,0,0.5,1\}^2\times\{0,0.5,1,2\}$
-on each of the three QSPR datasets.
+The Wuzi index family is a three-parameter generalization of
+several classical bond-incident-degree indices, defined in the
+companion paper~\cite{Paper1_Wuzi} as a sum over the edges of
+$G$ of $(d_u d_v)^\alpha (d_u + d_v)^\beta$ multiplied by an
+exponential factor in the normalized degree imbalance. The
+mathematical analysis of the family (closed forms on standard
+graph classes, bounds in graph parameters and in classical
+indices, extremal-graph behaviour) is the subject
+of~\cite{Paper1_Wuzi}; we use the family here only as a
+parametric BID candidate to be screened, and we screen it on a
+$100$-point grid
+$(\alpha, \beta, \gamma) \in \{-1, -1/2, 0, 1/2, 1\}^2 \times \{0, 1/2, 1, 2\}$
+on each of the three regression QSPR datasets.
 
 \subsection{Baseline redundancy on the three datasets}
 
@@ -442,7 +448,7 @@ and three principal components capture $95\%$ of the variance
 The full per-grid-point numerical workup of the Wuzi family ---
 $100$ grid points per dataset, $300$ grid points across the three
 datasets --- is reported in the Numerical work section of the
-companion mathematical paper~\cite{Paper2_Wuzi}. We reproduce the
+companion mathematical paper~\cite{Paper1_Wuzi}. We reproduce the
 compact verdict in Table~\ref{tab:wuzi_verdict_paper1} so that the
 present paper is self-contained, and isolate the parameter triple
 $(\alpha, \beta, \gamma) = (-1, -1, 1)$ because it is
@@ -501,7 +507,7 @@ the three datasets (rows) and four $\gamma$ slices (columns).
 The starred cell (FreeSolv, $(-1,-1,1)$) is the only grid point
 that falls below $|r|=0.95$; at the same parameter triple the
 partial correlation with the target is identically zero on all three
-datasets. Reproduced from~\cite{Paper2_Wuzi} for the convenience of
+datasets. Reproduced from~\cite{Paper1_Wuzi} for the convenience of
 the methodological discussion.}
 \label{fig:wuzi_grid_all}
 \end{figure}
@@ -852,9 +858,9 @@ I.~Gutman and B.~Borovi\'canin,
 \emph{Edge-degree-based topological indices and their applications}
 (survey paper), \todo{[FULL CITATION REFERENCE NEEDED]}.
 
-\bibitem{Paper2_Wuzi}
+\bibitem{Paper1_Wuzi}
 A.~Natarajan, G.~Shiwakoti, M.~Arockiaraj,
-\emph{The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal Graphs, and Redundancy Analysis},
+\emph{The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal Graphs, and Sensitivity Analysis},
 in preparation, 2026.
 (Companion mathematical paper.)
 

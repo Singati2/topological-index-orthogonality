@@ -32,7 +32,7 @@ the path *nor* the star for $n \ge 6$, and for $n \ge 7$ it is
 also *not a caterpillar* (verified by the `is_caterpillar`
 predicate in `scripts/10_wuzi_extremal_search.py`). The structural
 characterization of this non-classical extremal regime
-(`docs/paper2_wuzi.tex`, Conjecture 6.4 / label
+(`docs/paper1_wuzi.tex`, Conjecture 6.4 / label
 `conj:caterpillar_max`) is the most plausibly novel mathematical
 observation in the project and is the natural anchor for
 Section 6 of Paper 2.

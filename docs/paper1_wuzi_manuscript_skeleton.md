@@ -127,14 +127,14 @@ Companion strategy document: `docs/wuzi_bounds_strategy.md` (sections A, C).
   m · ψ_max(δ, Δ), with equality iff every edge of G has the same
   unordered degree pair. Proof: trivial sum bracket. Already
   stated as Theorem A.1 in `docs/wuzi_bounds_strategy.md` and as
-  Theorem~\ref{thm:bracket} in `docs/paper2_wuzi.tex`.
+  Theorem~\ref{thm:bracket} in `docs/paper1_wuzi.tex`.
 - **Theorem 3.2 (Jensen on $M_1$, rigorous for $\beta \ge 1$).**
   For $\alpha = \gamma = 0$, $\beta \ge 1$: $W \ge m^{1-\beta} M_1^\beta$.
-  Proof in `docs/paper2_wuzi.tex` Theorem~\ref{thm:m1_bound}.
+  Proof in `docs/paper1_wuzi.tex` Theorem~\ref{thm:m1_bound}.
 - **Theorem 3.3 (Geometric mean inequality, rigorous).** For
   $\alpha_1+\alpha_2 = 2\alpha$, etc., $W(G; \alpha, \beta, \gamma)
   \le \sqrt{W(G; \alpha_1, \beta_1, \gamma_1) \cdot W(G; \alpha_2, \beta_2, \gamma_2)}$.
-  Proof: Cauchy–Schwarz, in `docs/paper2_wuzi.tex` Theorem~\ref{thm:cs}.
+  Proof: Cauchy–Schwarz, in `docs/paper1_wuzi.tex` Theorem~\ref{thm:cs}.
 
 **Still needed (NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR):**
 

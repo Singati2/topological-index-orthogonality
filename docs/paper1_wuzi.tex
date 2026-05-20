@@ -1,6 +1,6 @@
 % !TEX program = pdflatex
-% Paper 2: The Wuzi Index Family
-% Compile with: pdflatex paper2_wuzi.tex (twice for cross-refs)
+% Paper 1: The Wuzi Index Family
+% Compile with: pdflatex paper1_wuzi.tex (twice for cross-refs)
 %
 % This file is a WORKING DRAFT. Sections 3, 4, 5 contain theorem statements
 % with explicit proof strategies but most proof bodies are marked
@@ -99,24 +99,23 @@ attained for $n \ge 6$ by a non-classical tree --- neither the
 path nor the star, and for $n \ge 7$ also not a caterpillar ---
 whose formal characterization is left as an open problem.
 
-In a numerical companion section, the family is screened against a
-30-index classical baseline on three QSPR benchmarks (ESOL,
-FreeSolv, Lipophilicity; total $5\,966$ molecules) using a
-transparent orthogonality protocol. Every grid point on ESOL and
-Lipophilicity is highly correlated with at least one classical
-baseline ($|r|\ge 0.95$); only the FreeSolv grid point at
-$(\alpha,\beta,\gamma)=(-1,-1,1)$ falls just below the pairwise
-threshold ($\max|r|=0.943$). At this parameter triple the Wuzi
-value is exactly captured by a linear combination of the $30$
-baseline indices on \emph{all three} datasets, so the partial
-correlation with the respective target is identically zero in each
-case. The empirical behaviour is consistent with a structural
-observation: every \emph{bond-incident-degree} index --- a
-real-valued functional of the form
-$I_f(G) = \sum_{uv \in E(G)} f(d_u, d_v)$ for some symmetric
-$f$ --- on hydrogen-suppressed molecular graphs with maximum
-degree $\Delta\le 4$ lies in a vector space of dimension at
-most~$10$, spanned by the ten edge-degree-pair counts.
+A sensitivity-analysis section evaluates the family against eight
+classical bond-incident-degree indices on the $18$ octane isomers
+(five physicochemical properties), reports degeneracy on the $106$
+non-isomorphic trees of order $10$, and reports structure
+sensitivity on the $75$ decane isomers. The companion methodology
+paper~\cite{Paper2_Screening} reports the multi-dataset QSPR
+orthogonality-screening behaviour of the family and a downstream
+machine-learning benchmark on four datasets; those results are not
+duplicated here.
+
+A structural observation underlies the chemometric behaviour:
+every \emph{bond-incident-degree} index --- a real-valued
+functional of the form $I_f(G) = \sum_{uv \in E(G)} f(d_u, d_v)$
+for some symmetric $f$ --- on hydrogen-suppressed molecular graphs
+with maximum degree $\Delta\le 4$ lies in a vector space of
+dimension at most~$10$, spanned by the ten edge-degree-pair counts
+(Theorem~\ref{thm:bid}).
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, bond-incident-degree
@@ -159,7 +158,7 @@ indices as boundary cases while introducing a degree-imbalance
 factor through a third parameter~$\gamma$. The mathematical
 program (Sections~\ref{sec:prelim}--\ref{sec:extremal}) follows the
 template of~\cite{MovahediGutmanRedzepovicFurtula2026}. The
-chemometric program (Section~\ref{sec:numerical}) uses an
+chemometric program (Section~\ref{sec:sensitivity}) uses an
 explicit orthogonality-screening protocol with a fixed redundancy
 threshold $|r|\ge 0.95$, replicated across three independent QSPR
 benchmark datasets. The two programs are coupled through a
@@ -193,7 +192,7 @@ graphs (Section~\ref{sec:extremal}).
 \item An open-source orthogonality-screening pipeline applied to a
 $100$-point Wuzi grid on three QSPR datasets, alongside octane
 prediction, degeneracy on trees of order~$10$, and structure
-sensitivity on decane isomers (Section~\ref{sec:numerical}).
+sensitivity on decane isomers (Section~\ref{sec:sensitivity}).
 \end{enumerate}
 
 \paragraph{Position relative to existing parametric extensions.}
@@ -471,7 +470,7 @@ The Wuzi family belongs to the class of \emph{bond-incident-degree}
 $I_f(G)=\sum_{uv\in E(G)} f(d_u,d_v)$ for some symmetric function
 $f:\mathbb{N}_{>0}\times\mathbb{N}_{>0}\to\mathbb{R}$. The
 following structural observation explains the empirical
-redundancy that emerges in Section~\ref{sec:numerical}.
+redundancy that emerges in Section~\ref{sec:sensitivity}.
 
 \begin{theorem}[Edge-Degree-Pair Basis]\label{thm:bid}
 Let $\mathcal{G}_\Delta$ denote the class of finite simple graphs
@@ -501,7 +500,7 @@ degree-pair counts $m_{ij}$ is standard in the mathematical-chemistry
 literature (see e.g.~\cite{GutmanBorovicanin2018BID} and references
 therein). The contribution here is the explicit dimension-$10$
 statement on $\mathcal{G}_4$ together with its application to
-redundancy screening in Section~\ref{sec:numerical}.
+redundancy screening in Section~\ref{sec:sensitivity}.
 \end{remark}
 
 \begin{corollary}\label{cor:bid_redundancy}
@@ -976,143 +975,130 @@ Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & open\\
 \end{table}
 
 % =====================================================================
-\section{Numerical work}\label{sec:numerical}
+\section{Sensitivity analysis}\label{sec:sensitivity}
 % =====================================================================
 
-This section reports the numerical work on the Wuzi family. All
-computations are reproducible from the public repository.
+This section reports the sensitivity of the Wuzi family on
+established chemical compound classes commonly used to benchmark
+parametric topological indices: the $18$ octane isomers, the
+$106$ non-isomorphic trees of order $10$, and the $75$ decane
+isomers. The protocol follows the conventions of
+Sections~5.1, 5.3, and~5.4 of~\cite{MovahediGutmanRedzepovicFurtula2026}.
+All computations are reproducible from the public repository
+(\texttt{scripts/05\_octane\_prediction.py},
+\texttt{scripts/06\_wuzi\_degeneracy.py},
+\texttt{scripts/07\_structure\_sensitivity.py}, and
+\texttt{scripts/12\_octane\_competitor\_comparison.py}).
 
-\subsection{Prediction on octanes}\label{sec:octanes}
+The multi-dataset orthogonality screening of the Wuzi family
+against a $30$-index classical baseline on the MoleculeNet QSPR
+benchmarks (ESOL, FreeSolv, Lipophilicity) and the downstream
+machine-learning benchmark including BBBP are reported in the
+companion methodology paper~\cite{Paper2_Screening} and are
+deliberately omitted here per the no-overlap structure of the
+two-paper series.
 
-Following the convention of Section~5.1
-of~\cite{MovahediGutmanRedzepovicFurtula2026}, we measure the
-Pearson correlation of the Wuzi family at a panel of canonical
-parameter points with eight physicochemical properties of the
-$n=18$ octane isomers (boiling point, melting point, enthalpy of
-formation, enthalpy of vaporization, entropy, accentric factor,
-density, refractive index; data from NIST WebBook).
+\subsection{Property correlations on the octane isomers}\label{sec:octanes}
 
-Figure~\ref{fig:octanes} shows the signed Pearson $r$ between each
-of $27$ indices (Wuzi at canonical $(\alpha,\beta,\gamma)$
-plus the $30$-index classical baseline, less three indices
-constant on the $18$ octanes) and each of the eight properties.
+We measure Pearson correlations between Wuzi at eight canonical
+parameter triples and five physicochemical properties of the
+$n=18$ octane isomers (boiling point $T_B$, enthalpy of formation
+$\Delta H_f$, enthalpy of vaporization $\Delta H_\mathrm{vap}$,
+entropy $S$, acentric factor $\omega$; data from NIST WebBook),
+and compare the results head-to-head against eight classical
+bond-incident-degree indices ($M_1, M_2, R, SO, GA, H, ABC, AZI$)
+recomputed on the same $18$-row octane table.
+Table~\ref{tab:octane_competitor} summarizes the comparison; the
+full table is in \texttt{results/octane\_competitor\_comparison.\{csv,md\}}.
+
+\begin{table}[h]
+\centering
+\caption{Pearson correlation $r$ between each index and each of the five physicochemical properties of the $18$ octane isomers. Sign carries the index's natural direction; what matters chemically is $|r|$. Bold entries flag the per-column maximum $|r|$ across all listed indices.}
+\label{tab:octane_competitor}
+\small
+\begin{tabular}{llrrrrr}
+\toprule
+Index & Family & $r(T_B)$ & $r(\Delta H_f)$ & $r(\Delta H_\mathrm{vap})$ & $r(S)$ & $r(\omega)$\\
+\midrule
+$M_1$              & classical & $-0.718$ & $-0.762$ & $-0.912$ & $-0.973$ & $-0.970$\\
+$M_2$              & classical & $-0.503$ & $-0.553$ & $-0.775$ & $-0.942$ & $-0.987$\\
+$R$                & classical & $+0.821$ & $+0.848$ & $+0.956$ & $+0.935$ & $+0.901$\\
+$SO$               & classical & $-0.748$ & $-0.793$ & $-0.926$ & $-0.969$ & $-0.957$\\
+$GA$               & classical & $+0.823$ & $+0.856$ & $+0.959$ & $+0.942$ & $+0.909$\\
+$H$                & classical & $+0.822$ & $+0.846$ & $+0.959$ & $+0.935$ & $+0.904$\\
+$ABC$              & classical & $-0.869$ & $-0.892$ & $-0.944$ & $-0.858$ & $-0.790$\\
+$AZI$              & classical & $\mathbf{+0.936}$ & $\mathbf{+0.922}$ & $+0.929$ & $+0.734$ & $+0.656$\\
+\midrule
+$W(1, 0, 0)$       & Wuzi      & $-0.503$ & $-0.553$ & $-0.775$ & $-0.942$ & $\mathbf{-0.987}$\\
+$W(-1/2, 0, 0)$    & Wuzi      & $+0.821$ & $+0.848$ & $+0.956$ & $+0.935$ & $+0.901$\\
+$W(0, -1/2, 0)$    & Wuzi      & $+0.801$ & $+0.829$ & $+0.953$ & $+0.950$ & $+0.927$\\
+$W(0, -1, 0)$      & Wuzi      & $+0.822$ & $+0.846$ & $+0.959$ & $+0.935$ & $+0.904$\\
+$W(0, 0, 1)$       & Wuzi      & $-0.828$ & $-0.831$ & $-0.966$ & $-0.931$ & $-0.930$\\
+$W(0, 0, 2)$       & Wuzi      & $-0.830$ & $-0.844$ & $\mathbf{-0.967}$ & $-0.939$ & $-0.926$\\
+$W(1, 1, 1)$       & Wuzi      & $-0.615$ & $-0.677$ & $-0.840$ & $-0.959$ & $-0.981$\\
+$W(-1, -1, 1)$     & Wuzi      & $+0.763$ & $+0.830$ & $+0.747$ & $+0.632$ & $+0.494$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation.} Three observations.
+
+\begin{enumerate}[label=(\alph*)]
+\item At the four exact-reduction parameter triples (Wuzi at
+$(1,0,0)$, $(-1/2,0,0)$, $(0,-1/2,0)$, $(0,-1,0)$) the Wuzi
+correlations agree with the corresponding classical indices
+($M_2, R, $ SCI$/2$, $H/2$ up to scale) to within floating-point
+precision, as expected from Proposition~\ref{prop:reductions}.
+This serves as an internal consistency check.
+
+\item The strongest single $|r|$ on $T_B$ and $\Delta H_f$ is
+achieved by the augmented Zagreb index $AZI$ ($|r| = 0.936, 0.922$
+respectively), with no Wuzi parameter triple in the sampled
+panel exceeding it. On $\Delta H_\mathrm{vap}$ the strongest
+correlation is achieved by $W(0, 0, 2)$ ($|r| = 0.967$),
+marginally exceeding $GA$ and $H$ ($|r| = 0.959$); on the
+acentric factor $\omega$ the strongest is $W(1, 0, 0) = M_2$ at
+$|r| = 0.987$, with $W(1, 1, 1)$ at $|r| = 0.981$. The Wuzi
+family is in the same $|r|$ regime as established BID indices on
+this benchmark and is competitive on two of the five properties
+at parameter triples that include a non-trivial $\gamma$-axis
+contribution.
+
+\item We do not claim the Wuzi family outperforms the classical
+indices in any uniform sense: the comparison is sensitivity
+only, not a QSPR-utility certification. A single scalar index
+that correlates strongly with one property on $18$ isomers can
+still be multivariately redundant with the classical baseline.
+The full multivariate analysis (orthogonality screen plus
+RandomForest benchmark across four datasets) is in the companion
+methodology paper~\cite{Paper2_Screening}.
+\end{enumerate}
+
+Figure~\ref{fig:octanes} shows the full heatmap of signed Pearson
+$r$ on the eight-property version of the octane table, including
+all indices in the implemented baseline.
+
+\begin{remark}\label{rem:pi_octanes}
 The edge-Padmakar--Ivan index $PI$ is degenerate on the $18$
-octanes ($\sigma = 0$, mean $42$) and is excluded. The degeneracy
-is structural: for every tree $T$ of size $m$, removing any edge
-$e$ disconnects $T$ into two components, and because trees have
-unique shortest paths every other edge lies entirely in one
-component or the other (no equidistant edges arise on a tree).
-Hence the edge-PI contribution from $e$ is $m - 1$, and summing
-over the $m$ edges gives $PI(T) = m(m - 1)$. The $18$ octanes
-are all trees on $8$ vertices, giving $PI \equiv 7 \cdot 6 = 42$. Strong performance on this
-small dataset is necessary but not sufficient for general QSPR
-utility (cf.\ Section~\ref{sec:cross_dataset}).
+octanes ($\sigma = 0$, mean $42$) and is excluded from
+Figure~\ref{fig:octanes}. The degeneracy is structural: for every
+tree $T$ of size $m$, removing any edge $e$ disconnects $T$ into
+two components, and because trees have unique shortest paths every
+other edge lies entirely in one component or the other (no
+equidistant edges arise on a tree). Hence the edge-PI contribution
+from $e$ is $m - 1$, and summing over the $m$ edges gives
+$PI(T) = m(m - 1)$. The $18$ octanes are all trees on $8$ vertices,
+giving $PI \equiv 7 \cdot 6 = 42$.
+\end{remark}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.95\linewidth]{fig4_octane_heatmap.pdf}
 \caption{Signed Pearson $r$ between each Wuzi/classical index and
 each of 8 octane properties (18 isomers). Color encodes $|r|$;
-values are printed with sign. PI is degenerate on the dataset and
-removed.}
+values are printed with sign. $PI$ is degenerate on the dataset and
+removed (Remark~\ref{rem:pi_octanes}).}
 \label{fig:octanes}
-\end{figure}
-
-\subsection{Cross-dataset orthogonality screening}\label{sec:cross_dataset}
-
-We screen the Wuzi family on a $100$-point parameter grid
-$(\alpha,\beta,\gamma)\in\{-1,-0.5,0,0.5,1\}^2\times\{0,0.5,1,2\}$
-against a $30$-index classical baseline on three MoleculeNet QSPR
-benchmark datasets~\cite{MoleculeNet}:
-\begin{itemize}
-\item \textbf{ESOL} \cite{Delaney2004ESOL}: $n=1\,127$ molecules,
-target $\log S$ (aqueous solubility, mol/L).
-\item \textbf{FreeSolv} \cite{Mobley2014FreeSolv}: $n=639$ molecules,
-target $\Delta G_{\mathrm{hyd}}$ (hydration free energy, kcal/mol).
-\item \textbf{Lipophilicity} \cite{LipophilicityChEMBL}: $n=4\,200$
-molecules, target $\log D$ at pH~7.4.
-\end{itemize}
-
-Two diagnostics are computed for each grid point and dataset:
-$\max_b |r(W_e, X_b)|$ over the $30$ baseline indices $X_b$, and
-$|r(W_e^{\mathrm{res}}, y^{\mathrm{res}})|$ where $W_e^{\mathrm{res}}$
-and $y^{\mathrm{res}}$ are the residuals after regressing the
-Wuzi value $W_e$ and target $y$ on the $30$ baselines (partial
-correlation with target).
-
-\begin{table}[h]
-\centering
-\caption{Baseline redundancy and Wuzi-family screening verdict on three QSPR benchmarks. Pair counts are out of $\binom{30}{2}=435$. PC$_{95}$ is the smallest $k$ with cumulative explained variance $\ge 0.95$.}
-\label{tab:cross_dataset}
-\begin{tabular}{lrrrrrr}
-\toprule
-Dataset & $n$ & $|r|\ge 0.90$ & $|r|\ge 0.95$ & PC$_{95}$
-        & Wuzi pass / $100$
-        & Min max $|r|$ \\
-\midrule
-ESOL          & 1127 & 203 (46.7\%) & 159 (36.6\%) & 3 & 0 & 0.965\\
-FreeSolv      &  639 & 257 (59.1\%) & 162 (37.2\%) & 3 & 1 & 0.943\\
-Lipophilicity & 4200 & 200 (46.0\%) & 164 (37.7\%) & 3 & 0 & 0.965\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The empirical pattern (Table~\ref{tab:cross_dataset},
-Figs.~\ref{fig:pca}--\ref{fig:wuzi_grid_all}) is the following:
-
-\begin{enumerate}[label=(\arabic*)]
-\item Roughly $37\%$ of the $\binom{30}{2}=435$ pairwise correlations
-between classical indices exceed the $|r|=0.95$ threshold on
-every dataset.
-\item Three principal components capture $95\%$ of the variance of
-the standardized $30$-index baseline on every dataset; five
-components capture $99\%$.
-\item On ESOL and Lipophilicity, every one of the $100$ Wuzi grid
-points has $\max|r|$ with some classical baseline above $0.96$.
-On FreeSolv, a single grid point at $(\alpha,\beta,\gamma)=(-1,-1,1)$
-has $\max|r|=0.943$, marginally below the pairwise threshold.
-A separate observation, dataset-independent, applies to this same
-parameter triple: at $(\alpha,\beta,\gamma)=(-1,-1,1)$ the Wuzi
-value is captured exactly by a linear combination of the $30$
-baseline indices on \emph{all three} datasets (the residual after
-regression has variance below numerical precision on ESOL, FreeSolv,
-and Lipophilicity alike), so the partial correlation with the
-respective target is identically zero in each case. The pairwise
-$\max|r|$ at this point varies by dataset ($0.965$, $0.943$, $0.977$
-on ESOL / FreeSolv / Lipo respectively, all with $mM_2$), but the
-multi-dimensional redundancy is structural. This illustrates that
-pairwise correlation alone catches only one-dimensional redundancy;
-the regression residual is the load-bearing diagnostic.
-\item The maximum $|$partial $r$ with target$|$ across all $300$
-grid points is $0.036$ (FreeSolv) and $0.0093$ (Lipophilicity);
-both maxima occur at non-passing grid points and both are below
-the $0.10$ threshold conventionally used to assess meaningful added
-signal.
-\end{enumerate}
-
-This behaviour is consistent with Corollary~\ref{cor:bid_redundancy}:
-the Wuzi family is parametrized in $\mathbb{R}^3$ but lives in a
-vector space of dimension at most~$10$ on $\mathcal{G}_4$.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.85\linewidth]{fig2_pca_scree.pdf}
-\caption{Cumulative explained variance of PCA on the $30$-index
-baseline for the three datasets. Three components capture $95\%$
-of the variance on every dataset.}
-\label{fig:pca}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\linewidth]{fig5b_wuzi_param_heatmaps_all.pdf}
-\caption{$\max|r|$ between the Wuzi index at each grid point
-$(\alpha,\beta,\gamma)$ and any of the 30 classical baseline
-indices, across three datasets (rows) and four $\gamma$ slices
-(columns). The single starred cell (FreeSolv, $(-1,-1,1)$) falls
-below the threshold with $\max|r|=0.943$; its partial correlation
-with the target is approximately zero.}
-\label{fig:wuzi_grid_all}
 \end{figure}
 
 \subsection{Degeneracy on trees of order 10}\label{sec:degeneracy}
@@ -1160,26 +1146,27 @@ recovers $M_2,R,\chi,H$ as special cases, and admits a bracket
 bound via the edge-contribution function that becomes an exact
 identity on regular graphs.
 
-At the same time the chemometric behaviour
-(Section~\ref{sec:numerical}) is consistent across three
-independent QSPR benchmarks: the family lies within the $10$-dimensional
-BID subspace on $\mathcal{G}_4$, and on the $300$ grid points sampled
-only one (FreeSolv $(-1,-1,1)$) is below the conventional $|r|=0.95$
-redundancy threshold against the $30$-index classical baseline.
-The borderline FreeSolv grid point carries essentially zero partial
-correlation with $\Delta G_{\mathrm{hyd}}$, so passing the
-correlation screen does not translate into independent QSPR signal.
+At the same time the sensitivity behaviour on the standard
+math-chem benchmarks (Section~\ref{sec:sensitivity}) is
+competitive with established BID indices on a subset of the
+octane physicochemical properties (notably $\Delta H_\mathrm{vap}$
+and $\omega$) and structurally interpretable on the trees-of-order-10
+degeneracy and the decane structure sensitivity. We do not claim
+the family is uniformly superior to any classical index on any
+benchmark; the comparison is sensitivity-only.
 
 The combination of structural and empirical observations supports a
 careful reading: the Wuzi family is a meaningful object of study on
-the mathematical side (bounds and extremal graphs in the
-classical tradition); on the chemometric side it offers no escape
-from the BID redundancy ceiling but it provides a transparent
-worked example of how to screen a parametric extension against an
-existing zoo of descriptors. We do not claim the family is
-``superior'' to any classical index, and the BID-basis observation
-of Theorem~\ref{thm:bid} explicitly accounts for the redundancy
-seen in Section~\ref{sec:numerical}.
+the mathematical side (closed forms, bounds, and extremal graphs in
+the classical tradition); on the chemometric side it provides a
+transparent worked example of a parametric BID generalization at
+the same correlation regime as established indices. The
+BID-basis observation of Theorem~\ref{thm:bid} explicitly accounts
+for the family's inability to escape the $10$-dimensional BID
+subspace on $\mathcal{G}_4$; the multi-dataset redundancy
+screening of the family and the downstream predictive-model
+benchmark are reported in the companion methodology
+paper~\cite{Paper2_Screening}.
 
 \paragraph{Future work.} The mathematical program of
 Sections~\ref{sec:bounds_nm}--\ref{sec:extremal} is partially
@@ -1198,15 +1185,14 @@ $\mathrm{Alb}(G)=\sum_e|d_u-d_v|$, naturally paired with the
 Wuzi $\gamma$-axis.
 \end{enumerate}
 
-On the chemometric side, future work includes:
-\begin{enumerate}
-\item Extension of the screening pipeline to non-BID candidate
-indices (information-theoretic, centrality, motif, eccentricity
-families), reported in the companion methodology paper.
-\item Sensitivity of the conclusions to the redundancy threshold:
-the conventional choice $|r|=0.95$ is reported here, with the
-empirical pattern stable across $|r|\in[0.90, 0.99]$.
-\end{enumerate}
+On the chemometric side, future work includes extending the
+sensitivity-analysis benchmarks to additional compound classes
+(benzene derivatives, alkane homologues beyond octane / decane)
+and to compound-class-specific QSPR endpoints. The
+methodology-paper side of the analysis (multi-dataset
+orthogonality screening, downstream ML benchmark, partial-
+correlation sensitivity to thresholds) is reported separately
+in~\cite{Paper2_Screening}.
 
 % =====================================================================
 \section{Conclusion}\label{sec:conclusion}
@@ -1214,16 +1200,19 @@ empirical pattern stable across $|r|\in[0.90, 0.99]$.
 
 We have introduced the Wuzi index family $\Wuzi$ and (i) derived
 closed-form values on nine standard graph classes, (ii) established
-bracket bounds via the edge-contribution function, with the bracket
-being tight on regular graphs, (iii) given exact reductions to
-classical indices $M_2,R,\chi,H$ at six parameter points, and
-(iv) reported numerical evidence on three QSPR benchmarks showing
-that the family is highly correlated with at least one classical
-baseline index at every tested grid point except one borderline
-case which does not carry independent QSPR signal. The latter
-behaviour is structurally explained by the Edge-Degree-Pair Basis
-observation, which gives a $10$-dimensional ceiling on the BID
-family on $\mathcal{G}_4$.
+a bracket bound via the edge-contribution function, with the
+bracket being tight on regular graphs, (iii) given exact reductions
+to classical indices $M_2, R, \chi, H$ at six parameter points,
+(iv) proved a rigorous ratio-bound theorem for the family against
+any classical BID index with strictly positive edge contribution,
+and (v) reported sensitivity analysis on the $18$ octane isomers,
+on the $106$ non-isomorphic trees of order $10$, and on the $75$
+decane isomers, showing the family is in the same correlation
+regime as established BID indices on the standard math-chem
+benchmarks. The Edge-Degree-Pair Basis observation gives a
+$10$-dimensional ceiling on the BID family on $\mathcal{G}_4$ and
+underlies the multi-dataset screening behaviour reported in the
+companion methodology paper~\cite{Paper2_Screening}.
 
 The formal bounds in $(n,m,\Delta,\delta)$ and via classical
 indices, as well as the extremal-graph characterizations for
@@ -1329,29 +1318,12 @@ E.~A.~Nordhaus and J.~W.~Gaddum,
 \emph{On complementary graphs},
 Amer.~Math.~Monthly~\textbf{63} (1956), 175--177.
 
-\bibitem{Delaney2004ESOL}
-J.~S.~Delaney,
-\emph{ESOL: Estimating aqueous solubility directly from molecular structure},
-J.~Chem.~Inf.~Comput.~Sci.~\textbf{44} (2004), 1000--1005.
-
-\bibitem{Mobley2014FreeSolv}
-D.~L.~Mobley and J.~P.~Guthrie,
-\emph{FreeSolv: A database of experimental and calculated hydration
-free energies, with input files},
-J.~Comput.~Aided Mol.~Des.~\textbf{28} (2014), 711--720.
-
-\bibitem{LipophilicityChEMBL}
-AstraZeneca, \emph{Experimental in vitro DMPK and physicochemical data
-on a set of publicly disclosed compounds},
-ChEMBL document CHEMBL3301361 (2015);
-distributed via MoleculeNet~\cite{MoleculeNet}. Curated set of
-4\,200 compound--$\log D_{7.4}$ pairs.
-
-\bibitem{MoleculeNet}
-Z.~Wu, B.~Ramsundar, E.~N.~Feinberg, J.~Gomes, C.~Geniesse,
-A.~S.~Pappu, K.~Leswing, and V.~Pande,
-\emph{MoleculeNet: A benchmark for molecular machine learning},
-Chem.~Sci.~\textbf{9} (2018), 513--530.
+\bibitem{Paper2_Screening}
+G.~Shiwakoti, A.~Natarajan, M.~Arockiaraj,
+\emph{Orthogonality Screening of Topological Indices for QSPR Modeling:
+A Reproducible Pipeline and Software Framework},
+in preparation, 2026.
+(Companion methodology paper.)
 
 \end{thebibliography}
 \end{document}

@@ -2,7 +2,7 @@
 
 Reads CSVs from results/ and writes figures/{name}.png and figures/{name}.pdf.
 
-Figures generated (numbering matches docs/paper2_wuzi_manuscript_skeleton.md):
+Figures generated (numbering matches docs/paper1_wuzi_manuscript_skeleton.md):
   fig2_pca_scree                — PCA cumulative variance, 3 datasets overlaid
   fig3_redundancy_bars          — # redundant pairs at |r|>=0.90/0.95, 3 datasets
   fig4_octane_heatmap           — |r| of each index vs each property on octanes
