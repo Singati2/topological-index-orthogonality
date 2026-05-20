@@ -342,15 +342,13 @@ def fig8_correlation_heatmap():
 
 
 def fig9_ml_benchmark():
-    """ML benchmark figure: per-dataset performance vs feature
+    """ML benchmark figure: per-dataset CV performance vs feature
     configuration, plus the corresponding feature count.
 
     Two-row layout: top row plots the primary task-appropriate metric
-    (RMSE for regression, ROC-AUC for classification); bottom row
-    plots the feature count. One column per dataset. The point of
-    the figure is the methodology paper's headline finding:
-    ``pairwise_pruned`` matches ``full`` while using 4-5x fewer
-    features, on three regression tasks and one classification task.
+    (RMSE for regression, ROC-AUC for classification) as mean across
+    5 CV folds with error bars; bottom row plots the mean feature
+    count. One column per dataset.
     """
     df = pd.read_csv(os.path.join(PROJECT, "results", "ml_benchmark.csv"))
     config_order = ["full", "pca_95", "pairwise_pruned", "combined_pruned"]
@@ -368,66 +366,84 @@ def fig9_ml_benchmark():
     }
     datasets = ["esol", "freesolv", "lipophilicity", "bbbp"]
     metric_for = {
-        "regression": ("rmse", "RMSE (lower is better)"),
-        "classification": ("roc_auc", "ROC-AUC (higher is better)"),
+        "regression": ("rmse_mean", "rmse_std", "RMSE (lower is better)"),
+        "classification": ("roc_auc_mean", "roc_auc_std",
+                           "ROC-AUC (higher is better)"),
     }
     display_name = {
         "esol": "ESOL", "freesolv": "FreeSolv",
         "lipophilicity": "Lipophilicity", "bbbp": "BBBP",
     }
 
-    fig, axes = plt.subplots(2, 4, figsize=(14, 6.5),
-                             gridspec_kw={"hspace": 0.55, "wspace": 0.35})
+    fig, axes = plt.subplots(2, 4, figsize=(14, 6.8),
+                             gridspec_kw={"hspace": 0.55, "wspace": 0.40})
     for col, ds in enumerate(datasets):
         sub = df[df["dataset"] == ds].set_index("config")
         task = sub["task_type"].iloc[0]
-        metric_col, metric_label = metric_for[task]
+        mean_col, std_col, metric_label = metric_for[task]
         xs = np.arange(len(config_order))
-        ys = [sub.loc[c, metric_col] if c in sub.index else np.nan
-              for c in config_order]
+        means = [sub.loc[c, mean_col] if c in sub.index else np.nan
+                 for c in config_order]
+        stds = [sub.loc[c, std_col] if c in sub.index else np.nan
+                for c in config_order]
         colors = [config_color[c] for c in config_order]
         ax_top = axes[0, col]
-        bars = ax_top.bar(xs, ys, color=colors, edgecolor="black", linewidth=0.5)
-        for x, y in zip(xs, ys):
-            if np.isnan(y):
-                ax_top.text(x, 0.5, "killed",
+        # Bars + error bars. NaN bars get skipped automatically.
+        ax_top.bar(xs, means, color=colors, edgecolor="black", linewidth=0.5,
+                   yerr=[0 if np.isnan(s) else s for s in stds],
+                   capsize=3, ecolor="black")
+        for x, m, s in zip(xs, means, stds):
+            if np.isnan(m):
+                ax_top.text(x, 0.5, "killed\n(see\nbelow)",
                             ha="center", va="center",
-                            fontsize=8, color="#c44e52",
+                            fontsize=7, color="#c44e52",
                             transform=ax_top.get_xaxis_transform())
             else:
-                ax_top.text(x, y, f"{y:.3f}", ha="center", va="bottom",
-                            fontsize=8)
+                offset = s if not np.isnan(s) else 0
+                ax_top.text(x, m + offset, f"{m:.3f}",
+                            ha="center", va="bottom", fontsize=8)
         ax_top.set_xticks(xs)
         ax_top.set_xticklabels([config_label[c] for c in config_order],
                                fontsize=7)
         ax_top.set_title(f"{display_name[ds]}\n({task})", fontsize=10)
-        if col == 0:
-            ax_top.set_ylabel(metric_label, fontsize=9)
+        ax_top.set_ylabel(metric_label, fontsize=9)
         if task == "classification":
             ax_top.set_ylim(0.5, 1.0)
-            # The BBBP panel uses a different metric than the regression
-            # panels (ROC-AUC, not RMSE), so it gets its own y-axis label
-            # even when it's not the leftmost column.
-            ax_top.set_ylabel(metric_label, fontsize=9)
-        # Bottom row: feature count.
+
+        # Bottom row: mean feature count with min-max range as error bar.
         ax_bot = axes[1, col]
-        ns = [int(sub.loc[c, "n_features"]) if c in sub.index else 0
-              for c in config_order]
-        ax_bot.bar(xs, ns, color=colors, edgecolor="black", linewidth=0.5)
-        for x, n in zip(xs, ns):
-            ax_bot.text(x, n, str(n), ha="center", va="bottom", fontsize=8)
+        nf_mean = [sub.loc[c, "n_features_mean"] if c in sub.index else 0
+                   for c in config_order]
+        nf_min = [sub.loc[c, "n_features_min"] if c in sub.index else 0
+                  for c in config_order]
+        nf_max = [sub.loc[c, "n_features_max"] if c in sub.index else 0
+                  for c in config_order]
+        # Error bar: from min to max
+        lower = [m - mn for m, mn in zip(nf_mean, nf_min)]
+        upper = [mx - m for m, mx in zip(nf_mean, nf_max)]
+        ax_bot.bar(xs, nf_mean, color=colors, edgecolor="black",
+                   linewidth=0.5,
+                   yerr=[lower, upper], capsize=3, ecolor="black")
+        for x, nf, mn, mx in zip(xs, nf_mean, nf_min, nf_max):
+            if mn == mx:
+                label = f"{int(nf)}"
+            else:
+                label = f"{nf:.1f}\n({mn}-{mx})"
+            ax_bot.text(x, mx + 0.5, label, ha="center", va="bottom",
+                        fontsize=7)
         ax_bot.set_xticks(xs)
         ax_bot.set_xticklabels([config_label[c] for c in config_order],
                                fontsize=7)
-        ax_bot.set_ylim(0, 33)
+        ax_bot.set_ylim(0, 35)
         if col == 0:
-            ax_bot.set_ylabel("Number of features", fontsize=9)
+            ax_bot.set_ylabel("Mean feature count\n(error bar: min-max across folds)",
+                              fontsize=8)
     fig.suptitle(
-        "ML benchmark: redundancy screening preserves RandomForest performance "
-        "while reducing input dimension\n"
-        "Top: primary metric (RMSE for regression, ROC-AUC for classification).  "
-        "Bottom: feature count per configuration.",
-        fontsize=11, y=1.00,
+        "ML benchmark across 5-fold cross-validation: redundancy screening "
+        "preserves RandomForest performance while reducing input dimension\n"
+        "Top: primary metric mean +/- std across folds.  "
+        "Bottom: mean feature count, error bar = min-max range across folds.",
+        fontsize=10.5, y=1.00,
     )
     save_both(fig, "fig9_ml_benchmark")
 

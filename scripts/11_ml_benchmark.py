@@ -2,35 +2,38 @@
 performance?
 
 For each dataset (ESOL, FreeSolv, Lipophilicity, BBBP), trains a
-RandomForest on four feature configurations and reports test-set
-metrics. Goal: test whether the redundancy-screening pipeline
-preserves predictive performance while substantially reducing the
-input dimension.
+RandomForest under four feature configurations across 5-fold CV.
+Reports mean +/- std across folds.
 
 Feature configurations
 ----------------------
   full              all 30 baseline indices
-  pca_95            top-k principal components capturing >=95% variance
-  pairwise_pruned   greedy pruning at |r| >= 0.95
-                    (keep one representative per correlation cluster)
-  combined_pruned   pairwise-pruned PLUS partial-correlation filter
-                    (drop indices with |pcor(z, y | X)| < 0.10)
+  pca_95            top-k principal components capturing >=95% variance,
+                    fit on the training fold only
+  pairwise_pruned   greedy pruning at |r| >= 0.95 on the training fold
+  combined_pruned   pairwise-pruned PLUS partial-correlation filter,
+                    fit on the training fold only
+
+All feature selection is performed inside each CV fold to avoid
+test-fold information leakage into the feature-selection step.
 
 For regression targets we report RMSE, MAE, R^2.
 For classification targets we report ROC-AUC, accuracy, F1.
 
 The headline claim of the methodology paper is operationalized as:
-``combined_pruned'' should match `full' within standard cross-validation
-noise on a held-out test split, while using fewer features.
+``combined_pruned'' / ``pairwise_pruned'' should match `full' within
+cross-validation noise on the held-out folds, while using fewer features.
 
 Outputs:
   results/ml_benchmark.csv
   results/ml_benchmark.md
 
 This script does not output figures; numerical tables are sufficient
-for the methodology paper's claim.
+for the methodology paper's claim. Figure generation happens in
+scripts/08_make_figures.py::fig9_ml_benchmark from this CSV.
 """
 from __future__ import annotations
+import math
 import os
 import sys
 import time
@@ -50,7 +53,7 @@ from sklearn.metrics import (
     accuracy_score, f1_score, mean_absolute_error,
     mean_squared_error, r2_score, roc_auc_score,
 )
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 
 from src.load_data import DATASETS, load
@@ -59,18 +62,18 @@ from src.standard_indices import compute_all
 
 DATASET_NAMES = ["esol", "freesolv", "lipophilicity", "bbbp"]
 RNG_SEED = 42
-TEST_SIZE = 0.20
+N_FOLDS = 5
 PAIRWISE_THRESHOLD = 0.95
 PCOR_THRESHOLD = 0.10
 PCA_VARIANCE = 0.95
+CONFIGS = ["full", "pca_95", "pairwise_pruned", "combined_pruned"]
+
+REGRESSION_METRICS = ("rmse", "mae", "r2")
+CLASSIFICATION_METRICS = ("roc_auc", "accuracy", "f1")
 
 
 def compute_baseline_descriptors(df: pd.DataFrame) -> tuple[pd.DataFrame, np.ndarray]:
-    """Compute the 30-index baseline matrix and the target vector for `df`.
-
-    Skips rows whose SMILES does not parse. Returns (X, y) with both arrays
-    aligned to the kept rows.
-    """
+    """Compute the 30-index baseline matrix and the target vector for `df`."""
     rows = []
     keep_target = []
     for _, row in df.iterrows():
@@ -87,8 +90,8 @@ def compute_baseline_descriptors(df: pd.DataFrame) -> tuple[pd.DataFrame, np.nda
 def select_pairwise_pruned(X: pd.DataFrame, threshold: float) -> list[str]:
     """Greedy redundancy-aware feature selection at |r| < threshold.
 
-    Iterate columns in order; keep each column whose maximum absolute
-    correlation with the already-kept columns is below `threshold`.
+    Iterates columns in DataFrame order; keeps each column whose maximum
+    absolute correlation with the already-kept columns is below threshold.
     """
     kept: list[str] = []
     for col in X.columns:
@@ -106,19 +109,18 @@ def select_pairwise_pruned(X: pd.DataFrame, threshold: float) -> list[str]:
 
 
 def select_combined_pruned(
-    X: pd.DataFrame, y: np.ndarray, pair_threshold: float, pcor_threshold: float
+    X: pd.DataFrame, y: np.ndarray,
+    pair_threshold: float, pcor_threshold: float,
 ) -> list[str]:
-    """Pairwise-pruned set further filtered by partial correlation with target.
+    """Pairwise-pruned set further filtered by |partial corr with y|.
 
-    A column is kept only if it passes the pairwise screen AND its partial
-    correlation with the target (after regressing out the other pairwise-
-    pruned columns) has absolute value at least `pcor_threshold`.
+    Both filters are computed on the supplied (X, y) -- which is the
+    training fold's slice, not the full dataset.
     """
     pair_kept = select_pairwise_pruned(X, pair_threshold)
     if len(pair_kept) <= 1:
         return pair_kept
     final_kept: list[str] = []
-    Xb = X[pair_kept].values
     for col in pair_kept:
         others = [c for c in pair_kept if c != col]
         if not others:
@@ -128,7 +130,6 @@ def select_combined_pruned(
         z = X[col].values
         if np.std(z) < 1e-12:
             continue
-        # Residualize z and y against others.
         z_res = z - LinearRegression().fit(Xo, z).predict(Xo)
         y_res = y - LinearRegression().fit(Xo, y).predict(Xo)
         if np.std(z_res) < 1e-12 or np.std(y_res) < 1e-12:
@@ -139,16 +140,28 @@ def select_combined_pruned(
     return final_kept
 
 
-def select_pca_95(X: pd.DataFrame, variance: float) -> tuple[np.ndarray, int]:
-    """Project X onto the smallest k PCs whose cumulative variance >= `variance`.
+def fit_pca_train_only(
+    X_train: np.ndarray, X_test: np.ndarray, variance: float,
+) -> tuple[np.ndarray, np.ndarray, int]:
+    """Fit StandardScaler and PCA on X_train only, transform X_test.
 
-    Returns (X_pc, k).
+    Returns (X_train_pc, X_test_pc, k) where k is the smallest number of
+    PCs whose cumulative explained variance >= `variance` on the training
+    fold.
     """
-    Xs = StandardScaler().fit_transform(X.values)
-    pca = PCA().fit(Xs)
+    scaler = StandardScaler().fit(X_train)
+    Xs_train = scaler.transform(X_train)
+    Xs_test = scaler.transform(X_test)
+    pca = PCA().fit(Xs_train)
     cum = np.cumsum(pca.explained_variance_ratio_)
     k = int(np.searchsorted(cum, variance)) + 1
-    return pca.transform(Xs)[:, :k], k
+    return pca.transform(Xs_train)[:, :k], pca.transform(Xs_test)[:, :k], k
+
+
+def nan_metrics_for(task: str) -> dict[str, float]:
+    nan = float("nan")
+    return {"rmse": nan, "mae": nan, "r2": nan,
+            "roc_auc": nan, "accuracy": nan, "f1": nan}
 
 
 def evaluate(
@@ -157,6 +170,9 @@ def evaluate(
     task_type: str,
 ) -> dict[str, float]:
     """Train RandomForest on train, score on test, return task-appropriate metrics."""
+    if X_train.shape[1] == 0:
+        # Empty feature set; cannot fit a model.
+        return nan_metrics_for(task_type)
     if task_type == "regression":
         model = RandomForestRegressor(
             n_estimators=300, random_state=RNG_SEED, n_jobs=-1,
@@ -187,82 +203,139 @@ def evaluate(
     raise ValueError(f"unknown task_type {task_type!r}")
 
 
+def aggregate(values: list[float]) -> tuple[float, float]:
+    """Return (mean, std) ignoring NaNs; if all NaN, return (NaN, NaN)."""
+    arr = np.asarray(values, dtype=float)
+    if np.all(np.isnan(arr)):
+        return float("nan"), float("nan")
+    return float(np.nanmean(arr)), float(np.nanstd(arr, ddof=0))
+
+
 def benchmark_dataset(dataset: str) -> list[dict[str, Any]]:
     spec = DATASETS[dataset]
     task = spec["task_type"]
-    print(f"\n{'='*64}\nML benchmark: {dataset}  ({task})\n{'='*64}")
+    print(f"\n{'='*64}\nML benchmark: {dataset}  ({task})  {N_FOLDS}-fold CV\n{'='*64}")
     df = load(dataset)
     t0 = time.time()
     X, y = compute_baseline_descriptors(df)
     print(f"  Built {len(X)} graphs in {time.time()-t0:.1f}s")
     if task == "classification":
-        # Drop NaN target rows defensively.
         keep = ~np.isnan(y)
         X = X.loc[keep].reset_index(drop=True)
         y = y[keep]
 
-    # Splits used identically for every configuration so the comparison
-    # isolates the effect of feature selection.
-    stratify = y.astype(int) if task == "classification" else None
-    X_train_idx, X_test_idx = train_test_split(
-        np.arange(len(X)), test_size=TEST_SIZE,
-        random_state=RNG_SEED, stratify=stratify,
-    )
+    if task == "classification":
+        splitter = StratifiedKFold(
+            n_splits=N_FOLDS, shuffle=True, random_state=RNG_SEED,
+        )
+        splits = list(splitter.split(X, y.astype(int)))
+    else:
+        splitter = KFold(
+            n_splits=N_FOLDS, shuffle=True, random_state=RNG_SEED,
+        )
+        splits = list(splitter.split(X))
+
+    per_config: dict[str, dict[str, list]] = {
+        cfg: {"n_features": [],
+              "rmse": [], "mae": [], "r2": [],
+              "roc_auc": [], "accuracy": [], "f1": []}
+        for cfg in CONFIGS
+    }
+
+    for fold_idx, (train_idx, test_idx) in enumerate(splits):
+        X_train_df = X.iloc[train_idx]
+        X_test_df = X.iloc[test_idx]
+        y_train = y[train_idx]
+        y_test = y[test_idx]
+
+        # 1) full
+        m = evaluate(X_train_df.values, y_train,
+                     X_test_df.values, y_test, task)
+        for metric_name, v in m.items():
+            per_config["full"][metric_name].append(v)
+        per_config["full"]["n_features"].append(X_train_df.shape[1])
+
+        # 2) pca_95 -- fit on train fold only
+        Xpc_train, Xpc_test, k = fit_pca_train_only(
+            X_train_df.values, X_test_df.values, PCA_VARIANCE,
+        )
+        m = evaluate(Xpc_train, y_train, Xpc_test, y_test, task)
+        for metric_name, v in m.items():
+            per_config["pca_95"][metric_name].append(v)
+        per_config["pca_95"]["n_features"].append(k)
+
+        # 3) pairwise_pruned -- fit on train fold only
+        pair_kept = select_pairwise_pruned(X_train_df, PAIRWISE_THRESHOLD)
+        if pair_kept:
+            m = evaluate(
+                X_train_df[pair_kept].values, y_train,
+                X_test_df[pair_kept].values, y_test, task,
+            )
+        else:
+            m = nan_metrics_for(task)
+        for metric_name, v in m.items():
+            per_config["pairwise_pruned"][metric_name].append(v)
+        per_config["pairwise_pruned"]["n_features"].append(len(pair_kept))
+
+        # 4) combined_pruned -- fit on train fold only
+        comb_kept = select_combined_pruned(
+            X_train_df, y_train, PAIRWISE_THRESHOLD, PCOR_THRESHOLD,
+        )
+        if comb_kept:
+            m = evaluate(
+                X_train_df[comb_kept].values, y_train,
+                X_test_df[comb_kept].values, y_test, task,
+            )
+        else:
+            # Combined screen kept nothing on this fold; report NaN metrics
+            # and 0 features. The aggregator preserves the NaN.
+            m = nan_metrics_for(task)
+        for metric_name, v in m.items():
+            per_config["combined_pruned"][metric_name].append(v)
+        per_config["combined_pruned"]["n_features"].append(len(comb_kept))
 
     rows: list[dict[str, Any]] = []
+    for cfg in CONFIGS:
+        nf = per_config[cfg]["n_features"]
+        nf_mean, nf_std = aggregate(nf)
+        nf_min, nf_max = int(np.min(nf)), int(np.max(nf))
+        row = {
+            "dataset": dataset,
+            "task_type": task,
+            "config": cfg,
+            "n_features_mean": nf_mean,
+            "n_features_std":  nf_std,
+            "n_features_min":  nf_min,
+            "n_features_max":  nf_max,
+        }
+        for metric_name in REGRESSION_METRICS + CLASSIFICATION_METRICS:
+            mean_v, std_v = aggregate(per_config[cfg][metric_name])
+            row[f"{metric_name}_mean"] = mean_v
+            row[f"{metric_name}_std"] = std_v
+        rows.append(row)
 
-    # 1) full
-    cfg = "full"
-    X_train = X.iloc[X_train_idx].values
-    X_test = X.iloc[X_test_idx].values
-    metrics = evaluate(X_train, y[X_train_idx], X_test, y[X_test_idx], task)
-    rows.append({"dataset": dataset, "task_type": task, "config": cfg,
-                 "n_features": X.shape[1], **metrics})
-    print(f"  {cfg:18s}  n_features={X.shape[1]:>2}  {metrics}")
-
-    # 2) pca_95
-    cfg = "pca_95"
-    X_pc_all, k = select_pca_95(X, PCA_VARIANCE)
-    X_train_pc = X_pc_all[X_train_idx]
-    X_test_pc = X_pc_all[X_test_idx]
-    metrics = evaluate(X_train_pc, y[X_train_idx], X_test_pc, y[X_test_idx], task)
-    rows.append({"dataset": dataset, "task_type": task, "config": cfg,
-                 "n_features": k, **metrics})
-    print(f"  {cfg:18s}  n_features={k:>2}  {metrics}")
-
-    # 3) pairwise_pruned
-    cfg = "pairwise_pruned"
-    pair_kept = select_pairwise_pruned(X, PAIRWISE_THRESHOLD)
-    X_train_p = X[pair_kept].iloc[X_train_idx].values
-    X_test_p = X[pair_kept].iloc[X_test_idx].values
-    metrics = evaluate(X_train_p, y[X_train_idx], X_test_p, y[X_test_idx], task)
-    rows.append({"dataset": dataset, "task_type": task, "config": cfg,
-                 "n_features": len(pair_kept), **metrics})
-    print(f"  {cfg:18s}  n_features={len(pair_kept):>2}  kept={pair_kept}")
-    print(f"                     {metrics}")
-
-    # 4) combined_pruned
-    cfg = "combined_pruned"
-    comb_kept = select_combined_pruned(X, y, PAIRWISE_THRESHOLD, PCOR_THRESHOLD)
-    if len(comb_kept) == 0:
-        # If the combined screen kills every feature, fall back to the single
-        # most-target-correlated feature. We do NOT silently use 0 features.
-        # Report and skip ML; report n_features=0 with NaN metrics.
-        metrics = {k: float("nan") for k in
-                   ("rmse", "mae", "r2", "roc_auc", "accuracy", "f1")}
-        rows.append({"dataset": dataset, "task_type": task, "config": cfg,
-                     "n_features": 0, **metrics})
-        print(f"  {cfg:18s}  n_features= 0  (combined screen kept nothing; "
-              f"reported as NaN)")
-    else:
-        X_train_c = X[comb_kept].iloc[X_train_idx].values
-        X_test_c = X[comb_kept].iloc[X_test_idx].values
-        metrics = evaluate(X_train_c, y[X_train_idx], X_test_c, y[X_test_idx], task)
-        rows.append({"dataset": dataset, "task_type": task, "config": cfg,
-                     "n_features": len(comb_kept), **metrics})
-        print(f"  {cfg:18s}  n_features={len(comb_kept):>2}  kept={comb_kept}")
-        print(f"                     {metrics}")
+        # Pretty print
+        if task == "regression":
+            print(f"  {cfg:18s}  n_feat={nf_mean:.1f} (range {nf_min}-{nf_max})  "
+                  f"RMSE={row['rmse_mean']:.3f}+-{row['rmse_std']:.3f}  "
+                  f"R^2={row['r2_mean']:.3f}+-{row['r2_std']:.3f}")
+        else:
+            print(f"  {cfg:18s}  n_feat={nf_mean:.1f} (range {nf_min}-{nf_max})  "
+                  f"ROC-AUC={row['roc_auc_mean']:.3f}+-{row['roc_auc_std']:.3f}  "
+                  f"F1={row['f1_mean']:.3f}+-{row['f1_std']:.3f}")
     return rows
+
+
+def fmt_mean_std(mean: float, std: float, places: int = 3) -> str:
+    if math.isnan(mean):
+        return "---"
+    return f"{mean:.{places}f} +/- {std:.{places}f}"
+
+
+def fmt_n_features(mean: float, mn: int, mx: int) -> str:
+    if mn == mx:
+        return f"{mn}"
+    return f"{mean:.1f} ({mn}-{mx})"
 
 
 def main() -> None:
@@ -276,70 +349,58 @@ def main() -> None:
     md_lines: list[str] = []
     md_lines.append("# ML benchmark: does orthogonality screening preserve predictive performance?\n")
     md_lines.append(
-        "Generated by `scripts/11_ml_benchmark.py`. RandomForest "
-        "(300 trees, fixed seed) trained on an 80/20 split with stratification "
-        "for the classification dataset. Identical splits across all four "
-        "feature configurations isolate the effect of feature selection.\n")
+        f"Generated by `scripts/11_ml_benchmark.py`. RandomForest "
+        f"(300 trees, fixed seed) trained under {N_FOLDS}-fold "
+        f"cross-validation (stratified for the classification "
+        f"dataset). All feature selection (PCA, pairwise pruning, "
+        f"combined pruning) is performed inside each training fold "
+        f"to avoid test-fold information leakage. Reported values "
+        f"are mean +/- std across the {N_FOLDS} folds.\n")
     md_lines.append(
-        "Feature configurations:\n\n"
-        f"- **full** — all 30 baseline indices\n"
-        f"- **pca_95** — top-k principal components, cumulative variance "
-        f">= {PCA_VARIANCE:.0%}\n"
-        f"- **pairwise_pruned** — greedy redundancy filter at |r| < "
-        f"{PAIRWISE_THRESHOLD}\n"
-        f"- **combined_pruned** — pairwise-pruned + |partial corr with target| "
-        f">= {PCOR_THRESHOLD}\n")
+        f"Feature configurations:\n\n"
+        f"- **full** -- all 30 baseline indices\n"
+        f"- **pca_95** -- top-k principal components on the training "
+        f"fold, cumulative variance >= {PCA_VARIANCE:.0%}\n"
+        f"- **pairwise_pruned** -- greedy redundancy filter at "
+        f"|r| < {PAIRWISE_THRESHOLD} on the training fold\n"
+        f"- **combined_pruned** -- pairwise filter plus "
+        f"|partial corr with target| >= {PCOR_THRESHOLD} on the "
+        f"training fold\n")
     md_lines.append("## Regression datasets (RMSE / MAE / R^2; lower / lower / higher is better)\n")
     md_lines.append("| Dataset | Config | n_features | RMSE | MAE | R^2 |")
-    md_lines.append("|---|---|---:|---:|---:|---:|")
+    md_lines.append("|---|---|---|---|---|---|")
     for r in rows:
         if r["task_type"] != "regression":
             continue
         md_lines.append(
-            f"| {r['dataset']} | {r['config']} | {r['n_features']} | "
-            f"{r['rmse']:.4f} | {r['mae']:.4f} | {r['r2']:.4f} |"
+            f"| {r['dataset']} | {r['config']} | "
+            f"{fmt_n_features(r['n_features_mean'], r['n_features_min'], r['n_features_max'])} | "
+            f"{fmt_mean_std(r['rmse_mean'], r['rmse_std'])} | "
+            f"{fmt_mean_std(r['mae_mean'], r['mae_std'])} | "
+            f"{fmt_mean_std(r['r2_mean'], r['r2_std'])} |"
         )
     md_lines.append("\n## Classification dataset (ROC-AUC / accuracy / F1; higher is better)\n")
     md_lines.append("| Dataset | Config | n_features | ROC-AUC | Accuracy | F1 |")
-    md_lines.append("|---|---|---:|---:|---:|---:|")
+    md_lines.append("|---|---|---|---|---|---|")
     for r in rows:
         if r["task_type"] != "classification":
             continue
         md_lines.append(
-            f"| {r['dataset']} | {r['config']} | {r['n_features']} | "
-            f"{r['roc_auc']:.4f} | {r['accuracy']:.4f} | {r['f1']:.4f} |"
+            f"| {r['dataset']} | {r['config']} | "
+            f"{fmt_n_features(r['n_features_mean'], r['n_features_min'], r['n_features_max'])} | "
+            f"{fmt_mean_std(r['roc_auc_mean'], r['roc_auc_std'])} | "
+            f"{fmt_mean_std(r['accuracy_mean'], r['accuracy_std'])} | "
+            f"{fmt_mean_std(r['f1_mean'], r['f1_std'])} |"
         )
     md_lines.append("\n## Interpretation\n")
     md_lines.append(
-        "The headline question for the methodology paper is: does the "
-        "combined-criterion screen preserve predictive performance while "
-        "reducing input dimension? A clean affirmative answer is the "
-        "comparison of `full` and `combined_pruned` columns within each "
-        "dataset: if the metrics are within standard cross-validation noise "
-        "(commonly cited as ~0.05 RMSE or ~0.02 ROC-AUC on this kind of data) "
-        "and the feature count is materially reduced, then the screen has "
-        "operationalized non-redundancy without sacrificing model utility.\n")
-    md_lines.append(
-        "On per-dataset reading the four rows can also be compared "
-        "diagnostically:\n"
-        "- `pca_95` collapses to 3 features on the regression datasets "
-        "(as expected from the BID-basis dimension bound), so it provides "
-        "a *minimum-information* control: model performance with only 3 "
-        "principal components establishes a floor.\n"
-        "- `pairwise_pruned` reduces feature count by removing only the "
-        "obviously redundant columns; performance close to `full` indicates "
-        "that the dropped columns add no fresh information.\n"
-        "- `combined_pruned` is the strict screen: pairwise screen plus "
-        "partial correlation with target. Materially fewer features than "
-        "`pairwise_pruned` with similar performance is the strongest "
-        "support for the methodology paper's `necessary but not sufficient' "
-        "framing of pairwise correlation.\n")
-    md_lines.append(
-        "**Caveat.** The screen is parameterized by two threshold choices "
-        "($|r| = 0.95$ and $|\\mathrm{pcor}| = 0.10$). Sensitivity to those "
-        "thresholds for the per-dataset feature count is in "
-        "`results/cross_dataset_summary.md`; sensitivity for the ML "
-        "performance is an obvious follow-up not done here.\n")
+        "Compare the `full` and `pairwise_pruned` rows within each dataset.\n"
+        "If the mean +/- std intervals overlap, the screen has reduced the\n"
+        "feature count without statistically meaningful loss in predictive\n"
+        "performance. The combined-criterion screen is more aggressive; on\n"
+        "datasets where the underlying topology-target partial-correlation\n"
+        "structure is weak, the screen may retain zero features in some or\n"
+        "all folds (reported as '---').\n")
     out_md = os.path.join(PROJECT, "results", "ml_benchmark.md")
     with open(out_md, "w") as f:
         f.write("\n".join(md_lines))

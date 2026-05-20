@@ -613,48 +613,56 @@ pairwise screen alone. They do not yet demonstrate that the criterion
 is useful for building predictive QSPR models. This section closes
 that gap: we train a RandomForest (300 trees, fixed seed,
 \texttt{class\_weight="balanced"} for classification) on each of four
-datasets under four feature configurations, and report whether the
-screened feature set matches the full-baseline model's predictive
-performance.
+datasets under four feature configurations across $5$-fold
+cross-validation, and report whether the screened feature set
+matches the full-baseline model's predictive performance within
+CV noise.
 
 \textbf{Datasets.} The three QSPR regression benchmarks of
 Section~\ref{sec:datasets} are augmented with a fourth dataset to
 test that the pipeline generalizes beyond regression:
-\textbf{BBBP} (Martins~2012 via~\cite{MoleculeNet}),
-$n = 2050$ molecules, binary target ``blood-brain barrier
-penetration''. The class distribution is approximately $3{:}1$
+\textbf{BBBP} (Martins~2012 via~\cite{MoleculeNet}), $2\,050$
+molecules in the source CSV of which $2\,039$ parse via RDKit and
+enter the screen; binary target ``blood-brain barrier
+penetration''; class distribution approximately $3{:}1$
 (positive:negative), handled with a class-balanced RandomForest.
 
-\textbf{Configurations.} An identical $80/20$ split (stratified for
-the classification task) is used across all configurations so the
-comparison isolates the effect of feature selection.
+\textbf{Configurations and cross-validation protocol.} $5$-fold
+cross-validation, stratified for the classification task, identical
+folds across all configurations so the comparison isolates the
+effect of feature selection. All feature selection is performed
+\emph{inside each training fold} to avoid test-fold information
+leakage.
 \begin{itemize}
 \item \textbf{full}: all $30$ baseline indices.
 \item \textbf{pca\_95}: top-$k$ principal components of the
-standardized baseline at $95\%$ cumulative variance ($k=3$ on all
-four datasets).
+training-fold-standardized baseline at $95\%$ cumulative variance
+($k=3$ on all four datasets, every fold).
 \item \textbf{pairwise\_pruned}: greedy redundancy filter at
-$|r| < 0.95$ (keep one representative per correlation cluster).
+$|r| < 0.95$ on the training fold (keep one representative per
+correlation cluster).
 \item \textbf{combined\_pruned}: pairwise filter plus
-$|\mathrm{pcor}(z, y \mid X)| \ge 0.10$ on the pairwise-pruned set.
+$|\mathrm{pcor}(z, y \mid X_{\mathrm{others}})| \ge 0.10$ on the
+training fold's pairwise-pruned set.
 \end{itemize}
 
 \textbf{Results.} Table~\ref{tab:ml_benchmark} and
 Figure~\ref{fig:ml_benchmark} summarize the per-dataset, per-configuration
-RandomForest performance and feature count.
+RandomForest performance (mean $\pm$ std across the $5$ folds) and
+mean feature count.
 
 \begin{table}[h]
 \centering
-\caption{RandomForest test-set performance under four feature configurations. Regression metric is RMSE (lower is better); classification metric is ROC-AUC (higher is better). Identical splits across configurations.}
+\caption{RandomForest $5$-fold cross-validation performance under four feature configurations. Regression metric is RMSE (lower is better); classification metric is ROC-AUC (higher is better). Reported as mean $\pm$ std across folds. The combined-pruned screen retained zero features in $4$ of $5$ folds on Lipophilicity (the RMSE shown is from the single fold that retained one feature).}
 \label{tab:ml_benchmark}
-\begin{tabular}{llrrrrrr}
+\begin{tabular}{lllllll}
 \toprule
-Dataset & Task & full & pca\_95 & pairwise\_pruned & combined\_pruned & full $n_{\mathrm{feat}}$ & pruned $n_{\mathrm{feat}}$\\
+Dataset & full & pca\_95 & pairwise\_pruned & combined\_pruned & full $n$ & pruned $n$\\
 \midrule
-ESOL          & regression       & 1.454 & 1.503 & 1.445 & 1.508 & 30 & 7\\
-FreeSolv      & regression       & 3.890 & 3.896 & 3.875 & 3.963 & 30 & 8\\
-Lipophilicity & regression       & 1.037 & 1.064 & 1.037 & ---   & 30 & 8\\
-BBBP          & classification   & 0.835 & 0.813 & 0.864 & 0.859 & 30 & 6\\
+ESOL          & $1.437 \pm 0.102$ & $1.455 \pm 0.096$ & $1.435 \pm 0.087$ & $1.475 \pm 0.123$ & 30 & 7.4 (7--9)\\
+FreeSolv      & $3.537 \pm 0.228$ & $3.544 \pm 0.264$ & $3.540 \pm 0.224$ & $3.561 \pm 0.300$ & 30 & 8.0\\
+Lipophilicity & $1.030 \pm 0.024$ & $1.065 \pm 0.018$ & $1.028 \pm 0.022$ & $1.287$ (1/5 folds) & 30 & 8.0\\
+BBBP          & $0.846 \pm 0.006$ & $0.818 \pm 0.014$ & $0.860 \pm 0.010$ & $0.840 \pm 0.010$ & 30 & 6.0\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -662,29 +670,41 @@ BBBP          & classification   & 0.835 & 0.813 & 0.864 & 0.859 & 30 & 6\\
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{fig9_ml_benchmark.pdf}
-\caption{Downstream ML benchmark on four datasets. Top row: primary
-metric (RMSE for the three regression panels, ROC-AUC for BBBP).
-Bottom row: number of features in each configuration. The pairwise
-screen matches or marginally improves the full-baseline RandomForest
-on every dataset while using $4$--$5\times$ fewer features. On
-Lipophilicity the strict combined screen retains zero features
-(no pairwise-pruned index has $|\mathrm{pcor}| \ge 0.10$ with $\log D$),
-which is reported as a failure mode rather than hidden.}
+\caption{Downstream ML benchmark on four datasets, $5$-fold cross
+validation. Top row: primary metric (RMSE for the three regression
+panels, ROC-AUC for BBBP), mean $\pm$ std across folds. Bottom row:
+mean feature count per configuration, error bar = min--max range
+across folds. The pairwise screen matches the full-baseline
+RandomForest on every dataset, with mean differences below CV
+noise, while using roughly $4\times$ (range $3.75$--$5\times$)
+fewer features. On Lipophilicity the strict combined screen retains
+zero features in $4$ of $5$ folds.}
 \label{fig:ml_benchmark}
 \end{figure}
 
-\textbf{Interpretation.} The \texttt{pairwise\_pruned} configuration
-matches \texttt{full} within $0.02$ RMSE on every regression dataset
-and marginally improves ROC-AUC on BBBP ($0.835 \to 0.864$), using
-$6$--$8$ features rather than $30$. This is the methodology paper's
-operational claim: redundancy screening at $|r| < 0.95$ preserves
-predictive performance while substantially reducing the input
-dimension. The stricter \texttt{combined\_pruned} configuration
-trades some performance for more aggressive feature reduction; on
-Lipophilicity it removes all features, an honest failure mode that
-reflects the dataset's weak topology-to-$\log D$ partial-correlation
-structure (no pairwise-pruned index has $|\mathrm{pcor}| \ge 0.10$).
-The threshold $|\mathrm{pcor}| = 0.10$ should be relaxed (or replaced
+\textbf{Interpretation.} On the four MoleculeNet benchmarks tested,
+the \texttt{pairwise\_pruned} configuration matches \texttt{full}
+within CV noise: mean RMSE differences are $|\Delta| \le 0.005$ on
+all three regression datasets and the mean and std intervals
+overlap. On BBBP, \texttt{pairwise\_pruned} attains ROC-AUC
+$0.860 \pm 0.010$ versus \texttt{full} at $0.846 \pm 0.006$; the
+mean delta is $0.014$, with marginal overlap of the std bands.
+This is best read as ``matches or marginally exceeds within CV
+noise'' rather than a definitive improvement. The PCA-95
+configuration consistently underperforms by $\approx 0.02$ RMSE or
+$\approx 0.03$ ROC-AUC, suggesting that the principal directions
+of the standardized $30$-index baseline are not the
+target-relevant directions for these specific QSPR problems.
+
+The stricter \texttt{combined\_pruned} configuration is more
+aggressive and on the regression datasets shows a small performance
+penalty (mean RMSE $0.04$--$0.05$ higher than \texttt{full}, still
+overlapping std bands). On Lipophilicity the combined screen
+retains zero features in $4$ of the $5$ folds, an honest failure
+mode that reflects the dataset's weak topology-to-$\log D$
+partial-correlation structure (no pairwise-pruned index has
+$|\mathrm{pcor}| \ge 0.10$ with $\log D$ on most folds). The
+threshold $|\mathrm{pcor}| = 0.10$ should be relaxed (or replaced
 with a target-correlation rank cut) on datasets where the underlying
 topology-target relationship is weak. We do not recommend the
 combined screen as a hard filter; it is best read as a diagnostic

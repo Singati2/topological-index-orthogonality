@@ -184,25 +184,33 @@ cross-dataset summary in `results/cross_dataset_summary.md`.
 
 Whether redundancy screening actually matters for predictive
 performance is tested in `scripts/11_ml_benchmark.py`, which
-trains a RandomForest on each dataset (including the
-classification dataset BBBP, $n=2039$) under four feature
+trains a RandomForest on each dataset (including BBBP — Martins
+2012 binary blood-brain barrier classification, $2\,050$ source
+entries / $2\,039$ post-RDKit parsing) under four feature
 configurations: full $30$-index baseline, top-$k$ PCA at $95\%$
 variance, pairwise-pruned at $|r| < 0.95$, and combined
-(pairwise + $|\mathrm{pcor}| \ge 0.10$). The headline finding is
+(pairwise + $|\mathrm{pcor}| \ge 0.10$). All feature selection is
+performed inside each training fold of a $5$-fold cross-validation
+to avoid test-fold information leakage. Headline ($\pm$ std across
+folds):
 
-| Dataset | Task | RMSE / ROC-AUC `full` (30 feats) | `pairwise_pruned` |
+| Dataset | Task | `full` (30 feats) | `pairwise_pruned` |
 |---|---|---|---|
-| ESOL          | regression       | RMSE 1.45, $R^2$ 0.56 | RMSE 1.45 (7 feats) |
-| FreeSolv      | regression       | RMSE 3.89, $R^2$ 0.23 | RMSE 3.88 (8 feats) |
-| Lipophilicity | regression       | RMSE 1.04, $R^2$ 0.27 | RMSE 1.04 (8 feats) |
-| BBBP          | classification   | ROC-AUC 0.835         | ROC-AUC 0.864 (6 feats) |
+| ESOL          | regression       | RMSE $1.437 \pm 0.102$ | RMSE $1.435 \pm 0.087$ (7.4 feats) |
+| FreeSolv      | regression       | RMSE $3.537 \pm 0.228$ | RMSE $3.540 \pm 0.224$ (8 feats)   |
+| Lipophilicity | regression       | RMSE $1.030 \pm 0.024$ | RMSE $1.028 \pm 0.022$ (8 feats)   |
+| BBBP          | classification   | ROC-AUC $0.846 \pm 0.006$ | ROC-AUC $0.860 \pm 0.010$ (6 feats) |
 
-i.e.\ the pairwise screen matches or marginally improves
-RandomForest performance with $4$--$5\times$ fewer features.
-The stricter combined screen kills all features on Lipophilicity
-(every pairwise-pruned index has $|\mathrm{pcor}| < 0.10$ with
-$\log D$), an honest failure mode that the paper reports. Full
-table: `results/ml_benchmark.md`; visual summary:
+i.e. the pairwise screen matches the full $30$-feature
+RandomForest within CV noise on every dataset, with roughly
+$4\times$ (range $3.75$–$5\times$) fewer features. On BBBP the
+pairwise-pruned model attains a mean ROC-AUC $0.014$ higher than
+`full`, with marginally overlapping std bands — read as "matches
+or marginally exceeds within CV noise". The stricter combined
+screen retains zero features in $4$ of $5$ folds on Lipophilicity
+(no pairwise-pruned index has $|\mathrm{pcor}| \ge 0.10$ with
+$\log D$ on most folds), an honest failure mode that the paper
+reports. Full table: `results/ml_benchmark.md`; visual summary:
 
 ![ML benchmark](figures/fig9_ml_benchmark.png)
 
