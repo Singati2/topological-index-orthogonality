@@ -137,15 +137,22 @@ Companion strategy document: `docs/wuzi_bounds_strategy.md` (sections A, C).
   \le \sqrt{W(G; \alpha_1, \beta_1, \gamma_1) \cdot W(G; \alpha_2, \beta_2, \gamma_2)}$.
   Proof: Cauchy–Schwarz, in `docs/paper1_wuzi.tex` Theorem~\ref{thm:cs}.
 
+**Now complete (round-10 update):**
+
+- **Proposition 4.7 / 4.8 (upper bound in $(\Delta, m)$ / lower
+  bound in $(\delta, m)$ in the non-negative parameter region,
+  rigorous).** Termwise factor-wise bounds, summed; equality
+  conditions stated. In `docs/paper1_wuzi.tex` as
+  `thm:upper_Delta` and `thm:lower_delta`.
+
 **Still needed (NEEDS DERIVATION BY ADVIK / AROCKIARAJ SIR):**
 
-- **Theorem 3.4 (sharper upper bound in $\Delta$).** Bounds tighter
-  than the bracket, depending on the sign region of $(\alpha,\beta,\gamma)$.
-- **Theorem 3.5 (Nordhaus–Gaddum type).** $W(G) + W(\bar G) \ge f_n(\alpha,\beta,\gamma)$.
-- **Theorem 3.6 (Polya–Szegő type).** Inverse-Cauchy-Schwarz bounds
-  using $\delta, \Delta$ as Polya–Szegő input.
-- Equality conditions for the Jensen bounds in $0 < \beta < 1$ and
-  $0 < \alpha < 1$.
+- **Conjecture 4.9 (Nordhaus–Gaddum type).** $W(G) + W(\bar G) \ge f_n(\alpha,\beta,\gamma)$ with an explicit $f_n$; only the
+  classical $M_1, M_2$ case has a known template.
+- **Sharper $\Delta$-dependent bounds in the mixed-sign region**
+  (the current Proposition 4.7 covers only $\alpha, \beta, \gamma \ge 0$).
+- **Polya–Szegő-type inverse-Cauchy-Schwarz bounds** using
+  $\delta, \Delta$ as Polya–Szegő input.
 
 ## 4. Bounds in terms of classical topological indices
 

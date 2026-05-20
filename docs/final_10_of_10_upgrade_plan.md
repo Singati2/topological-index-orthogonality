@@ -1,7 +1,18 @@
 # Final 10/10 Upgrade Plan
 
-**Compiled:** 2026-05-20 after the round-8/9 final-audit sweep.
-**State of repo:** branch `main`; last working commit before this plan was `58a57ac`; this commit will append the upgrade plan together with the round-8/9 fixes.
+**Compiled:** 2026-05-20 after the round-10 final-audit sweep.
+**State of repo:** branch `main`; baseline commit before this round was `58a57ac`; this plan lives in commit `a757e27` together with the round-10 fixes; round-12 meta-doc updates appended in the next commit.
+
+**Important note on Proposition / Conjecture numbering.** Paper 1 uses a per-section shared counter (`[theorem]`), so the propositions added in round 10 receive numbers different from what an earlier draft of this plan stated. The actual compiled numbers are:
+
+- Proposition **4.7** (upper bound in $\Delta$, `thm:upper_Delta`).
+- Proposition **4.8** (lower bound in $\delta$, `thm:lower_delta`).
+- Conjecture **4.9** (Nordhaus--Gaddum, `conj:NG`).
+- Proposition **5.4** (bound via generalized $R$ and $\chi$, `thm:R_chi`).
+- Proposition **5.5** (indirect bound via Sombor, `thm:sombor`).
+- Conjecture **5.6** (sharp bound via $GA$, `thm:GA`).
+- Conjecture **5.7** (sharp bounds via $H$, $ABC$, `thm:H_ABC`).
+- Conjecture **6.4** (non-classical extremal at $(-1,-1,1)$, `conj:caterpillar_max`).
 
 This document tells (a) Arockiaraj sir what to act on, (b) Ganesh what to do before arXiv, and (c) anyone reading the repo cold what is still missing for a clean journal submission.
 
@@ -9,14 +20,14 @@ This document tells (a) Arockiaraj sir what to act on, (b) Ganesh what to do bef
 
 ## 1. What is now fixed
 
-Round-8/9 work (this commit), driven by the final Woz + Jobs + figure + cross-number audits:
+Round-10 work, driven by the final Woz + Jobs + figure + cross-number audits:
 
 **Paper 1 (`docs/paper1_wuzi.tex`).**
-1. Theorem 4.9 (Upper bound in $\Delta$) was a `\todo{PROOF SKETCH}` theorem; converted to **Proposition 4.4** with an explicit termwise proof in the non-negative parameter region.
-2. Theorem 4.10 (Lower bound in $\delta$) similarly converted to **Proposition 4.5** with explicit proof and equality condition.
-3. Theorem 5.6 (Bound via $R$ and $\chi$) had a `[PROOF SKETCH -- TO BE COMPLETED]` marker but the derivation was already complete in the statement; converted to **Proposition 5.6** with a proper `\begin{proof}` block, the explicit $(2\alpha,0,0)/(0,2\beta,0)$ Cauchy--Schwarz split, and the equality condition inherited from `thm:cs`. Round-6 had silently fixed a spurious "$+1$" exponent in this bound; that fix is now re-validated.
-4. Theorem 5.7 (Sombor) had a wrong proof in the round-8 pass (cited the $\beta \ge 1$ lower-bound Jensen in the upper-bound direction); corrected to **Proposition 5.7** valid for $0 < \beta < 1$ using the concave Jensen `thm:m1_concave`, giving $W(G; 0, \beta, 0) \le m^{1-\beta} (\sqrt{2}\, SO(G))^{\beta}$.
-5. Theorems 5.8 (GA) and 5.9 (H/ABC) stated no actual bound; converted to **Conjectures** with honest framing ("are open").
+1. The previous "Theorem (upper bound in $\Delta$)" with a `\todo{PROOF SKETCH}` marker is now **Proposition 4.7** (`thm:upper_Delta`) with an explicit termwise proof in the non-negative parameter region.
+2. The previous "Theorem (lower bound in $\delta$)" is now **Proposition 4.8** (`thm:lower_delta`) with explicit proof and equality condition.
+3. The previous "Theorem (R/χ bound) -- skeleton" with a `[PROOF SKETCH -- TO BE COMPLETED]` marker is now **Proposition 5.4** (`thm:R_chi`) with a proper `\begin{proof}` block, the explicit $(2\alpha,0,0)/(0,2\beta,0)$ Cauchy--Schwarz split, and the equality condition inherited from `thm:cs`. (Round-6 silently fixed a spurious "$+1$" exponent in this bound; that fix is preserved.)
+4. The previous "Theorem (Sombor) -- skeleton" had a wrong-direction Jensen citation in the round-8 pass; corrected to **Proposition 5.5** (`thm:sombor`) valid for $0 < \beta < 1$ using the concave Jensen `thm:m1_concave`, giving $W(G; 0, \beta, 0) \le m^{1-\beta} (\sqrt{2}\, SO(G))^{\beta}$.
+5. The previous "Theorem (GA) -- skeleton" and "Theorem (H/ABC) -- skeleton" stated no actual bound; converted to **Conjectures 5.6 and 5.7** with honest framing ("are open"). (The legacy label names `thm:GA` and `thm:H_ABC` are retained for backward-compatibility of cross-references; the environments are correctly typeset as Conjectures.)
 6. Conjecture 6.3 (bicyclic) carried an in-body `\todo{TO BE CHARACTERIZED}` marker; rewritten to name two candidate families (theta-graph with pendants; bowtie-with-pendants) and to honestly state that a small-$n$ computational verification (e.g. via `nauty`/`geng`) is still open.
 7. Remark 5.3 reworded to make the per-$G$ sharp / $\mathcal{G}_4$-wide uniform distinction explicit, matching what `results/wuzi_bounds_ratio_tables.csv` actually computes.
 8. §8 octane wording at lines ~1138-43 corrected: "two of five properties" via $W(0, 0, 2)$ ($\gamma \ne 0$) and $W(1, 0, 0) = M_2$ ($\gamma = 0$), not "at parameter triples that include a non-trivial $\gamma$-axis contribution" (which is true of only one of the two).
@@ -52,8 +63,8 @@ After this commit: **Paper 1 has zero `[PROOF SKETCH -- TO BE COMPLETED]` marker
 
 In rough priority order:
 
-1. **Conjectures 5.8 (GA), 5.9 (H/ABC), conj:NG (Nordhaus-Gaddum), 6.1 (trees positive region), 6.2 (unicyclic), 6.3 (bicyclic), 6.4 (caterpillar_max at $(-1,-1,1)$) are conjectures, not theorems.** This is the structural ceiling for a MATCH or J. Math. Chem. submission. Each can be closed by Arockiaraj sir + Advik via the transformation-argument template of Movahedi--Gutman--Redžepović--Furtula 2026 (cited).
-2. **5 bibliography stubs.** `Movahedi2025arXivDSO` (arXiv id), `GutmanBorovicanin2018BID` (full survey citation), `GutmanFurtulaBook2017` (publisher), `HansenMelot2003unicyclicRandic` and `HansenMelot2005bicyclicBounds` (venues). All resolvable in 30 minutes of literature lookup.
+1. **Seven Conjectures remain open:** 4.9 (Nordhaus--Gaddum, `conj:NG`), 5.6 (GA, `thm:GA`), 5.7 (H/ABC, `thm:H_ABC`), 6.1 (trees positive region, `conj:trees_beta_pos`), 6.2 (unicyclic, `conj:unicyclic`), 6.3 (bicyclic, `conj:bicyclic`), 6.4 (caterpillar_max at $(-1,-1,1)$, `conj:caterpillar_max`). This is the structural ceiling for a MATCH or J. Math. Chem. submission. Each can be closed by Arockiaraj sir + Advik via the transformation-argument template of Movahedi--Gutman--Redžepović--Furtula 2026 (cited).
+2. **5 bibliography entries carry "to be added at submission" venue placeholders** (not missing entries — they compile and resolve cleanly via cite/bibitem, but the venue/page/identifier fields are still placeholder text): `Movahedi2025arXivDSO` (arXiv id), `GutmanBorovicanin2018BID` (full survey citation), `GutmanFurtulaBook2017` (publisher), `HansenMelot2003unicyclicRandic` and `HansenMelot2005bicyclicBounds` (venues). All resolvable in 30 minutes of literature lookup.
 3. **No comparison to closely related parametric BID families** (general Randić $R_\alpha$, sum-connectivity $\chi_\beta$, parametric Sombor variants, "Misc-Sombor" 2024-2025). The ratio-bound theorem makes a *uniform* statement against any classical BID index but does not explicitly position Wuzi vs other parametric extensions.
 4. **`\todo{PROOF STRATEGY}` markers in Conjecture bodies will render as red bold text.** This is intentional for advisor draft; remove the `\renewcommand{\todo}{...}` in the preamble (swap to `\newcommand{\todo}[1]{}`) for the submission-ready compile.
 5. **Closed-form bounds involving the Albertson irregularity $\mathrm{Alb}(G) = \sum_e |d_u - d_v|$** are listed as future work (§9 item 4) but not even stated as conjectures. If Arockiaraj sir likes the $\gamma$-axis framing, this is a natural mini-section to add.
@@ -64,7 +75,7 @@ In rough priority order:
 
 In rough priority order:
 
-1. **Single citation stub: `GutmanBorovicanin2018BID`** — same as in Paper 1; fill once.
+1. **One citation entry with placeholder venue text: `GutmanBorovicanin2018BID`** — same as in Paper 1; fill the venue/page fields once.
 2. **No reproducibility command block.** For *J. Cheminformatics*, the methodology section should name the exact script (`scripts/11_ml_benchmark.py`) and the expected output. Add a short "Reproducibility" block at the end of §4.
 3. **VIF defined but never reported in body.** §4.3 defines VIF; `results/{esol,freesolv,lipo}/vif.csv` contain the numbers. Add a one-sentence summary in §5.1 (e.g., "Of the 30 baseline indices, $k$ have $\mathrm{VIF} = \infty$ on ESOL").
 4. **The alternative-family screen is ESOL-only.** The abstract now flags this, but extending to one additional dataset (e.g., FreeSolv) would close the most likely reviewer attack at J. Cheminformatics.

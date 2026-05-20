@@ -91,14 +91,19 @@ A \emph{ratio-bound theorem} (Theorem~\ref{thm:ratio_bound}) proves
 that for every classical BID index $I_h$ with strictly positive
 edge contribution on the pairs realised in $G$, the family is
 sandwiched as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
-with explicit equality conditions. Further sharp bounds in terms of
-order $n$, size $m$, and degree extremes $(\Delta,\delta)$, and per-
-index bounds for $R$, $SO$, $GA$, $H$, $ABC$, are stated as theorem
-templates with explicit proof strategies; their fully sharp
-formulations and equality-condition analyses are reserved for joint
-work with the senior author.
-Extremal-graph behavior among trees, unicyclic graphs, and
-bicyclic graphs is conjectured by parameter-sign region.
+with explicit equality conditions. Explicit upper and lower bounds
+in $(\Delta, m)$ and $(\delta, m)$ are proved in the non-negative
+parameter region (Propositions~\ref{thm:upper_Delta},
+\ref{thm:lower_delta}); a rigorous Cauchy--Schwarz bound in terms
+of the generalized Randi\'c and sum-connectivity indices
+(Proposition~\ref{thm:R_chi}) and an indirect bound via the Sombor
+index and $M_1$ for $0 < \beta < 1$ (Proposition~\ref{thm:sombor})
+complete the rigorous core of the classical-index bounds. Sharp
+two-sided bounds against the geometric--arithmetic ($GA$), harmonic
+($H$), and atom-bond-connectivity ($ABC$) indices, and a sharp
+Nordhaus--Gaddum bound, are stated as Conjectures pending explicit
+constants. Extremal-graph behavior among trees, unicyclic graphs,
+and bicyclic graphs is conjectured by parameter-sign region.
 
 The headline computational finding is a non-classical extremal
 regime: at the mixed-sign parameter triple
@@ -193,19 +198,22 @@ their tightness on regular graphs
 \item Bounds in $(n, m, \Delta, \delta)$ and via classical indices,
 including the rigorous bracket bound (Theorem~\ref{thm:bracket}),
 a rigorous Cauchy--Schwarz / geometric-mean inequality
-(Theorem~\ref{thm:cs}), a Jensen-type bound via $M_1$
-(Theorem~\ref{thm:m1_bound}), explicit upper and lower bounds in
-$(\Delta, m)$ and $(\delta, m)$ respectively in the non-negative
-parameter region (Propositions~\ref{thm:upper_Delta},
+(Theorem~\ref{thm:cs}), Jensen-type upper and lower bounds via
+$M_1$ for $\beta \ge 1$ (Theorem~\ref{thm:m1_bound}) and
+$0 < \beta < 1$ (Theorem~\ref{thm:m1_concave}), explicit upper and
+lower bounds in $(\Delta, m)$ and $(\delta, m)$ respectively in
+the non-negative parameter region (Propositions~\ref{thm:upper_Delta},
 \ref{thm:lower_delta}), a rigorous ratio-bound theorem that
 applies uniformly to every classical BID index with strictly
-positive edge contribution (Theorem~\ref{thm:ratio_bound}), and
-a rigorous Cauchy--Schwarz bound in terms of the generalized
-Randi\'c and sum-connectivity indices (Proposition~\ref{thm:R_chi}).
-Sharp two-sided bounds against the geometric--arithmetic ($GA$),
-harmonic ($H$), and atom-bond-connectivity ($ABC$) indices are
-stated as Conjectures~\ref{thm:GA} and~\ref{thm:H_ABC} pending
-explicit constants.
+positive edge contribution (Theorem~\ref{thm:ratio_bound}), a
+rigorous Cauchy--Schwarz bound in terms of the generalized Randi\'c
+and sum-connectivity indices (Proposition~\ref{thm:R_chi}), and an
+indirect bound via the Sombor index $SO$ and $M_1$ for $0 < \beta < 1$
+(Proposition~\ref{thm:sombor}). Sharp two-sided bounds against the
+geometric--arithmetic ($GA$), harmonic ($H$), and
+atom-bond-connectivity ($ABC$) indices, and a sharp Nordhaus--Gaddum
+bound, are stated as Conjectures~\ref{thm:GA}, \ref{thm:H_ABC},
+and~\ref{conj:NG} pending explicit constants.
 \item Extremal-graph conjectures for trees, unicyclic, and bicyclic
 graphs, including a non-classical extremal regime at
 $(\alpha,\beta,\gamma)=(-1,-1,1)$
@@ -1371,11 +1379,18 @@ $10$-dimensional ceiling on the BID family on $\mathcal{G}_4$. A
 companion methodology paper~\cite{Paper2_Screening} studies
 multi-dataset redundancy screening of topological indices.
 
-The formal bounds in $(n,m,\Delta,\delta)$ and via classical
-indices, as well as the extremal-graph characterizations for
-trees, unicyclic, and bicyclic graphs, are partially complete in
-the present draft; the remaining derivations are reserved for
-joint work with the senior author.
+The formal bounds in $(n, m, \Delta, \delta)$ and via classical
+indices are complete for the non-negative parameter region and for
+$R$, $\chi$, $SO$ (Propositions~\ref{thm:upper_Delta},
+\ref{thm:lower_delta}, \ref{thm:R_chi}, \ref{thm:sombor}). A
+Nordhaus--Gaddum-type sum bound and sharp two-sided bounds against
+$GA$, $H$, $ABC$ remain conjectural
+(Conjectures~\ref{conj:NG}, \ref{thm:GA}, \ref{thm:H_ABC}), as do
+the formal extremal-graph characterizations for trees, unicyclic,
+and bicyclic graphs in every parameter sign region
+(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic},
+\ref{conj:caterpillar_max}); these are the natural seams for joint
+work with the senior author.
 
 % =====================================================================
 \section*{Data and code availability}

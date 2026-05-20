@@ -74,14 +74,23 @@ MATCH-style index papers:
 - Section 4: Bounds in $(n, m, \Delta, \delta)$
   -- bracket bound (rigorous, tight on regular graphs)
   -- Cauchy-Schwarz geometric-mean inequality (rigorous)
-  -- Jensen-type bound via $M_1$ (rigorous, equality conditions
-  split for $\beta = 1$ vs $\beta > 1$)
-  -- sharp $\Delta$ / Nordhaus-Gaddum / Polya-Szego bounds: PROOF
-  SKETCH only
+  -- Jensen-type bounds via $M_1$ (rigorous, both $\beta \ge 1$
+  lower and $0 < \beta < 1$ upper)
+  -- Upper bound in $(\Delta, m)$ in the non-negative parameter
+  region (rigorous, Proposition 4.7)
+  -- Lower bound in $(\delta, m)$ in the non-negative parameter
+  region (rigorous, Proposition 4.8)
+  -- Nordhaus-Gaddum bound (CONJECTURE 4.9, open in mixed-sign
+  $\gamma \ne 0$ regime)
 - Section 5: Bounds via classical indices
   -- ratio-bound theorem (rigorous, applies uniformly to any
-  classical BID index)
-  -- bounds via $R$, $SO$, $GA$, $H$, $ABC$: PROOF SKETCH only
+  classical BID index; Theorem 5.2)
+  -- bound via generalized $R$ and $\chi$ (rigorous,
+  Proposition 5.4)
+  -- indirect bound via Sombor $SO$ and $M_1$ for $0 < \beta < 1$
+  (rigorous, Proposition 5.5)
+  -- sharp two-sided bounds via $GA$, $H$, $ABC$ (CONJECTURES 5.6,
+  5.7, open)
 - Section 6: Extremal graphs
   -- Conjectures for trees, unicyclic, bicyclic in positive
   parameter region
@@ -140,31 +149,44 @@ From Paper 2 (Screening):
 
 ## 6. What still needs your mathematical input in Paper 1
 
-These are the sections currently marked [PROOF SKETCH] or
-[CONJECTURE] in the LaTeX source. None present a fabricated
-theorem; all gaps are honestly labelled.
+These are the items currently labelled as Conjectures in the LaTeX
+source. None present a fabricated theorem; the round-10 work
+upgraded every "Theorem -- skeleton" to either a rigorous
+Proposition or an honest Conjecture.
 
 Section 4 (Bounds in $(n, m, \Delta, \delta)$):
-- Sharp $\Delta$-dependent upper bound (Theorem~4.4)
-- Sharp lower bound in $\delta$ (Theorem~4.5)
 - Nordhaus-Gaddum bound $W(G) + W(\bar G) \ge f_n(\alpha, \beta, \gamma)$
-  (Theorem~4.6)
-- Polya-Szego-type inverse Cauchy-Schwarz bound
+  (Conjecture~4.9, `conj:NG`) -- open in the mixed-sign $\gamma \ne 0$
+  regime; the explicit $f_n$ is the missing object.
+- The upper bound in $(\Delta, m)$ (Proposition~4.7) and the lower
+  bound in $(\delta, m)$ (Proposition~4.8) are now *fully proved*
+  in the non-negative parameter region; the corresponding sharp
+  versions in the mixed-sign region remain natural follow-ups.
 
 Section 5 (Bounds via classical indices):
-- Sharp per-index bounds for $R$, $SO$, $GA$, $H$, $ABC$
-- Bound paired with the Albertson irregularity for the
-  $\gamma$-axis
+- Sharp two-sided bound via $GA$ (Conjecture~5.6, `thm:GA`).
+- Sharp two-sided bounds via $H$ and $ABC$ (Conjecture~5.7,
+  `thm:H_ABC`).
+- The ratio-bound theorem (Theorem~5.2, `thm:ratio_bound`), the
+  Cauchy--Schwarz bound via generalized $R$ and $\chi$
+  (Proposition~5.4, `thm:R_chi`), and the indirect Sombor / $M_1$
+  bound for $0 < \beta < 1$ (Proposition~5.5, `thm:sombor`) are
+  now *fully proved*.
+- (Optional) Closed-form bounds paired with the Albertson
+  irregularity $\mathrm{Alb}(G) = \sum_e |d_u - d_v|$ for the
+  $\gamma$-axis (not yet stated; listed in §9 future work).
 
 Section 6 (Extremal graphs):
-- Formal extremal-tree characterization in the positive
-  parameter region (Conjecture~6.1)
+- Formal extremal-tree characterization in the positive parameter
+  region (Conjecture~6.1, `conj:trees_beta_pos`).
 - Formal extremal characterization for unicyclic graphs
-  (Conjecture~6.2)
-- Bicyclic extremals (Conjecture~6.3 -- candidate structures only)
-- Mixed-sign non-classical extremal at $(-1, -1, 1)$
-  (Conjecture~6.4 -- computationally verified; the formal
-  proof is open)
+  (Conjecture~6.2, `conj:unicyclic`).
+- Bicyclic extremals (Conjecture~6.3, `conj:bicyclic` --
+  candidate-family-level only).
+- Mixed-sign non-classical extremal at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+  (Conjecture~6.4, `conj:caterpillar_max` -- computationally
+  verified for $n = 5, \ldots, 12$; the formal structural
+  characterization is the central open problem).
 
 The companion strategy document `docs/wuzi_bounds_strategy.md`
 contains rigorous theorem templates, proof techniques, and

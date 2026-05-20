@@ -120,9 +120,13 @@ Section plans and remaining math gaps are tracked in
 | Structure sensitivity on 75 decane isomers                   | ✅ done |
 | Reproducible end-to-end pipeline                             | ✅ done |
 | Publication-quality figures (PNG + PDF, 8 figures)           | ✅ done |
-| Paper 1 §4 sharper bounds in $(n, m, \Delta, \delta)$        | ⏳ math pending |
-| Paper 1 §5 sharper per-index bounds (beyond ratio bound)     | ⏳ math pending |
-| Paper 1 §6 formal extremal-graph characterization            | ⏳ math pending |
+| Paper 1 §4 bounds in $(n,m,\Delta,\delta)$ — non-negative region | ✅ done (Props 4.7, 4.8) |
+| Paper 1 §4 Nordhaus–Gaddum bound                              | ⏳ Conjecture 4.9 |
+| Paper 1 §5 ratio-bound theorem                                | ✅ done (Theorem 5.2) |
+| Paper 1 §5 generalized $R$/$\chi$ Cauchy–Schwarz bound        | ✅ done (Proposition 5.4) |
+| Paper 1 §5 indirect Sombor / $M_1$ bound for $0<\beta<1$      | ✅ done (Proposition 5.5) |
+| Paper 1 §5 sharp $GA$ / $H$ / $ABC$ bounds                    | ⏳ Conjectures 5.6, 5.7 |
+| Paper 1 §6 formal extremal-graph characterization             | ⏳ Conjectures 6.1–6.4 |
 | Paper 2 manuscript polish + final references                  | ⏳ writing |
 | Paper 2 submission gated on Paper 1 arXiv ID                  | ⏳ scheduled |
 
@@ -393,12 +397,16 @@ data/                             Cached download CSVs (gitignored)
 
 ## What remains unfinished
 
-1. Paper 1 §4, §5, §6 — sharp bounds in $(n, m, \Delta, \delta)$,
-   sharp per-classical-index bounds for $R, \chi, SO, GA, H, ABC$,
-   and formal extremal-graph characterizations for trees,
-   unicyclic and bicyclic graphs. Each section currently contains
-   visible `[PROOF SKETCH]` markers awaiting joint work with the
-   senior author following the MATCH 95:141–162 template.
+1. Paper 1 §4–§6 — the *rigorous* core is now complete
+   (Propositions 4.7, 4.8, 5.4, 5.5; Theorems 4.1, 4.3, 4.4, 4.5,
+   4.6, 5.2). The remaining items are honestly labelled
+   **Conjectures**: sharp Nordhaus–Gaddum (4.9); sharp two-sided
+   bounds against $GA$, $H$, $ABC$ (5.6, 5.7); formal
+   extremal-tree / unicyclic / bicyclic characterizations
+   (6.1–6.3); and the non-classical extremal at $(-1,-1,1)$
+   (6.4, the headline open problem). Closing any of these is
+   joint work with the senior author following the
+   MATCH 95:141–162 template.
 2. Paper 2 final prose polish in §9 (Discussion) and §10
    (Conclusion).
 3. Resolution of every `[REFERENCE NEEDED]` placeholder in

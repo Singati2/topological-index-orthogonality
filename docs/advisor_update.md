@@ -168,8 +168,8 @@ and Movahedi (2025) arXiv preprint:
 
 | Section | Content needed                                                     |
 |---|---|
-| **4** | Sharp $\Delta$-dependent and $\delta$-dependent bounds, Nordhaus–Gaddum, Polya–Szego (currently `[PROOF SKETCH]` placeholders) |
-| **5** | Sharp per-index bounds for $R$, $SO$, $GA$, $H$, $ABC$ (ratio-bound theorem is rigorous; per-index sharp forms are `[PROOF SKETCH]` placeholders) |
+| **4** | $(\Delta, m)$ and $(\delta, m)$ bounds in the non-negative parameter region are now rigorous (Propositions 4.7, 4.8); Nordhaus–Gaddum and Polya–Szego sharp forms remain Conjecture 4.9 / future work |
+| **5** | Ratio-bound theorem rigorous (Theorem 5.2); $R$/$\chi$ Cauchy–Schwarz and Sombor / $M_1$ bounds rigorous (Propositions 5.4, 5.5); sharp two-sided $GA$, $H$, $ABC$ bounds remain Conjectures 5.6, 5.7 |
 | **6** | Extremal-graph characterization among trees, unicyclic, bicyclic graphs, and the non-classical extremal at $(-1,-1,1)$ (Conjecture 6.4) |
 
 Each is comparable in scope to a single section of the MATCH DSO paper.
