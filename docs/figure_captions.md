@@ -38,16 +38,9 @@ $\sigma = 0$, mean $42$. Strong performance on this small dataset
 is *necessary but not sufficient* for general QSPR utility (cf.
 Figure 8 and the discussion in Section 6).
 
-**Figure 5.** Maximum $\lvert r\rvert$ between the Wuzi index at
-each grid point $(\alpha, \beta, \gamma)$ and any of the 30
-classical baseline indices, on ESOL ($n=1127$). Each of the four
-panels shows a single $\gamma$ slice. All 100 grid points yield
-$\max\lvert r\rvert \geq 0.965$; the family is highly correlated
-with at least one classical baseline at every tested parameter
-setting on this dataset. The horizontal black bar on the colorbar
-marks the conventional $\lvert r\rvert = 0.95$ screening threshold.
-
-**Figure 5b.** Same screen extended to all three QSPR benchmarks.
+**Figure 5b** (the only fig5 file shipped; the earlier ESOL-only
+Figure 5 was archived during round 4 and is replaced by 5b below).
+Wuzi-family redundancy screen extended to all three QSPR benchmarks.
 Each row corresponds to one dataset (ESOL, FreeSolv,
 Lipophilicity); each column to one $\gamma$ slice. Only one of the
 300 grid points falls below the $\lvert r\rvert = 0.95$ threshold

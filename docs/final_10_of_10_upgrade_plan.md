@@ -10,8 +10,8 @@
 - Conjecture **4.9** (Nordhaus--Gaddum, `conj:NG`).
 - Proposition **5.4** (bound via generalized $R$ and $\chi$, `thm:R_chi`).
 - Proposition **5.5** (indirect bound via Sombor, `thm:sombor`).
-- Conjecture **5.6** (sharp bound via $GA$, `thm:GA`).
-- Conjecture **5.7** (sharp bounds via $H$, $ABC$, `thm:H_ABC`).
+- Conjecture **5.6** (sharp bound via $GA$, `conj:GA`).
+- Conjecture **5.7** (sharp bounds via $H$, $ABC$, `conj:H_ABC`).
 - Conjecture **6.4** (non-classical extremal at $(-1,-1,1)$, `conj:caterpillar_max`).
 
 This document tells (a) Arockiaraj sir what to act on, (b) Ganesh what to do before arXiv, and (c) anyone reading the repo cold what is still missing for a clean journal submission.
@@ -27,7 +27,7 @@ Round-10 work, driven by the final Woz + Jobs + figure + cross-number audits:
 2. The previous "Theorem (lower bound in $\delta$)" is now **Proposition 4.8** (`thm:lower_delta`) with explicit proof and equality condition.
 3. The previous "Theorem (R/χ bound) -- skeleton" with a `[PROOF SKETCH -- TO BE COMPLETED]` marker is now **Proposition 5.4** (`thm:R_chi`) with a proper `\begin{proof}` block, the explicit $(2\alpha,0,0)/(0,2\beta,0)$ Cauchy--Schwarz split, and the equality condition inherited from `thm:cs`. (Round-6 silently fixed a spurious "$+1$" exponent in this bound; that fix is preserved.)
 4. The previous "Theorem (Sombor) -- skeleton" had a wrong-direction Jensen citation in the round-8 pass; corrected to **Proposition 5.5** (`thm:sombor`) valid for $0 < \beta < 1$ using the concave Jensen `thm:m1_concave`, giving $W(G; 0, \beta, 0) \le m^{1-\beta} (\sqrt{2}\, SO(G))^{\beta}$.
-5. The previous "Theorem (GA) -- skeleton" and "Theorem (H/ABC) -- skeleton" stated no actual bound; converted to **Conjectures 5.6 and 5.7** with honest framing ("are open"). (The legacy label names `thm:GA` and `thm:H_ABC` are retained for backward-compatibility of cross-references; the environments are correctly typeset as Conjectures.)
+5. The previous "Theorem (GA) -- skeleton" and "Theorem (H/ABC) -- skeleton" stated no actual bound; converted to **Conjectures 5.6 and 5.7** with honest framing ("are open"). (The legacy label names `conj:GA` and `conj:H_ABC` are retained for backward-compatibility of cross-references; the environments are correctly typeset as Conjectures.)
 6. Conjecture 6.3 (bicyclic) carried an in-body `\todo{TO BE CHARACTERIZED}` marker; rewritten to name two candidate families (theta-graph with pendants; bowtie-with-pendants) and to honestly state that a small-$n$ computational verification (e.g. via `nauty`/`geng`) is still open.
 7. Remark 5.3 reworded to make the per-$G$ sharp / $\mathcal{G}_4$-wide uniform distinction explicit, matching what `results/wuzi_bounds_ratio_tables.csv` actually computes.
 8. §8 octane wording at lines ~1138-43 corrected: "two of five properties" via $W(0, 0, 2)$ ($\gamma \ne 0$) and $W(1, 0, 0) = M_2$ ($\gamma = 0$), not "at parameter triples that include a non-trivial $\gamma$-axis contribution" (which is true of only one of the two).
@@ -63,7 +63,7 @@ After this commit: **Paper 1 has zero `[PROOF SKETCH -- TO BE COMPLETED]` marker
 
 In rough priority order:
 
-1. **Seven Conjectures remain open:** 4.9 (Nordhaus--Gaddum, `conj:NG`), 5.6 (GA, `thm:GA`), 5.7 (H/ABC, `thm:H_ABC`), 6.1 (trees positive region, `conj:trees_beta_pos`), 6.2 (unicyclic, `conj:unicyclic`), 6.3 (bicyclic, `conj:bicyclic`), 6.4 (caterpillar_max at $(-1,-1,1)$, `conj:caterpillar_max`). This is the structural ceiling for a MATCH or J. Math. Chem. submission. Each can be closed by Arockiaraj sir + Advik via the transformation-argument template of Movahedi--Gutman--Redžepović--Furtula 2026 (cited).
+1. **Seven Conjectures remain open:** 4.9 (Nordhaus--Gaddum, `conj:NG`), 5.6 (GA, `conj:GA`), 5.7 (H/ABC, `conj:H_ABC`), 6.1 (trees positive region, `conj:trees_beta_pos`), 6.2 (unicyclic, `conj:unicyclic`), 6.3 (bicyclic, `conj:bicyclic`), 6.4 (caterpillar_max at $(-1,-1,1)$, `conj:caterpillar_max`). This is the structural ceiling for a MATCH or J. Math. Chem. submission. Each can be closed by Arockiaraj sir + Advik via the transformation-argument template of Movahedi--Gutman--Redžepović--Furtula 2026 (cited).
 2. **5 bibliography entries carry "to be added at submission" venue placeholders** (not missing entries — they compile and resolve cleanly via cite/bibitem, but the venue/page/identifier fields are still placeholder text): `Movahedi2025arXivDSO` (arXiv id), `GutmanBorovicanin2018BID` (full survey citation), `GutmanFurtulaBook2017` (publisher), `HansenMelot2003unicyclicRandic` and `HansenMelot2005bicyclicBounds` (venues). All resolvable in 30 minutes of literature lookup.
 3. **No comparison to closely related parametric BID families** (general Randić $R_\alpha$, sum-connectivity $\chi_\beta$, parametric Sombor variants, "Misc-Sombor" 2024-2025). The ratio-bound theorem makes a *uniform* statement against any classical BID index but does not explicitly position Wuzi vs other parametric extensions.
 4. **`\todo{PROOF STRATEGY}` markers in Conjecture bodies will render as red bold text.** This is intentional for advisor draft; remove the `\renewcommand{\todo}{...}` in the preamble (swap to `\newcommand{\todo}[1]{}`) for the submission-ready compile.
@@ -86,7 +86,7 @@ In rough priority order:
 ## 4. Exact actions Arockiaraj sir must take
 
 1. **Look at Conjecture 6.4 (caterpillar_max) in `docs/paper1_wuzi.tex` §6.4** and decide if the non-classical extremal at $(-1,-1,1)$ for $n \ge 7$ is characterizable. If yes, Paper 1 has a publishable new structural theorem. If no, the conjecture stays as the headline empirical observation. The computational evidence is in `results/wuzi_extremal_trees.md` (degree sequences for $n = 5..12$).
-2. **Decide whether to co-author Paper 1 §4, §5, §6 conjectures** (Nordhaus--Gaddum 4.9 / `conj:NG`, GA 5.6 / `thm:GA`, H/ABC 5.7 / `thm:H_ABC`, trees-positive 6.1 / `conj:trees_beta_pos`, unicyclic 6.2 / `conj:unicyclic`, bicyclic 6.3 / `conj:bicyclic`, caterpillar 6.4 / `conj:caterpillar_max`), or to ship Paper 1 with them as labelled conjectures + companion future-work paper. Either choice unblocks submission.
+2. **Decide whether to co-author Paper 1 §4, §5, §6 conjectures** (Nordhaus--Gaddum 4.9 / `conj:NG`, GA 5.6 / `conj:GA`, H/ABC 5.7 / `conj:H_ABC`, trees-positive 6.1 / `conj:trees_beta_pos`, unicyclic 6.2 / `conj:unicyclic`, bicyclic 6.3 / `conj:bicyclic`, caterpillar 6.4 / `conj:caterpillar_max`), or to ship Paper 1 with them as labelled conjectures + companion future-work paper. Either choice unblocks submission.
 3. **Confirm the affiliation line** "Department of Mathematics, Loyola College, Chennai" (Advik + sir) and "Department of Mathematics and Statistics, Florida Atlantic University" (Ganesh) are correct as they appear in both `.tex` files and `CITATION.cff`.
 
 ---

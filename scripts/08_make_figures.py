@@ -1,16 +1,17 @@
-"""Produce publication-quality figures for Paper 2 (Wuzi family).
+"""Produce publication-quality figures for Paper 1 (Wuzi math-chem)
+and Paper 2 (orthogonality screening methodology).
 
 Reads CSVs from results/ and writes figures/{name}.png and figures/{name}.pdf.
 
 Figures generated:
-  fig2_pca_scree                — PCA cumulative variance, 3 datasets overlaid
-  fig3_redundancy_bars          — # redundant pairs at |r|>=0.90/0.95, 3 datasets
-  fig4_octane_heatmap           — |r| of each index vs each property on octanes
-  fig5b_wuzi_param_heatmaps_all — max|r|(α,β) on 3 datasets × 4 γ slices
-  fig6_degeneracy_bars          — % degeneracy of indices on 106 trees(10)
-  fig7_structure_sensitivity    — SS, Abr, SA on 75 decanes
-  fig8_correlation_heatmap      — 30x30 baseline correlation matrix (ESOL)
-  fig9_ml_benchmark             — 5-fold CV RandomForest, 4 datasets, 3 configs
+  fig2_pca_scree                — Paper 2: PCA cumulative variance, 3 datasets overlaid
+  fig3_redundancy_bars          — Paper 2: # redundant pairs at |r|>=0.90/0.95, 3 datasets
+  fig4_octane_heatmap           — Paper 1: |r| of each index vs each octane property
+  fig5b_wuzi_param_heatmaps_all — Paper 2: max|r|(α,β) on 3 datasets × 4 γ slices
+  fig6_degeneracy_bars          — Paper 1: % degeneracy of indices on 106 trees of order 10
+  fig7_structure_sensitivity    — Paper 1: SS, Abr, SA on 75 decane isomers
+  fig8_correlation_heatmap      — Paper 2: 30x30 baseline correlation matrix (ESOL)
+  fig9_ml_benchmark             — Paper 2: 5-fold CV RandomForest, 4 datasets, 4 configs
 
 Usage: python scripts/08_make_figures.py
 """

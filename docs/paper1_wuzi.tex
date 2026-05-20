@@ -212,7 +212,7 @@ indirect bound via the Sombor index $SO$ and $M_1$ for $0 < \beta < 1$
 (Proposition~\ref{thm:sombor}). Sharp two-sided bounds against the
 geometric--arithmetic ($GA$), harmonic ($H$), and
 atom-bond-connectivity ($ABC$) indices, and a sharp Nordhaus--Gaddum
-bound, are stated as Conjectures~\ref{thm:GA}, \ref{thm:H_ABC},
+bound, are stated as Conjectures~\ref{conj:GA}, \ref{conj:H_ABC},
 and~\ref{conj:NG} pending explicit constants.
 \item Extremal-graph conjectures for trees, unicyclic, and bicyclic
 graphs, including a non-classical extremal regime at
@@ -710,8 +710,7 @@ $\alpha, \beta \ge 0$ and $\gamma \ge 0$,
 \begin{equation}\label{eq:lower_delta}
 \Wuzi \;\ge\; m \cdot \delta^{2\alpha} \cdot (2\delta)^{\beta},
 \end{equation}
-with equality if and only if $G$ is $\delta$-regular and either
-$\gamma = 0$ or $G$ is regular ($\Delta = \delta$).
+with equality if and only if $G$ is $\delta$-regular.
 \end{proposition}
 
 \begin{proof}
@@ -722,12 +721,11 @@ $(d_u + d_v)^{\beta} \ge (2\delta)^{\beta}$. The imbalance factor
 is non-negative and $\gamma \ge 0$, so
 $\exp(\gamma |d_u - d_v| / (d_u + d_v)) \ge 1$. Multiplying gives
 $\psi(d_u, d_v; \alpha, \beta, \gamma) \ge \delta^{2\alpha}(2\delta)^{\beta}$
-for every edge; summing yields~\eqref{eq:lower_delta}. Equality in
-the polynomial factors requires $d_u = d_v = \delta$ on every edge
-(i.e., $\delta$-regular $G$); equality in the exponential factor
-requires the imbalance $|d_u - d_v| / (d_u + d_v) = 0$ on every
-edge (i.e., $G$ regular) or $\gamma = 0$. The combined equality
-condition is the conjunction.
+for every edge; summing yields~\eqref{eq:lower_delta}. Equality
+requires $d_u = d_v = \delta$ on every edge, i.e.\ $G$ is
+$\delta$-regular. On any such $G$ the imbalance is automatically
+zero on every edge, so the exponential factor is also $1$ and
+equality holds throughout.
 \end{proof}
 
 \begin{conjecture}[Nordhaus--Gaddum type]\label{conj:NG}
@@ -866,7 +864,7 @@ covered by the test suite (\texttt{tests/test\_ratio\_bound\_sanity.py}).
 The following results lift classical-index bounds to the broader
 parameter region via the Cauchy--Schwarz extension and the bracket.
 Propositions~\ref{thm:R_chi} and~\ref{thm:sombor} are rigorous;
-Conjectures~\ref{thm:GA} and~\ref{thm:H_ABC} state target bounds
+Conjectures~\ref{conj:GA} and~\ref{conj:H_ABC} state target bounds
 whose sharp constants are reserved for joint work with the senior
 author.
 
@@ -923,7 +921,7 @@ and $\beta > 0$, substituting the upper bound $M_1(G) \le \sqrt{2}\, SO(G)$
 yields~\eqref{eq:sombor_bound}.
 \end{proof}
 
-\begin{conjecture}[$GA$-controlled bound for the $\gamma$-axis]\label{thm:GA}
+\begin{conjecture}[$GA$-controlled bound for the $\gamma$-axis]\label{conj:GA}
 The geometric--arithmetic index
 $GA(G) = \sum_{uv \in E(G)} 2\sqrt{d_u d_v} / (d_u + d_v) \le m$
 (equality iff $G$ is regular) controls the average edge imbalance.
@@ -935,7 +933,7 @@ linear in the imbalance excess to first order. The explicit form
 of $g_\gamma$ and its sharp constants are reserved for future work.
 \end{conjecture}
 
-\begin{conjecture}[Bounds via harmonic $H$ and $ABC$]\label{thm:H_ABC}
+\begin{conjecture}[Bounds via harmonic $H$ and $ABC$]\label{conj:H_ABC}
 Each Wuzi instance with $\beta < 0$ inherits the harmonic-style
 monotonicity arguments from~\cite{Movahedi2025arXivDSO}; the
 $ABC$ index, $ABC(G) = \sum_{uv \in E(G)} \sqrt{(d_u + d_v - 2) / (d_u d_v)}$,
@@ -1271,10 +1269,11 @@ is degenerate on the dataset and removed
 
 Following~\cite{MovahediGutmanRedzepovicFurtula2026} Section~5.3,
 we report the degeneracy (fraction of indistinguishable structures)
-of each index on the $106$ non-isomorphic trees of order~$10$.
-Wuzi values at $\gamma=2$ achieve $\sim25\%$ degeneracy, comparable
-to the Sombor-family range $17$--$22\%$ reported
-in~\cite{MovahediGutmanRedzepovicFurtula2026} Figure~5.
+of each index on the $106$ non-isomorphic trees of order~$10$
+(Figure~\ref{fig:degeneracy}). Wuzi values at $\gamma=2$ achieve
+$\sim25\%$ degeneracy, comparable to the Sombor-family range
+$17$--$22\%$ reported in~\cite{MovahediGutmanRedzepovicFurtula2026}
+Figure~5.
 
 \begin{figure}[h]
 \centering
@@ -1340,7 +1339,7 @@ targets for the formal companion derivation:
 \item Sharp two-sided bounds via the geometric--arithmetic ($GA$),
 harmonic ($H$), and atom-bond-connectivity ($ABC$) indices, with
 explicit constants and equality conditions
-(Conjectures~\ref{thm:GA}, \ref{thm:H_ABC}).
+(Conjectures~\ref{conj:GA}, \ref{conj:H_ABC}).
 \item Formal extremal-graph characterization for trees, unicyclic,
 and bicyclic graphs in every parameter sign region
 (Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic}),
@@ -1385,7 +1384,7 @@ $R$, $\chi$, $SO$ (Propositions~\ref{thm:upper_Delta},
 \ref{thm:lower_delta}, \ref{thm:R_chi}, \ref{thm:sombor}). A
 Nordhaus--Gaddum-type sum bound and sharp two-sided bounds against
 $GA$, $H$, $ABC$ remain conjectural
-(Conjectures~\ref{conj:NG}, \ref{thm:GA}, \ref{thm:H_ABC}), as do
+(Conjectures~\ref{conj:NG}, \ref{conj:GA}, \ref{conj:H_ABC}), as do
 the formal extremal-graph characterizations for trees, unicyclic,
 and bicyclic graphs in every parameter sign region
 (Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic},

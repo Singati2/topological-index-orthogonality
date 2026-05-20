@@ -213,14 +213,22 @@ These are exactly the contributions reserved for the senior author.
 
 ## 6. Honest publishability status
 
-- Paper 1 **is not currently publishable**. Sections 3–5 (the math) are
-  unwritten; without them the manuscript would be desk-rejected by a
-  mathematical-chemistry venue. Numerical Section 6 alone does not make
-  a math-chem paper.
-- With Sections 3–5 derived to the standard of the MATCH DSO paper, the
-  manuscript is realistically targetable at *J. Math. Chem.*, *MATCH*,
-  *AKCE Int. J. Graphs Comb.*, or *SAR & QSAR Env. Res.* within 6–8 weeks.
-- Paper 2 is more ambitious and depends on Paper 1 landing first.
+- Paper 1 is **advisor-review ready** but **not yet journal-ready**. The
+  rigorous core is complete (Theorems 4.1, 4.3–4.6, 5.2; Propositions
+  3.1, 4.7, 4.8, 5.1, 5.4, 5.5, 5.8). What remains are honestly labelled
+  Conjectures: Nordhaus–Gaddum (4.9, `conj:NG`), sharp two-sided bounds
+  via $GA$ / $H$ / $ABC$ (5.6, 5.7), and the formal extremal-graph
+  characterizations for trees / unicyclic / bicyclic (6.1–6.3) and the
+  non-classical extremal regime at $(-1,-1,1)$ (6.4,
+  `conj:caterpillar_max`). Closing any of these (especially 6.1 and 6.4)
+  is what would lift the manuscript from labelled-conjectures state to
+  journal-submission state.
+- Realistic primary target: *MATCH Commun. Math. Comput. Chem.*
+  Plausible alternatives: *J. Math. Chem.*, *AKCE Int. J. Graphs Comb.*,
+  or *SAR & QSAR Env. Res.* See `docs/final_10_of_10_upgrade_plan.md` §6
+  for the per-venue tradeoffs.
+- Paper 2 is a companion-methodology draft and depends on Paper 1
+  having at least an arXiv ID before submission.
 
 ## 7. What we request
 

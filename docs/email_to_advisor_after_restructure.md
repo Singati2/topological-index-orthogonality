@@ -33,18 +33,18 @@ What changed:
 
 What still needs mathematical input:
 
-Paper 1 Sections 4--6 still contain a few [PROOF SKETCH] /
-[CONJECTURE] markers in the spots where the formal proof needs
-your or Arockiaraj sir's derivation. Specifically: sharp
-$\Delta$-dependent bounds (Section 4), the Nordhaus-Gaddum bound
-(Section 4), sharper per-index bounds for $R$, $SO$, $GA$, $H$,
-$ABC$ (Section 5), and the formal extremal-graph characterizations
-for trees / unicyclic / bicyclic (Section 6). The most
-interesting target is Conjecture 6.4, the non-classical extremal
-at $(\alpha, \beta, \gamma) = (-1, -1, 1)$, which has been
-computationally verified for $n = 5, \ldots, 12$ but lacks a
-formal proof. None of the math gaps is presented as a finished
-theorem; all are clearly labelled.
+Paper 1's rigorous core is complete: Theorems 4.1 (bracket), 4.3
+(Cauchy--Schwarz), 4.4 / 4.5 (Jensen via $M_1$), 4.6 (M_2), 5.2
+(ratio bound), and Propositions 4.7 / 4.8 ($(\Delta,m)$ / $(\delta,m)$
+bounds), 5.4 (R/$\chi$), 5.5 (indirect Sombor / $M_1$ for $0<\beta<1$).
+What remains are honestly labelled Conjectures: 4.9 (Nordhaus--Gaddum),
+5.6 / 5.7 (sharp two-sided bounds via $GA$, $H$, $ABC$), and the
+formal extremal-graph characterizations 6.1 / 6.2 / 6.3 (trees /
+unicyclic / bicyclic) and the non-classical regime 6.4 at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$, computationally verified
+for $n = 5, \ldots, 12$ but lacking a formal structural proof.
+None of the gaps is presented as a finished theorem; all are
+labelled as Conjectures.
 
 What is ready:
 

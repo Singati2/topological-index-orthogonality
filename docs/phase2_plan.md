@@ -1,5 +1,15 @@
 # Phase 2 Plan — Wuzi Family as a Parametric Topological Index
 
+> **SUPERSEDED — kept for history only.** This document describes the
+> pre-restructure single-paper layout (Wuzi math + screening + ML
+> benchmark in one 10-section paper). Arockiaraj sir's directive split
+> the project into two non-overlapping manuscripts: Paper 1 (Wuzi
+> mathematical chemistry, `docs/paper1_wuzi.tex`) and Paper 2
+> (orthogonality-screening methodology, `docs/paper2_orthogonality_screening.tex`).
+> The authoritative manuscript plan is now `docs/paper1_wuzi_manuscript_skeleton.md`,
+> `docs/advisor_ready_summary.md`, and `docs/final_10_of_10_upgrade_plan.md`.
+> Do not use this file's section layout as a guide — it no longer matches the project.
+
 Structural template: **Movahedi, Gutman, Redžepović, Furtula (2026),
 "Diminished Sombor Index,"** MATCH Commun. Math. Comput. Chem. 95(1),
 141–162. We mirror that paper's section structure for the Wuzi family

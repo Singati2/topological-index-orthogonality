@@ -164,9 +164,9 @@ Section 4 (Bounds in $(n, m, \Delta, \delta)$):
   versions in the mixed-sign region remain natural follow-ups.
 
 Section 5 (Bounds via classical indices):
-- Sharp two-sided bound via $GA$ (Conjecture~5.6, `thm:GA`).
+- Sharp two-sided bound via $GA$ (Conjecture~5.6, `conj:GA`).
 - Sharp two-sided bounds via $H$ and $ABC$ (Conjecture~5.7,
-  `thm:H_ABC`).
+  `conj:H_ABC`).
 - The ratio-bound theorem (Theorem~5.2, `thm:ratio_bound`), the
   Cauchy--Schwarz bound via generalized $R$ and $\chi$
   (Proposition~5.4, `thm:R_chi`), and the indirect Sombor / $M_1$
