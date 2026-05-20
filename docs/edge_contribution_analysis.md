@@ -101,7 +101,8 @@ parameter region:
 | α = β = 0, γ > 0         | regular (γ = 0)            | (1, 4) → exp(0.6 γ)       |
 
 This table is what enables the *m · ψ_min(Δ, δ) ≤ W ≤ m · ψ_max(Δ, δ)*
-template of bounds in Section 3.
+template of the bracket bound (Paper 1 §2, Theorem `thm:bracket`)
+that anchors the §4 / §5 bound theorems.
 
 **Lemma 2.3.1.** For any (α, β, γ) ∈ ℝ³ and any G with Δ(G) ≤ 4,
 

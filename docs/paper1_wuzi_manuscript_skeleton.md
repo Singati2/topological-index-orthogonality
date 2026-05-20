@@ -173,7 +173,7 @@ for $h \in \{M_1, M_2, R, SO, GA, H, ABC\}$ and a list of parameter
 triples; output in `results/wuzi_bounds_ratio_tables.{csv,md}`.
 
 The ratio bound is rigorous and now included in Paper 1 (§5,
-Theorem~5.1): it covers all seven classical indices in one
+Theorem~5.2 `thm:ratio_bound`): it covers all seven classical indices in one
 unified statement (one theorem + one table per index), and at
 exact Wuzi-classical reductions the constants collapse to a single
 identity (sanity-checked in the output: e.g.\ $(\alpha,\beta,\gamma) = (1,0,0)$
@@ -315,8 +315,8 @@ Key points to make:
 ## 8. Conclusion
 
 `[NEEDS WRITING ~0.5 page]` Restate contributions: definition,
-closed-forms, bounds (§3–4), extremal graphs (§5), honest
-redundancy analysis (§6).
+closed-forms, BID-basis observation (§3), bounds (§4–5),
+extremal graphs (§6), sensitivity analysis (§7).
 
 ## 9. Data and code availability
 
@@ -343,8 +343,7 @@ must be resolved before submission. Do NOT submit with placeholders.]`
 | Fig. 2 — PCA scree plot, three datasets            | `results/<dataset>/pca_variance.csv` | `figures/fig2_pca_scree.{png,pdf}` [VERIFIED AGAINST CSV] |
 | Fig. 3 — Cross-dataset redundancy bars             | `results/cross_dataset_summary.csv`  | `figures/fig3_redundancy_bars.{png,pdf}` [VERIFIED AGAINST CSV] |
 | Fig. 4 — Octane correlation heatmap                | `results/octane_descriptors.csv`     | `figures/fig4_octane_heatmap.{png,pdf}` [VERIFIED AGAINST CSV] |
-| Fig. 5 — Wuzi parameter sweep heatmaps (γ slices, ESOL) | `results/esol/wuzi_grid.csv`    | `figures/fig5_wuzi_param_heatmaps.{png,pdf}` [VERIFIED AGAINST CSV] |
-| Fig. 5b — Wuzi parameter sweep across three datasets | `results/<dataset>/wuzi_grid.csv`  | `figures/fig5b_wuzi_param_heatmaps_all.{png,pdf}` [VERIFIED AGAINST CSV] |
+| Fig. 5b — Wuzi parameter sweep across three datasets, 4 γ slices | `results/<dataset>/wuzi_grid.csv` | `figures/fig5b_wuzi_param_heatmaps_all.{png,pdf}` [VERIFIED AGAINST CSV] |
 | Fig. 6 — Degeneracy bar chart (trees of order 10)  | `results/wuzi_degeneracy.csv`        | `figures/fig6_degeneracy_bars.{png,pdf}` [VERIFIED AGAINST CSV] |
 | Fig. 7 — Structure sensitivity bar chart (decanes) | `results/structure_sensitivity.csv`  | `figures/fig7_structure_sensitivity.{png,pdf}` [VERIFIED AGAINST CSV] |
 | Fig. 8 — Full 30-index correlation matrix (ESOL)   | `results/esol/correlation_matrix.csv`| `figures/fig8_correlation_heatmap.{png,pdf}` [VERIFIED AGAINST CSV] |

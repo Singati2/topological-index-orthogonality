@@ -26,7 +26,7 @@ abstract: >-
   topological-index family with closed forms on standard graph classes,
   a ratio-bound theorem with respect to classical BID indices, a
   computational extremal-tree study, and a sensitivity analysis on the
-  18 octane / 106 decane / 75 decane-isomer benchmarks. Paper 2: an
+  18 octane / 106 trees of order 10 / 75 decane-isomer benchmarks. Paper 2: an
   open-source orthogonality-screening pipeline (pairwise correlation,
   PCA effective rank, partial correlation, VIF, combined criterion)
   applied to a 30-index classical baseline on ESOL, FreeSolv,

@@ -100,8 +100,8 @@ $|r| < 0.95$), and `combined` (pairwise filter plus
 $|\mathrm{pcor}(z, y \mid X)| \ge 0.10$). The pairwise screen
 matches or marginally improves the full-baseline RandomForest on
 every dataset with $4$--$5\times$ fewer features. On BBBP the
-pairwise-pruned model attains ROC-AUC $0.864$, marginally exceeding
-the full-baseline $0.835$. The strict combined screen removes
+pairwise-pruned model attains ROC-AUC $0.860$, marginally exceeding
+the full-baseline $0.846$. The strict combined screen removes
 every feature on Lipophilicity (no pairwise-pruned index has
 $|\mathrm{pcor}|\ge 0.10$ with $\log D$); this is reported as
 "killed" in the figure and discussed in the manuscript as an

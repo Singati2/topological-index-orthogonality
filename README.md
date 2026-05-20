@@ -370,8 +370,8 @@ docs/
 figures/                          Publication-quality figures (PNG + PDF)
   fig2_pca_scree                  Cross-dataset PCA scree (3 components -> 95%)
   fig3_redundancy_bars            Per-dataset redundant-pair counts at three thresholds
-  fig4_octane_heatmap             Octane prediction: signed correlation with 8 properties
-  fig5_wuzi_param_heatmaps        Wuzi redundancy screen on ESOL
+  fig4_octane_heatmap             Octane prediction: signed correlation with 5 properties
+  fig5b_wuzi_param_heatmaps_all   Wuzi redundancy screen on 3 datasets × 4 γ slices
   fig5b_wuzi_param_heatmaps_all   Wuzi redundancy screen across all three datasets
   fig6_degeneracy_bars            Index degeneracy on 106 trees of order 10
   fig7_structure_sensitivity      Structure sensitivity on 75 decane isomers
