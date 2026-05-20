@@ -3,8 +3,8 @@
 **Project:** Topological-index redundancy analysis with parametric case study
 **Repository:** <https://github.com/Singati2/topological-index-orthogonality>
 **Collaborators:** Advik Natarajan (Loyola College, Chennai), Ganesh Shiwakoti
-(FAU, Biostatistics PhD)
-**Date:** 2026-05-19
+(FAU, Department of Mathematics and Statistics)
+**Date:** 2026-05-20
 
 ## TL;DR (three sentences)
 

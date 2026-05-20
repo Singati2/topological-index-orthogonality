@@ -16,21 +16,27 @@ repository-code: "https://github.com/Singati2/topological-index-orthogonality"
 license: MIT
 keywords:
   - "topological indices"
+  - "Wuzi index family"
+  - "bond-incident-degree"
+  - "ratio-bound theorem"
+  - "extremal graphs"
   - "QSPR"
   - "orthogonality screening"
-  - "bond-incident-degree"
-  - "Wuzi index family"
   - "cheminformatics"
 abstract: >-
-  Companion software for two manuscripts. Paper 1: the Wuzi parametric
-  topological-index family with closed forms on standard graph classes,
-  a ratio-bound theorem with respect to classical BID indices, a
+  Companion software for two manuscripts.
+
+  Paper 1 (Wuzi index family): graph-theoretic properties, closed-form
+  values on standard graph classes, a rigorous ratio-bound theorem with
+  respect to classical bond-incident-degree (BID) indices, a
   computational extremal-tree study, and a sensitivity analysis on the
-  18 octane / 106 trees of order 10 / 75 decane-isomer benchmarks. Paper 2: an
-  open-source orthogonality-screening pipeline (pairwise correlation,
-  PCA effective rank, partial correlation, VIF, combined criterion)
-  applied to a 30-index classical baseline on ESOL, FreeSolv,
-  Lipophilicity, and BBBP, with a 5-fold cross-validated RandomForest
-  benchmark.
+  18 octanes, 106 trees of order 10, and 75 decane isomers.
+
+  Paper 2 (orthogonality-screening pipeline): an open-source pipeline
+  combining pairwise correlation, principal-component (PCA) effective
+  rank, partial correlation with the target, variance inflation factor
+  (VIF), and a combined criterion, applied to a 30-index classical
+  baseline on the ESOL, FreeSolv, Lipophilicity, and BBBP datasets,
+  together with a 5-fold cross-validated RandomForest benchmark.
 version: "0.1.0"
 date-released: "2026-05-20"

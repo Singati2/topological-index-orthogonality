@@ -1,16 +1,24 @@
-# Orthogonality Screening of Topological Indices for QSPR Modeling
+# Topological-Index Pilot: Wuzi index family and orthogonality-screening pipeline for QSPR
 
 [![tests](https://github.com/Singati2/topological-index-orthogonality/actions/workflows/test.yml/badge.svg)](https://github.com/Singati2/topological-index-orthogonality/actions/workflows/test.yml)
 
-An open-source pipeline for testing whether a proposed scalar
-topological index contributes **non-redundant** information beyond
-the classical 30-index baseline on QSPR chemistry. Combines pairwise
-Pearson correlation, principal-component analysis, partial
-correlation with the QSPR target, and variance inflation factor
-into a single combined criterion. Runs in seconds per benchmark on
-commodity hardware.
+This repository contains the code, data pipelines, and supporting
+material for **two companion manuscripts in preparation**:
 
-The repository accompanies two related manuscripts in preparation:
+- **Paper 1 — graph theory / mathematical chemistry.** The Wuzi
+  parametric topological-index family: closed forms on standard
+  graph classes, a rigorous ratio-bound theorem with respect to the
+  classical bond-incident-degree (BID) indices, a computational
+  extremal-tree study, and a sensitivity analysis on the 18 octanes,
+  106 trees of order 10, and 75 decane isomers.
+- **Paper 2 — software / methodology.** An open-source
+  orthogonality-screening pipeline (pairwise correlation, PCA
+  effective rank, partial correlation with the target, VIF, combined
+  criterion) for QSPR chemistry, plus a 5-fold cross-validated
+  RandomForest benchmark across four datasets (ESOL, FreeSolv,
+  Lipophilicity, BBBP).
+
+The remainder of this README expands the two-paper plan:
 
 - **Paper 1 (graph theory / mathematical chemistry).** *The Wuzi
   Index Family: Graph-Theoretic Properties, Bounds, Extremal Graphs,
@@ -372,7 +380,6 @@ figures/                          Publication-quality figures (PNG + PDF)
   fig3_redundancy_bars            Per-dataset redundant-pair counts at three thresholds
   fig4_octane_heatmap             Octane prediction: signed correlation with 5 properties
   fig5b_wuzi_param_heatmaps_all   Wuzi redundancy screen on 3 datasets × 4 γ slices
-  fig5b_wuzi_param_heatmaps_all   Wuzi redundancy screen across all three datasets
   fig6_degeneracy_bars            Index degeneracy on 106 trees of order 10
   fig7_structure_sensitivity      Structure sensitivity on 75 decane isomers
   fig8_correlation_heatmap        Full 30-index pairwise correlation matrix (ESOL)
@@ -403,20 +410,30 @@ data/                             Cached download CSVs (gitignored)
 
 ## Citation
 
-```
-[CITATION PLACEHOLDER — manuscript in preparation]
+Both manuscripts are in preparation. Placeholder citations:
 
-A. Natarajan, G. Shiwakoti, M. Arockiaraj.
-"The Wuzi Index Family: Graph-Theoretic Properties, Bounds,
- Extremal Graphs, and Sensitivity Analysis."
-In preparation, 2026.
+```bibtex
+@unpublished{NatarajanShiwakotiArockiaraj_Wuzi_2026,
+  author = {Natarajan, A. and Shiwakoti, G. and Arockiaraj, M.},
+  title  = {The {Wuzi} Index Family: Graph-Theoretic Properties, Bounds,
+            Extremal Graphs, and Sensitivity Analysis},
+  note   = {In preparation},
+  year   = {2026}
+}
 
-G. Shiwakoti, A. Natarajan, M. Arockiaraj.
-"Orthogonality Screening of Topological Indices for QSPR Modeling."
-In preparation, 2026.
+@unpublished{ShiwakotiNatarajanArockiaraj_OrthogonalityScreening_2026,
+  author = {Shiwakoti, G. and Natarajan, A. and Arockiaraj, M.},
+  title  = {Orthogonality Screening of Topological Indices for {QSPR} Modeling},
+  note   = {In preparation},
+  year   = {2026}
+}
 ```
+
+For the software/repository itself, see `CITATION.cff`.
+
+---
 
 ## License
 
 MIT License. See `LICENSE`. Code is openly available; please cite
-the manuscript above (once published) for academic use.
+the relevant manuscript above (once published) for academic use.

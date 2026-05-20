@@ -8,16 +8,12 @@ gaps awaiting Advik + Arockiaraj sir's input.
 
 ---
 
-## Title — three options
+## Title
 
-1. *"The Wuzi Parametric Index Family: Definition, Bounds, Extremal
-   Graphs, and Redundancy Analysis on Molecular Chemistry Benchmarks"*
-2. *"A Three-Parameter Bond-Incident-Degree Index Family: Mathematical
-   Properties and Empirical Redundancy"*
-3. *"Wuzi Index: Closed Forms, Sharp Bounds, and the Limits of
-   Parametric Extensions in the Bond-Incident-Degree Family"*
+*"The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal
+Graphs, and Sensitivity Analysis"*
 
-(Working title for now: **option 1**.)
+(Matches `docs/paper1_wuzi.tex` title verbatim.)
 
 ## Authors
 
