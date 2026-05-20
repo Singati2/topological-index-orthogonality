@@ -332,11 +332,14 @@ def fig9_ml_benchmark():
     """
     df = pd.read_csv(os.path.join(PROJECT, "results", "ml_benchmark.csv"))
     config_order = ["full", "pca_95", "pairwise_pruned", "combined_pruned"]
+    # Single-line labels with LaTeX math-mode for clean inequality
+    # symbols; rotated 30 deg with ha=right to prevent overlap between
+    # adjacent labels and with bar annotations.
     config_label = {
-        "full": "full\n(30)",
+        "full": "full (30)",
         "pca_95": "PCA-95",
-        "pairwise_pruned": "pair\n|r|<0.95",
-        "combined_pruned": "combined\n+|pcor|>=0.10",
+        "pairwise_pruned": "pair $|r|<0.95$",
+        "combined_pruned": "combined $|\\mathrm{pcor}|\\geq 0.10$",
     }
     config_color = {
         "full":            "#4c72b0",
@@ -384,7 +387,7 @@ def fig9_ml_benchmark():
                             ha="center", va="bottom", fontsize=8)
         ax_top.set_xticks(xs)
         ax_top.set_xticklabels([config_label[c] for c in config_order],
-                               fontsize=7)
+                               fontsize=7, rotation=30, ha="right")
         ax_top.set_title(f"{display_name[ds]}\n({task})", fontsize=10)
         ax_top.set_ylabel(metric_label, fontsize=9)
         if task == "classification":
@@ -413,7 +416,7 @@ def fig9_ml_benchmark():
                         fontsize=7)
         ax_bot.set_xticks(xs)
         ax_bot.set_xticklabels([config_label[c] for c in config_order],
-                               fontsize=7)
+                               fontsize=7, rotation=30, ha="right")
         ax_bot.set_ylim(0, 35)
         if col == 0:
             ax_bot.set_ylabel("Mean feature count\n(error bar: min-max across folds)",
