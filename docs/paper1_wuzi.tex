@@ -194,12 +194,18 @@ their tightness on regular graphs
 including the rigorous bracket bound (Theorem~\ref{thm:bracket}),
 a rigorous Cauchy--Schwarz / geometric-mean inequality
 (Theorem~\ref{thm:cs}), a Jensen-type bound via $M_1$
-(Theorem~\ref{thm:m1_bound}), and a rigorous ratio-bound theorem
-that applies uniformly to every classical BID index with
-strictly positive edge contribution (Theorem~\ref{thm:ratio_bound}).
-Sharper bounds in further graph parameters are stated with proof
-strategies and reserved for the formal companion derivation
-(Sections~\ref{sec:bounds_nm}--\ref{sec:bounds_classical}).
+(Theorem~\ref{thm:m1_bound}), explicit upper and lower bounds in
+$(\Delta, m)$ and $(\delta, m)$ respectively in the non-negative
+parameter region (Propositions~\ref{thm:upper_Delta},
+\ref{thm:lower_delta}), a rigorous ratio-bound theorem that
+applies uniformly to every classical BID index with strictly
+positive edge contribution (Theorem~\ref{thm:ratio_bound}), and
+a rigorous Cauchy--Schwarz bound in terms of the generalized
+Randi\'c and sum-connectivity indices (Proposition~\ref{thm:R_chi}).
+Sharp two-sided bounds against the geometric--arithmetic ($GA$),
+harmonic ($H$), and atom-bond-connectivity ($ABC$) indices are
+stated as Conjectures~\ref{thm:GA} and~\ref{thm:H_ABC} pending
+explicit constants.
 \item Extremal-graph conjectures for trees, unicyclic, and bicyclic
 graphs, including a non-classical extremal regime at
 $(\alpha,\beta,\gamma)=(-1,-1,1)$
@@ -660,32 +666,61 @@ $\bigl(d_u d_v\bigr)_{uv\in E(G)}$ and the convex function
 $t\mapsto t^\alpha$ for $\alpha\ge 1$.
 \end{proof}
 
-\subsection{Bounds in $n$, $m$, $\Delta$, $\delta$ -- proof skeletons}
+\subsection{Bounds in $n$, $m$, $\Delta$, $\delta$}
 
-\begin{theorem}[Upper bound in $\Delta$]\label{thm:upper_Delta}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-Let $G$ be a connected graph of size $m$ and maximum degree
-$\Delta$. For $\alpha,\beta\ge 0$ and $\gamma\ge 0$,
-\[
-\Wuzi\le m\cdot \Delta^{2\alpha}\cdot (2\Delta)^{\beta}
-\cdot e^{\gamma\frac{\Delta-1}{\Delta+1}}.
-\]
-The strategy is to bound each edge's contribution above by
-$\psi(\Delta,\Delta;\alpha,\beta,\gamma)$ when $\gamma=0$
-and by $\psi(1,\Delta;\alpha,\beta,\gamma)$ when $\gamma$ dominates.
-A careful case analysis on the sign region of $\gamma$ and the
-monotonicity of $\psi(x,y;\cdot)$ in each argument is required.
-\end{theorem}
+\begin{proposition}[Upper bound in $\Delta$]\label{thm:upper_Delta}
+Let $G$ be a graph of size $m$ and maximum degree $\Delta$. For
+$\alpha, \beta \ge 0$ and $\gamma \ge 0$,
+\begin{equation}\label{eq:upper_Delta}
+\Wuzi \;\le\; m \cdot \Delta^{2\alpha} \cdot (2\Delta)^{\beta}
+\cdot \exp\!\left(\gamma\,\frac{\Delta - 1}{\Delta + 1}\right).
+\end{equation}
+\end{proposition}
 
-\begin{theorem}[Lower bound in $\delta$]\label{thm:lower_delta}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-For $\alpha,\beta\ge 0$ and $\gamma\ge 0$,
-$\Wuzi\ge m\cdot \delta^{2\alpha}(2\delta)^{\beta}$
-(the $\gamma$ factor is at least $1$). Equality on $\delta$-regular
-$G$. Tightening for non-regular $G$ requires expressing
-$\sum_e (d_u d_v)^\alpha$ in terms of $M_1, M_2, R_\alpha$ and
-applying Polya--Szeg\H{o} (Lemma~\ref{lem:ps}).
-\end{theorem}
+\begin{proof}
+For every edge $uv$ of $G$, $1 \le d_u, d_v \le \Delta$. Since
+$\alpha, \beta \ge 0$, the elementary inequalities
+$d_u d_v \le \Delta^2$ and $d_u + d_v \le 2\Delta$ give
+$(d_u d_v)^{\alpha} \le \Delta^{2\alpha}$ and
+$(d_u + d_v)^{\beta} \le (2\Delta)^{\beta}$. The imbalance
+factor $|d_u - d_v| / (d_u + d_v)$ is maximized over the admissible
+set $\{(i, j) : 1 \le i \le j \le \Delta\}$ at the pair $(1, \Delta)$,
+giving $|d_u - d_v| / (d_u + d_v) \le (\Delta - 1) / (\Delta + 1)$;
+since $\gamma \ge 0$, exponentiation preserves the inequality, so
+$\exp(\gamma |d_u - d_v| / (d_u + d_v))
+   \le \exp(\gamma (\Delta - 1) / (\Delta + 1))$.
+Multiplying the three factor-wise bounds yields
+$\psi(d_u, d_v; \alpha, \beta, \gamma)
+   \le \Delta^{2\alpha} (2\Delta)^{\beta} \exp(\gamma (\Delta - 1) / (\Delta + 1))$
+for every edge, and summing over the $m$ edges of $G$
+gives~\eqref{eq:upper_Delta}.
+\end{proof}
+
+\begin{proposition}[Lower bound in $\delta$]\label{thm:lower_delta}
+Let $G$ be a graph of size $m$ and minimum degree $\delta$. For
+$\alpha, \beta \ge 0$ and $\gamma \ge 0$,
+\begin{equation}\label{eq:lower_delta}
+\Wuzi \;\ge\; m \cdot \delta^{2\alpha} \cdot (2\delta)^{\beta},
+\end{equation}
+with equality if and only if $G$ is $\delta$-regular and either
+$\gamma = 0$ or $G$ is regular ($\Delta = \delta$).
+\end{proposition}
+
+\begin{proof}
+For every edge, $d_u d_v \ge \delta^2$ and $d_u + d_v \ge 2\delta$;
+since $\alpha, \beta \ge 0$, this gives
+$(d_u d_v)^{\alpha} \ge \delta^{2\alpha}$ and
+$(d_u + d_v)^{\beta} \ge (2\delta)^{\beta}$. The imbalance factor
+is non-negative and $\gamma \ge 0$, so
+$\exp(\gamma |d_u - d_v| / (d_u + d_v)) \ge 1$. Multiplying gives
+$\psi(d_u, d_v; \alpha, \beta, \gamma) \ge \delta^{2\alpha}(2\delta)^{\beta}$
+for every edge; summing yields~\eqref{eq:lower_delta}. Equality in
+the polynomial factors requires $d_u = d_v = \delta$ on every edge
+(i.e., $\delta$-regular $G$); equality in the exponential factor
+requires the imbalance $|d_u - d_v| / (d_u + d_v) = 0$ on every
+edge (i.e., $G$ regular) or $\gamma = 0$. The combined equality
+condition is the conjunction.
+\end{proof}
 
 \begin{conjecture}[Nordhaus--Gaddum type]\label{conj:NG}
 \todo{PROOF STRATEGY}
@@ -791,21 +826,24 @@ forces $\psi(d_u, d_v) / h(d_u, d_v) = c_{\max}^{h}$ for every edge.
 \end{proof}
 
 \begin{remark}\label{rem:ratio_bound_practice}
-The graph-specific extrema in Theorem~\ref{thm:ratio_bound} can be
-replaced by uniform $\mathcal{G}_4$-wide extrema at the cost of a
-looser (but $G$-independent) bound: on hydrogen-suppressed molecular
-graphs $\mathcal{G}_4$, the ratio extrema $c_{\min}^{h}, c_{\max}^{h}$
-are finite-set extrema over the ten admissible degree pairs
-$\{(i, j) : 1 \le i \le j \le 4\}$ and are computable by brute force
-given any parameter triple $(\alpha, \beta, \gamma)$. More generally,
-whenever $h$ vanishes on some admissible pair (for example
-$h_{ABC}(1, 1) = 0$), $c_{\max}^{h}$ becomes infinite on any graph
-that realises that pair and the upper ratio bound is vacuous; the
-hypothesis ``$h(i, j) > 0$ on every pair appearing in $G$'' in
+Theorem~\ref{thm:ratio_bound} gives the \emph{sharp} bound for a
+specific $G$, with $c_{\min}^h, c_{\max}^h$ defined as extrema over
+the degree pairs realised by $G$. A weaker but \emph{$G$-independent}
+companion bound is obtained by taking the extrema over the full set
+of ten admissible degree pairs of $\mathcal{G}_4$, namely
+$\{(i, j) : 1 \le i \le j \le 4\}$; the resulting constants depend
+only on $(\alpha, \beta, \gamma)$ and not on $G$, at the cost of
+being looser than the per-$G$ sharp constants for graphs that do
+not realise every admissible pair. More generally, whenever $h$
+vanishes on some admissible pair (for example $h_{ABC}(1, 1) = 0$),
+$c_{\max}^{h}$ becomes infinite on any graph that realises that
+pair and the upper ratio bound is vacuous; the hypothesis
+``$h(i, j) > 0$ on every pair appearing in $G$'' in
 Theorem~\ref{thm:ratio_bound} is the correct restriction. For each
-classical index $I_h$ in $\{M_1, M_2, R, SO, GA, H, ABC\}$ (the $ABC$
-case with the natural $(1,1)$-free restriction), the
-script \texttt{scripts/09\_wuzi\_bounds\_tables.py} tabulates
+classical index $I_h$ in $\{M_1, M_2, R, SO, GA, H, ABC\}$ (the
+$ABC$ case with the natural $(1, 1)$-free restriction), the script
+\texttt{scripts/09\_wuzi\_bounds\_tables.py} tabulates the
+$\mathcal{G}_4$-wide (looser, uniform) constants
 $c_{\min}^{h}, c_{\max}^{h}$ at eight canonical parameter triples;
 output in \texttt{results/wuzi\_bounds\_ratio\_tables.\{csv,md\}}.
 At the exact Wuzi-classical reductions of
@@ -817,53 +855,87 @@ covered by the test suite (\texttt{tests/test\_ratio\_bound\_sanity.py}).
 
 \subsection{Bounds for general $(\alpha,\beta)$ with $\gamma=0$}
 
-The following theorems lift classical-index bounds to the broader
+The following results lift classical-index bounds to the broader
 parameter region via the Cauchy--Schwarz extension and the bracket.
-Proofs are written as sketches and are reserved for completion.
+Propositions~\ref{thm:R_chi} and~\ref{thm:sombor} are rigorous;
+Conjectures~\ref{thm:GA} and~\ref{thm:H_ABC} state target bounds
+whose sharp constants are reserved for joint work with the senior
+author.
 
-\begin{theorem}[Bound via generalized $R$ and $\chi$ -- skeleton]\label{thm:R_chi}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-Let $\gamma = 0$. Define the generalized Randi\'c and
+\begin{proposition}[Bound via generalized $R$ and $\chi$]\label{thm:R_chi}
+Let $\gamma = 0$, and define the generalized Randi\'c and
 sum-connectivity indices by
-$R_{a}(G) = \sum_{uv \in E(G)} (d_u d_v)^{a}$ and
-$\chi_{b}(G) = \sum_{uv \in E(G)} (d_u + d_v)^{b}$, so that the
-classical cases are $R = R_{-1/2}$ and $\chi = \chi_{-1/2}$.
-Applying Theorem~\ref{thm:cs} with the split $(\alpha_1, \beta_1, 0)
-= (2\alpha, 0, 0)$ and $(\alpha_2, \beta_2, 0) = (0, 2\beta, 0)$
-(so that $\alpha_1 + \alpha_2 = 2\alpha$ and
-$\beta_1 + \beta_2 = 2\beta$),
-\[W(G;\alpha,\beta,0)\;\le\; \sqrt{R_{2\alpha}(G)\cdot \chi_{2\beta}(G)},\]
-the right-hand side being a product of generalized classical
-indices. For the classical case
+\[R_{a}(G) = \sum_{uv \in E(G)} (d_u d_v)^{a}, \qquad
+  \chi_{b}(G) = \sum_{uv \in E(G)} (d_u + d_v)^{b},\]
+so that the classical cases are $R = R_{-1/2}$ and
+$\chi = \chi_{-1/2}$. Then for every graph $G$,
+\begin{equation}\label{eq:R_chi_bound}
+W(G;\alpha,\beta,0)\;\le\; \sqrt{R_{2\alpha}(G)\cdot \chi_{2\beta}(G)}.
+\end{equation}
+In particular, at the classical Randi\'c--$\chi$ reduction
 $(\alpha, \beta) = (-1/4, -1/4)$ this specialises to
-$W \le \sqrt{R \cdot \chi}$.
-\end{theorem}
+$W(G; -1/4, -1/4, 0) \le \sqrt{R(G) \cdot \chi(G)}$.
+\end{proposition}
 
-\begin{theorem}[Bound via Sombor $SO$ -- skeleton]\label{thm:sombor}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-The Sombor index is $SO(G)=\sum_e \sqrt{d_u^2+d_v^2}$.
-For $\alpha=0$, $\beta=1/2$, $\gamma=0$,
-$\sum_e\sqrt{d_u+d_v}=\chi_{1/2}(G)$. Using
-$\sqrt{d_u^2+d_v^2}\ge\sqrt{(d_u+d_v)^2/2}=(d_u+d_v)/\sqrt 2$
-we get $SO(G)\ge\frac{1}{\sqrt 2}M_1(G)$ which combined with
-Theorem~\ref{thm:m1_bound} provides an indirect bound on $\Wuzi$
-for $\beta\ge 1$.
-\end{theorem}
+\begin{proof}
+Apply Theorem~\ref{thm:cs} with the split
+$(\alpha_1, \beta_1, \gamma_1) = (2\alpha, 0, 0)$ and
+$(\alpha_2, \beta_2, \gamma_2) = (0, 2\beta, 0)$. The hypotheses
+$\alpha_1 + \alpha_2 = 2\alpha$, $\beta_1 + \beta_2 = 2\beta$,
+$\gamma_1 + \gamma_2 = 0 = 2\gamma$ are satisfied. By definition
+of $W$,
+$W(G; 2\alpha, 0, 0) = \sum_{uv \in E(G)} (d_u d_v)^{2\alpha} = R_{2\alpha}(G)$
+and $W(G; 0, 2\beta, 0) = \sum_{uv \in E(G)} (d_u + d_v)^{2\beta} = \chi_{2\beta}(G)$.
+Substitution into Theorem~\ref{thm:cs} yields~\eqref{eq:R_chi_bound}.
+Equality holds if and only if the ratio
+$(d_u d_v)^{2\alpha} / (d_u + d_v)^{2\beta}$ is constant over every
+edge of $G$, by the equality condition of Theorem~\ref{thm:cs}.
+\end{proof}
 
-\begin{theorem}[Bound via $GA$ -- skeleton]\label{thm:GA}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-$GA(G)=\sum_e \frac{2\sqrt{d_u d_v}}{d_u+d_v}$. The relation
-$GA\le m$ with equality iff $G$ is regular suggests a bound on the
-Wuzi $\gamma$-axis via the imbalance factor.
-\end{theorem}
+\begin{proposition}[Indirect bound via Sombor $SO$ and $M_1$]\label{thm:sombor}
+For $\alpha = 0$, $0 < \beta < 1$, and $\gamma = 0$, the Wuzi
+quantity $W(G; 0, \beta, 0) = \sum_{uv \in E(G)} (d_u + d_v)^{\beta}
+= \chi_{\beta}(G)$ satisfies
+\begin{equation}\label{eq:sombor_bound}
+W(G; 0, \beta, 0) \;\le\; m^{1 - \beta} \cdot \bigl(\sqrt{2}\, SO(G)\bigr)^{\beta},
+\end{equation}
+where $SO(G) = \sum_{uv \in E(G)} \sqrt{d_u^2 + d_v^2}$ is the
+Sombor index.
+\end{proposition}
 
-\begin{theorem}[Bound via $H$ and $ABC$ -- skeleton]\label{thm:H_ABC}
-\todo{PROOF SKETCH -- TO BE COMPLETED}
-Templates from~\cite{Movahedi2025arXivDSO}: each Wuzi instance with
-$\beta<0$ inherits the harmonic-style monotonicity arguments;
-$ABC(G)=\sum_e\sqrt{(d_u+d_v-2)/(d_u d_v)}$ pairs naturally with
-$\alpha<0,\beta>0$.
-\end{theorem}
+\begin{proof}
+The Cauchy--Schwarz inequality
+$\sqrt{d_u^2 + d_v^2} \ge \sqrt{(d_u + d_v)^2 / 2} = (d_u + d_v) / \sqrt{2}$
+holds termwise; summing gives $SO(G) \ge M_1(G) / \sqrt{2}$, i.e.,
+$M_1(G) \le \sqrt{2}\, SO(G)$. For $0 < \beta < 1$ the concave
+Jensen bound of Theorem~\ref{thm:m1_concave} (with $\alpha = 0$)
+gives $W(G; 0, \beta, 0) \le m^{1 - \beta} M_1(G)^{\beta}$. Since
+$M_1(G)^{\beta}$ is non-decreasing in $M_1(G)$ for $M_1(G) \ge 0$
+and $\beta > 0$, substituting the upper bound $M_1(G) \le \sqrt{2}\, SO(G)$
+yields~\eqref{eq:sombor_bound}.
+\end{proof}
+
+\begin{conjecture}[$GA$-controlled bound for the $\gamma$-axis]\label{thm:GA}
+The geometric--arithmetic index
+$GA(G) = \sum_{uv \in E(G)} 2\sqrt{d_u d_v} / (d_u + d_v) \le m$
+(equality iff $G$ is regular) controls the average edge imbalance.
+Conjecturally, for every parameter triple with $\alpha = \beta = 0$
+and $\gamma > 0$ there exists an explicit non-decreasing function
+$g_\gamma : [0, m] \to [m, m e^{\gamma}]$ such that
+$W(G; 0, 0, \gamma) \le g_\gamma(m - GA(G))$, with $g_\gamma$
+linear in the imbalance excess to first order. The explicit form
+of $g_\gamma$ and its sharp constants are reserved for future work.
+\end{conjecture}
+
+\begin{conjecture}[Bounds via harmonic $H$ and $ABC$]\label{thm:H_ABC}
+Each Wuzi instance with $\beta < 0$ inherits the harmonic-style
+monotonicity arguments from~\cite{Movahedi2025arXivDSO}; the
+$ABC$ index, $ABC(G) = \sum_{uv \in E(G)} \sqrt{(d_u + d_v - 2) / (d_u d_v)}$,
+pairs naturally with the $\alpha < 0$, $\beta > 0$ region of the
+Wuzi family. Sharp two-sided bounds of $\Wuzi$ in terms of $H(G)$
+and $ABC(G)$, with explicit equality conditions, are open. (See
+Section~\ref{sec:discussion} for further discussion.)
+\end{conjecture}
 
 \subsection{Bounds at the boundary of the $\gamma$ axis}
 
@@ -951,11 +1023,17 @@ arguments analogous to the Randi\'c-index literature
 \subsection{Bicyclic graphs}
 
 \begin{conjecture}[Extremal bicyclic graphs]\label{conj:bicyclic}
-Among bicyclic graphs of order $n\ge 5$, the extremals of $\Wuzi$
-in the region $\alpha\ge 0,\beta\ge 0,\gamma\ge 0$ are
-\todo{TO BE CHARACTERIZED}. Two natural candidates are the
-$\theta$-graph (two cycles sharing one edge) with pendant vertices
-attached to high-degree vertices, and the bowtie-with-pendants.
+Among bicyclic graphs of order $n \ge 5$, in the region
+$\alpha \ge 0,\, \beta \ge 0,\, \gamma \ge 0$ an extremal of
+$\Wuzi$ lies in one of the following candidate families:
+the $\theta$-graph (two cycles sharing one edge) with pendant
+vertices attached at the high-degree vertices, or the
+bowtie-with-pendants graph (two cycles sharing one vertex). The
+precise winner depends on the order $n$ and the exact
+parameter triple, by analogy with the unicyclic classification
+of Conjecture~\ref{conj:unicyclic}; a unified formal
+characterization (and a small-$n$ computational verification via
+\texttt{nauty}/\texttt{geng} enumeration) is open.
 \end{conjecture}
 
 \todo{PROOF STRATEGY} The bicyclic case is structurally richer
@@ -1141,9 +1219,9 @@ marginally exceeding $GA$ and $H$ ($|r| = 0.959$); on the
 acentric factor $\omega$ the strongest is $W(1, 0, 0) = M_2$ at
 $|r| = 0.987$, with $W(1, 1, 1)$ at $|r| = 0.981$. The Wuzi
 family is in the same $|r|$ regime as established BID indices on
-this benchmark and is competitive on two of the five properties
-at parameter triples that include a non-trivial $\gamma$-axis
-contribution.
+this benchmark and is competitive on two of the five properties:
+$\Delta H_\mathrm{vap}$ via the pure-$\gamma$ triple $W(0, 0, 2)$,
+and $\omega$ via the classical-reduction $W(1, 0, 0) = M_2$.
 
 \item We do not claim the Wuzi family outperforms the classical
 indices in any uniform sense: the comparison is sensitivity
@@ -1245,20 +1323,24 @@ BID-basis observation of Theorem~\ref{thm:bid} explicitly accounts
 for the family's inability to escape the $10$-dimensional BID
 subspace on $\mathcal{G}_4$.
 
-\paragraph{Future work.} The mathematical program of
-Sections~\ref{sec:bounds_nm}--\ref{sec:extremal} is partially
-complete; the [PROOF SKETCH] markers indicate the formal results
-that remain to be derived. Specifically:
+\paragraph{Future work.} The conjectural results of
+Sections~\ref{sec:bounds_nm}--\ref{sec:extremal} are the natural
+targets for the formal companion derivation:
 \begin{enumerate}
-\item Sharp Nordhaus--Gaddum bounds for $\Wuzi(G)+\Wuzi(\bar G)$
+\item Sharp Nordhaus--Gaddum bounds for $\Wuzi(G) + \Wuzi(\bar G)$
 (Conjecture~\ref{conj:NG}).
-\item Tight bounds via $SO,\,GA,\,H,\,ABC$ in the full
-$(\alpha,\beta,\gamma)$ region (Theorems~\ref{thm:sombor}--\ref{thm:H_ABC}).
+\item Sharp two-sided bounds via the geometric--arithmetic ($GA$),
+harmonic ($H$), and atom-bond-connectivity ($ABC$) indices, with
+explicit constants and equality conditions
+(Conjectures~\ref{thm:GA}, \ref{thm:H_ABC}).
 \item Formal extremal-graph characterization for trees, unicyclic,
 and bicyclic graphs in every parameter sign region
-(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic}).
+(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic}),
+including a structural description of the non-classical
+maximizer at $(\alpha, \beta, \gamma) = (-1, -1, 1)$ for $n \ge 7$
+(Conjecture~\ref{conj:caterpillar_max}).
 \item Closed-form bounds involving the Albertson irregularity
-$\mathrm{Alb}(G)=\sum_e|d_u-d_v|$, naturally paired with the
+$\mathrm{Alb}(G) = \sum_e |d_u - d_v|$, naturally paired with the
 Wuzi $\gamma$-axis.
 \end{enumerate}
 

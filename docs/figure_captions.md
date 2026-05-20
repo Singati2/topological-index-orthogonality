@@ -26,17 +26,17 @@ Roughly 37% of all pairs of classical indices are above the 0.95
 threshold on every dataset. The fraction of redundant pairs is
 remarkably stable across the three independent benchmarks.
 
-**Figure 4.** Signed Pearson correlation $r$ between each of 27
-indices (the Wuzi family at canonical parameter points plus the
-30-index classical baseline, less three indices that are constant
-on this small set) and each of 8 physicochemical properties on the
-18 octane isomers. Rows are sorted by maximum $\lvert r\rvert$.
-Color encodes $\lvert r\rvert$ while the printed value carries the
-sign. The Padmakar–Ivan ($PI$) index is constant on the 18 octanes
-($\sigma = 0$, mean $42$) and is dropped from the heatmap. Strong
-performance on this small dataset is *necessary but not sufficient*
-for general QSPR utility (cf. Figure 8 and the discussion in
-Section 6).
+**Figure 4.** Signed Pearson correlation $r$ between each of 34
+indices (the Wuzi family at eight canonical parameter points plus
+the 30-index classical baseline, less the Padmakar--Ivan index $PI$
+which is constant on the 18 octanes) and each of the five octane
+physicochemical properties ($T_B$, $\Delta H_f$, $\Delta H_{\mathrm{vap}}$,
+$S$, $\omega$) on the 18 isomers. Rows are sorted by maximum
+$\lvert r\rvert$. Color encodes $\lvert r\rvert$ while the printed
+value carries the sign. The $PI$ degeneracy on octane trees is
+$\sigma = 0$, mean $42$. Strong performance on this small dataset
+is *necessary but not sufficient* for general QSPR utility (cf.
+Figure 8 and the discussion in Section 6).
 
 **Figure 5.** Maximum $\lvert r\rvert$ between the Wuzi index at
 each grid point $(\alpha, \beta, \gamma)$ and any of the 30

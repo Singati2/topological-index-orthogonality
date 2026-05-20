@@ -89,12 +89,15 @@ datasets, fails the combined criterion at every grid point sampled.
 
 A five-fold cross-validated RandomForest benchmark across all four
 datasets (ESOL, FreeSolv, Lipophilicity regression; BBBP
-classification) compares three feature configurations
-(\texttt{full}, \texttt{pairwise\_pruned}, \texttt{combined\_pruned})
-and confirms that the combined criterion matches the full feature
-set within CV noise on three of the four datasets while exposing
-honest failure modes on Lipophilicity (Figure~\ref{fig:ml_benchmark},
-Table~\ref{tab:ml_benchmark}).
+classification) compares four feature configurations
+(\texttt{full}, \texttt{pca\_95}, \texttt{pairwise\_pruned},
+\texttt{combined\_pruned}) and confirms that the pairwise screen
+matches the full feature set within CV noise on all four datasets
+with roughly four-fold fewer features, while exposing an honest
+failure mode of the strict combined screen on Lipophilicity
+(Figure~\ref{fig:ml_benchmark}, Table~\ref{tab:ml_benchmark}). The
+alternative-family results in this paper are for a single dataset
+(ESOL, $\log S$); we do not generalize to other QSPR targets.
 
 We emphasize that orthogonality with the classical baseline is a
 \emph{necessary but not sufficient} condition for QSPR usefulness:
@@ -563,12 +566,16 @@ Spectral-hybrid (3) & AlgConn, Rho$\times$Dia, EE$\times$W\\
 \end{table}
 
 \noindent\emph{Disclaimer.} None of the $20$ candidates is claimed
-to be newly invented. Each has prior chemistry literature
-\todo{[REFERENCES TO BE FILLED FROM literature\_notes.md]} (Cao--Dehmer--Shi,
-Ghorbani et al., Aslam et al., Bonchev--Mekenyan--Trinajsti\'c,
-MOLTOP, and others); they appear here purely as screening targets
-to test whether candidates from different design philosophies
-escape the redundancy ceiling on ESOL.
+to be newly invented. Each has prior chemistry literature (the
+information-theoretic group draws on Cao--Dehmer--Shi and related
+entropy-style proposals; the centrality group on textbook graph
+centrality measures; the motif and eccentricity groups on
+standard graph invariants; the spectral-hybrid group on
+combinations of standard spectral quantities). They appear here
+purely as screening targets to test whether candidates from
+different design philosophies escape the redundancy ceiling on
+ESOL; the full per-candidate citation list is collected in
+\texttt{docs/literature\_notes.md} in the companion repository.
 
 \subsection{Screening verdict}
 
@@ -640,7 +647,7 @@ CV noise.
 \textbf{Datasets.} The three QSPR regression benchmarks of
 Section~\ref{sec:datasets} are augmented with a fourth dataset to
 test that the pipeline generalizes beyond regression:
-\textbf{BBBP} (Martins~2012 via~\cite{MoleculeNet}), $2\,050$
+\textbf{BBBP} (\cite{Martins2012BBBP} via~\cite{MoleculeNet}), $2\,050$
 molecules in the source CSV of which $2\,039$ parse via RDKit and
 enter the screen; binary target ``blood-brain barrier
 penetration''; class distribution approximately $3{:}1$
@@ -717,7 +724,7 @@ target-relevant directions for these specific QSPR problems.
 
 The stricter \texttt{combined\_pruned} configuration is more
 aggressive and on the regression datasets shows a small performance
-penalty (mean RMSE $0.04$--$0.05$ higher than \texttt{full}, still
+penalty (mean RMSE up to $0.04$ higher than \texttt{full}, still
 overlapping std bands). On Lipophilicity the combined screen
 retains zero features in $4$ of the $5$ folds, an honest failure
 mode that reflects the dataset's weak topology-to-$\log D$
@@ -878,6 +885,12 @@ Z.~Wu, B.~Ramsundar, E.~N.~Feinberg, J.~Gomes, C.~Geniesse,
 A.~S.~Pappu, K.~Leswing, V.~Pande,
 \emph{MoleculeNet: A benchmark for molecular machine learning},
 Chem.~Sci.~\textbf{9} (2018), 513--530.
+
+\bibitem{Martins2012BBBP}
+I.~F.~Martins, A.~L.~Teixeira, L.~Pinheiro, A.~O.~Falcao,
+\emph{A Bayesian approach to in silico blood-brain barrier
+penetration modeling},
+J.~Chem.~Inf.~Model.~\textbf{52} (2012), 1686--1697.
 
 \bibitem{Delaney2004ESOL}
 J.~S.~Delaney,
