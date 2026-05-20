@@ -173,17 +173,37 @@ not sufficient} for QSPR usefulness, with empirical evidence
 (Section~\ref{sec:discussion}).
 \end{enumerate}
 
-\subsection{Relation to the companion Wuzi paper}
-This paper presents the screening methodology. The companion
-graph-theory paper~\cite{Paper1_Wuzi} develops the Wuzi index
-family in detail (definition, closed-form values on standard graph
-classes, bounds in $(n, m, \Delta, \delta)$, bounds via classical
-indices, extremal-graph analysis, and sensitivity analysis on
-octane / decane / trees-of-order-10). The present paper uses the
-Wuzi family only as a screened candidate in a multi-dataset case
-study; the Wuzi mathematical material is not re-derived here, and
-the octane / decane / standalone-tree sensitivity material is not
-re-reported here.
+\subsection{Relation to the companion Wuzi paper, and why the split}\label{sec:relation_companion}
+
+The mathematical-chemistry properties of the Wuzi index family ---
+its definition, closed-form values on standard graph classes,
+bounds in $(n, m, \Delta, \delta)$, bounds via classical indices
+(including a uniform ratio-bound theorem and its specialisations
+to $R$, $\chi$, and $SO$), extremal-graph analysis, and the
+sensitivity-analysis benchmarks on $18$ octanes, $106$ trees of
+order $10$, and $75$ decane isomers --- are developed in a
+companion graph-theory paper~\cite{Paper1_Wuzi} aimed at a
+mathematical-chemistry / MATCH-style audience. The present paper
+is focused on the screening pipeline as a reusable methodology;
+it uses the Wuzi family only as one screened candidate
+(Section~\ref{sec:wuzi_case}) alongside the twenty
+alternative-family candidates (Section~\ref{sec:novel_case}) and
+re-derives no Wuzi-specific mathematical results.
+
+We have organised the work as two papers rather than one because
+the two have non-overlapping audiences and non-overlapping
+contributions: the graph-theory paper contributes new bounds,
+extremal conjectures, and parametric closed forms that are
+on-topic for math-chem venues and off-topic for a methodology
+venue; the methodology paper contributes a multi-diagnostic
+screening pipeline, the structural Edge-Degree-Pair Basis
+observation in operational form, and a downstream cross-validated
+ML benchmark across four QSPR datasets that are on-topic for a
+methodology venue and off-topic for a math-chem one. The two
+papers cite each other but neither requires reading the other to
+follow the contributions. A reader interested only in the
+screening methodology (the present paper) can take the Wuzi family
+as a black-box parametric BID family throughout.
 
 % =====================================================================
 \section{Related work}\label{sec:related}
@@ -628,6 +648,57 @@ We do not generalize to other QSPR targets, and we do not claim that
 any of the $4$ combined-criterion-passing candidates is a useful
 descriptor in absolute terms; the criterion is a redundancy filter,
 not a utility certification.
+
+\subsection{Structural interpretation of the four passers}\label{sec:passer_analysis}
+
+The four candidates that clear the combined criterion span three
+distinct design philosophies, and each computes a graph property
+that is \emph{not} expressible as a sum of per-edge contributions:
+
+\begin{itemize}
+\item $\mathrm{InfoH\_deg}$, the Shannon entropy of the degree
+multiplicities of $G$, is a logarithmic functional of the degree
+\emph{distribution}, not of the degree sequence summed edgewise.
+\item $\mathrm{CutVerts}$, the number of articulation points of $G$,
+is a vertex-connectivity invariant: the count of vertices whose
+removal disconnects $G$. It depends on the global block structure
+of $G$, not on local edge properties.
+\item $\mathrm{FourCyc}$, the number of induced $4$-cycles, captures
+a cycle-counting property of $G$. On hydrogen-suppressed molecular
+graphs of order $n \le 30$ it is small (often zero) and captures
+ring-substructure information disjoint from degree-based measures.
+\item $\mathrm{MeanEcc}$, the mean of the vertex eccentricities, is
+a distance-based scalar that depends on shortest-path lengths
+rather than on degrees.
+\end{itemize}
+
+This shared structural feature explains why all four can clear the
+partial-correlation threshold even when their pairwise correlation
+against an individual baseline is high. $\mathrm{MeanEcc}$, for
+example, has $\max |r| = 0.930$ against the modified second
+Zagreb index $mM_2$ on ESOL --- well above any natural redundancy
+threshold for a pair of degree-based indices --- but it still
+retains $|\mathrm{pcor}| = 0.109$ once the full $30$-index linear
+span is regressed out. Pairwise correlation against a single
+baseline does not preclude residual signal orthogonal to the
+$30$-dimensional baseline subspace, and the partial-correlation
+diagnostic is the component of the combined criterion that catches
+this. By contrast, the $11$ candidates that clear the pairwise
+screen with $|\mathrm{pcor}| < 0.10$ are well-approximated by a
+linear combination of the $30$ baseline indices: high pairwise
+$|r|$ against \emph{one} baseline is neither necessary nor
+sufficient for redundancy against the \emph{full} baseline.
+
+We emphasise that the four passing partial correlations are small
+in absolute terms ($0.109 \le |\mathrm{pcor}| \le 0.154$, all under
+$0.2$). The reading we recommend is the structural one --- the
+passers occupy a subspace of feature space outside the linear span
+of the $30$-index baseline --- not a chemical-utility one. Whether
+any of $\mathrm{InfoH\_deg}$, $\mathrm{CutVerts}$, $\mathrm{FourCyc}$,
+or $\mathrm{MeanEcc}$ actually improves QSPR performance on $\log S$
+or any other endpoint is a separate question, answered in part by
+the ML benchmark of Section~\ref{sec:ml_benchmark} and ultimately
+requiring downstream validation on tasks beyond ESOL.
 
 % =====================================================================
 \section{Downstream ML benchmark: does screening preserve predictive performance?}\label{sec:ml_benchmark}
