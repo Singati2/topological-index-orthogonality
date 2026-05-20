@@ -103,11 +103,9 @@ A sensitivity-analysis section evaluates the family against eight
 classical bond-incident-degree indices on the $18$ octane isomers
 (five physicochemical properties), reports degeneracy on the $106$
 non-isomorphic trees of order $10$, and reports structure
-sensitivity on the $75$ decane isomers. The companion methodology
-paper~\cite{Paper2_Screening} reports the multi-dataset QSPR
-orthogonality-screening behaviour of the family and a downstream
-machine-learning benchmark on four datasets; those results are not
-duplicated here.
+sensitivity on the $75$ decane isomers. A companion methodology
+paper~\cite{Paper2_Screening} studies multi-dataset redundancy
+screening of topological indices.
 
 A structural observation underlies the chemometric behaviour:
 every \emph{bond-incident-degree} index --- a real-valued
@@ -990,13 +988,10 @@ All computations are reproducible from the public repository
 \texttt{scripts/07\_structure\_sensitivity.py}, and
 \texttt{scripts/12\_octane\_competitor\_comparison.py}).
 
-The multi-dataset orthogonality screening of the Wuzi family
-against a $30$-index classical baseline on the MoleculeNet QSPR
-benchmarks (ESOL, FreeSolv, Lipophilicity) and the downstream
-machine-learning benchmark including BBBP are reported in the
-companion methodology paper~\cite{Paper2_Screening} and are
-deliberately omitted here per the no-overlap structure of the
-two-paper series.
+A companion methodology paper~\cite{Paper2_Screening} studies
+multi-dataset redundancy screening of topological indices. The
+present paper is concerned only with the sensitivity of the Wuzi
+family on the three classical compound classes listed above.
 
 \subsection{Property correlations on the octane isomers}\label{sec:octanes}
 
@@ -1068,10 +1063,9 @@ contribution.
 indices in any uniform sense: the comparison is sensitivity
 only, not a QSPR-utility certification. A single scalar index
 that correlates strongly with one property on $18$ isomers can
-still be multivariately redundant with the classical baseline.
-The full multivariate analysis (orthogonality screen plus
-RandomForest benchmark across four datasets) is in the companion
-methodology paper~\cite{Paper2_Screening}.
+still be multivariately redundant with the classical baseline. A
+companion methodology paper~\cite{Paper2_Screening} studies
+multi-dataset redundancy screening of topological indices.
 \end{enumerate}
 
 Figure~\ref{fig:octanes} shows the full heatmap of signed Pearson
@@ -1163,10 +1157,9 @@ transparent worked example of a parametric BID generalization at
 the same correlation regime as established indices. The
 BID-basis observation of Theorem~\ref{thm:bid} explicitly accounts
 for the family's inability to escape the $10$-dimensional BID
-subspace on $\mathcal{G}_4$; the multi-dataset redundancy
-screening of the family and the downstream predictive-model
-benchmark are reported in the companion methodology
-paper~\cite{Paper2_Screening}.
+subspace on $\mathcal{G}_4$. A companion methodology
+paper~\cite{Paper2_Screening} studies multi-dataset redundancy
+screening of topological indices.
 
 \paragraph{Future work.} The mathematical program of
 Sections~\ref{sec:bounds_nm}--\ref{sec:extremal} is partially
@@ -1188,11 +1181,9 @@ Wuzi $\gamma$-axis.
 On the chemometric side, future work includes extending the
 sensitivity-analysis benchmarks to additional compound classes
 (benzene derivatives, alkane homologues beyond octane / decane)
-and to compound-class-specific QSPR endpoints. The
-methodology-paper side of the analysis (multi-dataset
-orthogonality screening, downstream ML benchmark, partial-
-correlation sensitivity to thresholds) is reported separately
-in~\cite{Paper2_Screening}.
+and to compound-class-specific QSPR endpoints. A companion
+methodology paper~\cite{Paper2_Screening} studies multi-dataset
+redundancy screening of topological indices.
 
 % =====================================================================
 \section{Conclusion}\label{sec:conclusion}
@@ -1210,9 +1201,9 @@ on the $106$ non-isomorphic trees of order $10$, and on the $75$
 decane isomers, showing the family is in the same correlation
 regime as established BID indices on the standard math-chem
 benchmarks. The Edge-Degree-Pair Basis observation gives a
-$10$-dimensional ceiling on the BID family on $\mathcal{G}_4$ and
-underlies the multi-dataset screening behaviour reported in the
-companion methodology paper~\cite{Paper2_Screening}.
+$10$-dimensional ceiling on the BID family on $\mathcal{G}_4$. A
+companion methodology paper~\cite{Paper2_Screening} studies
+multi-dataset redundancy screening of topological indices.
 
 The formal bounds in $(n,m,\Delta,\delta)$ and via classical
 indices, as well as the extremal-graph characterizations for
