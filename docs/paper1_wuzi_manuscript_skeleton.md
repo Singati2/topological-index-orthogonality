@@ -1,4 +1,4 @@
-# Paper 2 — Wuzi family manuscript skeleton
+# Paper 1 — Wuzi family manuscript skeleton
 
 Working template for the parametric-index / math-chem paper. Section
 numbering mirrors **Movahedi, Gutman, Redžepović & Furtula, MATCH 95(1),

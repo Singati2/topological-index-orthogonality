@@ -261,9 +261,12 @@ def fig5b_wuzi_param_heatmaps_all():
         sup = (rf"Wuzi family — redundancy screen across three QSPR datasets: "
                rf"{total_pass} of {total_pts} grid points fall below the $|r|=0.95$ threshold (starred cells).")
     fig.suptitle(sup, fontsize=10.5, y=0.995)
-    cbar_ax = fig.add_axes([0.93, 0.15, 0.012, 0.7])
+    # Colorbar: wider strip + extra label padding to keep the rotated
+    # colorbar label clear of the tick numbers on its left.
+    cbar_ax = fig.add_axes([0.94, 0.15, 0.014, 0.7])
     cbar = fig.colorbar(im, cax=cbar_ax)
-    cbar.set_label(r"$\max|r|$ with baseline")
+    cbar.set_label(r"$\max\,|r|$", labelpad=12, fontsize=10)
+    cbar.ax.tick_params(labelsize=8)
     plt.tight_layout(rect=[0, 0, 0.92, 0.97])
     save_both(fig, "fig5b_wuzi_param_heatmaps_all")
     # Print honest pass details so they can also go in the manuscript caption
@@ -453,7 +456,7 @@ def main():
     fig2_pca_scree()
     fig3_redundancy_bars()
     fig4_octane_heatmap()
-    fig5_wuzi_param_heatmaps()
+    # fig5_wuzi_param_heatmaps()  # archived: superseded by fig5b (all 3 datasets)
     fig5b_wuzi_param_heatmaps_all()
     fig6_degeneracy_bars()
     fig7_structure_sensitivity()

@@ -12,30 +12,36 @@ commodity hardware.
 
 The repository accompanies two related manuscripts in preparation:
 
-- **Paper 1 (methodology).** *Orthogonality Screening of Topological
-  Indices for QSPR Modeling.* Develops the pipeline, replicates the
-  baseline-redundancy pattern across three independent QSPR
-  benchmarks (ESOL, FreeSolv, Lipophilicity), and demonstrates that
-  the conventional pairwise $|r|<0.95$ screen alone is
-  over-permissive: across $20$ alternative-family candidate indices
-  on ESOL, $15$ pass the pairwise screen but only $4$ also clear
-  $|\mathrm{pcor}(z,y\mid X)|\ge 0.10$.
-
-- **Paper 2 (parametric case study).** *The Wuzi Index Family.*
-  Develops a three-parameter bond-incident-degree (BID) family that
-  contains $M_2$, Randić, sum-connectivity, and harmonic as special
-  cases; derives closed-form values on nine standard graph classes;
-  proves a bracket bound and a ratio-bound theorem; conjectures
-  extremal graphs for trees, unicyclic, and bicyclic graphs;
-  applies the screening pipeline of Paper 1 at $300$ parameter grid
-  points across the three QSPR datasets. At every grid point the
-  family is statistically redundant with the classical baseline by
-  the combined criterion. Computational extremal search across
-  trees of order $5 \le n \le 12$ identifies a non-classical
+- **Paper 1 (graph theory / mathematical chemistry).** *The Wuzi
+  Index Family: Graph-Theoretic Properties, Bounds, Extremal Graphs,
+  and Sensitivity Analysis.* Develops a three-parameter
+  bond-incident-degree (BID) family that contains $M_2$, Randić,
+  sum-connectivity, and harmonic as special cases; derives
+  closed-form values on nine standard graph classes; proves a
+  rigorous bracket bound, a Cauchy-Schwarz/geometric-mean
+  inequality, a Jensen-type bound via $M_1$, and a uniform
+  ratio-bound theorem; conjectures extremal graphs for trees,
+  unicyclic, and bicyclic graphs. Computational extremal search
+  across trees of order $5 \le n \le 12$ identifies a non-classical
   extremal regime at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
   --- for $n \ge 7$ the observed maximizer is neither a path,
   a star, nor a caterpillar --- whose formal characterization is
-  an open problem.
+  an open problem. Sensitivity analysis on the $18$ octanes,
+  $106$ trees of order $10$, and $75$ decane isomers.
+
+- **Paper 2 (software / methodology).** *Orthogonality Screening of
+  Topological Indices for QSPR Modeling.* Develops the screening
+  pipeline (correlation matrix, PCA effective rank, partial
+  correlation with the target, VIF), replicates the
+  baseline-redundancy pattern across four independent QSPR
+  benchmarks (ESOL, FreeSolv, Lipophilicity, BBBP), and demonstrates
+  that the conventional pairwise $|r|<0.95$ screen alone is
+  over-permissive: across $20$ alternative-family candidate indices
+  on ESOL, $15$ pass the pairwise screen but only $4$ also clear
+  $|\mathrm{pcor}(z,y\mid X)|\ge 0.10$. A $5$-fold cross-validated
+  RandomForest benchmark shows the pairwise-pruned feature set
+  matches the full $30$-index baseline within CV noise with roughly
+  $4\times$ fewer features.
 
 A structural observation — the *Edge-Degree-Pair Basis* — gives a
 $10$-dimensional ceiling on the BID family on hydrogen-suppressed
@@ -106,11 +112,11 @@ Section plans and remaining math gaps are tracked in
 | Structure sensitivity on 75 decane isomers                   | ✅ done |
 | Reproducible end-to-end pipeline                             | ✅ done |
 | Publication-quality figures (PNG + PDF, 8 figures)           | ✅ done |
-| Paper 2 §3 bounds in $(n, m, \Delta, \delta)$                | ⏳ math pending |
-| Paper 2 §4 bounds via classical indices                      | ⏳ math pending |
-| Paper 2 §5 extremal-graph characterization                   | ⏳ math pending |
-| Paper 2 §1 introduction + §7 discussion                      | ⏳ writing |
-| Paper 1 manuscript                                           | ⏳ scheduled after Paper 2 |
+| Paper 1 §4 sharper bounds in $(n, m, \Delta, \delta)$        | ⏳ math pending |
+| Paper 1 §5 sharper per-index bounds (beyond ratio bound)     | ⏳ math pending |
+| Paper 1 §6 formal extremal-graph characterization            | ⏳ math pending |
+| Paper 2 manuscript polish + final references                  | ⏳ writing |
+| Paper 2 submission gated on Paper 1 arXiv ID                  | ⏳ scheduled |
 
 ---
 
@@ -354,7 +360,7 @@ docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation
   edge_contribution_analysis.md  Edge-contribution function analysis
   phase2_plan.md                 Section-by-section paper plan
-  paper1_wuzi_manuscript_skeleton.md   Paper 2 skeleton with math gaps marked
+  paper1_wuzi_manuscript_skeleton.md   Paper 1 skeleton with math gaps marked
   literature_notes.md            Citation discipline document
   figure_audit.md                Figure-by-figure consistency record
   figure_captions.md             Manuscript-ready figure captions

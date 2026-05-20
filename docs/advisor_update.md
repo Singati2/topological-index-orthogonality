@@ -8,17 +8,17 @@
 
 ## TL;DR (three sentences)
 
-We have a complete numerical pipeline plus LaTeX-ready Paper 1
-(methodology) and Paper 2 (Wuzi mathematical case study with closed
+We have a complete numerical pipeline plus LaTeX-ready Paper 2
+(methodology) and Paper 1 (Wuzi mathematical case study with closed
 forms, bracket bound, ratio bound, and an empirical observation
 about a non-classical extremal at $(\alpha,\beta,\gamma)=(-1,-1,1)$).
 What we need from you, sir, is the formal proof / refinement of
-Sections 4, 5, and 6 of Paper 2 (bounds in $(n, m, \Delta, \delta)$,
+Sections 4, 5, and 6 of Paper 1 (bounds in $(n, m, \Delta, \delta)$,
 bounds via classical indices, and the extremal-graph
 characterization, including the non-classical extremal at
-$(-1,-1,1)$). With those sections completed Paper 2 is submittable
-to a math-chem venue within a few weeks; Paper 1 follows once
-Paper 2 has at minimum an arXiv ID.
+$(-1,-1,1)$). With those sections completed Paper 1 is submittable
+to a math-chem venue within a few weeks; Paper 2 follows once
+Paper 1 has at minimum an arXiv ID.
 
 ## Most interesting finding to-date (one paragraph)
 
@@ -35,7 +35,7 @@ characterization of this non-classical extremal regime
 (`docs/paper1_wuzi.tex`, Conjecture 6.4 / label
 `conj:caterpillar_max`) is the most plausibly novel mathematical
 observation in the project and is the natural anchor for
-Section 6 of Paper 2.
+Section 6 of Paper 1.
 
 ---
 
@@ -103,7 +103,7 @@ We **do claim**, and have evidence for:
 The work naturally splits into two contributions for two different
 audiences:
 
-**Paper 2 (we recommend writing first):**
+**Paper 1 (we recommend writing first):**
 *"The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal
 Graphs, and Redundancy Analysis"*
 
@@ -118,7 +118,7 @@ Redžepović & Furtula, *MATCH Commun. Math. Comput. Chem.* 95(1), 2026,
 - Numerical Section: octane prediction, intercorrelations across three
   datasets, PCA effective rank, degeneracy, structure sensitivity
 
-The redundancy analysis is included **inside Paper 2** as Section 6
+The redundancy analysis is included **inside Paper 1** as Section 6
 ("Numerical work"), framed constructively, and positioned the same way
 the MATCH DSO paper Section 5.2 positions its own intercorrelation
 observation.
@@ -126,13 +126,13 @@ observation.
 Target venues: J. Math. Chem., MATCH, AKCE, Iranian J. Math. Chem.,
 SAR & QSAR Env. Res. Realistic.
 
-**Paper 1 (drafted in parallel, submitted second):**
+**Paper 2 (drafted in parallel, submitted second):**
 *"Orthogonality Screening of Topological Indices for QSPR Modeling: A
 Structural and Empirical Redundancy Analysis"*
 
-The broader methodology / software / benchmark paper. References Paper 2
+The broader methodology / software / benchmark paper. References Paper 1
 as the worked case study. Target venues: J. Cheminformatics, J. Chem. Inf.
-Model., Molecular Informatics. More ambitious; depends on Paper 2 going
+Model., Molecular Informatics. More ambitious; depends on Paper 1 going
 through smoothly.
 
 ## 4. What is already complete
@@ -158,7 +158,7 @@ computational extremal searches are in
 `scripts/10_wuzi_extremal_search.py`. The bibliographic
 discipline is maintained in `docs/literature_notes.md`.
 
-## 5. What remains — the math sections of Paper 2
+## 5. What remains — the math sections of Paper 1
 
 This is where your input would be most valuable, sir. Three sections need
 graph-theoretic derivations following the template of MATCH 95:141–162
@@ -200,7 +200,7 @@ they are starting material.
 - For the mixed-sign triple $(-1, -1, 1)$: observed extremals are
   *neither* $P_n$ nor $S_n$. This is the most interesting case
   computationally and the natural target for a "genuinely new"
-  result in Section 5 of Paper 2.
+  result in Section 5 of Paper 1.
 
 **What this still does not provide.** Formal proofs of any of the
 extremal conjectures above; equality-condition analysis for the
@@ -210,14 +210,14 @@ These are exactly the contributions reserved for the senior author.
 
 ## 6. Honest publishability status
 
-- Paper 2 **is not currently publishable**. Sections 3–5 (the math) are
+- Paper 1 **is not currently publishable**. Sections 3–5 (the math) are
   unwritten; without them the manuscript would be desk-rejected by a
   mathematical-chemistry venue. Numerical Section 6 alone does not make
   a math-chem paper.
 - With Sections 3–5 derived to the standard of the MATCH DSO paper, the
   manuscript is realistically targetable at *J. Math. Chem.*, *MATCH*,
   *AKCE Int. J. Graphs Comb.*, or *SAR & QSAR Env. Res.* within 6–8 weeks.
-- Paper 1 is more ambitious and depends on Paper 2 landing first.
+- Paper 2 is more ambitious and depends on Paper 1 landing first.
 
 ## 7. What we request
 
@@ -225,7 +225,7 @@ If you would be open to it, we would like to:
 
 1. Discuss the Wuzi family definition and confirm the family is worth
    the bounds derivation (versus folding into the screening paper only).
-2. Co-author Sections 3, 4, and 5 of Paper 2 — Advik as lead, you as
+2. Co-author Sections 3, 4, and 5 of Paper 1 — Advik as lead, you as
    senior author providing the math-chem derivations and connections to
    your group's prior work, Ganesh on the numerical / methodology side
    (or in acknowledgments only, at your discretion).

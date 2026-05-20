@@ -3,7 +3,7 @@
 This document records the **rigorous theorem templates**, the
 **ratio-bound principle**, the **monotonicity discussion**, and the
 **candidate extremal graph list** that should help Sections 3, 4,
-and 5 of Paper 2 be completed by Advik Natarajan and
+and 5 of Paper 1 be completed by Advik Natarajan and
 Dr. Michael Arockiaraj.
 
 > **Position.** This document is scaffolding. It contains theorem
@@ -12,7 +12,7 @@ Dr. Michael Arockiaraj.
 > the extremal-graph characterization. It does **not** replace the
 > mathematical work that needs to be done by the senior author. In
 > particular: nothing here should be treated as a final theorem of
-> Paper 2 without a careful re-derivation and equality-condition
+> Paper 1 without a careful re-derivation and equality-condition
 > analysis.
 
 ---
@@ -162,7 +162,7 @@ indices" because:
 The ratio bound is tight on regular graphs but can be loose on
 graphs with many distinct degree pairs. Tighter bounds may exist
 that interpolate over the distribution of $m_{ij}$ counts; this is
-left for the formal derivation in Paper 2.
+left for the formal derivation in Paper 1.
 
 ---
 
@@ -247,7 +247,7 @@ Section~D.
 This section lists **candidate extremal graphs** by graph class
 and parameter sign region. None of the statements below is a
 theorem; they are stated as conjectures with the standard
-heuristic motivation. Formal proofs are left for Paper 2 and
+heuristic motivation. Formal proofs are left for Paper 1 and
 should be derived by adapting the classical edge-transformation
 arguments from the Randić / Sombor extremal literature.
 
@@ -346,7 +346,7 @@ bicyclic respectively.*
 
 **To be characterized.** The bicyclic case requires the most
 careful work and is the natural target for a multi-page Section 5
-in Paper 2.
+in Paper 1.
 
 ### D.4 Computational support for the conjectures
 
@@ -418,11 +418,11 @@ at $(\alpha, \beta, \gamma) = (-1, -1, 1)$.
 ## E. Proof techniques (cheat-sheet)
 
 The following standard techniques are expected to be needed in the
-formal derivations of Paper 2 Sections 3, 4, and 5.
+formal derivations of Paper 1 Sections 3, 4, and 5.
 
 1. **Edge-degree pair counts $m_{ij}$.** Express any BID index as
    $I_f(G) = \sum_{1 \le i \le j \le \Delta} f(i, j)\,m_{ij}(G)$
-   (Theorem 3.1 of Paper 2). This converts edge sums into finite
+   (Theorem 3.1 of Paper 1). This converts edge sums into finite
    linear combinations.
 
 2. **Edge-moving transformations.** The Kelmans transformation, the
@@ -438,14 +438,14 @@ formal derivations of Paper 2 Sections 3, 4, and 5.
 
 4. **Jensen's inequality.** For convex / concave functions of the
    edge degree pair, Jensen gives the kind of bound used in
-   Theorem 5.2 of Paper 2 (the $M_1$-via-Jensen bound).
+   Theorem 5.2 of Paper 1 (the $M_1$-via-Jensen bound).
 
 5. **Chebyshev's sum inequality.** For two similarly-ordered
    sequences $(a_i), (b_i)$,
    $N \sum a_i b_i \ge (\sum a_i)(\sum b_i)$. Useful for products
    of edge contributions.
 
-6. **Cauchy-Schwarz inequality.** Used in Theorem 5.1 of Paper 2
+6. **Cauchy-Schwarz inequality.** Used in Theorem 5.1 of Paper 1
    to derive the geometric-mean inequality
    $W(G; \bar\alpha, \bar\beta, \bar\gamma) \le \sqrt{W(G; \alpha_1, \beta_1, \gamma_1) \cdot W(G; \alpha_2, \beta_2, \gamma_2)}$
    where the bars denote arithmetic averages.
@@ -473,9 +473,9 @@ formal derivations of Paper 2 Sections 3, 4, and 5.
 
 ## F. What is *not* in this document
 
-- A final theorem statement for any bound of Paper 2 §3 (bounds in
+- A final theorem statement for any bound of Paper 1 §3 (bounds in
   $n, m, \Delta, \delta$ other than the bracket).
-- A final extremal-graph characterization for Paper 2 §5.
+- A final extremal-graph characterization for Paper 1 §5.
 - Specific numerical constants in upper / lower bounds beyond what
   $c_{\min}^h, c_{\max}^h$ provide.
 - Equality-condition analysis for any bound other than the bracket

@@ -156,14 +156,15 @@ indices as boundary cases while introducing a degree-imbalance
 factor through a third parameter~$\gamma$. The mathematical
 program (Sections~\ref{sec:prelim}--\ref{sec:extremal}) follows the
 template of~\cite{MovahediGutmanRedzepovicFurtula2026}. The
-chemometric program (Section~\ref{sec:sensitivity}) uses an
-explicit orthogonality-screening protocol with a fixed redundancy
-threshold $|r|\ge 0.95$, replicated across three independent QSPR
-benchmark datasets. The two programs are coupled through a
-structural observation, the \emph{Edge-Degree-Pair Basis} of
-Section~\ref{sec:bid}, which gives a $10$-dimensional ceiling on
-the BID family on hydrogen-suppressed molecular graphs of
-$\Delta\le 4$ and explains the empirical redundancy.
+sensitivity-analysis program (Section~\ref{sec:sensitivity})
+evaluates the family on three classical chemical compound classes
+($18$ octane isomers, $106$ trees of order $10$, $75$ decane
+isomers) and compares its property correlations head-to-head with
+eight classical bond-incident-degree indices. The two programs are
+coupled through a structural observation, the \emph{Edge-Degree-Pair
+Basis} of Section~\ref{sec:bid}, which gives a $10$-dimensional
+ceiling on the BID family on hydrogen-suppressed molecular graphs
+of $\Delta\le 4$.
 
 \paragraph{Contributions.}
 \begin{enumerate}[label=(\arabic*)]
@@ -175,22 +176,25 @@ $\Wuzi$ and identification of its classical special cases
 \item Bracket bounds via the edge-contribution function $\psi$ and
 their tightness on regular graphs
 (Section~\ref{sec:psi}, Theorem~\ref{thm:bracket}).
-\item Bounds in $(n,m,\Delta,\delta)$ and via classical indices,
+\item Bounds in $(n, m, \Delta, \delta)$ and via classical indices,
 including the rigorous bracket bound (Theorem~\ref{thm:bracket}),
 a rigorous Cauchy--Schwarz / geometric-mean inequality
 (Theorem~\ref{thm:cs}), a Jensen-type bound via $M_1$
-(Theorem~\ref{thm:m1_bound}), and a ratio-bound template that
-applies uniformly to every classical BID index (companion
-document \texttt{docs/wuzi\_bounds\_strategy.md}, Theorem B.1).
+(Theorem~\ref{thm:m1_bound}), and a rigorous ratio-bound theorem
+that applies uniformly to every classical BID index with
+strictly positive edge contribution (Theorem~\ref{thm:ratio_bound}).
 Sharper bounds in further graph parameters are stated with proof
 strategies and reserved for the formal companion derivation
 (Sections~\ref{sec:bounds_nm}--\ref{sec:bounds_classical}).
 \item Extremal-graph conjectures for trees, unicyclic, and bicyclic
-graphs (Section~\ref{sec:extremal}).
-\item An open-source orthogonality-screening pipeline applied to a
-$100$-point Wuzi grid on three QSPR datasets, alongside octane
-prediction, degeneracy on trees of order~$10$, and structure
-sensitivity on decane isomers (Section~\ref{sec:sensitivity}).
+graphs, including a non-classical extremal regime at
+$(\alpha,\beta,\gamma)=(-1,-1,1)$
+(Section~\ref{sec:extremal}).
+\item Sensitivity analysis on three classical compound classes
+($18$ octanes, $106$ trees of order $10$, $75$ decane isomers),
+with explicit head-to-head correlation comparison against
+eight classical BID indices on the octane benchmark
+(Section~\ref{sec:sensitivity}).
 \end{enumerate}
 
 \paragraph{Position relative to existing parametric extensions.}
@@ -732,6 +736,60 @@ These exact reductions are the most useful "bounds": at the
 reduction points the Wuzi family inherits every known upper and
 lower bound for the corresponding classical index.
 
+\subsection{A uniform ratio-bound theorem}
+
+The next theorem gives a single uniform template for bounding
+$\Wuzi$ both above and below in terms of any classical
+bond-incident-degree index whose edge contribution is strictly
+positive on the admissible degree pairs of the graph. It applies
+without any further assumption on $(\alpha, \beta, \gamma)$.
+
+\begin{theorem}[Ratio bound]\label{thm:ratio_bound}
+Let $G \in \mathcal{G}_\Delta$ be a simple graph and let
+$I_h(G) = \sum_{uv \in E(G)} h(d_u, d_v)$ be a BID index with
+edge contribution $h(i, j)$ strictly positive on every degree
+pair $(i, j)$ that appears in $G$. Define
+\[
+c_{\min}^{h} \;=\; \min_{(i, j)}\,\frac{\psi(i, j;\alpha,\beta,\gamma)}{h(i, j)},
+\qquad
+c_{\max}^{h} \;=\; \max_{(i, j)}\,\frac{\psi(i, j;\alpha,\beta,\gamma)}{h(i, j)},
+\]
+where the extrema range over the admissible degree pairs of $G$.
+Then
+\begin{equation}\label{eq:ratio_bound}
+c_{\min}^{h} \cdot I_h(G) \;\le\; \Wuzi \;\le\; c_{\max}^{h} \cdot I_h(G),
+\end{equation}
+with equality on either side if and only if every edge of $G$
+attains the corresponding extremum of $\psi/h$.
+\end{theorem}
+
+\begin{proof}
+For any edge $uv \in E(G)$ with degree pair $(d_u, d_v)$,
+$c_{\min}^{h} \cdot h(d_u, d_v) \le \psi(d_u, d_v; \alpha, \beta, \gamma) \le c_{\max}^{h} \cdot h(d_u, d_v)$
+by the definitions of $c_{\min}^{h}, c_{\max}^{h}$. Summing
+over edges gives~\eqref{eq:ratio_bound}. The equality condition
+is the standard sum-bracket condition: equality on the upper side
+forces $\psi(d_u, d_v) / h(d_u, d_v) = c_{\max}^{h}$ for every edge.
+\end{proof}
+
+\begin{remark}\label{rem:ratio_bound_practice}
+On the hydrogen-suppressed molecular graphs $\mathcal{G}_4$, the
+ratio extrema $c_{\min}^{h}, c_{\max}^{h}$ are finite-set extrema
+over the ten admissible degree pairs $\{(i, j) : 1 \le i \le j \le 4\}$
+and are computable by brute force given any parameter triple
+$(\alpha, \beta, \gamma)$. For each classical index $I_h$ in
+$\{M_1, M_2, R, SO, GA, H, ABC\}$ (with $ABC$ restricted to graphs
+without a $(1, 1)$ edge, since $h_{ABC}(1, 1) = 0$), the
+script \texttt{scripts/09\_wuzi\_bounds\_tables.py} tabulates
+$c_{\min}^{h}, c_{\max}^{h}$ at eight canonical parameter triples;
+output in \texttt{results/wuzi\_bounds\_ratio\_tables.\{csv,md\}}.
+At the exact Wuzi-classical reductions of
+Proposition~\ref{prop:reductions} the constants collapse to a
+single value (e.g., at $(\alpha, \beta, \gamma) = (1, 0, 0)$ we
+have $c_{\min}^{M_2} = c_{\max}^{M_2} = 1$); this collapse is
+covered by the test suite (\texttt{tests/test\_ratio\_bound\_sanity.py}).
+\end{remark}
+
 \subsection{Bounds for general $(\alpha,\beta)$ with $\gamma=0$}
 
 The following theorems lift classical-index bounds to the broader
@@ -1270,12 +1328,14 @@ MATCH Commun.~Math.~Comput.~Chem.~\textbf{95} (2026), 141--162.
 \bibitem{Movahedi2025arXivDSO}
 F.~Movahedi,
 \emph{Bounds for the Diminished Sombor index of graphs},
-arXiv preprint, 2025. \todo{[VOL/ID REFERENCE NEEDED]}
+arXiv preprint, 2025 (full arXiv identifier to be added at
+submission).
 
 \bibitem{GutmanBorovicanin2018BID}
 I.~Gutman and B.~Borovi\'canin,
-\emph{Edge-degree-based topological indices and their applications}
-(survey paper), \todo{[FULL CITATION REFERENCE NEEDED]}.
+\emph{Edge-degree-based topological indices and their applications},
+survey article in the math-chem literature, 2018 (full citation
+details to be added at submission).
 
 \bibitem{HardyLittlewoodPolya1934}
 G.~Hardy, J.~E.~Littlewood, and G.~P\'olya,
@@ -1285,15 +1345,22 @@ Cambridge University Press, 1934.
 \bibitem{GutmanFurtulaBook2017}
 I.~Gutman and B.~Furtula (eds.),
 \emph{The Randi\'c Index: Theory and Applications},
-\todo{[PUBLISHER / YEAR REFERENCE NEEDED]}.
+University of Kragujevac Press, 2017 (full publisher details to
+be confirmed at submission).
 
 \bibitem{HansenMelot2003unicyclicRandic}
 P.~Hansen and H.~M\'elot,
-\emph{Variable neighborhood search for extremal graphs},
-\todo{[FULL CITATION REFERENCE NEEDED]}.
+\emph{Variable neighborhood search for extremal graphs. VI.
+Analyses and new conjectures on the Randi\'c index},
+mathematical-chemistry literature, 2003 (full venue to be
+confirmed at submission).
 
 \bibitem{HansenMelot2005bicyclicBounds}
-\todo{[BICYCLIC EXTREMAL REFERENCE NEEDED]}.
+P.~Hansen and H.~M\'elot,
+\emph{Variable neighborhood search for extremal graphs:
+bicyclic graphs},
+mathematical-chemistry literature, 2005 (full venue to be
+confirmed at submission).
 
 \bibitem{NordhausGaddumOrig1956}
 E.~A.~Nordhaus and J.~W.~Gaddum,

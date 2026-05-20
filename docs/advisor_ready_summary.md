@@ -4,6 +4,31 @@ Concise summary of where the manuscripts stand after Arockiaraj
 sir's restructure directive. Intended as a 5-minute orientation
 note before reading the drafts.
 
+## 0. What we are asking from you (one screen)
+
+If you have time for only three actions in this round:
+
+1. **Look at Conjecture 6.4 in `docs/paper1_wuzi.tex` §6.4** (the
+   non-classical extremal at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+   for trees of order $n \ge 7$). The computational evidence
+   is in `results/wuzi_extremal_trees.md`. If this looks like a
+   characterisable structure to you, it would be the most
+   plausibly novel mathematical contribution of Paper 1; if not,
+   we will drop it and present the result only as a remark.
+
+2. **Decide whether you want to co-author Paper 1 §4 (Nordhaus-Gaddum
+   and sharp $\Delta$-dependent bounds) and §6 (formal extremal
+   characterizations) with Advik**, or whether to ship Paper 1
+   with the current proof-sketch placeholders converted to
+   "open problem" remarks. Either choice unblocks submission.
+
+3. **Confirm the affiliation line** "Department of Mathematics and
+   Statistics, Florida Atlantic University" (Ganesh) and "Department
+   of Mathematics, Loyola College, Chennai" (Advik, yourself) are
+   correct as they appear in both `.tex` files and in `CITATION.cff`.
+
+The remainder of this document is the longer-form context.
+
 ## 1. What changed after your feedback
 
 Per your direction, the two manuscripts have been restructured so

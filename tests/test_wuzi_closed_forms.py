@@ -43,6 +43,23 @@ def closed_form_Kpq(p: int, q: int, a: float, b: float, g: float) -> float:
     )
 
 
+def closed_form_Pn(n: int, a: float, b: float, g: float) -> float:
+    """Path P_n: piecewise formula (n=2, n=3, n>=4).
+
+      n=2: one edge with degree pair (1, 1) -> W = (1)^a * 2^b * 1 = 2^b
+      n=3: two pendant edges (1, 2) -> W = 2 * 2^a * 3^b * exp(g/3)
+      n>=4: two pendant edges (1, 2) + (n-3) interior edges (2, 2)
+            -> W = 2 * 2^a * 3^b * exp(g/3) + (n - 3) * 4^(a+b)
+    """
+    if n == 2:
+        return 2.0 ** b
+    pendant = 2.0 * (2.0 ** a) * (3.0 ** b) * math.exp(g / 3.0)
+    if n == 3:
+        return pendant
+    interior = (n - 3) * (4.0 ** (a + b))
+    return pendant + interior
+
+
 @pytest.mark.parametrize("a,b,g", PARAMETER_TRIPLES)
 @pytest.mark.parametrize("n", [4, 5, 6])
 def test_closed_form_Kn(n, a, b, g):
@@ -75,4 +92,14 @@ def test_closed_form_Kpq(p, q, a, b, g):
     G = nx.complete_bipartite_graph(p, q)
     actual = wuzi(G, a, b, g)
     expected = closed_form_Kpq(p, q, a, b, g)
+    assert actual == pytest.approx(expected, rel=1e-10)
+
+
+@pytest.mark.parametrize("a,b,g", PARAMETER_TRIPLES)
+@pytest.mark.parametrize("n", [2, 3, 4, 5, 8])
+def test_closed_form_Pn(n, a, b, g):
+    """Path P_n closed form -- exercises the n=2 / n=3 / n>=4 case split."""
+    G = nx.path_graph(n)
+    actual = wuzi(G, a, b, g)
+    expected = closed_form_Pn(n, a, b, g)
     assert actual == pytest.approx(expected, rel=1e-10)

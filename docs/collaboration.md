@@ -17,7 +17,7 @@ collaborator can work on the project alongside the maintainer
    ```
 4. Create a feature branch for your work:
    ```
-   git checkout -b paper2-section3-bounds
+   git checkout -b paper1-section3-bounds
    ```
 5. Make changes (edit files, add new scripts, etc.). Use commits in
    small logical units; meaningful commit messages help reviewers.
@@ -27,7 +27,7 @@ collaborator can work on the project alongside the maintainer
    ```
 6. Push the branch and open a pull request:
    ```
-   git push -u origin paper2-section3-bounds
+   git push -u origin paper1-section3-bounds
    gh pr create --base main --fill
    ```
 7. Maintainer reviews and merges, or requests changes.
@@ -49,8 +49,9 @@ attribution in the commit message.
 
 ## Repository conventions
 
-- **Branch names:** `paper2-section<N>-<topic>` for paper-2 sections;
-  `paper1-<topic>` for paper-1 work; `fix-<thing>` for bug fixes.
+- **Branch names:** `paper1-section<N>-<topic>` for Paper 1 (Wuzi)
+  sections; `paper2-<topic>` for Paper 2 (orthogonality screening)
+  work; `fix-<thing>` for bug fixes.
 - **No raw data in git:** datasets are auto-downloaded by `src/load_data.py`.
   Don't commit `data/`.
 - **Reproducibility:** every new script should run end-to-end from a
