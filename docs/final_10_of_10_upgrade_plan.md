@@ -86,7 +86,7 @@ In rough priority order:
 ## 4. Exact actions Arockiaraj sir must take
 
 1. **Look at Conjecture 6.4 (caterpillar_max) in `docs/paper1_wuzi.tex` §6.4** and decide if the non-classical extremal at $(-1,-1,1)$ for $n \ge 7$ is characterizable. If yes, Paper 1 has a publishable new structural theorem. If no, the conjecture stays as the headline empirical observation. The computational evidence is in `results/wuzi_extremal_trees.md` (degree sequences for $n = 5..12$).
-2. **Decide whether to co-author Paper 1 §4, §5, §6 conjectures** (Nordhaus--Gaddum 4.11, GA 5.8, H/ABC 5.9, trees-positive 6.1, unicyclic 6.2, bicyclic 6.3, caterpillar 6.4), or to ship Paper 1 with them as labelled conjectures + companion future-work paper. Either choice unblocks submission.
+2. **Decide whether to co-author Paper 1 §4, §5, §6 conjectures** (Nordhaus--Gaddum 4.9 / `conj:NG`, GA 5.6 / `thm:GA`, H/ABC 5.7 / `thm:H_ABC`, trees-positive 6.1 / `conj:trees_beta_pos`, unicyclic 6.2 / `conj:unicyclic`, bicyclic 6.3 / `conj:bicyclic`, caterpillar 6.4 / `conj:caterpillar_max`), or to ship Paper 1 with them as labelled conjectures + companion future-work paper. Either choice unblocks submission.
 3. **Confirm the affiliation line** "Department of Mathematics, Loyola College, Chennai" (Advik + sir) and "Department of Mathematics and Statistics, Florida Atlantic University" (Ganesh) are correct as they appear in both `.tex` files and `CITATION.cff`.
 
 ---
@@ -104,7 +104,7 @@ In rough priority order:
 
 ## 6. Target venue recommendation
 
-**Paper 1.** Realistic primary target: *MATCH Commun. Math. Comput. Chem.* — the paper sits squarely in the MATCH tradition (parametric BID family + closed forms + bounds + conjectures + sensitivity analysis on octanes/decanes), explicitly templates from Movahedi--Gutman--Redžepović--Furtula 2026 (MATCH 95:141-162), and is structurally complete with rigorous Theorems 4.1/4.4/4.5/4.6/4.7/4.8/5.5, Propositions 4.4/4.5/5.6/5.7, and clearly-labelled Conjectures 5.8/5.9/conj:NG/6.1/6.2/6.3/6.4. *J. Math. Chem.* is plausible. *AKCE Int. J. Graphs Comb.* and *SAR & QSAR Env. Res.* are safer fall-throughs.
+**Paper 1.** Realistic primary target: *MATCH Commun. Math. Comput. Chem.* — the paper sits squarely in the MATCH tradition (parametric BID family + closed forms + bounds + conjectures + sensitivity analysis on octanes/decanes), explicitly templates from Movahedi--Gutman--Redžepović--Furtula 2026 (MATCH 95:141-162), and is structurally complete with rigorous Theorems 3.1 (BID basis), 4.1 (bracket), 4.2 (regular bracket), 4.3 (Cauchy--Schwarz), 4.4 ($M_1$, $\beta \ge 1$), 4.5 ($M_1$, $0 < \beta < 1$), 4.6 ($M_2$), 5.2 (ratio-bound), Propositions 4.7 (upper in $\Delta$), 4.8 (lower in $\delta$), 5.4 (generalized $R$/$\chi$), 5.5 (Sombor), and clearly-labelled Conjectures 4.9 (NG), 5.6 (GA), 5.7 (H/ABC), 6.1-6.4 (extremal trees / unicyclic / bicyclic / caterpillar). *J. Math. Chem.* is plausible. *AKCE Int. J. Graphs Comb.* and *SAR & QSAR Env. Res.* are safer fall-throughs.
 
 **Paper 2.** Realistic primary target: *Molecular Informatics* (Wiley) — methodology paper with honest empirical findings, four-dataset RandomForest benchmark, explicit failure-mode reporting, accepting MIT-licensed open-source companion. *J. Cheminformatics* (BMC) is reachable once the reproducibility block + cross-dataset alt-family extension land. *J. Chem. Inf. Model.* is a stretch without a stronger predictive payoff.
 
