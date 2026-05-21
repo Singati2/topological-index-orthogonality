@@ -251,6 +251,36 @@ are processed through RDKit~\cite{RDKit} and converted to
 hydrogen-suppressed molecular graphs through a thin NetworkX
 wrapper.
 
+\subsection{Relation to generic feature-selection methods}\label{sec:feature_selection}
+
+The broader cheminformatics descriptor-redundancy literature is
+documented in the Todeschini--Consonni
+handbook~\cite{TodeschiniConsonniHandbook}, which catalogues the
+classical molecular-descriptor families and the standard pairwise
+and multivariate redundancy diagnostics. Outside cheminformatics,
+generic feature-selection methods --- the minimum-redundancy
+maximum-relevance criterion (mRMR)~\cite{PengLongDing2005},
+the Boruta wrapper~\cite{KursaRudnicki2010}, and embedded
+methods such as LASSO~\cite{Tibshirani1996} --- select features
+from an arbitrary descriptor matrix conditional on a fixed target
+and model class.
+
+The present pipeline is positioned at a different layer in the
+modelling stack. The pairwise / PCA / VIF diagnostics are
+\emph{target-agnostic}; the partial-correlation step is
+\emph{target-aware but model-agnostic}; and the combined criterion
+is designed as a \emph{pre-flight check for a single proposed new
+topological index} against a fixed classical baseline, not as a
+competitor for end-to-end QSPR feature selection. Conceptually,
+the two layers compose rather than compete: the screening pipeline
+gates which indices enter the descriptor matrix, after which
+mRMR / LASSO / Boruta / similar methods could be applied
+downstream to the screened set against the modelling task at hand.
+Comparing redundancy-screening pipelines against generic
+feature-selection benchmarks on a full QSPR endpoint is outside
+the scope of the present paper and is noted as future work in
+Section~\ref{sec:discussion}.
+
 % =====================================================================
 \section{Datasets and implementation}\label{sec:datasets}
 % =====================================================================
@@ -984,6 +1014,30 @@ distributed via MoleculeNet~\cite{MoleculeNet}. Curated set of
 G.~Landrum et al.,
 \emph{RDKit: Open-source cheminformatics},
 \url{https://www.rdkit.org}.
+
+\bibitem{TodeschiniConsonniHandbook}
+R.~Todeschini and V.~Consonni,
+\emph{Molecular Descriptors for Chemoinformatics}, 2nd ed.,
+Wiley-VCH, Weinheim, 2009 (originally \emph{Handbook of Molecular
+Descriptors}, Wiley-VCH, 2000).
+(Full publisher / page-range details to be confirmed at submission.)
+
+\bibitem{PengLongDing2005}
+H.~Peng, F.~Long, and C.~Ding,
+\emph{Feature selection based on mutual information criteria of
+max-dependency, max-relevance, and min-redundancy},
+IEEE Trans.~Pattern Anal.~Mach.~Intell.~\textbf{27} (2005),
+1226--1238.
+
+\bibitem{KursaRudnicki2010}
+M.~B.~Kursa and W.~R.~Rudnicki,
+\emph{Feature selection with the Boruta package},
+J.~Stat.~Softw.~\textbf{36} (2010), 1--13.
+
+\bibitem{Tibshirani1996}
+R.~Tibshirani,
+\emph{Regression shrinkage and selection via the lasso},
+J.~R.~Stat.~Soc.~B \textbf{58} (1996), 267--288.
 
 \end{thebibliography}
 \end{document}
