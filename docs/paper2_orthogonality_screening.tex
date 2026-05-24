@@ -458,17 +458,11 @@ the full per-dataset numerical tables are in
 
 \subsection{Case study 1: the Wuzi parametric family}\label{sec:wuzi_case}
 
-The Wuzi index family is a three-parameter generalization of
-several classical bond-incident-degree indices, defined in the
-companion paper~\cite{Paper1_Wuzi} as a sum over the edges of
-$G$ of $(d_u d_v)^\alpha (d_u + d_v)^\beta$ multiplied by an
-exponential factor in the normalized degree imbalance. The
-mathematical analysis of the family (closed forms on standard
-graph classes, bounds in graph parameters and in classical
-indices, extremal-graph behaviour) is the subject
-of~\cite{Paper1_Wuzi}; we use the family here only as a
-parametric BID candidate to be screened, and we screen it on a
-$100$-point grid
+The Wuzi index family is the three-parameter BID family
+$W(G;\alpha,\beta,\gamma) = \sum_{uv\in E(G)} (d_u d_v)^\alpha (d_u + d_v)^\beta
+\exp(\gamma\cdot|d_u-d_v|/(d_u+d_v))$ developed in the companion
+paper~\cite{Paper1_Wuzi}; we treat it here as one parametric BID
+candidate and screen it on a $100$-point grid
 $(\alpha, \beta, \gamma) \in \{-1, -1/2, 0, 1/2, 1\}^2 \times \{0, 1/2, 1, 2\}$
 on each of the three regression QSPR datasets.
 
@@ -476,15 +470,15 @@ on each of the three regression QSPR datasets.
 
 \begin{table}[h]
 \centering
-\caption{Baseline redundancy across the three QSPR datasets. Pair counts are out of $\binom{30}{2}=435$.}
+\caption{Baseline redundancy across the three QSPR datasets. Pair counts are out of $\binom{30}{2}=435$. $\mathrm{PC}_{\alpha}$ is the smallest number of principal components whose cumulative explained variance is at least $\alpha\%$ of the baseline.}
 \label{tab:baseline_redundancy}
 \begin{tabular}{lrrrrrr}
 \toprule
-Dataset & $n$ & $|r|\ge 0.90$ & $|r|\ge 0.95$ & PC$_{90}$ & PC$_{95}$ & PC$_{99}$\\
+Dataset & $n$ & $\lvert r\rvert \ge 0.90$ & $\lvert r\rvert \ge 0.95$ & $\mathrm{PC}_{90}$ & $\mathrm{PC}_{95}$ & $\mathrm{PC}_{99}$\\
 \midrule
-ESOL          & 1127 & 203 (46.7\%) & 159 (36.6\%) & 2 & 3 & 5\\
-FreeSolv      &  639 & 257 (59.1\%) & 162 (37.2\%) & 2 & 3 & 5\\
-Lipophilicity & 4200 & 200 (46.0\%) & 164 (37.7\%) & 2 & 3 & 5\\
+ESOL          & $1127$ & $203$ ($46.7\%$) & $159$ ($36.6\%$) & $2$ & $3$ & $5$\\
+FreeSolv      & $\phantom{0}639$ & $257$ ($59.1\%$) & $162$ ($37.2\%$) & $2$ & $3$ & $5$\\
+Lipophilicity & $4200$ & $200$ ($46.0\%$) & $164$ ($37.7\%$) & $2$ & $3$ & $5$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -533,15 +527,15 @@ pairwise screen.
 
 \begin{table}[h]
 \centering
-\caption{Wuzi $100$-point grid screening verdict across three QSPR datasets. ``Pass'' means $\max|r|$ with every classical baseline strictly $<0.95$. Max $|\mathrm{pcor}|$ is the maximum across all $100$ grid points of $|\mathrm{pcor}(W, y \mid X)|$.}
+\caption{Wuzi $100$-point grid screening verdict across three QSPR datasets. ``Pass'' counts grid points at which $\max_{b}\lvert r(W, X_b)\rvert$ is strictly below $0.95$ for every classical baseline index $X_b$. ``Min $\max\lvert r\rvert$'' is the across-grid minimum of $\max_b\lvert r\rvert$ (the best-passing grid point). ``Max $\lvert\mathrm{pcor}\rvert$'' is the across-grid maximum of $\lvert\mathrm{pcor}(W, y \mid X)\rvert$, the partial correlation of $W$ with the QSPR target $y$ after regressing $W$ on the $30$-index baseline $X$.}
 \label{tab:wuzi_verdict_paper1}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lcccc}
 \toprule
-Dataset & Grid points & Pass & Fail & Min $\max|r|$ & Max $|\mathrm{pcor}|$\\
+Dataset & Pass (max $\lvert r\rvert < 0.95$) & Fail & Min max $\lvert r\rvert$ & Max $\lvert\mathrm{pcor}(W, y \mid X)\rvert$\\
 \midrule
-ESOL          & 100 & 0 & 100 & 0.965 & 0.028\\
-FreeSolv      & 100 & 1 & 99  & 0.943 & 0.036\\
-Lipophilicity & 100 & 0 & 100 & 0.965 & 0.009\\
+ESOL          & 0 & 100 & $0.965$ & $0.028$\\
+FreeSolv      & 1 &  99 & $0.943$ & $0.036$\\
+Lipophilicity & 0 & 100 & $0.965$ & $0.009$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -786,16 +780,16 @@ mean feature count.
 
 \begin{table}[h]
 \centering
-\caption{RandomForest $5$-fold cross-validation performance under four feature configurations. Regression metric is RMSE (lower is better); classification metric is ROC-AUC (higher is better). Reported as mean $\pm$ std across folds. The combined-pruned screen retained zero features in $4$ of $5$ folds on Lipophilicity (the RMSE shown is from the single fold that retained one feature).}
+\caption{RandomForest $5$-fold cross-validation performance under four feature configurations. Regression metric is RMSE (lower is better); classification metric is ROC-AUC (higher is better). Reported as mean $\pm$ std across folds. The \texttt{combined\_pruned} screen retained zero features in $4$ of $5$ folds on Lipophilicity (the RMSE shown is from the single fold that retained one feature).}
 \label{tab:ml_benchmark}
-\begin{tabular}{lllllll}
+\begin{tabular}{lccccrr}
 \toprule
-Dataset & full & pca\_95 & pairwise\_pruned & combined\_pruned & full $n$ & pruned $n$\\
+Dataset & \texttt{full} & \texttt{pca\_95} & \texttt{pairwise\_pruned} & \texttt{combined\_pruned} & full $n$ & pruned $n$\\
 \midrule
-ESOL          & $1.437 \pm 0.102$ & $1.455 \pm 0.096$ & $1.435 \pm 0.087$ & $1.475 \pm 0.123$ & 30 & 7.4 (7--9)\\
-FreeSolv      & $3.537 \pm 0.228$ & $3.544 \pm 0.264$ & $3.540 \pm 0.224$ & $3.561 \pm 0.300$ & 30 & 8.0\\
-Lipophilicity & $1.030 \pm 0.024$ & $1.065 \pm 0.018$ & $1.028 \pm 0.022$ & $1.287$ (1/5 folds) & 30 & 8.0\\
-BBBP          & $0.846 \pm 0.006$ & $0.818 \pm 0.014$ & $0.860 \pm 0.010$ & $0.840 \pm 0.010$ & 30 & 6.0\\
+ESOL          & $1.437 \pm 0.102$ & $1.455 \pm 0.096$ & $1.435 \pm 0.087$ & $1.475 \pm 0.123$ & $30$ & $7.4$ ($7$--$9$)\\
+FreeSolv      & $3.537 \pm 0.228$ & $3.544 \pm 0.264$ & $3.540 \pm 0.224$ & $3.561 \pm 0.300$ & $30$ & $8.0$\\
+Lipophilicity & $1.030 \pm 0.024$ & $1.065 \pm 0.018$ & $1.028 \pm 0.022$ & $1.287$ ($1/5$ folds) & $30$ & $8.0$\\
+BBBP          & $0.846 \pm 0.006$ & $0.818 \pm 0.014$ & $0.860 \pm 0.010$ & $0.840 \pm 0.010$ & $30$ & $6.0$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -849,42 +843,27 @@ $(-1,-1,1)$ exhibits.
 \section{Discussion}\label{sec:discussion}
 % =====================================================================
 
-The empirical pattern across the two case studies makes a single
-methodological point: \emph{passing the orthogonality screen is
-a necessary but not sufficient condition for QSPR usefulness}.
-The Wuzi FreeSolv borderline point illustrates the failure mode
-sharply: a parameter setting that clears the $|r| < 0.95$
-threshold can still have negligible partial correlation with the
-target, as the partial-correlation diagnostic of
-Section~\ref{sec:protocol} catches. The combined criterion
-(Table~\ref{tab:decision}) is more faithful to the QSPR-utility
-question than the bare pairwise correlation threshold.
+The two case studies and the cross-validated ML benchmark together
+support a single methodological reading. Section~\ref{sec:wuzi_case}
+shows that the pairwise diagnostic alone admits a parameter setting
+(the Wuzi FreeSolv point at $(-1, -1, 1)$) that clears
+$|r| < 0.95$ yet has multi-dimensional partial correlation
+identically zero against the baseline on every dataset --- the
+failure mode the combined criterion of Table~\ref{tab:decision} is
+designed to catch. Section~\ref{sec:ml_benchmark} shows that the
+combined screen is best read as a diagnostic rather than as a hard
+filter: it flags the Wuzi failure mode but degenerates on
+Lipophilicity, where the topology-to-$\log D$ partial-correlation
+structure is too weak for any pairwise-pruned index to clear
+$|\mathrm{pcor}| \ge 0.10$. The threshold should therefore be tied
+to the QSPR utility loss the analyst is willing to tolerate, not
+treated as a fixed cutoff.
 
-The downstream ML benchmark (Section~\ref{sec:ml_benchmark})
-extends the methodological point to predictive performance. The
-pairwise screen reduces feature count by roughly $4\times$ on all
-four MoleculeNet datasets while matching the full-baseline
-RandomForest within cross-validation noise. The strict combined
-screen is more selective and, in the limit case of Lipophilicity,
-retains zero features in $4$ of $5$ folds --- an honest failure
-mode that reflects the weakness of the topology-to-$\log D$
-partial-correlation structure on that dataset. The combined
-screen should therefore be read as a diagnostic rather than as a
-hard filter: it flags the exact failure mode the Wuzi family at
-$(-1, -1, 1)$ exhibits, but its use as a feature-selection
-criterion needs to be tied to the QSPR utility loss the analyst
-is willing to tolerate.
-
-The Edge-Degree-Pair Basis (Theorem~\ref{thm:bid}) gives the
-structural reason that parametric BID families on
-hydrogen-suppressed molecular graphs cannot escape the empirical
-redundancy ceiling reported across the three datasets: the
-$\binom{5}{2} = 10$-dimensional cap is intrinsic to the BID
-construction. The methodology paper and the companion graph-theory
-paper~\cite{Paper1_Wuzi} together close the loop: the graph-theory
-paper studies the family's mathematical structure, and the present
-paper studies its statistical structure relative to a fixed
-baseline.
+Theorem~\ref{thm:bid} (Edge-Degree-Pair Basis) gives the structural
+reason for the empirical redundancy ceiling observed across the
+three datasets: the dimension-$10$ cap is intrinsic to the BID
+construction on $\mathcal{G}_4$ rather than an artefact of any
+particular dataset.
 
 % =====================================================================
 \section{Limitations and open questions}\label{sec:limitations}
