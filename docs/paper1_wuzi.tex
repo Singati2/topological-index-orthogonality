@@ -111,15 +111,19 @@ sum-connectivity, and Sombor indices follow from a Cauchy--Schwarz
 parameter-splitting argument.
 
 Exhaustive enumeration of all non-isomorphic trees of order
-$5 \le n \le 15$ at eight canonical parameter triples isolates a
+$5 \le n \le 20$ at eight canonical parameter triples isolates a
 non-classical extremal regime at
 $(\alpha, \beta, \gamma) = (-1, -1, 1)$: the maximum of $W$ is
-attained for $n \ge 6$ by a tree that is neither the path nor the
-star, and for $n \ge 7$ by a tree that is also not a caterpillar
+attained by a non-caterpillar tree for every $n \in \{7, \ldots, 20\}$,
+with a sharp odd/even structural pattern --- the spider $S^{(2)}_{(n-1)/2}$
+with length-$2$ spokes for odd $n \ge 9$, and the balanced
+double-spider $DS(a, b)$ with $a + b = n/2 + 1$ and $|a - b| \le 1$
+for even $n \ge 10$
 (Table~\ref{tab:caterpillar_argmax},
-Figure~\ref{fig:caterpillar_maximizers}). A structural
-characterisation of this maximizer is left as an open problem
-(Conjecture~\ref{conj:caterpillar_max}). Sensitivity analysis on
+Figure~\ref{fig:caterpillar_maximizers}). The positive
+structural characterisation of the maximizer at every $n$ in this
+range is stated as Conjecture~\ref{conj:caterpillar_max}; a formal
+transformation-lemma proof is open. Sensitivity analysis on
 the standard $18$-octane benchmark places the family in the same
 correlation regime as the eight classical BID indices, with all
 margins below the bootstrap-CI half-widths characteristic of $n = 18$;
@@ -222,12 +226,17 @@ and Sombor indices
 (Propositions~\ref{thm:R_chi},~\ref{thm:sombor}).
 \item \textbf{Computational extremal-graph search}
 (Section~\ref{sec:extremal}). Exhaustive enumeration of all
-non-isomorphic trees of order $5 \le n \le 12$ at eight canonical
-parameter triples partitions parameter space into three sign regions
-and isolates a non-classical extremal regime at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$ where the maximum is
-attained by a non-caterpillar tree for $n \ge 7$
-(Table~\ref{tab:caterpillar_argmax}).
+$\sim 1.3 \times 10^{6}$ non-isomorphic trees of order
+$5 \le n \le 20$ at eight canonical parameter triples partitions
+parameter space into three sign regions and isolates a
+non-classical extremal regime at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$: the maximum is attained
+by a non-caterpillar tree for every $n \in \{7, \ldots, 20\}$,
+with a sharp odd/even pattern --- the spider $S^{(2)}_{(n-1)/2}$
+with length-$2$ spokes for odd $n \ge 9$, and the balanced
+double-spider with two hubs summing to $n/2 + 1$ for even
+$n \ge 10$ (Table~\ref{tab:caterpillar_argmax},
+Figure~\ref{fig:caterpillar_maximizers}).
 \item \textbf{Sensitivity analysis} (Section~\ref{sec:sensitivity}).
 We benchmark the family on the $18$ octanes (head-to-head against
 eight classical BID indices on five physicochemical properties),
@@ -1126,7 +1135,7 @@ $(\alpha,\beta,\gamma)=(-1,-1,1)$.
 \label{sec:caterpillar}
 
 The search ranges over all non-isomorphic trees of order
-$5 \le n \le 15$ at eight canonical parameter triples
+$5 \le n \le 20$ at eight canonical parameter triples
 (\texttt{scripts/10\_wuzi\_extremal\_search.py}). For each $n$ and each
 triple, the observed minimizer and maximizer of $W$ over the
 non-isomorphic trees are recorded and identified by their canonical
@@ -1163,7 +1172,7 @@ Table~\ref{tab:caterpillar_argmax}, and the explicit
 \begin{table}[h]
 \centering
 \small
-\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $5 \le n \le 15$, identified by both degree sequence (descending) and canonical \texttt{graph6} string. The \texttt{graph6} string uniquely identifies the tree up to isomorphism (degree sequences alone do not, for $n \ge 6$). For $n = 5$ the maximum is attained at the path $P_5$; for $n = 6$ the maximum is a caterpillar; for every $n \in \{7, \ldots, 15\}$ the maximum is neither a path, a star, nor a caterpillar. Computed by exhaustive enumeration via \texttt{networkx.generators.nonisomorphic\_trees}; the total number of non-isomorphic trees ranges from $3$ at $n = 5$ to $7\,741$ at $n = 15$ (OEIS A000055) and the entire enumeration runs in under one second on a single core.}
+\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $5 \le n \le 20$, identified by degree sequence (descending) and canonical \texttt{graph6} string (degree sequences alone do not uniquely identify trees for $n \ge 6$). For $n = 5$ the maximizer is the path $P_5$; for $n = 6$ it is a caterpillar; for every $n \in \{7, \ldots, 20\}$ the maximizer is neither a path, a star, nor a caterpillar. \textbf{Structural pattern}: for odd $n \in \{7, 9, 11, 13, 15, 17, 19\}$ the maximizer is the \emph{spider} with hub degree $h = (n-1)/2$ and every spoke a length-$2$ path (so the degree sequence is $(h, 2^h, 1^h)$); for even $n \in \{10, 12, 14, 16, 18, 20\}$ the maximizer is the \emph{balanced double-spider} with two adjacent hubs of degrees $a, b$ satisfying $a + b = n/2 + 1$ and $|a - b| \le 1$, with every non-shared spoke a length-$2$ path. The case $n = 8$ is a spider with one spoke extended to length $3$. Computed by exhaustive enumeration via \texttt{networkx.generators.nonisomorphic\_trees}; the total number of non-isomorphic trees ranges from $3$ at $n = 5$ to $823\,065$ at $n = 20$ (OEIS A000055); the entire enumeration completes in about $30$ seconds on a single core.}
 \label{tab:caterpillar_argmax}
 \begin{tabular}{rll}
 \toprule
@@ -1180,6 +1189,11 @@ $12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{Kp\_I?D??I??@}\\
 $13$ & $(6, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \texttt{LqD?I?@O??g??@}\\
 $14$ & $(4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \texttt{Mp\_K?D??I??@O???\_}\\
 $15$ & $(7, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{NqD?I?@O??g??@O???G}\\
+$16$ & $(5, 4, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{Op\_K?D??I??@O???g???@}\\
+$17$ & $(8, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{PqD?I?@O??g??@O???I????C}\\
+$18$ & $(5, 5, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{Qp\_K?E??I??@O???g???@O????G}\\
+$19$ & $(9, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{RqD?I?@O??g??@O???I????D?????G}\\
+$20$ & $(6, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{Sp\_K?E??I??@O???g???@O????I?????C}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1198,7 +1212,7 @@ subtree is not a path).
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{fig10_caterpillar_maximizers.pdf}
-\caption{Maximizers of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, for $n = 10, 11, 12$, drawn as rooted trees with the highest-degree vertex at the top. Internal vertices are coloured green and leaves cream. None of the three trees is a caterpillar (the non-leaf vertices do not form a path), confirming Table~\ref{tab:caterpillar_argmax} visually. The corresponding \texttt{graph6} strings are shown above each panel.}
+\caption{Maximizers of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, for $n = 10, 11, 12$, drawn as rooted trees with the highest-degree vertex at the top. Internal vertices are coloured green and leaves cream. None of the three trees is a caterpillar (the non-leaf vertices do not form a path), confirming Table~\ref{tab:caterpillar_argmax} visually. In the language of Conjecture~\ref{conj:caterpillar_max}: $n = 11$ is the spider $S^{(2)}_{5}$ with $h = (11-1)/2 = 5$ length-$2$ spokes; $n = 10$ is the balanced double-spider $DS(3, 3)$; and $n = 12$ is $DS(4, 3)$. The corresponding \texttt{graph6} strings are shown above each panel.}
 \label{fig:caterpillar_maximizers}
 \end{figure}
 
@@ -1206,7 +1220,7 @@ The pattern in Table~\ref{tab:caterpillar_argmax} and
 Figure~\ref{fig:caterpillar_maximizers} is the central empirical
 phenomenon of the paper: a parameter triple at which the
 classical star / path extremals fail and the observed maximizer is
-not even a caterpillar for $7 \le n \le 15$. The corresponding
+not even a caterpillar for $7 \le n \le 20$, with a sharp odd/even structural pattern (spider for odd $n$, balanced double-spider for even $n$; see Table~\ref{tab:caterpillar_argmax} caption). The corresponding
 formal conjecture (Conjecture~\ref{conj:caterpillar_max}) and a
 summary table organising extremal-graph conjectures by parameter
 sign region
@@ -1386,7 +1400,7 @@ bound, and the generalised Randi\'c, sum-connectivity, and Sombor
 estimates. The exhaustive enumeration of
 Section~\ref{sec:extremal} establishes the empirical extremal
 pattern across three parameter-sign regions for trees of order
-$n \le 15$. The conjectures collected below are the natural
+$n \le 20$. The conjectures collected below are the natural
 mathematical continuations of these results; they record what is
 believed to be true on the basis of computational evidence and
 classical analogy, and explicitly state the gaps that a formal
@@ -1572,30 +1586,52 @@ treatment.
 
 \subsection{A non-classical extremal regime at $(\alpha,\beta,\gamma) = (-1, -1, 1)$}\label{sub:open_caterpillar}
 
-\begin{conjecture}[Mixed-sign non-classical extremal trees]
+Let $S^{(2)}_{h}$ denote the \emph{spider with hub degree $h$ and
+length-$2$ spokes} --- the tree on $2h + 1$ vertices consisting of
+a single hub vertex of degree $h$ together with $h$ length-$2$
+paths attached at the hub. Let $DS(a, b)$ denote the
+\emph{double-spider} of hub degrees $a, b$ --- the tree on
+$2(a + b - 1)$ vertices obtained by joining two hub vertices of
+degrees $a$ and $b$ by an edge and attaching $a - 1$ and $b - 1$
+length-$2$ paths to the respective hubs.
+
+\begin{conjecture}[Mixed-sign extremal trees: spider / double-spider]
 \label{conj:caterpillar_max}
 For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-and tree order $n \ge 7$, the maximum of $W(T;-1,-1,1)$ over all
-trees $T$ of order $n$ is attained at a tree that is neither the
-path $P_n$, the star $S_n$, nor any caterpillar (a tree whose
-non-leaf vertices form a path).
+and tree order $n \ge 9$ with $n \ne 8$,
+\begin{enumerate}[label=(\alph*)]
+\item if $n$ is odd, the unique maximizer of $W(T; -1, -1, 1)$
+over all non-isomorphic trees $T$ of order $n$ is the spider
+$S^{(2)}_{(n-1)/2}$;
+\item if $n$ is even, the unique maximizer is the balanced
+double-spider $DS(a, b)$ with $a + b = n/2 + 1$ and $|a - b| \le 1$;
+equivalently, $a = \lceil (n + 2) / 4 \rceil$ and
+$b = \lfloor (n + 2) / 4 \rfloor$.
+\end{enumerate}
+In both cases the maximizer is non-caterpillar (its internal
+vertices do not form a path).
 \end{conjecture}
 
 \begin{remark}\label{rem:caterpillar_strategy}
-This is a strictly empirical conjecture: the computational
-evidence in Table~\ref{tab:caterpillar_argmax} is
-conjecture-generating, not proof. If confirmed, it would be the
-most plausibly new mathematical phenomenon for this parametric
-family: a parameter triple at which the classical star / path
-extremals fail and the observed maximum is not even a
-caterpillar. A formal structural characterisation of the
-maximizer tree at each $n$ --- including its degree sequence as a
-function of $n$ and the equality conditions --- is open. The
-inspection of Table~\ref{tab:caterpillar_argmax} suggests that
-the maximizer has a single high-degree vertex of degree $\Theta(\sqrt n)$
-together with one or two adjacent ``small hubs'' of degree $\ge 3$
-distinguishing it from a caterpillar, but this observation has not
-been formally extracted from the enumeration data.
+The conjecture is supported by exhaustive enumeration through
+$n = 20$: at every odd $n \in \{9, 11, 13, 15, 17, 19\}$ and at
+every even $n \in \{10, 12, 14, 16, 18, 20\}$ the observed
+maximizer in Table~\ref{tab:caterpillar_argmax} matches the
+predicted spider or balanced double-spider exactly
+(see Figure~\ref{fig:caterpillar_maximizers} for $n = 10, 11, 12$).
+The cases $n = 6, 7, 8$ are explicitly excluded from the
+conjecture: $n = 6$ has a caterpillar maximizer, $n = 7$ matches
+the odd-spider formula at the boundary ($h = 3$), and $n = 8$ is
+genuinely exceptional ($S^{(2)}_3$ has only $7$ vertices, so the
+maximizer is a spider with one extended spoke). The natural proof
+template is the classical transformation-lemma approach: show that
+any tree $T$ of order $n$ not isomorphic to the prediction admits
+a local edge transformation that strictly increases
+$W(T; -1, -1, 1)$. The proof has been deferred to joint work with
+the senior author; the explicit positive characterisation here
+replaces the earlier negative form (``maximizer is neither path,
+star, nor caterpillar'') of this conjecture and gives a concrete
+target.
 \end{remark}
 
 \subsection{Summary table of extremal conjectures}
@@ -1611,8 +1647,9 @@ Graph class & $\alpha$ & $\beta$ & $\gamma$ & Conjectured extremals (max / min)\
 \midrule
 Trees, $n\ge 3$ & $+$ & $+$ & $+$ & $S_n$ / $P_n$\\
 Trees, $n\ge 3$ & $-$ & $-$ & $0$ & $P_n$ / $S_n$ (mirror)\\
-Trees, $n\ge 7$ & $\circ$ & $\circ$ & $\circ$ & non-classical (not $P_n$, $S_n$, or caterpillar) / $S_n$\\
-                & \multicolumn{4}{l}{\quad (at $(\alpha,\beta,\gamma)=(-1,-1,1)$; Conjecture~\ref{conj:caterpillar_max})}\\
+Trees, odd $n \ge 9$ & $\circ$ & $\circ$ & $\circ$ & spider $S^{(2)}_{(n-1)/2}$ / $S_n$\\
+Trees, even $n \ge 10$ & $\circ$ & $\circ$ & $\circ$ & balanced double-spider $DS(a, b)$, $a+b = n/2 + 1$ / $S_n$\\
+                & \multicolumn{4}{l}{\quad (at $(\alpha,\beta,\gamma)=(-1,-1,1)$; Conjecture~\ref{conj:caterpillar_max}; verified $n \le 20$)}\\
 Unicyclic, $n\ge 4$ & $+$ & $+$ & $+$ & $U_n^{(1)}$ / $C_n$\\
 Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & $\theta$- or bowtie-with-pendants (open)\\
 \bottomrule
@@ -1642,7 +1679,7 @@ fact for redundancy screening.
 
 The empirical centrepiece is the non-classical extremal regime at
 $(\alpha, \beta, \gamma) = (-1, -1, 1)$: exhaustive enumeration of
-all non-isomorphic trees up to order $n = 15$ shows that the
+all non-isomorphic trees up to order $n = 20$ shows that the
 maximizer is neither the star, the path, nor a caterpillar for
 $n \ge 7$ (Table~\ref{tab:caterpillar_argmax},
 Conjecture~\ref{conj:caterpillar_max}). On the chemometric side,
