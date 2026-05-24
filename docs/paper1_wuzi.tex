@@ -2,17 +2,28 @@
 % Paper 1: The Wuzi Index Family
 % Compile with: pdflatex paper1_wuzi.tex (twice for cross-refs)
 %
-% This file is a WORKING DRAFT. Section layout:
-%   Section 3 -- BID-basis observation (10-dim ceiling on Delta<=4)
-%   Section 4 -- Bounds in (n, m, Delta, delta)
-%   Section 5 -- Bounds via classical indices / ratio-bound theorem
-%   Section 6 -- Extremal graphs (trees, unicyclic, bicyclic)
-%   Section 7 -- Sensitivity analysis (octanes, trees of order 10, decanes)
-% Sections 4, 5, 6 contain theorem statements with explicit proof
-% strategies; most proof bodies are marked [PROOF SKETCH -- TO BE COMPLETED]
-% and are reserved for completion by Advik Natarajan and
-% Dr. Michael Arockiaraj. Section 6 extremals are stated as
-% Conjectures, not Theorems, until characterized formally.
+% Section layout (post-restructure, 2026-05-22):
+%   Section 1 -- Introduction (contributions)
+%   Section 2 -- Preliminaries (notation; definition + special cases;
+%                closed forms; bracket function psi; standard lemmas)
+%   Section 3 -- The Edge-Degree-Pair Basis (Theorem thm:bid)
+%   Section 4 -- Bounds for the Wuzi family (consolidated):
+%                bracket, Cauchy-Schwarz, M1/M2 Jensen, (n,m,Delta,delta)
+%                bounds, tight regions, exact reductions,
+%                uniform ratio-bound theorem, R/chi/SO bounds,
+%                gamma-axis asymptotics.
+%   Section 5 -- Computational extremal-graph search (the empirical
+%                pattern partitioning eight parameter triples into
+%                three sign regions; non-classical regime at (-1,-1,1))
+%   Section 6 -- Sensitivity analysis (octanes / trees-10 / decanes)
+%   Section 7 -- Open problems and conjectures (all conjectures
+%                collected here per Arockiaraj sir's instruction:
+%                Nordhaus-Gaddum, GA/H/ABC sharp bounds, extremal trees,
+%                unicyclic, bicyclic, caterpillar maximizer)
+%   Section 8 -- Discussion
+%   Section 9 -- Conclusion
+% All Theorems/Propositions in Sections 3-4 are fully proved.
+% Conjectures are clearly labelled and live exclusively in Section 7.
 
 \documentclass[11pt,a4paper]{article}
 
@@ -68,70 +79,67 @@
 \maketitle
 
 \begin{abstract}
-A three-parameter parametric topological index family, the
-\emph{Wuzi index family}, is introduced for a simple connected
-graph $G=(V,E)$ with edge degree pairs $(d_u,d_v)$,
+We introduce the \emph{Wuzi index family}, a three-parameter
+generalization of several classical bond-incident-degree (BID)
+indices. For a simple connected graph $G = (V, E)$ with edge degree
+pairs $(d_u, d_v)$,
 \[
 \Wuzi
-=\sum_{uv\in E(G)}
-(d_u d_v)^{\alpha}(d_u+d_v)^{\beta}
-\exp\!\left(\gamma\,\frac{|d_u-d_v|}{d_u+d_v}\right),
-\quad
-\alpha,\beta,\gamma\in\mathbb{R}.
+\;=\; \sum_{uv \in E(G)}
+(d_u d_v)^{\alpha}\,(d_u + d_v)^{\beta}\,
+\exp\!\left(\gamma\,\frac{|d_u - d_v|}{d_u + d_v}\right),
+\qquad
+\alpha, \beta, \gamma \in \mathbb{R}.
 \]
-The family is a common generalization of several classical
-bond-incident-degree (BID) indices: the second Zagreb index $M_{2}$,
-the Randi\'c index $R$, the sum-connectivity index $\chi$, and the
-harmonic index $H$ all appear as special cases. Closed-form values
-of the family are derived on nine standard graph classes
-($K_n,\,C_n,\,P_n,\,S_n,\,K_{p,q},\,Q_k,\,W_n,\,F_p$, and
-$r$-regular graphs). A bracket bound via the edge-contribution
-function is established and is tight on regular graphs.
-A \emph{ratio-bound theorem} (Theorem~\ref{thm:ratio_bound}) proves
-that for every classical BID index $I_h$ with strictly positive
-edge contribution on the pairs realised in $G$, the family is
-sandwiched as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
-with explicit equality conditions. Explicit upper and lower bounds
-in $(\Delta, m)$ and $(\delta, m)$ are proved in the non-negative
-parameter region (Propositions~\ref{thm:upper_Delta},
-\ref{thm:lower_delta}); a rigorous Cauchy--Schwarz bound in terms
-of the generalized Randi\'c and sum-connectivity indices
-(Proposition~\ref{thm:R_chi}) and an indirect bound via the Sombor
-index and $M_1$ for $0 < \beta < 1$ (Proposition~\ref{thm:sombor})
-complete the rigorous core of the classical-index bounds. Sharp
-two-sided bounds against the geometric--arithmetic ($GA$), harmonic
-($H$), and atom-bond-connectivity ($ABC$) indices, and a sharp
-Nordhaus--Gaddum bound, are stated as Conjectures pending explicit
-constants. Extremal-graph behavior among trees, unicyclic graphs,
-and bicyclic graphs is conjectured by parameter-sign region.
+The family recovers the second Zagreb index $M_2$, the Randi\'c
+index $R$, the sum-connectivity index $\chi$, and the harmonic
+index $H$ as boundary cases, and adds a degree-imbalance factor
+through the third parameter $\gamma$.
 
-The headline computational finding is a non-classical extremal
-regime: at the mixed-sign parameter triple
-$(\alpha,\beta,\gamma)=(-1,-1,1)$, exhaustive enumeration of all
-non-isomorphic trees of order $5 \le n \le 12$ shows that the
-maximum is attained for $n \ge 6$ by a tree that is
-\emph{neither the path nor the star, and for $n \ge 7$ also not a
-caterpillar} (Conjecture~\ref{conj:caterpillar_max}). The structural
-characterization of this maximizer is the central open problem of
-the paper. Two flanking sign-region patterns confirm the
-classical extremals in the positive-parameter region and in the
-Randi\'c / sum-connectivity / harmonic region.
+The mathematical contributions of the paper are:
+(i) closed-form values on nine standard graph classes
+($K_n, C_n, P_n, S_n, K_{p,q}, Q_k, W_n, F_p$, and $r$-regular
+graphs); (ii) a bracket bound via the edge-contribution function
+$\psi$ that is tight on regular graphs (Theorem~\ref{thm:bracket});
+(iii) Jensen-type bounds in the Zagreb indices $M_1$ and $M_2$
+(Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha});
+(iv) explicit upper and lower bounds in $(\Delta, m)$ and
+$(\delta, m)$ for the non-negative parameter region
+(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta}); (v) a
+\emph{uniform ratio-bound theorem} (Theorem~\ref{thm:ratio_bound})
+that, for every classical BID index $I_h$ with strictly positive
+edge contribution on the degree pairs realised in $G$, sandwiches
+$\Wuzi$ as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
+with explicit equality conditions; and (vi) a rigorous
+Cauchy--Schwarz bound via the generalised Randi\'c and
+sum-connectivity indices (Proposition~\ref{thm:R_chi}) and an
+indirect bound via the Sombor index and $M_1$ for $0 < \beta < 1$
+(Proposition~\ref{thm:sombor}). The structural cap underlying all
+of these is the \emph{Edge-Degree-Pair Basis}
+(Theorem~\ref{thm:bid}): every BID index on hydrogen-suppressed
+molecular graphs of maximum degree $\Delta \le 4$ lies in a vector
+space of dimension at most $\binom{5}{2} = 10$.
 
-A sensitivity-analysis section evaluates the family against eight
-classical bond-incident-degree indices on the $18$ octane isomers
-(five physicochemical properties), reports degeneracy on the $106$
-non-isomorphic trees of order $10$, and reports structure
-sensitivity on the $75$ decane isomers. A companion methodology
-paper~\cite{Paper2_Screening} studies multi-dataset redundancy
-screening of topological indices.
-
-A structural observation underlies the chemometric behaviour:
-every \emph{bond-incident-degree} index --- a real-valued
-functional of the form $I_f(G) = \sum_{uv \in E(G)} f(d_u, d_v)$
-for some symmetric $f$ --- on hydrogen-suppressed molecular graphs
-with maximum degree $\Delta\le 4$ lies in a vector space of
-dimension at most~$10$, spanned by the ten edge-degree-pair counts
-(Theorem~\ref{thm:bid}).
+Exhaustive enumeration of all non-isomorphic trees of order
+$5 \le n \le 12$ at eight canonical parameter triples isolates a
+non-classical extremal regime at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$: the maximum of $W$ is
+attained for $n \ge 6$ by a tree that is neither the path nor the
+star, and for $n \ge 7$ by a tree that is also not a caterpillar
+(Table~\ref{tab:caterpillar_argmax}). The structural
+characterisation of this maximizer is the central open problem of
+the paper (Conjecture~\ref{conj:caterpillar_max}). Sensitivity
+analysis on three standard chemical compound classes ($18$ octane
+isomers, $106$ trees of order $10$, $75$ decane isomers) shows
+that the family lies in the same correlation regime as established
+BID indices on the standard math-chem benchmarks and is
+competitive on $\Delta H_{\mathrm{vap}}$ and on the acentric
+factor $\omega$. All open problems (sharp Nordhaus--Gaddum and
+$GA$/$H$/$ABC$ bounds; extremal-graph characterisations among
+trees, unicyclic, and bicyclic graphs; the non-classical maximizer
+at $(-1, -1, 1)$) are collected in Section~\ref{sec:open}. A
+companion methodology paper~\cite{Paper2_Screening} studies
+multi-dataset redundancy screening of topological indices.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, bond-incident-degree
@@ -187,42 +195,59 @@ of $\Delta\le 4$.
 
 \paragraph{Contributions.}
 \begin{enumerate}[label=(\arabic*)]
-\item Definition of the Wuzi index family
-$\Wuzi$ and identification of its classical special cases
-(Section~\ref{sec:def}).
-\item Closed-form values of $\Wuzi$ on nine standard graph classes
-(Section~\ref{sec:closedforms}, Proposition~\ref{prop:closedforms}).
-\item Bracket bounds via the edge-contribution function $\psi$ and
-their tightness on regular graphs
-(Section~\ref{sec:psi}, Theorem~\ref{thm:bracket}).
-\item Bounds in $(n, m, \Delta, \delta)$ and via classical indices,
-including the rigorous bracket bound (Theorem~\ref{thm:bracket}),
-a rigorous Cauchy--Schwarz / geometric-mean inequality
-(Theorem~\ref{thm:cs}), Jensen-type upper and lower bounds via
-$M_1$ for $\beta \ge 1$ (Theorem~\ref{thm:m1_bound}) and
-$0 < \beta < 1$ (Theorem~\ref{thm:m1_concave}), explicit upper and
-lower bounds in $(\Delta, m)$ and $(\delta, m)$ respectively in
-the non-negative parameter region (Propositions~\ref{thm:upper_Delta},
-\ref{thm:lower_delta}), a rigorous ratio-bound theorem that
-applies uniformly to every classical BID index with strictly
-positive edge contribution (Theorem~\ref{thm:ratio_bound}), a
-rigorous Cauchy--Schwarz bound in terms of the generalized Randi\'c
-and sum-connectivity indices (Proposition~\ref{thm:R_chi}), and an
-indirect bound via the Sombor index $SO$ and $M_1$ for $0 < \beta < 1$
-(Proposition~\ref{thm:sombor}). Sharp two-sided bounds against the
-geometric--arithmetic ($GA$), harmonic ($H$), and
-atom-bond-connectivity ($ABC$) indices, and a sharp Nordhaus--Gaddum
-bound, are stated as Conjectures~\ref{conj:GA}, \ref{conj:H_ABC},
-and~\ref{conj:NG} pending explicit constants.
-\item Extremal-graph conjectures for trees, unicyclic, and bicyclic
-graphs, including a non-classical extremal regime at
-$(\alpha,\beta,\gamma)=(-1,-1,1)$
-(Section~\ref{sec:extremal}).
-\item Sensitivity analysis on three classical compound classes
-($18$ octanes, $106$ trees of order $10$, $75$ decane isomers),
-with explicit head-to-head correlation comparison against
-eight classical BID indices on the octane benchmark
-(Section~\ref{sec:sensitivity}).
+\item \textbf{Definition and identification of special cases.}
+We define the Wuzi family $\Wuzi$ (Section~\ref{sec:def}) and
+identify the second Zagreb, Randi\'c, sum-connectivity, and harmonic
+indices as boundary cases (Table~\ref{tab:specialcases}).
+\item \textbf{Closed-form values.} We derive $\Wuzi$ in closed form
+on nine standard graph classes (Section~\ref{sec:closedforms},
+Proposition~\ref{prop:closedforms}).
+\item \textbf{Edge-Degree-Pair Basis} (Section~\ref{sec:bid},
+Theorem~\ref{thm:bid}). We show that every bond-incident-degree
+index on hydrogen-suppressed molecular graphs lies in a
+$10$-dimensional vector space spanned by the edge-degree-pair
+counts $m_{ij}$. The companion methodology
+paper~\cite{Paper2_Screening} uses this fact as the structural
+ceiling for redundancy screening.
+\item \textbf{Bounds for the Wuzi family} (Section~\ref{sec:bounds}).
+We prove: a bracket bound via the edge-contribution function $\psi$
+that is tight on regular graphs (Theorem~\ref{thm:bracket}); a
+Cauchy--Schwarz parameter-splitting inequality
+(Theorem~\ref{thm:cs}); Jensen-type bounds via $M_1$ and $M_2$
+(Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha});
+explicit $(\Delta, m)$ and $(\delta, m)$ bounds in the non-negative
+parameter region
+(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta}); a
+\emph{uniform ratio-bound theorem} (Theorem~\ref{thm:ratio_bound})
+that converts any classical BID index $I_h$ with strictly positive
+edge contribution into a sandwich on $\Wuzi$ with explicit equality
+conditions; and bounds via the generalised Randi\'c, sum-connectivity,
+and Sombor indices
+(Propositions~\ref{thm:R_chi},~\ref{thm:sombor}).
+\item \textbf{Computational extremal-graph search}
+(Section~\ref{sec:extremal}). Exhaustive enumeration of all
+non-isomorphic trees of order $5 \le n \le 12$ at eight canonical
+parameter triples partitions parameter space into three sign regions
+and isolates a non-classical extremal regime at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$ where the maximum is
+attained by a non-caterpillar tree for $n \ge 7$
+(Table~\ref{tab:caterpillar_argmax}).
+\item \textbf{Sensitivity analysis} (Section~\ref{sec:sensitivity}).
+We benchmark the family on the $18$ octanes (head-to-head against
+eight classical BID indices on five physicochemical properties),
+on the $106$ non-isomorphic trees of order $10$ (degeneracy), and
+on the $75$ decane isomers (structure-sensitivity metrics).
+\item \textbf{Open problems and conjectures}
+(Section~\ref{sec:open}). We collect all open problems --- sharp
+Nordhaus--Gaddum and $GA$/$H$/$ABC$ bounds
+(Conjectures~\ref{conj:NG},~\ref{conj:GA},~\ref{conj:H_ABC});
+extremal-graph characterisations for trees, unicyclic, and bicyclic
+graphs
+(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic}); and
+the structural characterisation of the non-classical maximizer at
+$(-1, -1, 1)$ (Conjecture~\ref{conj:caterpillar_max}) --- in one
+section with explicit proof-strategy remarks, separated from the
+proven results.
 \end{enumerate}
 
 \paragraph{Position relative to existing parametric extensions.}
@@ -452,8 +477,8 @@ $\Wuzi = m\cdot 2^{\beta} r^{2\alpha+\beta}$
 
 \subsection{Standard lemmas used in proofs}\label{sec:lemmas}
 
-The following inequalities will be invoked in
-Sections~\ref{sec:bounds_nm}--\ref{sec:bounds_classical}. They are
+The following inequalities will be invoked throughout
+Section~\ref{sec:bounds}. They are
 standard~\cite{HardyLittlewoodPolya1934} and are stated here for
 completeness.
 
@@ -516,21 +541,56 @@ dimension at most $\binom{4+1}{2}=10$.
 \end{theorem}
 
 \begin{proof}
-The summand $f(d_u,d_v)$ depends only on the unordered pair
-$\{d_u,d_v\}$ because $f$ is symmetric. Grouping edges by their
-unordered degree pair gives~\eqref{eq:bid_linear}. The set of
-admissible pairs on $\mathcal{G}_\Delta$ is
-$\{(i,j):1\le i\le j\le \Delta\}$, of size $\binom{\Delta+1}{2}$.
-For $\Delta=4$ this equals $10$.
+We establish the linear-decomposition
+identity~\eqref{eq:bid_linear} first and then deduce the dimension
+bound.
+
+\emph{Step 1: linear decomposition.} Fix $G\in\mathcal{G}_{\Delta}$.
+For each admissible pair $(i,j)$ with $1\le i\le j\le\Delta$, define
+\[
+E_{ij}(G) \;=\; \bigl\{ uv\in E(G) \,:\, \{d_u,d_v\}=\{i,j\} \bigr\},
+\qquad
+m_{ij}(G) \;=\; |E_{ij}(G)|.
+\]
+Because $\Delta(G)\le\Delta$ every edge $uv\in E(G)$ has
+$d_u,d_v\in\{1,\ldots,\Delta\}$, so the unordered pair $\{d_u,d_v\}$
+belongs to $\{\{i,j\}:1\le i\le j\le\Delta\}$, and the family of sets
+$\{E_{ij}(G)\}_{1\le i\le j\le\Delta}$ partitions $E(G)$. Therefore
+\[
+I_{f}(G) \;=\; \sum_{uv\in E(G)} f(d_u,d_v)
+\;=\; \sum_{1\le i\le j\le\Delta}\;\sum_{uv\in E_{ij}(G)} f(d_u,d_v).
+\]
+For every $uv\in E_{ij}(G)$ the multiset $\{d_u,d_v\}$ equals
+$\{i,j\}$ and the function $f$ is symmetric, so $f(d_u,d_v)=f(i,j)$
+is constant on the inner sum. Hence the inner sum reduces to
+$f(i,j)\cdot |E_{ij}(G)| = f(i,j)\cdot m_{ij}(G)$, which
+yields~\eqref{eq:bid_linear}.
+
+\emph{Step 2: dimension bound.} Equation~\eqref{eq:bid_linear}
+exhibits $I_{f}$ as a $\mathbb{R}$-linear combination of the
+$G$-dependent counts $\{m_{ij}(G)\}_{1\le i\le j\le\Delta}$ with
+coefficients $\{f(i,j)\}_{1\le i\le j\le\Delta}$ that depend on $f$
+alone. Hence $\bid$, viewed as a real vector space of functionals on
+$\mathcal{G}_{\Delta}$, embeds into $\mathbb{R}^{N_{\Delta}}$ by
+$I_{f}\mapsto(f(i,j))_{1\le i\le j\le\Delta}$, where
+$N_{\Delta}=|\{(i,j):1\le i\le j\le\Delta\}|$. The set
+$\{(i,j):1\le i\le j\le\Delta\}$ is in bijection with the multisets
+of size $\le 2$ from $\{1,\ldots,\Delta\}$ that contain at most one
+repetition, and its cardinality is $N_{\Delta}=\binom{\Delta+1}{2}$
+by the standard multiset-counting identity. Consequently
+$\dim\bid\le \binom{\Delta+1}{2}$, and specialising to
+$\Delta=4$ gives $\binom{5}{2}=10$.
 \end{proof}
 
 \begin{remark}\label{rem:bid_credit}
-The observation that BID indices are linear functionals of edge-
-degree-pair counts $m_{ij}$ is standard in the mathematical-chemistry
-literature (see e.g.~\cite{GutmanBorovicanin2018BID} and references
-therein). The contribution here is the explicit dimension-$10$
-statement on $\mathcal{G}_4$ together with its application to
-redundancy screening in Section~\ref{sec:sensitivity}.
+The observation that BID indices are linear functionals of the
+edge-degree-pair counts $m_{ij}$ is standard in the
+mathematical-chemistry literature (see
+e.g.~\cite{GutmanBorovicanin2018BID} and references therein). Our
+contribution here is the explicit dimension-$10$ statement on the
+hydrogen-suppressed molecular class $\mathcal{G}_{4}$ together with
+its operational use in the redundancy screening discussion of
+Section~\ref{sec:sensitivity}.
 \end{remark}
 
 \begin{corollary}\label{cor:bid_redundancy}
@@ -542,14 +602,29 @@ many parameter triples are sampled.
 \end{corollary}
 
 % =====================================================================
-\section{Bounds in terms of $n$, $m$, $\Delta$, $\delta$}\label{sec:bounds_nm}
+\section{Bounds for the Wuzi family}\label{sec:bounds}
 % =====================================================================
 
-This section establishes upper and lower bounds on $\Wuzi$ in
-terms of $n,m,\Delta,\delta$. Throughout, $G$ is a connected simple
-graph with $\delta\le d_v\le\Delta$ for every $v\in V(G)$.
+This section establishes a coherent set of upper and lower bounds on
+$\Wuzi$. The development proceeds from the simplest bracket bound
+in degree extremes (\S\ref{sub:bracket_psi}--\S\ref{sub:tight}),
+through Cauchy--Schwarz and Jensen-type bounds in the first two
+Zagreb indices $M_1, M_2$
+(\S\ref{sub:cs}--\S\ref{sub:m1_m2}), to bounds in $(n, m, \Delta,
+\delta)$ for the non-negative parameter region
+(\S\ref{sub:nmDelta}), exact reductions to the classical BID
+indices (\S\ref{sub:reductions}), a uniform ratio-bound theorem
+that converts any single classical BID index into a sharp sandwich
+on $\Wuzi$ (\S\ref{sub:ratio}), explicit bounds via the
+generalized Randi\'c, sum-connectivity, and Sombor indices
+(\S\ref{sub:R_chi_SO}), and asymptotic behaviour on the
+$\gamma$-axis (\S\ref{sub:gamma_axis}). Throughout, $G$ is a
+connected simple graph with $\delta\le d_v\le\Delta$ for every
+$v\in V(G)$. The corresponding sharp bounds via $GA$, $H$, $ABC$
+and the Nordhaus--Gaddum sum bound remain open and are stated as
+conjectures in Section~\ref{sec:open}.
 
-\subsection{Bracket via $\psi$ extremes}
+\subsection{Bracket via $\psi$ extremes}\label{sub:bracket_psi}
 
 Theorem~\ref{thm:bracket} already gives the bracket
 $m\,\psi_{\min}\le \Wuzi\le m\,\psi_{\max}$ with equality on
@@ -582,7 +657,7 @@ $\alpha,\beta$ and the sign of $2\alpha+\beta$ determine which of
 the $\binom{\Delta+1}{2}$ admissible pairs $(i,j)$ maximizes or
 minimizes $\psi$.
 
-\subsection{Sharper bounds via Cauchy--Schwarz}
+\subsection{Sharper bounds via Cauchy--Schwarz}\label{sub:cs}
 
 \begin{theorem}\label{thm:cs}
 Let $\alpha_1+\alpha_2=2\alpha$, $\beta_1+\beta_2=2\beta$,
@@ -608,7 +683,7 @@ $\sum_e \sqrt{\psi_e^{(1)}\psi_e^{(2)}}\le
 which is exactly the statement.
 \end{proof}
 
-\subsection{Bounds involving $M_1$ and $m$}
+\subsection{Jensen-type bounds via $M_1$ and $M_2$}\label{sub:m1_m2}
 
 \begin{theorem}[Bound in $M_1$ and $m$, $\beta\ge 1$]\label{thm:m1_bound}
 Let $\alpha=\gamma=0$ and $\beta\ge 1$. Then
@@ -664,17 +739,50 @@ and only if $d_u + d_v$ is constant on every edge.
 \begin{theorem}[Bound in $M_2$ for $\beta=\gamma=0$, $\alpha\ge 1$]
 \label{thm:m2_alpha}
 Let $\beta=\gamma=0$ and $\alpha\ge 1$. Then
-$\Wuzi=R_\alpha(G)\ge m^{1-\alpha}M_2(G)^\alpha$ where
-$M_2(G)=\sum_e d_u d_v$.
+\[
+\Wuzi
+\;=\; \sum_{uv\in E(G)}(d_u d_v)^{\alpha}
+\;=\; R_{\alpha}(G)
+\;\ge\; m^{\,1-\alpha}\,M_{2}(G)^{\alpha},
+\]
+where $M_{2}(G)=\sum_{uv\in E(G)} d_u d_v$ is the second Zagreb index
+and $R_{\alpha}(G)=\sum_{uv\in E(G)}(d_u d_v)^{\alpha}$ is the general
+Randi\'c index. At $\alpha=1$ both sides equal $M_{2}(G)$ identically;
+for $\alpha>1$ equality holds if and only if the product $d_u d_v$
+is constant on every edge of $G$.
 \end{theorem}
 
 \begin{proof}
-Identical to Theorem~\ref{thm:m1_bound} applied to the sequence
-$\bigl(d_u d_v\bigr)_{uv\in E(G)}$ and the convex function
-$t\mapsto t^\alpha$ for $\alpha\ge 1$.
+Setting $\beta=\gamma=0$ in Definition~\ref{def:wuzi} collapses the
+edge-contribution function to
+$\psi(d_u,d_v;\alpha,0,0)=(d_u d_v)^{\alpha}\cdot(d_u+d_v)^{0}\cdot
+e^{0}=(d_u d_v)^{\alpha}$, so
+$\Wuzi=\sum_{uv\in E(G)}(d_u d_v)^{\alpha}=R_{\alpha}(G)$ by
+definition of the general Randi\'c index. The function
+$\varphi:\mathbb{R}_{>0}\to\mathbb{R}_{>0}$ given by $\varphi(t)=t^{\alpha}$
+satisfies $\varphi''(t)=\alpha(\alpha-1)\,t^{\alpha-2}\ge 0$ for
+$\alpha\ge 1$ and is therefore convex on $\mathbb{R}_{>0}$, with the
+inequality strict for $\alpha>1$. Applying Jensen's inequality
+(Lemma~\ref{lem:jensen}, convex case) to the $m=|E(G)|$ positive
+values $\{d_u d_v : uv\in E(G)\}$ with uniform weights $1/m$ gives
+\[
+\varphi\!\left(\frac{1}{m}\sum_{uv\in E(G)} d_u d_v\right)
+\;\le\;
+\frac{1}{m}\sum_{uv\in E(G)} \varphi(d_u d_v),
+\]
+which, using $\sum_{uv\in E(G)} d_u d_v = M_{2}(G)$ and
+$\varphi(t)=t^{\alpha}$, rearranges to
+$(M_{2}(G)/m)^{\alpha} \le R_{\alpha}(G)/m$. Multiplying both sides by
+$m>0$ yields the stated bound $R_{\alpha}(G)\ge m^{\,1-\alpha}M_{2}(G)^{\alpha}$.
+
+The boundary case $\alpha=1$ gives $\varphi(t)=t$, which is affine,
+so Jensen's inequality holds as an identity ($R_{1}(G)=M_{2}(G)$ by
+definition). For $\alpha>1$ strict convexity of $\varphi$ implies that
+Jensen's inequality is an equality if and only if all the sampled values
+are equal, i.e.\ $d_u d_v$ is constant over every edge $uv\in E(G)$.
 \end{proof}
 
-\subsection{Bounds in $n$, $m$, $\Delta$, $\delta$}
+\subsection{Bounds in $n$, $m$, $\Delta$, $\delta$}\label{sub:nmDelta}
 
 \begin{proposition}[Upper bound in $\Delta$]\label{thm:upper_Delta}
 Let $G$ be a graph of size $m$ and maximum degree $\Delta$. For
@@ -728,26 +836,7 @@ zero on every edge, so the exponential factor is also $1$ and
 equality holds throughout.
 \end{proof}
 
-\begin{conjecture}[Nordhaus--Gaddum type]\label{conj:NG}
-\todo{PROOF STRATEGY}
-For every $n \ge 2$ and every parameter triple
-$(\alpha, \beta, \gamma)$, there exists an explicit function
-$f_n(\alpha, \beta, \gamma)$ depending only on $n$ and the
-parameters such that, for every graph $G$ of order $n$ and its
-complement $\bar G$,
-\[
-W(G;\alpha,\beta,\gamma)+W(\bar G;\alpha,\beta,\gamma)
-\;\ge\; f_{n}(\alpha,\beta,\gamma).
-\]
-The classical Nordhaus--Gaddum case for the Zagreb indices
-$M_1, M_2$ \cite{NordhausGaddumOrig1956} is the template; the
-$\gamma$-factor requires extending the argument by an explicit
-estimate of $\sum_e\mathrm{imb}(d_u,d_v)$ on $G$ and $\bar G$
-combined. We state this as a conjecture pending the explicit form
-of $f_n$ in the mixed-sign parameter regime.
-\end{conjecture}
-
-\subsection{Tight regions}
+\subsection{Tight regions}\label{sub:tight}
 
 A clean and verifiable conclusion of this section is that the
 bracket bound of Theorem~\ref{thm:bracket} is tight precisely on
@@ -759,19 +848,13 @@ the same size yield the same Wuzi value, and in particular the
 bracket is attained on $K_n$, $C_n$, $Q_k$, and every other
 $r$-regular graph.
 
-% =====================================================================
-\section{Bounds via classical indices}\label{sec:bounds_classical}
-% =====================================================================
+\subsection{Exact reductions to classical indices}\label{sub:reductions}
 
-This section establishes bounds on $\Wuzi$ in terms of standard
-classical indices: $M_1$, $M_2$, Randi\'c $R$, Sombor $SO$,
-geometric-arithmetic $GA$, harmonic $H$, atom-bond connectivity
-$ABC$. The strategy in each case is to use the bracket
-(Theorem~\ref{thm:bracket}), the Cauchy--Schwarz extension
-(Theorem~\ref{thm:cs}), or a direct algebraic identity at the
-reduction points of Table~\ref{tab:specialcases}.
-
-\subsection{Exact reductions}
+The constructions of \S\ref{sub:bracket_psi}--\S\ref{sub:nmDelta}
+specialise cleanly at the boundary parameter points of the family.
+We record the exact reductions and use them as a sanity hub: at
+each reduction point, every classical bound on the corresponding
+index transfers verbatim to the Wuzi family.
 
 \begin{proposition}[Reductions to classical indices]\label{prop:reductions}
 \begin{align*}
@@ -795,7 +878,7 @@ These exact reductions are the most useful "bounds": at the
 reduction points the Wuzi family inherits every known upper and
 lower bound for the corresponding classical index.
 
-\subsection{A uniform ratio-bound theorem}
+\subsection{A uniform ratio-bound theorem}\label{sub:ratio}
 
 The next theorem gives a single uniform template for bounding
 $\Wuzi$ both above and below in terms of any classical
@@ -823,12 +906,36 @@ attains the corresponding extremum of $\psi/h$.
 \end{theorem}
 
 \begin{proof}
-For any edge $uv \in E(G)$ with degree pair $(d_u, d_v)$,
-$c_{\min}^{h} \cdot h(d_u, d_v) \le \psi(d_u, d_v; \alpha, \beta, \gamma) \le c_{\max}^{h} \cdot h(d_u, d_v)$
-by the definitions of $c_{\min}^{h}, c_{\max}^{h}$. Summing
-over edges gives~\eqref{eq:ratio_bound}. The equality condition
-is the standard sum-bracket condition: equality on the upper side
-forces $\psi(d_u, d_v) / h(d_u, d_v) = c_{\max}^{h}$ for every edge.
+Fix an edge $uv\in E(G)$ with degree pair $(d_u,d_v)$, and define
+\[
+r_{uv} \;:=\; \frac{\psi(d_u,d_v;\alpha,\beta,\gamma)}{h(d_u,d_v)}.
+\]
+By the hypothesis $h(d_u,d_v)>0$ the ratio $r_{uv}$ is well defined
+and positive. The definitions of $c_{\min}^{h}$ and $c_{\max}^{h}$
+give immediately
+\[
+c_{\min}^{h} \;\le\; r_{uv} \;\le\; c_{\max}^{h}
+\qquad\text{for every }uv\in E(G).
+\]
+Multiplying through by the strictly positive quantity $h(d_u,d_v)$
+preserves both inequalities and yields the per-edge sandwich
+\begin{equation}\label{eq:ratio_per_edge}
+c_{\min}^{h}\cdot h(d_u,d_v) \;\le\; \psi(d_u,d_v;\alpha,\beta,\gamma)
+\;\le\; c_{\max}^{h}\cdot h(d_u,d_v).
+\end{equation}
+Summing~\eqref{eq:ratio_per_edge} over all $|E(G)|$ edges of $G$ and
+using $\sum_{uv\in E(G)} h(d_u,d_v) = I_{h}(G)$ together with
+$\sum_{uv\in E(G)} \psi(d_u,d_v;\alpha,\beta,\gamma) = \Wuzi$ gives
+exactly~\eqref{eq:ratio_bound}.
+
+For the equality conditions, the summed inequality
+$\Wuzi \le c_{\max}^{h}\,I_{h}(G)$ is an equality if and only if each
+of its $|E(G)|$ summands attains its per-edge upper bound
+in~\eqref{eq:ratio_per_edge}, equivalently $r_{uv}=c_{\max}^{h}$ for
+every $uv\in E(G)$; this says that every edge of $G$ realises the
+maximum of $\psi/h$ over the admissible degree pairs of $G$. The
+lower-side equality condition is dual: $r_{uv}=c_{\min}^{h}$ for
+every edge of $G$.
 \end{proof}
 
 \begin{remark}\label{rem:ratio_bound_practice}
@@ -859,14 +966,14 @@ have $c_{\min}^{M_2} = c_{\max}^{M_2} = 1$); this collapse is
 covered by the test suite (\texttt{tests/test\_ratio\_bound\_sanity.py}).
 \end{remark}
 
-\subsection{Bounds for general $(\alpha,\beta)$ with $\gamma=0$}
+\subsection{Bounds via the generalized $R$, $\chi$, and $SO$ indices}\label{sub:R_chi_SO}
 
 The following results lift classical-index bounds to the broader
 parameter region via the Cauchy--Schwarz extension and the bracket.
-Propositions~\ref{thm:R_chi} and~\ref{thm:sombor} are rigorous;
-Conjectures~\ref{conj:GA} and~\ref{conj:H_ABC} state target bounds
-whose sharp constants are reserved for joint work with the senior
-author.
+The corresponding sharp bounds via the geometric--arithmetic ($GA$),
+harmonic ($H$), and atom-bond-connectivity ($ABC$) indices remain
+open and are stated as Conjectures~\ref{conj:GA},~\ref{conj:H_ABC}
+in Section~\ref{sec:open}.
 
 \begin{proposition}[Bound via generalized $R$ and $\chi$]\label{thm:R_chi}
 Let $\gamma = 0$, and define the generalized Randi\'c and
@@ -921,140 +1028,89 @@ and $\beta > 0$, substituting the upper bound $M_1(G) \le \sqrt{2}\, SO(G)$
 yields~\eqref{eq:sombor_bound}.
 \end{proof}
 
-\begin{conjecture}[$GA$-controlled bound for the $\gamma$-axis]\label{conj:GA}
-The geometric--arithmetic index
-$GA(G) = \sum_{uv \in E(G)} 2\sqrt{d_u d_v} / (d_u + d_v) \le m$
-(equality iff $G$ is regular) controls the average edge imbalance.
-Conjecturally, for every parameter triple with $\alpha = \beta = 0$
-and $\gamma > 0$ there exists an explicit non-decreasing function
-$g_\gamma : [0, m] \to [m, m e^{\gamma}]$ such that
-$W(G; 0, 0, \gamma) \le g_\gamma(m - GA(G))$, with $g_\gamma$
-linear in the imbalance excess to first order. The explicit form
-of $g_\gamma$ and its sharp constants are reserved for future work.
-\end{conjecture}
-
-\begin{conjecture}[Bounds via harmonic $H$ and $ABC$]\label{conj:H_ABC}
-Each Wuzi instance with $\beta < 0$ inherits the harmonic-style
-monotonicity arguments from~\cite{Movahedi2025arXivDSO}; the
-$ABC$ index, $ABC(G) = \sum_{uv \in E(G)} \sqrt{(d_u + d_v - 2) / (d_u d_v)}$,
-pairs naturally with the $\alpha < 0$, $\beta > 0$ region of the
-Wuzi family. Sharp two-sided bounds of $\Wuzi$ in terms of $H(G)$
-and $ABC(G)$, with explicit equality conditions, are open. (See
-Section~\ref{sec:discussion} for further discussion.)
-\end{conjecture}
-
-\subsection{Bounds at the boundary of the $\gamma$ axis}
+\subsection{Boundary behaviour on the $\gamma$ axis}\label{sub:gamma_axis}
 
 \begin{proposition}\label{prop:gamma_eq_0_or_inf}
-$W(G;\alpha,\beta,0)$ coincides with the two-parameter
-$(\alpha,\beta)$ degree-based index family. As $\gamma\to+\infty$,
-$\Wuzi$ is dominated by edges with the largest imbalance
-$\mathrm{imb}(d_u,d_v)$; as $\gamma\to-\infty$, by edges with
-the smallest imbalance.
+At $\gamma=0$, $W(G;\alpha,\beta,0)$ coincides with the two-parameter
+$(\alpha,\beta)$ degree-based index
+$\sum_{uv\in E(G)} (d_u d_v)^{\alpha}(d_u+d_v)^{\beta}$. Furthermore,
+let $E^{*}(G)$ denote the set of edges of $G$ realising
+$\mathrm{imb}_{\max}(G) := \max_{uv\in E(G)} \mathrm{imb}(d_u,d_v)$
+and $E_{*}(G)$ the set of edges realising
+$\mathrm{imb}_{\min}(G) := \min_{uv\in E(G)} \mathrm{imb}(d_u,d_v)$.
+Then, as $\gamma\to+\infty$,
+\[
+\frac{\Wuzi}{e^{\gamma\,\mathrm{imb}_{\max}(G)}}
+\;\longrightarrow\;
+\sum_{uv\in E^{*}(G)} (d_u d_v)^{\alpha}(d_u+d_v)^{\beta},
+\]
+and as $\gamma\to-\infty$,
+\[
+\frac{\Wuzi}{e^{\gamma\,\mathrm{imb}_{\min}(G)}}
+\;\longrightarrow\;
+\sum_{uv\in E_{*}(G)} (d_u d_v)^{\alpha}(d_u+d_v)^{\beta}.
+\]
 \end{proposition}
 
 \begin{proof}
-At $\gamma=0$ the exponential factor is $1$. For $\gamma\to+\infty$,
-$e^{\gamma\cdot \mathrm{imb}}$ grows fastest on edges with maximal
-imbalance; the sum is dominated asymptotically by such edges. The
-$\gamma\to-\infty$ statement is dual.
+At $\gamma=0$ the exponential factor in Definition~\ref{def:wuzi}
+satisfies $\exp(0\cdot\mathrm{imb}(d_u,d_v))=1$ on every edge, so
+$\Wuzi[\gamma=0]=\sum_{uv\in E(G)}(d_u d_v)^{\alpha}(d_u+d_v)^{\beta}$,
+the two-parameter degree-based family.
+
+For the asymptotic statements, write
+$M(G):=\mathrm{imb}_{\max}(G)$ and define, for each $uv\in E(G)$,
+$\Delta_{uv}:=M(G)-\mathrm{imb}(d_u,d_v)\ge 0$. The defining sum
+factorises as
+\[
+\frac{\Wuzi}{e^{\gamma M(G)}}
+\;=\;\sum_{uv\in E(G)}
+(d_u d_v)^{\alpha}(d_u+d_v)^{\beta}\,
+e^{-\gamma\,\Delta_{uv}}.
+\]
+For $uv\in E^{*}(G)$ we have $\Delta_{uv}=0$ and the summand equals
+$(d_u d_v)^{\alpha}(d_u+d_v)^{\beta}$ independently of $\gamma$.
+For $uv\notin E^{*}(G)$ we have $\Delta_{uv}>0$ (by definition of the
+maximum), so $e^{-\gamma\,\Delta_{uv}}\to 0$ as $\gamma\to+\infty$ and
+the corresponding summand vanishes. Because $E(G)$ is finite, the
+limit can be taken termwise, yielding the displayed identity. The
+$\gamma\to-\infty$ statement is dual on replacing
+$\Delta_{uv}$ with $\mathrm{imb}(d_u,d_v)-\mathrm{imb}_{\min}(G)\ge 0$.
 \end{proof}
 
 % =====================================================================
-\section{Extremal graphs}\label{sec:extremal}
+\section{Computational extremal-graph search}\label{sec:extremal}
 % =====================================================================
 
-This section concerns the extremal-graph characterization problem:
-given $n$ and a parameter region $(\alpha,\beta,\gamma)$, which
-graphs of order $n$ within a class (trees, unicyclic graphs,
-bicyclic graphs) attain $\max\Wuzi$ and $\min\Wuzi$?
+The classical extremal-graph problem for a degree-based topological
+index $I$ asks, for a given order $n$ and graph class
+$\mathcal{C}_n$ (trees, unicyclic graphs, bicyclic graphs), which
+graph $G\in\mathcal{C}_n$ attains $\max_{G\in\mathcal{C}_n} I(G)$
+and which attains $\min_{G\in\mathcal{C}_n} I(G)$. For classical
+degree-based indices the answers are well established
+\cite{Randic1975, GutmanFurtulaBook2017} via transformation
+arguments (Kelmans transformation, edge shifting, branch
+contraction). The qualitative expectation transfers naturally to
+the Wuzi family by parameter sign region: for $\alpha,\beta>0$
+extremals concentrate degree on a small vertex set (stars,
+caterpillars, double-stars); for $\alpha,\beta<0$ they shift
+toward path-like and balanced structures; and the $\gamma$ axis
+amplifies high-imbalance edges. The formal Wuzi statements
+(extremal trees, unicyclic, bicyclic) are conjectures and are
+collected in Section~\ref{sec:open}, together with the equality
+conditions that an honest formal derivation would require.
 
-The general intuition from the classical degree-based literature
-\cite{Randic1975, GutmanFurtulaBook2017} is:
-\begin{itemize}
-\item For $\alpha>0$ (multiplicative-degree-favouring) extremals
-shift toward graphs concentrating degree on a small set of vertices
-(stars, ``caterpillars,'' double-stars). For $\alpha<0$ the
-intuition flips toward path-like / balanced structures.
-\item For $\beta>0$ (sum-degree-favouring) extremals shift toward
-high-degree-pair edges; for $\beta<0$ toward low-degree-pair edges.
-\item The $\gamma$ axis amplifies high-imbalance edges (large
-spoke-degree contrasts) for $\gamma>0$.
-\end{itemize}
+The present section reports the \emph{computationally established}
+content: an exhaustive enumeration of all non-isomorphic trees of
+order $5\le n\le 12$ at eight canonical parameter triples that
+isolates a non-classical extremal regime at
+$(\alpha,\beta,\gamma)=(-1,-1,1)$.
 
-These intuitions are stated as \emph{conjectures} below; the
-precise extremal characterization with equality conditions
-requires a careful adaptation of the classical
-\emph{transformation lemmas} (Kelmans transformation, edge
-shifting, branch contraction) to the Wuzi family.
-
-\subsection{Trees}
-
-\begin{conjecture}[Extremal trees in the $\beta\ge 0$ region]
-\label{conj:trees_beta_pos}
-Fix $\beta\ge 0$, $\gamma\ge 0$, and $\alpha\ge 0$. Among all
-trees of order $n\ge 3$,
-\begin{enumerate}[label=(\alph*)]
-\item the star $S_n$ uniquely attains $\max\Wuzi$;
-\item the path $P_n$ uniquely attains $\min\Wuzi$.
-\end{enumerate}
-The cases $\beta\ge 0,\gamma\ge 0,\alpha\le 0$ and other sign
-combinations require separate statements.
-\end{conjecture}
-
-\todo{PROOF STRATEGY} The standard transformation argument for
-$R_\alpha$ (move a pendant edge from a vertex of smaller degree
-to a vertex of larger degree, show $\Wuzi$ strictly increases when
-$\alpha>0$ and decreases when $\alpha<0$) should adapt with
-careful tracking of the $(d_u+d_v)^\beta$ and
-$\exp(\gamma\cdot\mathrm{imb})$ factors. The boundary case of the
-transformation produces the star.
-
-\subsection{Unicyclic graphs}
-
-\begin{conjecture}[Extremal unicyclic graphs]\label{conj:unicyclic}
-Among unicyclic graphs of order $n\ge 4$, the extremals of $\Wuzi$
-in the parameter region $\alpha\ge 0,\beta\ge 0,\gamma\ge 0$ are:
-\begin{enumerate}[label=(\alph*)]
-\item maximum: the graph $U_n^{(1)}$ obtained by attaching $n-3$
-pendant vertices to one vertex of $C_3$;
-\item minimum: the cycle $C_n$.
-\end{enumerate}
-\end{conjecture}
-
-\todo{PROOF STRATEGY} Standard cycle-vs-pendant transformation
-arguments analogous to the Randi\'c-index literature
-(see~\cite{HansenMelot2003unicyclicRandic} for the classical case).
-
-\subsection{Bicyclic graphs}
-
-\begin{conjecture}[Extremal bicyclic graphs]\label{conj:bicyclic}
-Among bicyclic graphs of order $n \ge 5$, in the region
-$\alpha \ge 0,\, \beta \ge 0,\, \gamma \ge 0$ an extremal of
-$\Wuzi$ lies in one of the following candidate families:
-the $\theta$-graph (two cycles sharing one edge) with pendant
-vertices attached at the high-degree vertices, or the
-bowtie-with-pendants graph (two cycles sharing one vertex). The
-precise winner depends on the order $n$ and the exact
-parameter triple, by analogy with the unicyclic classification
-of Conjecture~\ref{conj:unicyclic}; a unified formal
-characterization (and a small-$n$ computational verification via
-\texttt{nauty}/\texttt{geng} enumeration) is open.
-\end{conjecture}
-
-\todo{PROOF STRATEGY} The bicyclic case is structurally richer
-because bicyclic graphs come in three flavours (two triangles
-sharing one edge, two cycles sharing one vertex, $\theta$-graphs).
-Each flavour requires a separate transformation analysis. See
-\cite{HansenMelot2005bicyclicBounds} for an analogous treatment in
-the classical case.
-
-\subsection{Computational evidence: a non-classical extremal regime at $(-1, -1, 1)$}
+\subsection{Exhaustive enumeration setup}
 \label{sec:caterpillar}
 
-The tree-extremal conjectures of Section~\ref{sec:extremal} are
-supported by an exhaustive search over all non-isomorphic trees of
-order $5 \le n \le 12$ at eight parameter triples
+The search ranges over all non-isomorphic trees of order
+$5 \le n \le 12$ at eight canonical parameter triples
 (\texttt{scripts/10\_wuzi\_extremal\_search.py}). For each $n$ and each
 triple, the observed minimizer and maximizer of $W$ over the
 non-isomorphic trees are recorded and identified by their canonical
@@ -1108,44 +1164,14 @@ $12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$\\
 \end{tabular}
 \end{table}
 
-\begin{conjecture}[Mixed-sign non-classical extremal trees]
-\label{conj:caterpillar_max}
-For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-and tree order $n \ge 7$, the maximum of $W$ over all trees of
-order $n$ is attained at a tree that is neither the path $P_n$,
-the star $S_n$, nor a caterpillar.
-\end{conjecture}
-
-This is a strictly empirical conjecture in the present state of
-the manuscript: the computational evidence in
-Table~\ref{tab:caterpillar_argmax} is conjecture-generating, not
-proof. The conjecture, if confirmed, would be the most plausibly
-new mathematical phenomenon for this parametric family: a
-parameter triple in which the standard star/path extremals fail
-and the observed maximum is not even a caterpillar tree. A
-formal extremal-graph characterization in this regime --- which
-tree structure attains the maximum at each $n$, and what are
-the equality conditions --- is left for the formal derivation.
-
-\subsection{Summary table of extremal conjectures}
-
-\begin{table}[h]
-\centering
-\caption{Summary of extremal-graph conjectures for $\Wuzi$. ``$+$'' denotes the sign region in which the conjecture is stated; $\circ$ denotes a mixed-sign triple.}
-\label{tab:extremals}
-\begin{tabular}{lcccc}
-\toprule
-Graph class & $\alpha$ & $\beta$ & $\gamma$ & Conjectured extremals (max / min)\\
-\midrule
-Trees, $n\ge 3$ & $+$ & $+$ & $+$ & $S_n$ / $P_n$\\
-Trees, $n\ge 3$ & $-$ & $-$ & $0$ & $P_n$ / $S_n$ (mirror)\\
-Trees, $n\ge 7$ & $\circ$ & $\circ$ & $\circ$ & non-classical (not $P_n$, $S_n$, or caterpillar) / $S_n$\\
-                & \multicolumn{4}{l}{\quad (at $(\alpha,\beta,\gamma)=(-1,-1,1)$; Conjecture~\ref{conj:caterpillar_max})}\\
-Unicyclic, $n\ge 4$ & $+$ & $+$ & $+$ & $U_n^{(1)}$ / $C_n$\\
-Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & open\\
-\bottomrule
-\end{tabular}
-\end{table}
+The pattern in Table~\ref{tab:caterpillar_argmax} is the central
+empirical phenomenon of the paper: a parameter triple at which the
+classical star / path extremals fail and the observed maximizer is
+not even a caterpillar for $n \ge 7$. The corresponding formal
+conjecture (Conjecture~\ref{conj:caterpillar_max}) and a summary
+table organising extremal-graph conjectures by parameter sign region
+(Table~\ref{tab:extremals}) are deferred to
+Section~\ref{sec:open}.
 
 % =====================================================================
 \section{Sensitivity analysis}\label{sec:sensitivity}
@@ -1302,94 +1328,344 @@ top $20$ indices by $SS$.}
 \end{figure}
 
 % =====================================================================
+\section{Open problems and conjectures}\label{sec:open}
+% =====================================================================
+
+The rigorous bounds of Section~\ref{sec:bounds} cover the
+non-negative parameter region, the $M_1, M_2$ Jensen-type
+inequalities, the Cauchy--Schwarz extension, the uniform ratio
+bound, and the generalised Randi\'c, sum-connectivity, and Sombor
+estimates. The exhaustive enumeration of
+Section~\ref{sec:extremal} establishes the empirical extremal
+pattern across three parameter-sign regions for trees of order
+$n \le 12$. The conjectures collected below are the natural
+mathematical continuations of these results; they record what is
+believed to be true on the basis of computational evidence and
+classical analogy, and explicitly state the gaps that a formal
+derivation must close. They are organised by theme: sharp bounds
+in classical indices (\S\ref{sub:open_bounds}), extremal-graph
+characterisations among trees, unicyclic, and bicyclic graphs
+(\S\ref{sub:open_extremal}), and the non-classical mixed-sign
+maximizer at $(\alpha,\beta,\gamma) = (-1, -1, 1)$
+(\S\ref{sub:open_caterpillar}).
+
+\subsection{Conjectural sharp bounds via classical indices}\label{sub:open_bounds}
+
+The Nordhaus--Gaddum sum bound and the sharp two-sided bounds via
+the geometric--arithmetic, harmonic, and atom-bond-connectivity
+indices are the natural counterparts of the rigorous bounds proved
+in \S\ref{sub:R_chi_SO} for the generalised Randi\'c, sum-connectivity,
+and Sombor indices.
+
+\begin{conjecture}[Nordhaus--Gaddum type]\label{conj:NG}
+For every $n \ge 2$ and every parameter triple
+$(\alpha, \beta, \gamma) \in \mathbb{R}^3$, there exists an
+explicit function $f_n(\alpha, \beta, \gamma)$ depending only on
+$n$ and the parameters such that, for every simple graph $G$ of
+order $n$ with no isolated vertex in $G$ or $\bar G$, the Wuzi
+sum on $G$ and its complement satisfies
+\[
+W(G;\alpha,\beta,\gamma) + W(\bar G;\alpha,\beta,\gamma)
+\;\ge\; f_{n}(\alpha,\beta,\gamma).
+\]
+\end{conjecture}
+
+\begin{remark}\label{rem:NG_strategy}
+The classical Nordhaus--Gaddum results for the Zagreb indices
+$M_1, M_2$ \cite{NordhausGaddumOrig1956} are the template. The
+$\gamma$-factor requires extending the classical argument by an
+explicit estimate of $\sum_e \mathrm{imb}(d_u, d_v)$ on $G$ and on
+$\bar G$ combined; since the degree of every vertex in $G$ and
+$\bar G$ sums to $n - 1$, the imbalance on $\bar G$ is determined
+by the imbalance on $G$, and the conjecture reduces to bounding
+$\sum_e \exp(\gamma\cdot\mathrm{imb}(d_u, d_v))$ over the
+$\binom{n}{2}$ pairs that are edges in either $G$ or $\bar G$
+(but not both). An explicit $f_n$ in the mixed-sign parameter
+regime is the missing piece.
+\end{remark}
+
+\begin{conjecture}[$GA$-controlled bound for the $\gamma$-axis]\label{conj:GA}
+Let $GA(G) = \sum_{uv \in E(G)} 2\sqrt{d_u d_v}/(d_u + d_v)$ be the
+geometric--arithmetic index, which satisfies $GA(G) \le m$ with
+equality iff $G$ is regular. For every $\gamma > 0$ there exists a
+non-decreasing function
+$g_\gamma : [0, m] \to [m, m\, e^{\gamma}]$ such that
+\[
+W(G; 0, 0, \gamma) \;\le\; g_\gamma\!\bigl(m - GA(G)\bigr),
+\]
+with $g_\gamma$ affine in the imbalance excess $m - GA(G)$ to first
+order in $\gamma$.
+\end{conjecture}
+
+\begin{remark}\label{rem:GA_strategy}
+$GA(G) = \sum_{uv \in E(G)} (1 - \tfrac{1}{2}\mathrm{imb}(d_u, d_v)^2
++ O(\mathrm{imb}^4))$ by Taylor expansion of $2\sqrt{xy}/(x+y)$
+about $x = y$, so the deficit $m - GA(G)$ is a quadratic-in-imbalance
+proxy for $\sum_e \mathrm{imb}(d_u, d_v)^2$. The conjecture asserts
+that the corresponding linear-in-imbalance quantity
+$\sum_e \exp(\gamma\cdot\mathrm{imb})$ inherits a comparable
+monotonicity, but the explicit form of $g_\gamma$ and the sharp
+constant are open.
+\end{remark}
+
+\begin{conjecture}[Sharp two-sided bounds via $H$ and $ABC$]\label{conj:H_ABC}
+There exist explicit constants
+$c^{H}_{\min}(\alpha,\beta,\gamma),\, c^{H}_{\max}(\alpha,\beta,\gamma)$
+and
+$c^{ABC}_{\min}(\alpha,\beta,\gamma),\, c^{ABC}_{\max}(\alpha,\beta,\gamma)$
+such that for every connected simple graph $G$ on the
+hydrogen-suppressed molecular class $\mathcal{G}_4$ that realises
+no edge with degree pair $(1, 1)$,
+\[
+c^{H}_{\min}\cdot H(G) \le \Wuzi \le c^{H}_{\max}\cdot H(G),
+\qquad
+c^{ABC}_{\min}\cdot ABC(G) \le \Wuzi \le c^{ABC}_{\max}\cdot ABC(G),
+\]
+where $H(G) = \sum_{uv \in E(G)} 2/(d_u + d_v)$ and
+$ABC(G) = \sum_{uv \in E(G)} \sqrt{(d_u + d_v - 2)/(d_u d_v)}$.
+\end{conjecture}
+
+\begin{remark}\label{rem:H_ABC_strategy}
+The uniform ratio bound (Theorem~\ref{thm:ratio_bound}) gives
+existence of finite ratio constants whenever the candidate $h$ is
+strictly positive on every degree pair realised by $G$. The
+hypothesis ``no $(1, 1)$-edge'' is the natural restriction for the
+$ABC$ case, since $ABC$'s edge contribution $\sqrt{(i+j-2)/(ij)}$
+vanishes at $(i, j) = (1, 1)$. What Conjecture~\ref{conj:H_ABC}
+asserts beyond Theorem~\ref{thm:ratio_bound} is that the ratio
+constants on the full admissible set $\{(i, j) : 1 \le i \le j \le 4\}$
+(excluding $(1, 1)$ for $ABC$) coincide with the per-$G$ sharp
+constants in chemically relevant sign regions; this requires a
+case analysis of $\psi/h$ on the ten admissible pairs and is open
+in the mixed-sign regime $\alpha\beta\gamma < 0$.
+\end{remark}
+
+\subsection{Extremal-graph conjectures}\label{sub:open_extremal}
+
+The empirical extremal pattern of Section~\ref{sec:extremal} (three
+sign regions; star / path swap; the non-classical mixed-sign
+maximizer) motivates the formal extremal-graph statements collected
+here. The natural proof technique is a parameter-tracking
+adaptation of the classical transformation lemmas (Kelmans
+transformation, edge shifting, branch contraction) used for the
+generalised Randi\'c index.
+
+\begin{conjecture}[Extremal trees in the non-negative parameter region]
+\label{conj:trees_beta_pos}
+Fix $\alpha \ge 0$, $\beta \ge 0$, $\gamma \ge 0$. Among all trees
+of order $n \ge 3$,
+\begin{enumerate}[label=(\alph*)]
+\item the star $S_n$ uniquely attains $\max_{T \in \mathcal{T}_n} W(T;\alpha,\beta,\gamma)$;
+\item the path $P_n$ uniquely attains $\min_{T \in \mathcal{T}_n} W(T;\alpha,\beta,\gamma)$,
+\end{enumerate}
+where $\mathcal{T}_n$ is the set of all trees of order $n$. The
+mixed-sign sub-region $\alpha \le 0, \beta \ge 0$ and the
+sign-flipped region $\alpha < 0, \beta < 0$ are not covered by this
+statement (the empirical evidence of
+Table~\ref{tab:caterpillar_argmax} flips the extremals in the
+sign-flipped region and breaks them in the mixed-sign region).
+\end{conjecture}
+
+\begin{remark}\label{rem:trees_strategy}
+The standard transformation argument for the general Randi\'c
+index $R_\alpha$ (move a pendant edge from a vertex of smaller
+degree to a vertex of larger degree, show $\Wuzi$ strictly
+increases when $\alpha > 0$ and decreases when $\alpha < 0$)
+adapts under careful tracking of the $(d_u + d_v)^\beta$ and
+$\exp(\gamma\cdot\mathrm{imb})$ factors. The boundary case of the
+transformation produces the star; an explicit pair-by-pair
+$\psi$-monotonicity lemma (in the spirit of
+Lemma~\ref{lem:psi_mono_regular} but on the full admissible set)
+would discharge the conjecture for $n \le N_0$ via case analysis
+for any fixed $N_0$.
+\end{remark}
+
+\begin{conjecture}[Extremal unicyclic graphs]\label{conj:unicyclic}
+Among unicyclic graphs of order $n \ge 4$, in the parameter region
+$\alpha \ge 0,\, \beta \ge 0,\, \gamma \ge 0$,
+\begin{enumerate}[label=(\alph*)]
+\item the maximum of $\Wuzi$ is attained at the graph $U_n^{(1)}$
+obtained by attaching $n - 3$ pendant vertices to one vertex of
+the triangle $C_3$;
+\item the minimum of $\Wuzi$ is attained at the cycle $C_n$.
+\end{enumerate}
+\end{conjecture}
+
+\begin{remark}\label{rem:unicyclic_strategy}
+Standard cycle-vs-pendant transformation arguments analogous to the
+Randi\'c-index literature
+(see~\cite{HansenMelot2003unicyclicRandic} for the classical case)
+should adapt, with the qualifying tracking of the $\beta$ and
+$\gamma$ factors that is the analogue of
+Remark~\ref{rem:trees_strategy}.
+\end{remark}
+
+\begin{conjecture}[Extremal bicyclic graphs]\label{conj:bicyclic}
+Among bicyclic graphs of order $n \ge 5$, in the parameter region
+$\alpha \ge 0,\, \beta \ge 0,\, \gamma \ge 0$, an extremal of
+$\Wuzi$ lies in one of the following candidate families:
+the $\theta$-graph (two cycles sharing one edge) with pendant
+vertices attached at the high-degree vertices, or the bowtie-with-
+pendants graph (two cycles sharing one vertex). The precise winner
+depends on $n$ and on $(\alpha, \beta, \gamma)$.
+\end{conjecture}
+
+\begin{remark}\label{rem:bicyclic_strategy}
+Bicyclic graphs come in three structural flavours (two triangles
+sharing one edge, two cycles sharing one vertex, $\theta$-graphs),
+each requiring a separate transformation analysis. A small-$n$
+computational verification via \texttt{nauty}/\texttt{geng}
+enumeration would be a natural first step;
+see~\cite{HansenMelot2005bicyclicBounds} for the classical Randi\'c
+treatment.
+\end{remark}
+
+\subsection{A non-classical extremal regime at $(\alpha,\beta,\gamma) = (-1, -1, 1)$}\label{sub:open_caterpillar}
+
+\begin{conjecture}[Mixed-sign non-classical extremal trees]
+\label{conj:caterpillar_max}
+For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+and tree order $n \ge 7$, the maximum of $W(T;-1,-1,1)$ over all
+trees $T$ of order $n$ is attained at a tree that is neither the
+path $P_n$, the star $S_n$, nor any caterpillar (a tree whose
+non-leaf vertices form a path).
+\end{conjecture}
+
+\begin{remark}\label{rem:caterpillar_strategy}
+This is a strictly empirical conjecture: the computational
+evidence in Table~\ref{tab:caterpillar_argmax} is
+conjecture-generating, not proof. If confirmed, it would be the
+most plausibly new mathematical phenomenon for this parametric
+family: a parameter triple at which the classical star / path
+extremals fail and the observed maximum is not even a
+caterpillar. A formal structural characterisation of the
+maximizer tree at each $n$ --- including its degree sequence as a
+function of $n$ and the equality conditions --- is open. The
+inspection of Table~\ref{tab:caterpillar_argmax} suggests that
+the maximizer has a single high-degree vertex of degree $\Theta(\sqrt n)$
+together with one or two adjacent ``small hubs'' of degree $\ge 3$
+distinguishing it from a caterpillar, but this observation has not
+been formally extracted from the enumeration data.
+\end{remark}
+
+\subsection{Summary table of extremal conjectures}
+
+\begin{table}[h]
+\centering
+\caption{Summary of extremal-graph conjectures for $\Wuzi$. ``$+$'' denotes the sign region in which the conjecture is stated; ``$\circ$'' denotes a mixed-sign triple.}
+\label{tab:extremals}
+\begin{tabular}{lcccc}
+\toprule
+Graph class & $\alpha$ & $\beta$ & $\gamma$ & Conjectured extremals (max / min)\\
+\midrule
+Trees, $n\ge 3$ & $+$ & $+$ & $+$ & $S_n$ / $P_n$\\
+Trees, $n\ge 3$ & $-$ & $-$ & $0$ & $P_n$ / $S_n$ (mirror)\\
+Trees, $n\ge 7$ & $\circ$ & $\circ$ & $\circ$ & non-classical (not $P_n$, $S_n$, or caterpillar) / $S_n$\\
+                & \multicolumn{4}{l}{\quad (at $(\alpha,\beta,\gamma)=(-1,-1,1)$; Conjecture~\ref{conj:caterpillar_max})}\\
+Unicyclic, $n\ge 4$ & $+$ & $+$ & $+$ & $U_n^{(1)}$ / $C_n$\\
+Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & $\theta$- or bowtie-with-pendants (open)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
 \section{Discussion}\label{sec:discussion}
 % =====================================================================
 
-The Wuzi family is structurally rich (Sections~\ref{sec:closedforms}--\ref{sec:psi}):
-it admits closed-form values on nine standard graph classes,
-recovers $M_2,R,\chi,H$ as special cases, and admits a bracket
-bound via the edge-contribution function that becomes an exact
-identity on regular graphs.
+The Wuzi family combines mathematical tractability on the standard
+graph classes (Section~\ref{sec:closedforms}) with a structural
+ceiling on its chemometric reach (Section~\ref{sec:bid},
+Theorem~\ref{thm:bid}). The bracket bound via the edge-contribution
+function (Theorem~\ref{thm:bracket}) and the uniform ratio bound
+(Theorem~\ref{thm:ratio_bound}) together give a complete two-sided
+sandwich for $\Wuzi$ in terms of any classical BID index with
+strictly positive edge contribution; on regular graphs the bracket
+collapses to the exact identity
+$\Wuzi = m \cdot 2^{\beta} r^{2\alpha + \beta}$
+(Theorem~\ref{thm:regular_bracket}). Combined with the
+Cauchy--Schwarz extension and the Jensen-type bounds via $M_1$ and
+$M_2$, the rigorous core of Section~\ref{sec:bounds} covers the
+non-negative parameter region and the generalised Randi\'c,
+sum-connectivity, and Sombor bounds for all real
+$(\alpha, \beta, \gamma)$ with $\gamma = 0$.
 
-At the same time the sensitivity behaviour on the standard
-math-chem benchmarks (Section~\ref{sec:sensitivity}) is
-competitive with established BID indices on a subset of the
-octane physicochemical properties (notably $\Delta H_\mathrm{vap}$
-and $\omega$) and structurally interpretable on the trees-of-order-10
-degeneracy and the decane structure sensitivity. We do not claim
-the family is uniformly superior to any classical index on any
-benchmark; the comparison is sensitivity-only.
+On the chemometric side, the sensitivity behaviour on the standard
+math-chem benchmarks (Section~\ref{sec:sensitivity}) places the
+family in the same correlation regime as established BID indices.
+The family is competitive on two of the five octane physicochemical
+properties ($\Delta H_{\mathrm{vap}}$ via the pure-$\gamma$ triple
+$W(0, 0, 2)$ and the acentric factor $\omega$ via the classical
+reduction $W(1, 0, 0) = M_2$); we do not claim it is uniformly
+superior to any classical index on any benchmark. The Edge-Degree-Pair
+Basis observation explicitly accounts for the family's inability to
+escape the $10$-dimensional BID subspace on hydrogen-suppressed
+molecular graphs of $\Delta \le 4$, which is the structural reason
+that no parametric BID family --- including this one --- can break
+the redundancy ceiling reported in the companion methodology
+paper~\cite{Paper2_Screening}.
 
-The combination of structural and empirical observations supports a
-careful reading: the Wuzi family is a meaningful object of study on
-the mathematical side (closed forms, bounds, and extremal graphs in
-the classical tradition); on the chemometric side it provides a
-transparent worked example of a parametric BID generalization at
-the same correlation regime as established indices. The
-BID-basis observation of Theorem~\ref{thm:bid} explicitly accounts
-for the family's inability to escape the $10$-dimensional BID
-subspace on $\mathcal{G}_4$.
-
-\paragraph{Future work.} The conjectural results of
-Sections~\ref{sec:bounds_nm}--\ref{sec:extremal} are the natural
-targets for the formal companion derivation:
-\begin{enumerate}
-\item Sharp Nordhaus--Gaddum bounds for $\Wuzi(G) + \Wuzi(\bar G)$
-(Conjecture~\ref{conj:NG}).
-\item Sharp two-sided bounds via the geometric--arithmetic ($GA$),
-harmonic ($H$), and atom-bond-connectivity ($ABC$) indices, with
-explicit constants and equality conditions
-(Conjectures~\ref{conj:GA}, \ref{conj:H_ABC}).
-\item Formal extremal-graph characterization for trees, unicyclic,
-and bicyclic graphs in every parameter sign region
-(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic}),
-including a structural description of the non-classical
-maximizer at $(\alpha, \beta, \gamma) = (-1, -1, 1)$ for $n \ge 7$
-(Conjecture~\ref{conj:caterpillar_max}).
-\item Closed-form bounds involving the Albertson irregularity
-$\mathrm{Alb}(G) = \sum_e |d_u - d_v|$, naturally paired with the
-Wuzi $\gamma$-axis.
-\end{enumerate}
-
-On the chemometric side, future work includes extending the
-sensitivity-analysis benchmarks to additional compound classes
-(benzene derivatives, alkane homologues beyond octane / decane)
-and to compound-class-specific QSPR endpoints. A companion
-methodology paper~\cite{Paper2_Screening} studies multi-dataset
-redundancy screening of topological indices.
+The open mathematical problems are catalogued in
+Section~\ref{sec:open}; the most distinctive of them is the
+non-classical mixed-sign maximizer at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$
+(Conjecture~\ref{conj:caterpillar_max}), supported by exhaustive
+enumeration up to order $12$ but lacking a structural
+characterisation of the maximizer tree. The natural chemometric
+extension is to additional compound classes (benzene derivatives,
+alkane homologues beyond octane and decane) and to
+compound-class-specific QSPR endpoints; the bounded
+Albertson-irregularity pairing
+$\mathrm{Alb}(G) = \sum_e |d_u - d_v|$ is the natural mathematical
+companion of the Wuzi $\gamma$-axis and is not addressed here.
 
 % =====================================================================
 \section{Conclusion}\label{sec:conclusion}
 % =====================================================================
 
-We have introduced the Wuzi index family $\Wuzi$ and (i) derived
-closed-form values on nine standard graph classes, (ii) established
-a bracket bound via the edge-contribution function, with the
-bracket being tight on regular graphs, (iii) given exact reductions
-to classical indices $M_2, R, \chi, H$ at six parameter points,
-(iv) proved a rigorous ratio-bound theorem for the family against
-any classical BID index with strictly positive edge contribution,
-and (v) reported sensitivity analysis on the $18$ octane isomers,
-on the $106$ non-isomorphic trees of order $10$, and on the $75$
-decane isomers, showing the family is in the same correlation
-regime as established BID indices on the standard math-chem
-benchmarks. The Edge-Degree-Pair Basis observation gives a
-$10$-dimensional ceiling on the BID family on $\mathcal{G}_4$. A
+We have introduced the Wuzi index family $\Wuzi$ and obtained
+(i) closed-form values on nine standard graph classes
+(Proposition~\ref{prop:closedforms});
+(ii) a bracket bound via the edge-contribution function that is
+tight on regular graphs (Theorem~\ref{thm:bracket});
+(iii) exact reductions to the classical indices $M_2$, $R$,
+$\chi$, $H$ at six parameter points
+(Proposition~\ref{prop:reductions});
+(iv) Jensen-type bounds in $M_1$ and $M_2$
+(Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha})
+together with explicit bounds in $(\Delta, m)$ and $(\delta, m)$
+for the non-negative parameter region
+(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta});
+(v) a uniform ratio-bound theorem (Theorem~\ref{thm:ratio_bound})
+covering every classical BID index with strictly positive edge
+contribution, together with rigorous Cauchy--Schwarz bounds via
+the generalised Randi\'c, sum-connectivity, and Sombor indices
+(Propositions~\ref{thm:R_chi},~\ref{thm:sombor});
+(vi) the Edge-Degree-Pair Basis (Theorem~\ref{thm:bid}), giving a
+$10$-dimensional structural ceiling on the BID family on
+hydrogen-suppressed molecular graphs;
+(vii) an empirical isolation of a non-classical extremal regime at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$ via exhaustive tree
+enumeration through $n = 12$
+(Table~\ref{tab:caterpillar_argmax}); and
+(viii) sensitivity analysis on the $18$ octane isomers, the $106$
+non-isomorphic trees of order $10$, and the $75$ decane isomers,
+showing the family is in the same correlation regime as
+established BID indices on the standard math-chem benchmarks. A
 companion methodology paper~\cite{Paper2_Screening} studies
 multi-dataset redundancy screening of topological indices.
 
-The formal bounds in $(n, m, \Delta, \delta)$ and via classical
-indices are complete for the non-negative parameter region and for
-$R$, $\chi$, $SO$ (Propositions~\ref{thm:upper_Delta},
-\ref{thm:lower_delta}, \ref{thm:R_chi}, \ref{thm:sombor}). A
-Nordhaus--Gaddum-type sum bound and sharp two-sided bounds against
-$GA$, $H$, $ABC$ remain conjectural
-(Conjectures~\ref{conj:NG}, \ref{conj:GA}, \ref{conj:H_ABC}), as do
-the formal extremal-graph characterizations for trees, unicyclic,
-and bicyclic graphs in every parameter sign region
-(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic},
-\ref{conj:caterpillar_max}); these are the natural seams for joint
-work with the senior author.
+The formal bounds in $(n, m, \Delta, \delta)$ and via the
+generalised Randi\'c, sum-connectivity, and Sombor indices are
+complete for the non-negative parameter region
+(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta},~\ref{thm:R_chi},~\ref{thm:sombor}).
+The Nordhaus--Gaddum sum bound, sharp two-sided bounds via $GA$,
+$H$, $ABC$, the formal extremal-graph characterisations for trees,
+unicyclic, and bicyclic graphs, and the structural description of
+the non-classical maximizer at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+are stated as conjectures and consolidated in
+Section~\ref{sec:open}; together with explicit proof-strategy
+remarks, these are the natural seams for the formal companion
+derivation.
 
 % =====================================================================
 \section*{Data and code availability}
