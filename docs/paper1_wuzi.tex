@@ -57,13 +57,10 @@
 \newcommand{\Wuzi}{W(G;\alpha,\beta,\gamma)}
 \newcommand{\edgepsi}{\psi(x,y;\alpha,\beta,\gamma)}
 \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
-% Working-draft markers are VISIBLE in this draft so Arockiaraj sir
-% and a careful reader can see exactly which theorems are still proof
-% sketches vs fully proved. Submission-ready compile swaps the
-% definition to \newcommand{\todo}[1]{} (suppressed) AFTER converting
-% every visible [PROOF SKETCH] theorem to either a complete proof or
-% a Conjecture environment.
-\newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
+% \todo marker: suppressed (no [PROOF SKETCH] markers remain in the
+% body as of the post-restructure version; macro retained for safety
+% in case a future revision reintroduces one).
+\newcommand{\todo}[1]{}
 
 \title{\bfseries The Wuzi Index Family:\\ Graph-Theoretic Properties, Bounds, Extremal Graphs,\\ and Sensitivity Analysis}
 
@@ -509,7 +506,7 @@ $S_k=\bigl(\binom{N}{k}^{-1}\sum_{i_1<\cdots<i_k}x_{i_1}\cdots x_{i_k}\bigr)^{1/
 $S_1\ge S_2\ge\cdots\ge S_N$.
 \end{lemma}
 
-\begin{lemma}[Polya--Szeg\H{o}]\label{lem:ps}
+\begin{lemma}[P\'olya--Szeg\H{o}]\label{lem:ps}
 For positive reals $a_i\in[m_a,M_a]$, $b_i\in[m_b,M_b]$,
 \[
 \frac{\sum a_i^2 \sum b_i^2}{(\sum a_i b_i)^2}
@@ -595,7 +592,7 @@ gives the molecular-graph case $\binom{5}{2}=10$.
 The observation that BID indices are linear functionals of the
 edge-degree-pair counts $m_{ij}$ is standard in the
 mathematical-chemistry literature (see
-e.g.~\cite{GutmanBorovicanin2018BID} and references therein). Our
+e.g.~\cite{BorovicaninDasFurtulaGutman2017Zagreb} and references therein). Our
 contribution here is the explicit dimension-$10$ statement on the
 hydrogen-suppressed molecular class $\mathcal{G}_{4}$ together with
 its operational use in the redundancy screening discussion of
@@ -1095,7 +1092,7 @@ $\mathcal{C}_n$ (trees, unicyclic graphs, bicyclic graphs), which
 graph $G\in\mathcal{C}_n$ attains $\max_{G\in\mathcal{C}_n} I(G)$
 and which attains $\min_{G\in\mathcal{C}_n} I(G)$. For classical
 degree-based indices the answers are well established
-\cite{Randic1975, GutmanFurtulaBook2017} via transformation
+\cite{Randic1975, GutmanFurtula2008Randic} via transformation
 arguments (Kelmans transformation, edge shifting, branch
 contraction). The qualitative expectation transfers naturally to
 the Wuzi family by parameter sign region: for $\alpha,\beta>0$
@@ -1525,7 +1522,7 @@ sharing one vertex, $\theta$-graphs), each requiring a separate
 transformation analysis. A small-$n$ computational verification via
 \texttt{nauty}/\texttt{geng} enumeration would be the natural first
 step before committing to a formal conjecture;
-see~\cite{HansenMelot2005bicyclicBounds} for the classical Randi\'c
+see~\cite{LiuLuTian2008Randic} for the classical Randi\'c
 treatment.
 \end{remark}
 
@@ -1689,40 +1686,44 @@ MATCH Commun.~Math.~Comput.~Chem.~\textbf{95} (2026), 141--162.
 
 \bibitem{Movahedi2025arXivDSO}
 F.~Movahedi,
-\emph{Bounds for the Diminished Sombor index of graphs},
-arXiv preprint, 2025 (full arXiv identifier to be added at
-submission).
+\emph{Diminished Sombor index and its relationship with topological indices},
+arXiv preprint arXiv:2508.06532 [math.CO], 2025.
+\url{https://arxiv.org/abs/2508.06532}.
 
-\bibitem{GutmanBorovicanin2018BID}
-I.~Gutman and B.~Borovi\'canin,
-\emph{Edge-degree-based topological indices and their applications},
-survey article in the math-chem literature, 2018 (full citation
-details to be added at submission).
+\bibitem{BorovicaninDasFurtulaGutman2017Zagreb}
+B.~Borovi\'canin, K.~C.~Das, B.~Furtula, and I.~Gutman,
+\emph{Bounds for Zagreb indices},
+MATCH Commun.~Math.~Comput.~Chem.~\textbf{78} (2017), 17--100.
+(Reprinted as a chapter in I.~Gutman, B.~Furtula, K.~C.~Das,
+E.~Milovanovi\'c, and I.~Milovanovi\'c (eds.),
+\emph{Bounds in Chemical Graph Theory --- Mainstreams},
+Mathematical Chemistry Monographs MCM-20,
+University of Kragujevac, 2017, pp.~67--153.)
 
 \bibitem{HardyLittlewoodPolya1934}
 G.~Hardy, J.~E.~Littlewood, and G.~P\'olya,
 \emph{Inequalities},
 Cambridge University Press, 1934.
 
-\bibitem{GutmanFurtulaBook2017}
+\bibitem{GutmanFurtula2008Randic}
 I.~Gutman and B.~Furtula (eds.),
-\emph{The Randi\'c Index: Theory and Applications},
-University of Kragujevac Press, 2017 (full publisher details to
-be confirmed at submission).
+\emph{Recent Results in the Theory of Randi\'c Index},
+Mathematical Chemistry Monographs MCM-6,
+University of Kragujevac and Faculty of Science Kragujevac,
+Kragujevac, 2008.
 
 \bibitem{HansenMelot2003unicyclicRandic}
 P.~Hansen and H.~M\'elot,
-\emph{Variable neighborhood search for extremal graphs. VI.
-Analyses and new conjectures on the Randi\'c index},
-mathematical-chemistry literature, 2003 (full venue to be
-confirmed at submission).
+\emph{Variable neighborhood search for extremal graphs.~6.
+Analysing bounds for the connectivity index},
+J.~Chem.~Inf.~Comput.~Sci.~\textbf{43} (2003), 1--14.
+\url{https://doi.org/10.1021/ci020143l}.
 
-\bibitem{HansenMelot2005bicyclicBounds}
-P.~Hansen and H.~M\'elot,
-\emph{Variable neighborhood search for extremal graphs:
-bicyclic graphs},
-mathematical-chemistry literature, 2005 (full venue to be
-confirmed at submission).
+\bibitem{LiuLuTian2008Randic}
+H.~Liu, M.~Lu, and F.~Tian,
+\emph{On the Randi\'c index},
+J.~Math.~Chem.~\textbf{44} (2008), 301--310.
+\url{https://doi.org/10.1007/s10910-007-9311-1}.
 
 \bibitem{NordhausGaddumOrig1956}
 E.~A.~Nordhaus and J.~W.~Gaddum,
@@ -1732,7 +1733,7 @@ Amer.~Math.~Monthly~\textbf{63} (1956), 175--177.
 \bibitem{Paper2_Screening}
 G.~Shiwakoti, A.~Natarajan, M.~Arockiaraj,
 \emph{Orthogonality Screening of Topological Indices for QSPR Modeling:
-A Reproducible Pipeline and Software Framework},
+A Structural and Empirical Redundancy Analysis},
 in preparation, 2026.
 (Companion methodology paper.)
 
