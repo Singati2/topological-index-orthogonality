@@ -335,15 +335,17 @@ $\{i,j\}$ and $f$ is symmetric, so $f(d_u,d_v)=f(i,j)$ is constant
 on the inner sum, which collapses to $f(i,j)\cdot m_{ij}(G)$ and
 yields~\eqref{eq:bid_linear}.
 
-\emph{Step 2: dimension bound.} Equation~\eqref{eq:bid_linear}
-exhibits $I_f$ as a linear combination of the $G$-dependent counts
-$\{m_{ij}(G)\}_{i\le j}$ with coefficients $\{f(i,j)\}_{i\le j}$
-depending only on $f$. The linear map
-$\bid\to\mathbb{R}^{N_\Delta}$ sending $I_f$ to the vector
-$(f(i,j))_{i\le j}$ is well defined and injective, where
-$N_\Delta = |\{(i,j):1\le i\le j\le\Delta\}|=\binom{\Delta+1}{2}$
-by the standard multiset-counting identity. Hence
-$\dim\bid\le\binom{\Delta+1}{2}$; for $\Delta=4$ this is
+\emph{Step 2: dimension bound.} For each admissible pair $(i,j)$
+with $1\le i\le j\le\Delta$, regard the edge-count
+$m_{ij}:\mathcal{G}_\Delta\to\mathbb{N}_{\ge 0}$ as a functional on
+$\mathcal{G}_\Delta$. Equation~\eqref{eq:bid_linear} shows
+$I_f = \sum_{i\le j} f(i,j)\cdot m_{ij}$ as functionals on
+$\mathcal{G}_\Delta$, so
+$\bid \subseteq \operatorname{span}_{\mathbb{R}}\{m_{ij}:1\le i\le j\le\Delta\}$.
+A subspace of a span of $N_\Delta$ vectors has dimension at most
+$N_\Delta$, hence
+$\dim_{\mathbb{R}}\bid \le N_\Delta = \binom{\Delta+1}{2}$ by the
+standard multiset-counting identity. For $\Delta=4$ this is
 $\binom{5}{2}=10$.
 \end{proof}
 
@@ -470,6 +472,7 @@ on each of the three regression QSPR datasets.
 
 \begin{table}[h]
 \centering
+\small
 \caption{Baseline redundancy across the three QSPR datasets. Pair counts are out of $\binom{30}{2}=435$. $\mathrm{PC}_{\alpha}$ is the smallest number of principal components whose cumulative explained variance is at least $\alpha\%$ of the baseline.}
 \label{tab:baseline_redundancy}
 \begin{tabular}{lrrrrrr}
@@ -527,6 +530,7 @@ pairwise screen.
 
 \begin{table}[h]
 \centering
+\small
 \caption{Wuzi $100$-point grid screening verdict across three QSPR datasets. ``Pass'' counts grid points at which $\max_{b}\lvert r(W, X_b)\rvert$ is strictly below $0.95$ for every classical baseline index $X_b$. ``Min $\max\lvert r\rvert$'' is the across-grid minimum of $\max_b\lvert r\rvert$ (the best-passing grid point). ``Max $\lvert\mathrm{pcor}\rvert$'' is the across-grid maximum of $\lvert\mathrm{pcor}(W, y \mid X)\rvert$, the partial correlation of $W$ with the QSPR target $y$ after regressing $W$ on the $30$-index baseline $X$.}
 \label{tab:wuzi_verdict_paper1}
 \begin{tabular}{lcccc}
@@ -780,6 +784,7 @@ mean feature count.
 
 \begin{table}[h]
 \centering
+\small
 \caption{RandomForest $5$-fold cross-validation performance under four feature configurations. Regression metric is RMSE (lower is better); classification metric is ROC-AUC (higher is better). Reported as mean $\pm$ std across folds. The \texttt{combined\_pruned} screen retained zero features in $4$ of $5$ folds on Lipophilicity (the RMSE shown is from the single fold that retained one feature).}
 \label{tab:ml_benchmark}
 \begin{tabular}{lccccrr}
