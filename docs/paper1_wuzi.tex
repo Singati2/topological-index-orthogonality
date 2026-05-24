@@ -93,52 +93,40 @@ index $R$, the sum-connectivity index $\chi$, and the harmonic
 index $H$ as boundary cases, and adds a degree-imbalance factor
 through the third parameter $\gamma$.
 
-The mathematical contributions of the paper are:
-(i) closed-form values on nine standard graph classes
-($K_n, C_n, P_n, S_n, K_{p,q}, Q_k, W_n, F_p$, and $r$-regular
-graphs); (ii) a bracket bound via the edge-contribution function
-$\psi$ that is tight on regular graphs (Proposition~\ref{thm:bracket});
-(iii) Jensen-type bounds in the Zagreb indices $M_1$ and $M_2$
-(Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha});
-(iv) explicit (coarse, factor-wise) upper and lower bounds in
-$(\Delta, m)$ and $(\delta, m)$ for the non-negative parameter
-region (Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta}); (v) a
-\emph{uniform ratio-bound theorem} (Theorem~\ref{thm:ratio_bound})
-that, for every classical BID index $I_h$ with strictly positive
-edge contribution on the degree pairs realised in $G$, sandwiches
-$\Wuzi$ as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
-with explicit equality conditions; and (vi) a rigorous
-Cauchy--Schwarz bound via the generalised Randi\'c and
-sum-connectivity indices (Proposition~\ref{thm:R_chi}) and an
-indirect bound via the Sombor index and $M_1$ for $0 < \beta < 1$
-(Proposition~\ref{thm:sombor}). The structural cap underlying all
-of these is the \emph{Edge-Degree-Pair Basis}
-(Theorem~\ref{thm:bid}): every BID index on hydrogen-suppressed
-molecular graphs of maximum degree $\Delta \le 4$ lies in a vector
-space of dimension at most $\binom{5}{2} = 10$.
+The structural backbone of the paper is the
+\emph{Edge-Degree-Pair Basis} (Theorem~\ref{thm:bid}): every BID
+index on hydrogen-suppressed molecular graphs of maximum degree
+$\Delta \le 4$ lies in a vector space of dimension at most
+$\binom{5}{2} = 10$, an explicit operational ceiling on the
+chemometric information any parametric BID family can add. Within
+this ceiling we derive closed-form values for $\Wuzi$ on nine
+standard graph classes, a bracket bound via the edge-contribution
+function $\psi$ that is tight on regular graphs, Jensen-type bounds
+in $M_1$ and $M_2$, and a \emph{uniform ratio-bound theorem}
+(Theorem~\ref{thm:ratio_bound}) that, for every classical BID index
+$I_h$ with strictly positive edge contribution, sandwiches $\Wuzi$
+as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$ with
+explicit equality conditions. Bounds via the generalised Randi\'c,
+sum-connectivity, and Sombor indices follow from a Cauchy--Schwarz
+parameter-splitting argument.
 
 Exhaustive enumeration of all non-isomorphic trees of order
-$5 \le n \le 12$ at eight canonical parameter triples isolates a
+$5 \le n \le 15$ at eight canonical parameter triples isolates a
 non-classical extremal regime at
 $(\alpha, \beta, \gamma) = (-1, -1, 1)$: the maximum of $W$ is
 attained for $n \ge 6$ by a tree that is neither the path nor the
 star, and for $n \ge 7$ by a tree that is also not a caterpillar
-(Table~\ref{tab:caterpillar_argmax}). The structural
-characterisation of this maximizer is the central open problem of
-the paper (Conjecture~\ref{conj:caterpillar_max}). Sensitivity
-analysis on three standard chemical compound classes ($18$ octane
-isomers, $106$ trees of order $10$, $75$ decane isomers) shows
-that the family lies in the same correlation regime as established
-BID indices on the standard math-chem benchmarks; on the octane
-benchmark $W(0, 0, 2)$ attains $|r| = 0.967$ on
-$\Delta H_{\mathrm{vap}}$, comparable in magnitude to the
-geometric--arithmetic and harmonic indices ($|r| = 0.959$ each)
-on $n = 18$ isomers. All open problems (sharp Nordhaus--Gaddum and
-$GA$/$H$/$ABC$ bounds; extremal-graph characterisations among
-trees, unicyclic, and bicyclic graphs; the non-classical maximizer
-at $(-1, -1, 1)$) are collected in Section~\ref{sec:open}. A
-companion methodology paper~\cite{Paper2_Screening} studies
-multi-dataset redundancy screening of topological indices.
+(Table~\ref{tab:caterpillar_argmax},
+Figure~\ref{fig:caterpillar_maximizers}). A structural
+characterisation of this maximizer is left as an open problem
+(Conjecture~\ref{conj:caterpillar_max}). Sensitivity analysis on
+the standard $18$-octane benchmark places the family in the same
+correlation regime as the eight classical BID indices, with all
+margins below the bootstrap-CI half-widths characteristic of $n = 18$;
+no claim of QSPR superiority is made. Open problems and conjectures
+are collected in Section~\ref{sec:open}. A companion methodology
+paper~\cite{Paper2_Screening} studies multi-dataset redundancy
+screening of topological indices.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, bond-incident-degree
@@ -180,9 +168,18 @@ The present work introduces the \emph{Wuzi index family} as a
 three-parameter generalization that subsumes several established
 indices as boundary cases while introducing a degree-imbalance
 factor through a third parameter~$\gamma$. The mathematical
-program (Sections~\ref{sec:prelim}--\ref{sec:extremal}) follows the
-template of~\cite{MovahediGutmanRedzepovicFurtula2026}. The
-sensitivity-analysis program (Section~\ref{sec:sensitivity})
+program (Sections~\ref{sec:prelim}--\ref{sec:extremal}) uses the
+standard mathematical-chemistry checklist for parametric BID
+families --- closed forms on canonical graph classes, bracket and
+Cauchy--Schwarz bounds, classical-index reductions, and extremal
+graphs --- adopted in recent work such
+as~\cite{MovahediGutmanRedzepovicFurtula2026} as a baseline; the
+distinctive emphases here are the Edge-Degree-Pair Basis as a
+structural ceiling (Section~\ref{sec:bid}), the uniform ratio-bound
+theorem (Theorem~\ref{thm:ratio_bound}), and the non-classical
+mixed-sign extremal regime at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+(Section~\ref{sec:extremal}). The sensitivity-analysis program
+(Section~\ref{sec:sensitivity})
 evaluates the family on three classical chemical compound classes
 ($18$ octane isomers, $106$ trees of order $10$, $75$ decane
 isomers) and compares its property correlations head-to-head with
@@ -1129,7 +1126,7 @@ $(\alpha,\beta,\gamma)=(-1,-1,1)$.
 \label{sec:caterpillar}
 
 The search ranges over all non-isomorphic trees of order
-$5 \le n \le 12$ at eight canonical parameter triples
+$5 \le n \le 15$ at eight canonical parameter triples
 (\texttt{scripts/10\_wuzi\_extremal\_search.py}). For each $n$ and each
 triple, the observed minimizer and maximizer of $W$ over the
 non-isomorphic trees are recorded and identified by their canonical
@@ -1166,7 +1163,7 @@ Table~\ref{tab:caterpillar_argmax}, and the explicit
 \begin{table}[h]
 \centering
 \small
-\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, identified by both degree sequence (descending) and canonical \texttt{graph6} string. The \texttt{graph6} string uniquely identifies the tree up to isomorphism (degree sequences alone do not, for $n \ge 6$). For $n = 5$ the maximum is attained at the path $P_5$; for $n = 6$ the maximum is a caterpillar; for every $n \in \{7, \ldots, 12\}$ the maximum is neither a path, a star, nor a caterpillar.}
+\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $5 \le n \le 15$, identified by both degree sequence (descending) and canonical \texttt{graph6} string. The \texttt{graph6} string uniquely identifies the tree up to isomorphism (degree sequences alone do not, for $n \ge 6$). For $n = 5$ the maximum is attained at the path $P_5$; for $n = 6$ the maximum is a caterpillar; for every $n \in \{7, \ldots, 15\}$ the maximum is neither a path, a star, nor a caterpillar. Computed by exhaustive enumeration via \texttt{networkx.generators.nonisomorphic\_trees}; the total number of non-isomorphic trees ranges from $3$ at $n = 5$ to $7\,741$ at $n = 15$ (OEIS A000055) and the entire enumeration runs in under one second on a single core.}
 \label{tab:caterpillar_argmax}
 \begin{tabular}{rll}
 \toprule
@@ -1180,16 +1177,39 @@ $9$  & $(4, 2, 2, 2, 2, 1, 1, 1, 1)$ & \texttt{HqD?I?@}\\
 $10$ & $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$ & \texttt{Ip\_I?D??G}\\
 $11$ & $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{JqD?I?@O??\_}\\
 $12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{Kp\_I?D??I??@}\\
+$13$ & $(6, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \texttt{LqD?I?@O??g??@}\\
+$14$ & $(4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \texttt{Mp\_K?D??I??@O???\_}\\
+$15$ & $(7, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{NqD?I?@O??g??@O???G}\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The pattern in Table~\ref{tab:caterpillar_argmax} is the central
-empirical phenomenon of the paper: a parameter triple at which the
+Figure~\ref{fig:caterpillar_maximizers} shows the maximizers for
+$n = 10, 11, 12$ drawn as rooted trees with the highest-degree
+vertex at the top. In each case the internal (non-leaf) vertices
+do not form a path: at $n = 10$ two adjacent degree-$3$ vertices
+form a branching, at $n = 11$ a degree-$5$ ``spider'' has each
+of its five spokes extended by one vertex to a leaf, and at
+$n = 12$ a degree-$4$ root has one of its branches further
+sub-branched. These structural features make the trees
+non-caterpillars in the formal sense (their pruned-leaf
+subtree is not a path).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig10_caterpillar_maximizers.pdf}
+\caption{Maximizers of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, for $n = 10, 11, 12$, drawn as rooted trees with the highest-degree vertex at the top. Internal vertices are coloured green and leaves cream. None of the three trees is a caterpillar (the non-leaf vertices do not form a path), confirming Table~\ref{tab:caterpillar_argmax} visually. The corresponding \texttt{graph6} strings are shown above each panel.}
+\label{fig:caterpillar_maximizers}
+\end{figure}
+
+The pattern in Table~\ref{tab:caterpillar_argmax} and
+Figure~\ref{fig:caterpillar_maximizers} is the central empirical
+phenomenon of the paper: a parameter triple at which the
 classical star / path extremals fail and the observed maximizer is
-not even a caterpillar for $n \ge 7$. The corresponding formal
-conjecture (Conjecture~\ref{conj:caterpillar_max}) and a summary
-table organising extremal-graph conjectures by parameter sign region
+not even a caterpillar for $7 \le n \le 15$. The corresponding
+formal conjecture (Conjecture~\ref{conj:caterpillar_max}) and a
+summary table organising extremal-graph conjectures by parameter
+sign region
 (Table~\ref{tab:extremals}) are deferred to
 Section~\ref{sec:open}.
 
@@ -1224,7 +1244,7 @@ full table is in \texttt{results/octane\_competitor\_comparison.\{csv,md\}}.
 
 \begin{table}[h]
 \centering
-\caption{Pearson correlation $r$ between each index and each of the five physicochemical properties of the $18$ octane isomers. Sign carries the index's natural direction; what matters chemically is $|r|$. Bold entries flag the per-column maximum $|r|$ across all listed indices.}
+\caption{Pearson correlation $r$ between each index and each of the five physicochemical properties of the $18$ octane isomers. Sign carries the index's natural direction; what matters chemically is $|r|$. Bold entries flag the per-column maximum $|r|$ across all listed indices. \textbf{Bootstrap uncertainty (B = 10,000, percentile method, 95\% CI):} full per-cell intervals are tabulated in \texttt{results/octane\_competitor\_bootstrap.csv}; the headline values are $r(\Delta H_\mathrm{vap}, GA) = +0.959$ with CI $[+0.917, +0.986]$, $r(\Delta H_\mathrm{vap}, H) = +0.959$ with CI $[+0.917, +0.986]$, and $r(\Delta H_\mathrm{vap}, W(0,0,2)) = -0.967$ with CI $[-0.991, -0.921]$. The CI half-widths range from $0.019$ (smallest, $M_2$ on $\omega$) to $0.47$ (largest), median $0.13$; differences in $|r|$ smaller than ${\sim}0.10$--$0.15$ are within bootstrap noise at $n = 18$.}
 \label{tab:octane_competitor}
 \small
 \begin{tabular}{llrrrrr}
@@ -1267,22 +1287,27 @@ achieved by the augmented Zagreb index $AZI$ ($|r| = 0.936, 0.922$
 respectively), with no Wuzi parameter triple in the sampled panel
 exceeding it. On $\Delta H_\mathrm{vap}$ the strongest correlation
 is the pure-$\gamma$ triple $W(0, 0, 2)$ at $|r| = 0.967$,
-comparable in magnitude to $GA$ and $H$ ($|r| = 0.959$); the
-margin of $0.008$ on $n = 18$ observations is not large enough to
-support a claim of superiority without an uncertainty interval. On
+comparable in magnitude to $GA$ and $H$ ($|r| = 0.959$ each).
+The $0.008$ margin between $W(0, 0, 2)$ and $GA$/$H$ is well within
+the bootstrap-CI half-width of $\sim 0.034$ for each of these
+correlations at $n = 18$ (Table~\ref{tab:octane_competitor}
+footnote): the three indices are statistically indistinguishable on
+this benchmark, and we therefore make no claim of superiority. On
 the acentric factor $\omega$ the strongest is $W(1, 0, 0) = M_2$
 at $|r| = 0.987$, but this is by definition the second Zagreb
 index (Proposition~\ref{prop:reductions}), not a Wuzi-specific
 finding; the strongest Wuzi-only triple on $\omega$ is $W(1, 1, 1)$
 at $|r| = 0.981$. The Wuzi family is therefore in the same $|r|$
-regime as established BID indices on this benchmark, with $W(0,0,2)$
-marginally favoured on $\Delta H_\mathrm{vap}$.
+regime as established BID indices on this benchmark.
 
-\item We do not claim the Wuzi family outperforms the classical
-indices in any uniform sense: the comparison is sensitivity
-only, not a QSPR-utility certification. A single scalar index
+\item These experiments are sensitivity benchmarks, not QSPR model
+validation: we do not claim the Wuzi family outperforms the
+classical indices in any uniform sense, and a single scalar index
 that correlates strongly with one property on $18$ isomers can
-still be multivariately redundant with the classical baseline.
+still be multivariately redundant with the classical baseline. The
+companion methodology paper~\cite{Paper2_Screening} addresses the
+multivariate redundancy question directly on three
+larger QSPR datasets.
 \end{enumerate}
 
 Figure~\ref{fig:octanes} shows the full heatmap of signed Pearson
@@ -1361,7 +1386,7 @@ bound, and the generalised Randi\'c, sum-connectivity, and Sombor
 estimates. The exhaustive enumeration of
 Section~\ref{sec:extremal} establishes the empirical extremal
 pattern across three parameter-sign regions for trees of order
-$n \le 12$. The conjectures collected below are the natural
+$n \le 15$. The conjectures collected below are the natural
 mathematical continuations of these results; they record what is
 believed to be true on the basis of computational evidence and
 classical analogy, and explicitly state the gaps that a formal
@@ -1617,7 +1642,7 @@ fact for redundancy screening.
 
 The empirical centrepiece is the non-classical extremal regime at
 $(\alpha, \beta, \gamma) = (-1, -1, 1)$: exhaustive enumeration of
-all non-isomorphic trees up to order $n = 12$ shows that the
+all non-isomorphic trees up to order $n = 15$ shows that the
 maximizer is neither the star, the path, nor a caterpillar for
 $n \ge 7$ (Table~\ref{tab:caterpillar_argmax},
 Conjecture~\ref{conj:caterpillar_max}). On the chemometric side,
