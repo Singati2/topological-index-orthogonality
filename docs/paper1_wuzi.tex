@@ -241,9 +241,10 @@ on the $75$ decane isomers (structure-sensitivity metrics).
 (Section~\ref{sec:open}). We collect all open problems --- sharp
 Nordhaus--Gaddum and $GA$/$H$/$ABC$ bounds
 (Conjectures~\ref{conj:NG},~\ref{conj:GA},~\ref{conj:H_ABC});
-extremal-graph characterisations for trees, unicyclic, and bicyclic
-graphs
-(Conjectures~\ref{conj:trees_beta_pos}--\ref{conj:bicyclic}); and
+extremal-graph characterisations for trees and unicyclic graphs
+(Conjectures~\ref{conj:trees_beta_pos},~\ref{conj:unicyclic});
+the analogous bicyclic question (Remark~\ref{conj:bicyclic},
+posed as an open question pending computational support); and
 the structural characterisation of the non-classical maximizer at
 $(-1, -1, 1)$ (Conjecture~\ref{conj:caterpillar_max}) --- in one
 section with explicit proof-strategy remarks, separated from the
@@ -566,20 +567,28 @@ is constant on the inner sum. Hence the inner sum reduces to
 $f(i,j)\cdot |E_{ij}(G)| = f(i,j)\cdot m_{ij}(G)$, which
 yields~\eqref{eq:bid_linear}.
 
-\emph{Step 2: dimension bound.} Equation~\eqref{eq:bid_linear}
-exhibits $I_{f}$ as a $\mathbb{R}$-linear combination of the
-$G$-dependent counts $\{m_{ij}(G)\}_{1\le i\le j\le\Delta}$ with
-coefficients $\{f(i,j)\}_{1\le i\le j\le\Delta}$ that depend on $f$
-alone. Hence $\bid$, viewed as a real vector space of functionals on
-$\mathcal{G}_{\Delta}$, embeds into $\mathbb{R}^{N_{\Delta}}$ by
-$I_{f}\mapsto(f(i,j))_{1\le i\le j\le\Delta}$, where
-$N_{\Delta}=|\{(i,j):1\le i\le j\le\Delta\}|$. The set
-$\{(i,j):1\le i\le j\le\Delta\}$ is in bijection with the multisets
-of size $\le 2$ from $\{1,\ldots,\Delta\}$ that contain at most one
-repetition, and its cardinality is $N_{\Delta}=\binom{\Delta+1}{2}$
-by the standard multiset-counting identity. Consequently
-$\dim\bid\le \binom{\Delta+1}{2}$, and specialising to
-$\Delta=4$ gives $\binom{5}{2}=10$.
+\emph{Step 2: dimension bound.} For each admissible pair $(i, j)$
+with $1\le i\le j\le\Delta$, regard the edge-count
+$m_{ij}:\mathcal{G}_{\Delta}\to\mathbb{N}_{\ge 0}$ as a real-valued
+functional on $\mathcal{G}_{\Delta}$. Equation~\eqref{eq:bid_linear}
+shows that
+\[
+I_{f} \;=\; \sum_{1\le i\le j\le\Delta} f(i,j)\cdot m_{ij}
+\qquad\text{as functionals on }\mathcal{G}_{\Delta},
+\]
+so $I_{f}$ lies in the $\mathbb{R}$-linear span of
+$\{m_{ij} : 1\le i\le j\le\Delta\}$. Hence
+$\bid \subseteq \operatorname{span}_{\mathbb{R}}\{m_{ij}:1\le i\le j\le\Delta\}$,
+and since any subspace of a span of $N_{\Delta}$ vectors has
+dimension at most $N_{\Delta}$,
+\[
+\dim_{\mathbb{R}} \bid \;\le\; N_{\Delta}
+\;=\; |\{(i,j) : 1\le i\le j\le\Delta\}|
+\;=\; \binom{\Delta+1}{2},
+\]
+the last equality being the standard count of multisets of size
+$\le 2$ from a $\Delta$-element set. Specialising to $\Delta = 4$
+gives the molecular-graph case $\binom{5}{2}=10$.
 \end{proof}
 
 \begin{remark}\label{rem:bid_credit}
@@ -1498,22 +1507,24 @@ $\gamma$ factors that is the analogue of
 Remark~\ref{rem:trees_strategy}.
 \end{remark}
 
-\begin{conjecture}[Extremal bicyclic graphs]\label{conj:bicyclic}
-Among bicyclic graphs of order $n \ge 5$, in the parameter region
-$\alpha \ge 0,\, \beta \ge 0,\, \gamma \ge 0$, an extremal of
-$\Wuzi$ lies in one of the following candidate families:
-the $\theta$-graph (two cycles sharing one edge) with pendant
-vertices attached at the high-degree vertices, or the bowtie-with-
-pendants graph (two cycles sharing one vertex). The precise winner
-depends on $n$ and on $(\alpha, \beta, \gamma)$.
-\end{conjecture}
-
-\begin{remark}\label{rem:bicyclic_strategy}
-Bicyclic graphs come in three structural flavours (two triangles
-sharing one edge, two cycles sharing one vertex, $\theta$-graphs),
-each requiring a separate transformation analysis. A small-$n$
-computational verification via \texttt{nauty}/\texttt{geng}
-enumeration would be a natural first step;
+\begin{remark}[Open question: extremal bicyclic graphs]\label{conj:bicyclic}
+The analogous extremal problem for bicyclic graphs of order $n \ge 5$
+is left open here. The natural candidate families in the parameter
+region $\alpha \ge 0,\, \beta \ge 0,\, \gamma \ge 0$ are the
+$\theta$-graph (two cycles sharing one edge) with pendant vertices
+attached at the high-degree vertices, and the bowtie-with-pendants
+graph (two cycles sharing one vertex); the precise winner is
+expected to depend on $n$ and on $(\alpha, \beta, \gamma)$. We
+state this as an open question rather than a conjecture because, in
+contrast to Conjectures~\ref{conj:trees_beta_pos} and
+\ref{conj:unicyclic} (which inherit support from the classical
+Randi\'c-index literature), no computational evidence has been
+collected here for the bicyclic case. Bicyclic graphs come in three
+structural flavours (two triangles sharing one edge, two cycles
+sharing one vertex, $\theta$-graphs), each requiring a separate
+transformation analysis. A small-$n$ computational verification via
+\texttt{nauty}/\texttt{geng} enumeration would be the natural first
+step before committing to a formal conjecture;
 see~\cite{HansenMelot2005bicyclicBounds} for the classical Randi\'c
 treatment.
 \end{remark}
@@ -1550,6 +1561,7 @@ been formally extracted from the enumeration data.
 
 \begin{table}[h]
 \centering
+\small
 \caption{Summary of extremal-graph conjectures for $\Wuzi$. ``$+$'' denotes the sign region in which the conjecture is stated; ``$\circ$'' denotes a mixed-sign triple.}
 \label{tab:extremals}
 \begin{tabular}{lcccc}
