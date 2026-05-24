@@ -645,13 +645,12 @@ Direct from the definition; on regular pairs the exponential
 factor is~$1$.
 \end{proof}
 
-\begin{theorem}[Regular bracket]\label{thm:regular_bracket}
-If $G$ is $r$-regular for some $r\in[\delta,\Delta]$, then
-$\Wuzi = m\cdot 2^{\beta} r^{2\alpha+\beta}$ (cf.\
-Corollary~\ref{cor:regular_value}).
-\end{theorem}
-
-For non-regular graphs the bracket bound depends on which
+On regular graphs the bracket of Theorem~\ref{thm:bracket}
+collapses to the exact identity
+$\Wuzi = m\cdot 2^{\beta} r^{2\alpha+\beta}$ established in
+Corollary~\ref{cor:regular_value}; this is the sharp regular case
+and is referenced in \S\ref{sub:tight} below. For non-regular
+graphs the bracket bound depends on which
 parameter region $(\alpha,\beta,\gamma)$ lies in. The signs of
 $\alpha,\beta$ and the sign of $2\alpha+\beta$ determine which of
 the $\binom{\Delta+1}{2}$ admissible pairs $(i,j)$ maximizes or
@@ -841,11 +840,10 @@ equality holds throughout.
 A clean and verifiable conclusion of this section is that the
 bracket bound of Theorem~\ref{thm:bracket} is tight precisely on
 the class of $r$-regular graphs, for every $r \in [\delta, \Delta]$.
-For any $r$-regular graph $G$ of size $m$,
-$\Wuzi = m \cdot 2^\beta r^{2\alpha + \beta}$
-(Theorem~\ref{thm:regular_bracket}), so all $r$-regular graphs of
-the same size yield the same Wuzi value, and in particular the
-bracket is attained on $K_n$, $C_n$, $Q_k$, and every other
+By Corollary~\ref{cor:regular_value}, any $r$-regular graph $G$ of
+size $m$ has $\Wuzi = m \cdot 2^\beta r^{2\alpha + \beta}$; all
+$r$-regular graphs of the same size yield the same Wuzi value, and
+the bracket is attained on $K_n$, $C_n$, $Q_k$, and every other
 $r$-regular graph.
 
 \subsection{Exact reductions to classical indices}\label{sub:reductions}
@@ -1569,103 +1567,48 @@ Bicyclic, $n\ge 5$ & $+$ & $+$ & $+$ & $\theta$- or bowtie-with-pendants (open)\
 \end{table}
 
 % =====================================================================
-\section{Discussion}\label{sec:discussion}
+\section{Concluding remarks}\label{sec:conclusion}
 % =====================================================================
 
 The Wuzi family combines mathematical tractability on the standard
-graph classes (Section~\ref{sec:closedforms}) with a structural
-ceiling on its chemometric reach (Section~\ref{sec:bid},
-Theorem~\ref{thm:bid}). The bracket bound via the edge-contribution
-function (Theorem~\ref{thm:bracket}) and the uniform ratio bound
-(Theorem~\ref{thm:ratio_bound}) together give a complete two-sided
-sandwich for $\Wuzi$ in terms of any classical BID index with
-strictly positive edge contribution; on regular graphs the bracket
-collapses to the exact identity
-$\Wuzi = m \cdot 2^{\beta} r^{2\alpha + \beta}$
-(Theorem~\ref{thm:regular_bracket}). Combined with the
-Cauchy--Schwarz extension and the Jensen-type bounds via $M_1$ and
-$M_2$, the rigorous core of Section~\ref{sec:bounds} covers the
-non-negative parameter region and the generalised Randi\'c,
-sum-connectivity, and Sombor bounds for all real
-$(\alpha, \beta, \gamma)$ with $\gamma = 0$.
+graph classes with an explicit structural ceiling on its
+chemometric reach. The rigorous core of Section~\ref{sec:bounds}
+gives a coherent set of bounds: the bracket bound via the
+edge-contribution function (Theorem~\ref{thm:bracket}) and the
+uniform ratio bound (Theorem~\ref{thm:ratio_bound}) together
+sandwich $\Wuzi$ in terms of any classical BID index with strictly
+positive edge contribution, and the Jensen-type and
+Cauchy--Schwarz inequalities of \S\ref{sub:cs}--\S\ref{sub:R_chi_SO}
+close the picture in $M_1, M_2, R, \chi$, and $SO$ for the
+non-negative parameter region. The Edge-Degree-Pair Basis
+(Theorem~\ref{thm:bid}) gives the structural reason that no
+parametric BID family on $\mathcal{G}_4$ --- including the Wuzi
+family --- can escape the $10$-dimensional BID subspace; the
+companion methodology paper~\cite{Paper2_Screening} exploits this
+fact for redundancy screening.
 
-On the chemometric side, the sensitivity behaviour on the standard
-math-chem benchmarks (Section~\ref{sec:sensitivity}) places the
-family in the same correlation regime as established BID indices.
-The family is competitive on two of the five octane physicochemical
-properties ($\Delta H_{\mathrm{vap}}$ via the pure-$\gamma$ triple
-$W(0, 0, 2)$ and the acentric factor $\omega$ via the classical
-reduction $W(1, 0, 0) = M_2$); we do not claim it is uniformly
-superior to any classical index on any benchmark. The Edge-Degree-Pair
-Basis observation explicitly accounts for the family's inability to
-escape the $10$-dimensional BID subspace on hydrogen-suppressed
-molecular graphs of $\Delta \le 4$, which is the structural reason
-that no parametric BID family --- including this one --- can break
-the redundancy ceiling reported in the companion methodology
-paper~\cite{Paper2_Screening}.
+The empirical centrepiece is the non-classical extremal regime at
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$: exhaustive enumeration of
+all non-isomorphic trees up to order $n = 12$ shows that the
+maximizer is neither the star, the path, nor a caterpillar for
+$n \ge 7$ (Table~\ref{tab:caterpillar_argmax},
+Conjecture~\ref{conj:caterpillar_max}). On the chemometric side,
+the sensitivity-analysis results of Section~\ref{sec:sensitivity}
+place the family in the same correlation regime as the eight
+classical BID indices on the $18$ octanes.
 
-The open mathematical problems are catalogued in
-Section~\ref{sec:open}; the most distinctive of them is the
-non-classical mixed-sign maximizer at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$
-(Conjecture~\ref{conj:caterpillar_max}), supported by exhaustive
-enumeration up to order $12$ but lacking a structural
-characterisation of the maximizer tree. The natural chemometric
-extension is to additional compound classes (benzene derivatives,
-alkane homologues beyond octane and decane) and to
-compound-class-specific QSPR endpoints; the bounded
-Albertson-irregularity pairing
-$\mathrm{Alb}(G) = \sum_e |d_u - d_v|$ is the natural mathematical
-companion of the Wuzi $\gamma$-axis and is not addressed here.
-
-% =====================================================================
-\section{Conclusion}\label{sec:conclusion}
-% =====================================================================
-
-We have introduced the Wuzi index family $\Wuzi$ and obtained
-(i) closed-form values on nine standard graph classes
-(Proposition~\ref{prop:closedforms});
-(ii) a bracket bound via the edge-contribution function that is
-tight on regular graphs (Theorem~\ref{thm:bracket});
-(iii) exact reductions to the classical indices $M_2$, $R$,
-$\chi$, $H$ at six parameter points
-(Proposition~\ref{prop:reductions});
-(iv) Jensen-type bounds in $M_1$ and $M_2$
-(Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha})
-together with explicit bounds in $(\Delta, m)$ and $(\delta, m)$
-for the non-negative parameter region
-(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta});
-(v) a uniform ratio-bound theorem (Theorem~\ref{thm:ratio_bound})
-covering every classical BID index with strictly positive edge
-contribution, together with rigorous Cauchy--Schwarz bounds via
-the generalised Randi\'c, sum-connectivity, and Sombor indices
-(Propositions~\ref{thm:R_chi},~\ref{thm:sombor});
-(vi) the Edge-Degree-Pair Basis (Theorem~\ref{thm:bid}), giving a
-$10$-dimensional structural ceiling on the BID family on
-hydrogen-suppressed molecular graphs;
-(vii) an empirical isolation of a non-classical extremal regime at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$ via exhaustive tree
-enumeration through $n = 12$
-(Table~\ref{tab:caterpillar_argmax}); and
-(viii) sensitivity analysis on the $18$ octane isomers, the $106$
-non-isomorphic trees of order $10$, and the $75$ decane isomers,
-showing the family is in the same correlation regime as
-established BID indices on the standard math-chem benchmarks. A
-companion methodology paper~\cite{Paper2_Screening} studies
-multi-dataset redundancy screening of topological indices.
-
-The formal bounds in $(n, m, \Delta, \delta)$ and via the
-generalised Randi\'c, sum-connectivity, and Sombor indices are
-complete for the non-negative parameter region
-(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta},~\ref{thm:R_chi},~\ref{thm:sombor}).
-The Nordhaus--Gaddum sum bound, sharp two-sided bounds via $GA$,
-$H$, $ABC$, the formal extremal-graph characterisations for trees,
-unicyclic, and bicyclic graphs, and the structural description of
-the non-classical maximizer at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-are stated as conjectures and consolidated in
-Section~\ref{sec:open}; together with explicit proof-strategy
-remarks, these are the natural seams for the formal companion
-derivation.
+The mathematical problems left open --- the sharp Nordhaus--Gaddum
+sum bound; sharp two-sided bounds via $GA$, $H$, and $ABC$; the
+formal extremal-graph characterisations for trees, unicyclic, and
+bicyclic graphs; and the structural description of the maximizer
+at $(-1, -1, 1)$ --- are consolidated in Section~\ref{sec:open}
+together with explicit proof-strategy remarks. On the chemometric
+side, the natural extensions are to additional compound classes
+(benzene derivatives, alkane homologues beyond octane and decane)
+and to compound-class-specific QSPR endpoints, together with a
+formal study of the Albertson-irregularity pairing
+$\mathrm{Alb}(G) = \sum_e |d_u - d_v|$ that is the natural
+mathematical companion of the Wuzi $\gamma$-axis.
 
 % =====================================================================
 \section*{Data and code availability}
