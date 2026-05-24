@@ -30,9 +30,8 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-% Working-draft markers visible in this draft; submission-ready
-% compile swaps to \newcommand{\todo}[1]{} after stub resolution.
-\newcommand{\todo}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
+% \todo marker: suppressed (no draft markers remain in body).
+\newcommand{\todo}[1]{}
 \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
 
 \title{\bfseries Orthogonality Screening of Topological Indices for QSPR Modeling:\\ A Structural and Empirical Redundancy Analysis}
@@ -210,7 +209,7 @@ connectivity $ABC$, augmented Zagreb $AZI$, Sombor $SO$ and its
 variants, Albertson irregularity $\mathrm{Alb}$, sigma $\sigma$,
 and reduced Zagreb $\mathrm{redM}_1$. The observation that BID
 indices are linear functionals of the edge-degree-pair counts
-$m_{ij}$ is standard~\cite{GutmanBorovicanin2018BID}; what we
+$m_{ij}$ is standard~\cite{BorovicaninDasFurtulaGutman2017Zagreb}; what we
 contribute is the explicit dimension bound on $\mathcal{G}_4$ and
 the redundancy-screening consequence.
 
@@ -351,7 +350,7 @@ $\binom{5}{2}=10$.
 
 \begin{remark}\label{rem:bid_credit}
 The observation that BID indices are linear in $m_{ij}$ counts is
-standard~\cite{GutmanBorovicanin2018BID}. The contribution here is
+standard~\cite{BorovicaninDasFurtulaGutman2017Zagreb}. The contribution here is
 (i)~the explicit dimension-$10$ bound on $\mathcal{G}_4$ and
 (ii)~its operational use in the screening pipeline: any new BID
 index proposed for molecular chemistry must justify its
@@ -1015,11 +1014,15 @@ F.~Movahedi, I.~Gutman, I.~Red\v{z}epovi\'c, and B.~Furtula,
 \emph{Diminished Sombor index of graphs},
 MATCH Commun.~Math.~Comput.~Chem.~\textbf{95} (2026), 141--162.
 
-\bibitem{GutmanBorovicanin2018BID}
-I.~Gutman and B.~Borovi\'canin,
-\emph{Edge-degree-based topological indices and their applications},
-survey article in the math-chem literature, 2018 (full citation
-details to be added at submission).
+\bibitem{BorovicaninDasFurtulaGutman2017Zagreb}
+B.~Borovi\'canin, K.~C.~Das, B.~Furtula, and I.~Gutman,
+\emph{Bounds for Zagreb indices},
+MATCH Commun.~Math.~Comput.~Chem.~\textbf{78} (2017), 17--100.
+(Reprinted as a chapter in I.~Gutman, B.~Furtula, K.~C.~Das,
+E.~Milovanovi\'c, and I.~Milovanovi\'c (eds.),
+\emph{Bounds in Chemical Graph Theory --- Mainstreams},
+Mathematical Chemistry Monographs MCM-20,
+University of Kragujevac, 2017, pp.~67--153.)
 
 \bibitem{Paper1_Wuzi}
 A.~Natarajan, G.~Shiwakoti, M.~Arockiaraj,
@@ -1063,10 +1066,14 @@ G.~Landrum et al.,
 
 \bibitem{TodeschiniConsonniHandbook}
 R.~Todeschini and V.~Consonni,
-\emph{Molecular Descriptors for Chemoinformatics}, 2nd ed.,
-Wiley-VCH, Weinheim, 2009 (originally \emph{Handbook of Molecular
-Descriptors}, Wiley-VCH, 2000).
-(Full publisher / page-range details to be confirmed at submission.)
+\emph{Molecular Descriptors for Chemoinformatics}, 2nd ed., 2 vols.\
+(Vol.~I: Alphabetical Listing; Vol.~II: Appendices, References),
+Methods and Principles in Medicinal Chemistry, Vol.~41,
+Wiley-VCH, Weinheim, 2009, xxxvi + 1257 pp.,
+ISBN 978-3-527-31852-0, DOI 10.1002/9783527628766.
+(Originally published as \emph{Handbook of Molecular Descriptors},
+Methods and Principles in Medicinal Chemistry, Vol.~11,
+Wiley-VCH, Weinheim, 2000.)
 
 \bibitem{PengLongDing2005}
 H.~Peng, F.~Long, and C.~Ding,
