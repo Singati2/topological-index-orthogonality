@@ -97,12 +97,12 @@ The mathematical contributions of the paper are:
 (i) closed-form values on nine standard graph classes
 ($K_n, C_n, P_n, S_n, K_{p,q}, Q_k, W_n, F_p$, and $r$-regular
 graphs); (ii) a bracket bound via the edge-contribution function
-$\psi$ that is tight on regular graphs (Theorem~\ref{thm:bracket});
+$\psi$ that is tight on regular graphs (Proposition~\ref{thm:bracket});
 (iii) Jensen-type bounds in the Zagreb indices $M_1$ and $M_2$
 (Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha});
-(iv) explicit upper and lower bounds in $(\Delta, m)$ and
-$(\delta, m)$ for the non-negative parameter region
-(Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta}); (v) a
+(iv) explicit (coarse, factor-wise) upper and lower bounds in
+$(\Delta, m)$ and $(\delta, m)$ for the non-negative parameter
+region (Propositions~\ref{thm:upper_Delta},~\ref{thm:lower_delta}); (v) a
 \emph{uniform ratio-bound theorem} (Theorem~\ref{thm:ratio_bound})
 that, for every classical BID index $I_h$ with strictly positive
 edge contribution on the degree pairs realised in $G$, sandwiches
@@ -129,9 +129,11 @@ the paper (Conjecture~\ref{conj:caterpillar_max}). Sensitivity
 analysis on three standard chemical compound classes ($18$ octane
 isomers, $106$ trees of order $10$, $75$ decane isomers) shows
 that the family lies in the same correlation regime as established
-BID indices on the standard math-chem benchmarks and is
-competitive on $\Delta H_{\mathrm{vap}}$ and on the acentric
-factor $\omega$. All open problems (sharp Nordhaus--Gaddum and
+BID indices on the standard math-chem benchmarks; on the octane
+benchmark $W(0, 0, 2)$ attains $|r| = 0.967$ on
+$\Delta H_{\mathrm{vap}}$, comparable in magnitude to the
+geometric--arithmetic and harmonic indices ($|r| = 0.959$ each)
+on $n = 18$ isomers. All open problems (sharp Nordhaus--Gaddum and
 $GA$/$H$/$ABC$ bounds; extremal-graph characterisations among
 trees, unicyclic, and bicyclic graphs; the non-classical maximizer
 at $(-1, -1, 1)$) are collected in Section~\ref{sec:open}. A
@@ -208,7 +210,7 @@ paper~\cite{Paper2_Screening} uses this fact as the structural
 ceiling for redundancy screening.
 \item \textbf{Bounds for the Wuzi family} (Section~\ref{sec:bounds}).
 We prove: a bracket bound via the edge-contribution function $\psi$
-that is tight on regular graphs (Theorem~\ref{thm:bracket}); a
+that is tight on regular graphs (Proposition~\ref{thm:bracket}); a
 Cauchy--Schwarz parameter-splitting inequality
 (Theorem~\ref{thm:cs}); Jensen-type bounds via $M_1$ and $M_2$
 (Theorems~\ref{thm:m1_bound},~\ref{thm:m1_concave},~\ref{thm:m2_alpha});
@@ -436,7 +438,7 @@ For real parameters $\alpha,\beta,\gamma$ and positive reals $x,y$,
 With this notation $\Wuzi=\sum_{uv\in E(G)}\psi(d_u,d_v;\alpha,\beta,\gamma)$
 and the trivial summation bracket gives:
 
-\begin{theorem}[Bracket bound]\label{thm:bracket}
+\begin{proposition}[Bracket bound]\label{thm:bracket}
 Let $G$ be a simple connected graph of size $m\ge 1$ with degrees
 in $[\delta,\Delta]$. Then
 \begin{equation}\label{eq:bracket}
@@ -455,7 +457,7 @@ pair attaining $\psi_{\min}$. If the extremum is attained at a
 unique admissible pair, this collapses to ``every edge of $G$
 shares the same degree pair'', which holds in particular for
 regular and certain biregular graphs.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 The inequalities are immediate from
@@ -632,7 +634,7 @@ conjectures in Section~\ref{sec:open}.
 
 \subsection{Bracket via $\psi$ extremes}\label{sub:bracket_psi}
 
-Theorem~\ref{thm:bracket} already gives the bracket
+Proposition~\ref{thm:bracket} already gives the bracket
 $m\,\psi_{\min}\le \Wuzi\le m\,\psi_{\max}$ with equality on
 regular graphs. The next step is to express $\psi_{\min},\psi_{\max}$
 in closed form in the regime where $\psi$ is monotone in each
@@ -651,7 +653,7 @@ Direct from the definition; on regular pairs the exponential
 factor is~$1$.
 \end{proof}
 
-On regular graphs the bracket of Theorem~\ref{thm:bracket}
+On regular graphs the bracket of Proposition~\ref{thm:bracket}
 collapses to the exact identity
 $\Wuzi = m\cdot 2^{\beta} r^{2\alpha+\beta}$ established in
 Corollary~\ref{cor:regular_value}; this is the sharp regular case
@@ -814,7 +816,14 @@ Multiplying the three factor-wise bounds yields
 $\psi(d_u, d_v; \alpha, \beta, \gamma)
    \le \Delta^{2\alpha} (2\Delta)^{\beta} \exp(\gamma (\Delta - 1) / (\Delta + 1))$
 for every edge, and summing over the $m$ edges of $G$
-gives~\eqref{eq:upper_Delta}.
+gives~\eqref{eq:upper_Delta}. The bound is a coarse product bound:
+the three factor-wise maxima are not attained at a common pair
+($d_u d_v$ and $d_u + d_v$ are both maximized at $(\Delta, \Delta)$,
+while $|d_u - d_v|/(d_u + d_v)$ is maximized at $(1, \Delta)$), so
+the bound is generally loose unless all edges of $G$ share a
+common degree-pair extremum of $\psi$ (cf.\
+Proposition~\ref{thm:bracket}); the sharp per-$G$ analogue is the
+ratio bound of Theorem~\ref{thm:ratio_bound}.
 \end{proof}
 
 \begin{proposition}[Lower bound in $\delta$]\label{thm:lower_delta}
@@ -843,14 +852,20 @@ equality holds throughout.
 
 \subsection{Tight regions}\label{sub:tight}
 
-A clean and verifiable conclusion of this section is that the
-bracket bound of Theorem~\ref{thm:bracket} is tight precisely on
-the class of $r$-regular graphs, for every $r \in [\delta, \Delta]$.
-By Corollary~\ref{cor:regular_value}, any $r$-regular graph $G$ of
-size $m$ has $\Wuzi = m \cdot 2^\beta r^{2\alpha + \beta}$; all
-$r$-regular graphs of the same size yield the same Wuzi value, and
+A verifiable conclusion of this section is that regular graphs
+form a \emph{universal tightness class} for the bracket bound of
+Proposition~\ref{thm:bracket}: for any $r \in [\delta, \Delta]$ and
+any $r$-regular graph $G$ of size $m$, Corollary~\ref{cor:regular_value}
+gives $\Wuzi = m \cdot 2^\beta r^{2\alpha + \beta}$, so all
+$r$-regular graphs of the same size share the same Wuzi value, and
 the bracket is attained on $K_n$, $C_n$, $Q_k$, and every other
-$r$-regular graph.
+$r$-regular graph. Regular graphs are sufficient but not necessary
+for tightness: the equality condition of Proposition~\ref{thm:bracket}
+requires only that every edge of $G$ realise a single extremum of
+$\psi$ over the admissible degree pairs, which depending on the
+parameter region $(\alpha, \beta, \gamma)$ and on which admissible
+pair attains the extremum can also be satisfied by certain
+biregular and semiregular graphs.
 
 \subsection{Exact reductions to classical indices}\label{sub:reductions}
 
@@ -1150,20 +1165,21 @@ Table~\ref{tab:caterpillar_argmax}, and the explicit
 
 \begin{table}[h]
 \centering
-\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, identified by degree sequence (descending). For $n = 5$ the maximum is attained at the path $P_5$; for $n = 6$ the maximum is a caterpillar tree; for every $n \in \{7, \ldots, 12\}$ the maximum is neither a path, a star, nor a caterpillar.}
+\small
+\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, identified by both degree sequence (descending) and canonical \texttt{graph6} string. The \texttt{graph6} string uniquely identifies the tree up to isomorphism (degree sequences alone do not, for $n \ge 6$). For $n = 5$ the maximum is attained at the path $P_5$; for $n = 6$ the maximum is a caterpillar; for every $n \in \{7, \ldots, 12\}$ the maximum is neither a path, a star, nor a caterpillar.}
 \label{tab:caterpillar_argmax}
-\begin{tabular}{rl}
+\begin{tabular}{rll}
 \toprule
-$n$ & Argmax degree sequence\\
+$n$ & Argmax degree sequence & \texttt{graph6}\\
 \midrule
-$5$  & $(2, 2, 2, 1, 1)$ \quad (= $P_5$)\\
-$6$  & $(3, 2, 2, 1, 1, 1)$\\
-$7$  & $(3, 2, 2, 2, 1, 1, 1)$\\
-$8$  & $(3, 2, 2, 2, 2, 1, 1, 1)$\\
-$9$  & $(4, 2, 2, 2, 2, 1, 1, 1, 1)$\\
-$10$ & $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$\\
-$11$ & $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$\\
-$12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$\\
+$5$  & $(2, 2, 2, 1, 1)$ \quad (= $P_5$) & \texttt{DqC}\\
+$6$  & $(3, 2, 2, 1, 1, 1)$ & \texttt{EqD?}\\
+$7$  & $(3, 2, 2, 2, 1, 1, 1)$ & \texttt{FqD?G}\\
+$8$  & $(3, 2, 2, 2, 2, 1, 1, 1)$ & \texttt{GpOI?C}\\
+$9$  & $(4, 2, 2, 2, 2, 1, 1, 1, 1)$ & \texttt{HqD?I?@}\\
+$10$ & $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$ & \texttt{Ip\_I?D??G}\\
+$11$ & $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{JqD?I?@O??\_}\\
+$12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{Kp\_I?D??I??@}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1248,16 +1264,19 @@ This serves as an internal consistency check.
 
 \item The strongest single $|r|$ on $T_B$ and $\Delta H_f$ is
 achieved by the augmented Zagreb index $AZI$ ($|r| = 0.936, 0.922$
-respectively), with no Wuzi parameter triple in the sampled
-panel exceeding it. On $\Delta H_\mathrm{vap}$ the strongest
-correlation is achieved by $W(0, 0, 2)$ ($|r| = 0.967$),
-marginally exceeding $GA$ and $H$ ($|r| = 0.959$); on the
-acentric factor $\omega$ the strongest is $W(1, 0, 0) = M_2$ at
-$|r| = 0.987$, with $W(1, 1, 1)$ at $|r| = 0.981$. The Wuzi
-family is in the same $|r|$ regime as established BID indices on
-this benchmark and is competitive on two of the five properties:
-$\Delta H_\mathrm{vap}$ via the pure-$\gamma$ triple $W(0, 0, 2)$,
-and $\omega$ via the classical-reduction $W(1, 0, 0) = M_2$.
+respectively), with no Wuzi parameter triple in the sampled panel
+exceeding it. On $\Delta H_\mathrm{vap}$ the strongest correlation
+is the pure-$\gamma$ triple $W(0, 0, 2)$ at $|r| = 0.967$,
+comparable in magnitude to $GA$ and $H$ ($|r| = 0.959$); the
+margin of $0.008$ on $n = 18$ observations is not large enough to
+support a claim of superiority without an uncertainty interval. On
+the acentric factor $\omega$ the strongest is $W(1, 0, 0) = M_2$
+at $|r| = 0.987$, but this is by definition the second Zagreb
+index (Proposition~\ref{prop:reductions}), not a Wuzi-specific
+finding; the strongest Wuzi-only triple on $\omega$ is $W(1, 1, 1)$
+at $|r| = 0.981$. The Wuzi family is therefore in the same $|r|$
+regime as established BID indices on this benchmark, with $W(0,0,2)$
+marginally favoured on $\Delta H_\mathrm{vap}$.
 
 \item We do not claim the Wuzi family outperforms the classical
 indices in any uniform sense: the comparison is sensitivity
@@ -1583,7 +1602,7 @@ The Wuzi family combines mathematical tractability on the standard
 graph classes with an explicit structural ceiling on its
 chemometric reach. The rigorous core of Section~\ref{sec:bounds}
 gives a coherent set of bounds: the bracket bound via the
-edge-contribution function (Theorem~\ref{thm:bracket}) and the
+edge-contribution function (Proposition~\ref{thm:bracket}) and the
 uniform ratio bound (Theorem~\ref{thm:ratio_bound}) together
 sandwich $\Wuzi$ in terms of any classical BID index with strictly
 positive edge contribution, and the Jensen-type and
