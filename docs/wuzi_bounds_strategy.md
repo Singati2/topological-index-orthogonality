@@ -374,47 +374,68 @@ This empirical evidence is **conjecture-generating**, not proof.
 
 The most interesting empirical finding of the computational search.
 For $n \ge 6$ the observed maximizer of $W(T; -1, -1, 1)$ is
-*neither* $P_n$ *nor* $S_n$. An is-caterpillar check on the
-observed maximizer (verified by `is_caterpillar` in
-`scripts/10_wuzi_extremal_search.py`) further distinguishes two
-sub-cases:
+*neither* $P_n$ *nor* $S_n$. An exhaustive enumeration through
+$n = 20$ (committed as `scripts/13_caterpillar_max_n5_to_20.py`,
+output `results/wuzi_caterpillar_max_n5_to_20.csv`) reveals a
+sharp odd/even structural pattern, summarized below:
 
-| $n$ | Argmax degree sequence | Is caterpillar? |
-|---|---|---|
-| $6$  | $(3, 2, 2, 1, 1, 1)$               | yes |
-| $7$  | $(3, 2, 2, 2, 1, 1, 1)$            | no  |
-| $8$  | $(3, 2, 2, 2, 2, 1, 1, 1)$         | no  |
-| $9$  | $(4, 2, 2, 2, 2, 1, 1, 1, 1)$      | no  |
-| $10$ | $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$   | no  |
-| $11$ | $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$| no  |
-| $12$ | $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ | no  |
+| $n$ | Argmax degree sequence | `graph6` | Pattern |
+|---|---|---|---|
+| $6$  | $(3, 2, 2, 1, 1, 1)$                                  | `EqD?`                            | caterpillar (boundary) |
+| $7$  | $(3, 2, 2, 2, 1, 1, 1)$                               | `FqD?G`                           | spider $S^{(2)}_3$ (boundary) |
+| $8$  | $(3, 2, 2, 2, 2, 1, 1, 1)$                            | `GpOI?C`                          | spider w/ one length-3 spoke (exceptional) |
+| $9$  | $(4, 2, 2, 2, 2, 1, 1, 1, 1)$                         | `HqD?I?@`                         | spider $S^{(2)}_4$ |
+| $10$ | $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$                      | `Ip_I?D??G`                       | double-spider $DS(3,3)$ |
+| $11$ | $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$                   | `JqD?I?@O??_`                     | spider $S^{(2)}_5$ |
+| $12$ | $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$                | `Kp_I?D??I??@`                    | double-spider $DS(4,3)$ |
+| $13$ | $(6, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$             | `LqD?I?@O??g??@`                  | spider $S^{(2)}_6$ |
+| $14$ | $(4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$          | `Mp_K?D??I??@O???_`               | double-spider $DS(4,4)$ |
+| $15$ | $(7, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$       | `NqD?I?@O??g??@O???G`             | spider $S^{(2)}_7$ |
+| $16$ | $(5, 4, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$    | `Op_K?D??I??@O???g???@`           | double-spider $DS(5,4)$ |
+| $17$ | $(8, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ | `PqD?I?@O??g??@O???I????C`        | spider $S^{(2)}_8$ |
+| $18$ | $(5, 5, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ | `Qp_K?E??I??@O???g???@O????G`  | double-spider $DS(5,5)$ |
+| $19$ | $(9, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ | `RqD?I?@O??g??@O???I????D?????G` | spider $S^{(2)}_9$ |
+| $20$ | $(6, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ | `Sp_K?E??I??@O???g???@O????I?????C` | double-spider $DS(6,5)$ |
 
-For $n = 6$ the observed argmax is a caterpillar (specifically a
-broom-like tree with a single branch vertex of degree 3 on a chain
-of length 2). For every $n \ge 7$ tested the argmax is NOT a
-caterpillar: removing the leaves leaves a non-path subgraph.
-Inspection of the search-script output (canonical labels in the
-CSV) shows that the argmax for $n \ge 7$ is a *spider*-like or
-*branched* tree where multiple short paths meet at one or two
-internal vertices. The full structural description is left for
-the formal derivation.
+Let $S^{(2)}_h$ denote the **spider** with hub degree $h$ and
+length-$2$ spokes ($2h + 1$ vertices total). Let $DS(a, b)$ denote
+the **double-spider** with hub degrees $a, b$ joined by an edge and
+$a - 1$, $b - 1$ length-$2$ spokes attached to the respective hubs
+($2(a + b - 1)$ vertices total). Then for every $n \in \{9, \ldots, 20\}$
+the observed maximizer matches the prediction:
 
-**Conjecture D.5 (Mixed-sign non-classical extremal).**
+- if $n$ is odd, the maximizer is $S^{(2)}_{(n-1)/2}$ — a single
+  hub of degree $(n-1)/2$ with all spokes of length $2$;
+- if $n$ is even, the maximizer is $DS(a, b)$ with
+  $a + b = n/2 + 1$ and $|a - b| \le 1$, equivalently
+  $a = \lceil (n + 2)/4 \rceil$ and $b = \lfloor (n + 2)/4 \rfloor$.
+
+The cases $n = 6, 7, 8$ sit on the boundary of the pattern:
+$n = 6$ is a caterpillar; $n = 7$ fits the spider formula at
+$h = 3$ on the boundary $n = 2h + 1 = 7$; $n = 8$ is genuinely
+exceptional ($S^{(2)}_3$ has only $7$ vertices, so $n = 8$ is a
+spider with one length-$3$ spoke).
+
+**Conjecture D.5 (Mixed-sign extremal trees: spider / double-spider).**
 For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-and tree order $n \ge 7$, the maximum of $W$ over all trees of
-order $n$ is attained at a tree that is neither the path $P_n$,
-the star $S_n$, nor a caterpillar. The precise structural
-characterization is an open problem.
+and tree order $n \ge 9$:
+(a) if $n$ is odd, the unique maximizer of $W(T; -1, -1, 1)$ over
+all non-isomorphic trees $T$ of order $n$ is the spider
+$S^{(2)}_{(n-1)/2}$;
+(b) if $n$ is even, the unique maximizer is the balanced
+double-spider $DS(a, b)$ with $a + b = n/2 + 1$ and $|a - b| \le 1$.
 
-This conjecture is the most plausibly *new* mathematical
-observation that the parametric Wuzi family produces: a parameter
-triple in which the standard star / path extremals fail and the
-maximizer escapes the caterpillar class entirely. A formal
-characterization should adapt the Kelmans transformation and the
-pendant-shift argument of the classical extremal-trees literature
-to the joint weight
+This conjecture *upgrades* the earlier draft formulation, which
+characterised the maximizer only **negatively** as "neither path
+nor star nor caterpillar". The positive characterisation above
+specifies the exact graph family at each $n$ in closed form and
+gives a concrete proof target. A formal characterization should
+adapt the Kelmans transformation and the pendant-shift argument
+of the classical extremal-trees literature to the joint weight
 $\psi(d_u, d_v; -1, -1, 1) = (d_u d_v)^{-1}(d_u + d_v)^{-1} \exp(|d_u - d_v|/(d_u + d_v))$
-at $(\alpha, \beta, \gamma) = (-1, -1, 1)$.
+at $(\alpha, \beta, \gamma) = (-1, -1, 1)$, showing that any tree
+not isomorphic to the prediction of (a) or (b) admits a local
+edge transformation that strictly increases the joint weight.
 
 ---
 

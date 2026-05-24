@@ -3,11 +3,11 @@
 **Paper.** *The Wuzi Index Family: Graph-Theoretic Properties, Bounds, Extremal Graphs, and Sensitivity Analysis*
 **Authors.** A. Natarajan, G. Shiwakoti, M. Arockiaraj
 **Repository.** <https://github.com/Singati2/topological-index-orthogonality>
-**Tag.** `v1.0-paper1-wuzi`
+**Tag.** `v1.1-paper1-wuzi`
 
 This file lists every script, dataset, results CSV, and figure that
 this paper depends on. A reviewer who clones the repository at the
-tag `v1.0-paper1-wuzi` and follows the steps below should be able
+tag `v1.1-paper1-wuzi` and follows the steps below should be able
 to reproduce every numerical claim and every figure in the
 manuscript.
 
@@ -46,15 +46,15 @@ Run from the repository root. All scripts complete in seconds on a single core.
 | `scripts/06_wuzi_degeneracy.py` | `results/wuzi_degeneracy.{csv,md}` | Figure 2 |
 | `scripts/07_structure_sensitivity.py` | `results/structure_sensitivity.{csv,md}` | Figure 3 |
 | `scripts/09_wuzi_bounds_tables.py` | `results/wuzi_bounds_ratio_tables.{csv,md}` | Remark 4.11 (ratio-bound constants) |
-| `scripts/10_wuzi_extremal_search.py` | `results/wuzi_extremal_trees.{csv,md}` | Table 2 (computational extremal search) |
+| `scripts/10_wuzi_extremal_search.py` | `results/wuzi_extremal_trees.{csv,md}` | Section 5 narrative (8 parameter triples at $n \le 12$) |
+| `scripts/13_caterpillar_max_n5_to_20.py` | `results/wuzi_caterpillar_max_n5_to_20.csv` | Table 2 (extended n=5..20 enumeration at $(-1,-1,1)$) |
+| `scripts/14_octane_bootstrap.py` | `results/octane_competitor_bootstrap.csv` | Table 3 caption (95% bootstrap CIs, B = 10,000) |
 
-Bootstrap CIs for Table 3 and the extended `graph6`-labelled
-maximizers for Table 2 (n=5..15) are produced by the inline
-Python blocks recorded in commit history; the canonical outputs
-are:
-
-- `results/octane_competitor_bootstrap.csv` (B = 10,000 percentile-method bootstrap; seed 20260524).
-- `results/wuzi_caterpillar_max_n5_to_15.csv` (extended enumeration, n=5..15).
+The two trailing scripts (13 and 14) are committed in this
+release so a reviewer pulling the `v1.1-paper1-wuzi` tag can
+reproduce the extended n=5..20 enumeration and the bootstrap CIs
+end-to-end. Both scripts run in under one minute on a single
+core.
 
 ## Figures referenced by the manuscript
 

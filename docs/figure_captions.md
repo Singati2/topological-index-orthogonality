@@ -100,3 +100,23 @@ $|\mathrm{pcor}|\ge 0.10$ with $\log D$); this is reported as
 "killed" in the figure and discussed in the manuscript as an
 honest failure mode of the strict combined criterion on
 weakly-target-correlated regression tasks.
+
+**Figure 10.** Maximizers of the Wuzi index
+$W(T; -1, -1, 1) = \sum_{uv \in E(T)} (d_u d_v)^{-1} (d_u + d_v)^{-1}
+\exp(|d_u - d_v|/(d_u + d_v))$ over all non-isomorphic trees of order
+$n$, for $n = 10, 11, 12$, drawn as rooted trees with the
+highest-degree vertex at the top. Internal vertices are coloured
+green and leaves cream. None of the three trees is a caterpillar
+(the non-leaf vertices do not form a path). In the language of
+Conjecture conj:caterpillar_max (Section 7): $n = 11$ is the spider
+$S^{(2)}_5$ with hub degree $(11-1)/2 = 5$ and length-$2$ spokes;
+$n = 10$ is the balanced double-spider $DS(3, 3)$ (two hubs of
+degree $3$, joined by an edge); $n = 12$ is $DS(4, 3)$. The
+\texttt{graph6} strings above each panel uniquely identify each
+tree up to isomorphism (degree sequences alone do not, for
+$n \ge 6$). Computed from
+\texttt{results/wuzi\_caterpillar\_max\_n5\_to\_20.csv}; rendering
+script lives in commit \texttt{cbed908}, dataset extended at
+\texttt{7f6c44a}. The same pattern (spider for odd $n$, balanced
+double-spider for even $n$) holds at every enumerated $n \ge 9$
+through $n = 20$.

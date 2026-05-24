@@ -27,15 +27,21 @@ The remainder of this README expands the two-paper plan:
   sum-connectivity, and harmonic as special cases; derives
   closed-form values on nine standard graph classes; proves a
   rigorous bracket bound, a Cauchy-Schwarz/geometric-mean
-  inequality, a Jensen-type bound via $M_1$, and a uniform
-  ratio-bound theorem; conjectures extremal graphs for trees,
-  unicyclic, and bicyclic graphs. Computational extremal search
-  across trees of order $5 \le n \le 12$ identifies a non-classical
-  extremal regime at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-  --- for $n \ge 7$ the observed maximizer is neither a path,
-  a star, nor a caterpillar --- whose formal characterization is
-  an open problem. Sensitivity analysis on the $18$ octanes,
-  $106$ trees of order $10$, and $75$ decane isomers.
+  inequality, Jensen-type bounds via $M_1$ and $M_2$, and a
+  uniform ratio-bound theorem; conjectures extremal graphs for
+  trees, unicyclic, and bicyclic graphs. Computational extremal
+  search across all non-isomorphic trees of order
+  $5 \le n \le 20$ ($823{,}065$ trees at $n = 20$) identifies a
+  non-classical extremal regime at
+  $(\alpha, \beta, \gamma) = (-1, -1, 1)$ with a sharp odd/even
+  structural pattern: for odd $n \ge 9$ the maximizer is the
+  spider $S^{(2)}_{(n-1)/2}$ with length-$2$ spokes, and for even
+  $n \ge 10$ it is the balanced double-spider $DS(a, b)$ with
+  $a + b = n/2 + 1$ and $|a - b| \le 1$. A formal
+  transformation-lemma proof of this characterization is open.
+  Sensitivity analysis on the $18$ octanes (with $95\%$ bootstrap
+  CIs), the $106$ trees of order $10$, and the $75$ decane
+  isomers.
 
 - **Paper 2 (software / methodology).** *Orthogonality Screening of
   Topological Indices for QSPR Modeling.* Develops the screening
@@ -365,8 +371,11 @@ scripts/
   07_structure_sensitivity.py    MATCH §5.4 analog on 75 decane isomers
   08_make_figures.py             Generates the 8 manuscript figures
   09_wuzi_bounds_tables.py       Brute-forces ratio-bound constants c_min^h / c_max^h
-  10_wuzi_extremal_search.py     Enumerates trees of order 5..12; observed extremals
+  10_wuzi_extremal_search.py     Enumerates trees of order 5..12 at eight parameter triples; observed extremals + caterpillar predicate
   11_ml_benchmark.py             RandomForest on 4 datasets with 4 feature configurations
+  12_octane_competitor_comparison.py  Head-to-head Pearson r between Wuzi and 8 classical BID indices on the 18 octanes
+  13_caterpillar_max_n5_to_20.py Extended n=5..20 enumeration of the (-1,-1,1) maximizer (graph6 + degree sequence)
+  14_octane_bootstrap.py         95% percentile bootstrap (B=10,000) on octane correlations
 
 docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation
@@ -388,6 +397,7 @@ figures/                          Publication-quality figures (PNG + PDF)
   fig7_structure_sensitivity      Structure sensitivity on 75 decane isomers
   fig8_correlation_heatmap        Full 30-index pairwise correlation matrix (ESOL)
   fig9_ml_benchmark               RandomForest performance and feature count across 4 datasets and 4 configurations
+  fig10_caterpillar_maximizers    Maximizers of W(T;-1,-1,1) for n=10, 11, 12 drawn as rooted trees (Paper 1 §5)
 
 results/                          Reproducible outputs by dataset
 data/                             Cached download CSVs (gitignored)
@@ -397,16 +407,22 @@ data/                             Cached download CSVs (gitignored)
 
 ## What remains unfinished
 
-1. Paper 1 §4–§6 — the *rigorous* core is now complete
-   (Propositions 4.7, 4.8, 5.4, 5.5; Theorems 4.1, 4.3, 4.4, 4.5,
-   4.6, 5.2). The remaining items are honestly labelled
-   **Conjectures**: sharp Nordhaus–Gaddum (4.9); sharp two-sided
-   bounds against $GA$, $H$, $ABC$ (5.6, 5.7); formal
-   extremal-tree / unicyclic / bicyclic characterizations
-   (6.1–6.3); and the non-classical extremal at $(-1,-1,1)$
-   (6.4, the headline open problem). Closing any of these is
-   joint work with the senior author following the
-   MATCH 95:141–162 template.
+1. Paper 1 §4 — the *rigorous* core (closed forms, bracket
+   bound, Cauchy–Schwarz extension, Jensen-type bounds in
+   $M_1$/$M_2$, $(n,m,\Delta,\delta)$ bounds, uniform ratio-bound
+   theorem, and bounds via the generalised Randić / sum-connectivity /
+   Sombor indices) is complete. The open items, collected in
+   **Section 7** (Open problems and conjectures) of the manuscript,
+   are: sharp Nordhaus–Gaddum (Conjecture~\ref{conj:NG}); sharp
+   two-sided bounds via $GA$, $H$, $ABC$ (Conjectures~\ref{conj:GA},
+   \ref{conj:H_ABC}); formal extremal-tree / unicyclic
+   characterisations (Conjectures~\ref{conj:trees_beta_pos},
+   \ref{conj:unicyclic}); the analogous bicyclic question
+   (Remark~\ref{conj:bicyclic}); and the
+   transformation-lemma proof of the spider / double-spider
+   structural conjecture at $(-1,-1,1)$
+   (Conjecture~\ref{conj:caterpillar_max}, verified empirically
+   through $n=20$).
 2. Paper 2 final prose polish in §9 (Discussion) and §10
    (Conclusion).
 3. Resolution of every `[REFERENCE NEEDED]` placeholder in
