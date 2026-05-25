@@ -222,7 +222,7 @@ def fig5b_wuzi_param_heatmaps_all():
                 f"partial $r$ w/ target $={r['partial_corr_target']:.3f}$"
             )
 
-    fig, axes = plt.subplots(3, 4, figsize=(13, 9))
+    fig, axes = plt.subplots(3, 4, figsize=(13, 7))
     gammas = [0.0, 0.5, 1.0, 2.0]
     for row, (ds, label) in enumerate(DATASETS):
         for col, gamma in enumerate(gammas):
