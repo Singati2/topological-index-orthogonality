@@ -1,0 +1,13 @@
+dataset,task,config,n,model,n_kept_pre_lasso_mean,n_kept_pre_lasso_std,rmse_mean,rmse_std,mae_mean,mae_std,r2_mean,r2_std,n_features_mean,n_features_std,roc_auc_mean,roc_auc_std,accuracy_mean,accuracy_std
+esol,regression,full,1127,LASSO_CV,30.0,0.0,1.536,0.0769,1.2176,0.0596,0.4571,0.0456,17.6,1.85,,,,
+esol,regression,pairwise_pruned,1127,LASSO_CV,7.4,0.8,1.5797,0.0847,1.2473,0.0643,0.4261,0.0475,7.2,0.4,,,,
+esol,regression,combined_pruned,1127,LASSO_CV,4.4,0.49,1.5884,0.0902,1.2565,0.0675,0.4198,0.0497,4.4,0.49,,,,
+freesolv,regression,full,639,LASSO_CV,30.0,0.0,3.4687,0.4001,2.5768,0.2305,0.1749,0.0331,12.8,3.97,,,,
+freesolv,regression,pairwise_pruned,639,LASSO_CV,8.0,0.0,3.4653,0.3942,2.5798,0.2146,0.1763,0.029,6.4,1.36,,,,
+freesolv,regression,combined_pruned,639,LASSO_CV,3.2,0.75,3.4616,0.3866,2.5769,0.218,0.1779,0.0213,3.2,0.75,,,,
+lipophilicity,regression,full,4200,LASSO_CV,30.0,0.0,1.1283,0.0156,0.9108,0.0079,0.1185,0.0247,16.2,3.25,,,,
+lipophilicity,regression,pairwise_pruned,4200,LASSO_CV,8.0,0.0,1.1374,0.0131,0.9197,0.0072,0.1044,0.0182,7.0,0.0,,,,
+lipophilicity,regression,combined_pruned,4200,LASSO_CV,0.2,0.4,1.2195,0.0,0.9837,0.0,-0.0119,0.0,0.2,0.4,,,,
+bbbp,classification,full,2039,L1_Logistic_CV,30.0,0.0,,,,,,,11.6,9.26,0.7939,0.0187,0.7626,0.0227
+bbbp,classification,pairwise_pruned,2039,L1_Logistic_CV,6.0,0.0,,,,,,,6.0,0.0,0.7873,0.026,0.7528,0.0299
+bbbp,classification,combined_pruned,2039,L1_Logistic_CV,4.0,0.0,,,,,,,4.0,0.0,0.7861,0.0283,0.7489,0.026

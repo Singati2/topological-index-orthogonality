@@ -91,7 +91,13 @@ CV noise at roughly $4\times$ fewer features
 (Table~\ref{tab:ml_benchmark}), and is competitive with several
 generic feature-selection comparators (LASSO, ElasticNet, mRMR,
 Boruta, $\ell_1$-logistic) under the reported mixed-model
-benchmark (Table~\ref{tab:fs_comparison}).
+benchmark (Table~\ref{tab:fs_comparison}). A matched-model-class
+benchmark (pipeline-then-LASSO vs.\ LASSO-only, same model class
+throughout) replicates the parsimony claim without the
+cross-model-class qualification: on every dataset the
+pairwise-then-LASSO pipeline matches no-screen LASSO within
+$5$-fold CV noise at roughly half the final LASSO-active features
+(Table~\ref{tab:matched_class}).
 
 \textbf{Limitation.} On Lipophilicity the strict combined
 diagnostic retains zero features in $4/5$ ML-benchmark folds; the
@@ -1029,6 +1035,7 @@ ESOL & \texttt{full} (RF)                 & RMSE $1.437$ & $30.0$\\
      & ElasticNet (linear, CV)            & RMSE $1.546$ & $16.2$\\
      & mRMR $k{=}7$ (linear)              & RMSE $1.654$ & $\phantom{0}7.0$\\
      & Boruta + RF (linear scoring)       & RMSE $1.620$ & $10.0$\\
+     & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $1.580$ & $\phantom{0}7.2$\\
 \midrule
 FreeSolv & \texttt{full} (RF)             & RMSE $3.537$ & $30.0$\\
          & \texttt{pairwise\_pruned} (RF) & RMSE $3.540$ & $\phantom{0}8.0$\\
@@ -1037,6 +1044,7 @@ FreeSolv & \texttt{full} (RF)             & RMSE $3.537$ & $30.0$\\
          & ElasticNet (linear, CV)        & RMSE $3.515$ & $18.6$\\
          & mRMR $k{=}8$ (linear)          & RMSE $3.618$ & $\phantom{0}8.0$\\
          & Boruta + RF (linear scoring)   & RMSE $3.588$ & $\phantom{0}2.0$\\
+         & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $3.465$ & $\phantom{0}6.4$\\
 \midrule
 Lipophilicity & \texttt{full} (RF)        & RMSE $1.030$ & $30.0$\\
               & \texttt{pairwise\_pruned} (RF) & RMSE $1.028$ & $\phantom{0}8.0$\\
@@ -1045,6 +1053,7 @@ Lipophilicity & \texttt{full} (RF)        & RMSE $1.030$ & $30.0$\\
               & ElasticNet (linear, CV)   & RMSE $1.130$ & $17.8$\\
               & mRMR $k{=}8$ (linear)     & RMSE $1.142$ & $\phantom{0}8.0$\\
               & Boruta + RF (linear scoring) & RMSE $1.144$ & $\phantom{0}5.0$\\
+              & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $1.137$ & $\phantom{0}7.0$\\
 \midrule
 BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
      & \texttt{pairwise\_pruned} (RF)     & AUC $0.860$ & $\phantom{0}6.0$\\
@@ -1057,6 +1066,7 @@ BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
 
 \vspace{0.5em}
 \noindent\small{$^\dagger$ Strict combined screen degenerates: retains zero features in $4/5$ folds; the RMSE shown is from the single fold that retained one feature. See \S\ref{sub:limitations}.}
+\noindent\small{$^\ddagger$ Pipeline-then-LASSO: in-fold pairwise screen $\to$ LASSO on the surviving features, same model class throughout. See \S\ref{sub:pipeline_then_lasso} and Table~\ref{tab:matched_class}.}
 \end{table}
 
 The headline reading is qualified by the cross-model-class
@@ -1072,16 +1082,98 @@ benchmark ($1.435$ at $7.4$ features versus $1.545$ at $14.6$
 features) and lower RMSE than mRMR-$k{=}7$ ($1.654$); on BBBP,
 \texttt{pairwise\_pruned} has higher ROC-AUC than $\ell_1$-Logistic
 ($0.860$ at $6$ features versus $0.790$ at $13.6$ features) and
-higher AUC than mRMR-$k{=}6$ ($0.747$). Because the comparison
-crosses model classes, the mechanical reading is
-``pairwise-pruned RandomForest is at least competitive with
-linear-model LASSO / ElasticNet / mRMR / Boruta /
-$\ell_1$-Logistic at matched feature count'' rather than a
-head-to-head model-architecture benchmark; a fully matched
-comparison is left as future work
-(\S\ref{sub:limitations}, item 5). Full per-fold standard
-deviations are in
+higher AUC than mRMR-$k{=}6$ ($0.747$). Because the comparators (LASSO, ElasticNet, mRMR, Boruta,
+$\ell_1$-Logistic) and the screen-pipeline rows
+(\texttt{full}, \texttt{pairwise\_pruned}, \texttt{combined\_pruned})
+use different model classes (linear vs.\ RandomForest), the
+single most honest reading of this table is the same-model-class
+``pipeline-then-LASSO'' rows reported in
+\S\ref{sub:pipeline_then_lasso} below. Full per-fold standard
+deviations for all comparators are in
 \texttt{results/paper2\_feature\_selection\_comparison.csv}.
+
+\subsubsection{Matched-model-class benchmark: pipeline-then-LASSO}\label{sub:pipeline_then_lasso}
+
+To eliminate the cross-model-class qualification on
+Table~\ref{tab:fs_comparison} we re-run the screen-pipeline /
+no-screen-pipeline comparison entirely within the LASSO
+(regression) and $\ell_1$-Logistic (classification) model classes.
+For each of the four datasets, under the same fold seed and the
+same $5$-fold splits as Table~\ref{tab:ml_benchmark} and
+Table~\ref{tab:fs_comparison}, we evaluate three configurations:
+
+\begin{itemize}
+\item \texttt{full (LASSO/L1-Log)}: LASSO (or $\ell_1$-Logistic on
+BBBP) with $5$-fold-CV-tuned regularisation, fit on the full
+$30$-index baseline inside each training fold.
+\item \texttt{pairwise} $\to$ \texttt{LASSO/L1-Log}: pairwise
+greedy redundancy filter at $|r|<0.95$ applied inside each
+training fold, then LASSO (or $\ell_1$-Logistic) fit on the
+surviving features.
+\item \texttt{combined} $\to$ \texttt{LASSO/L1-Log}: pairwise
+filter plus the in-fold partial-correlation filter
+$|\mathrm{pcor}|\ge 0.10$, then LASSO (or $\ell_1$-Logistic) fit on
+the survivors.
+\end{itemize}
+
+The pairwise / combined selectors are the byte-identical functions
+used by the RandomForest benchmark of script
+\texttt{11\_ml\_benchmark.py}, so the surviving feature subsets are
+exactly the ones the RF benchmark sees. The only difference is the
+downstream model class: LASSO / $\ell_1$-Logistic instead of
+RandomForest.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Pipeline-then-LASSO matched-model-class benchmark. Same model class (LASSO for regression, $\ell_1$-Logistic for BBBP) and same 5-fold splits across all three configurations within each dataset, so the comparison isolates the effect of the upstream screening step. ``pre-LASSO feats'' is the mean number of features handed to LASSO after screening; ``final L1 feats'' is the mean number of features with non-zero LASSO coefficient (the screening step shrinks the input set; LASSO further shrinks via $\ell_1$ regularisation). Reported as mean $\pm$ std across the 5 folds. Full per-fold numbers in \texttt{results/paper2\_pipeline\_then\_lasso.csv}.}
+\label{tab:matched_class}
+\begin{tabular}{llcrr}
+\toprule
+Dataset & Configuration & Metric (mean $\pm$ std) & pre-LASSO feats & final L1 feats\\
+\midrule
+ESOL          & \texttt{full} (LASSO)                       & RMSE $1.536\pm 0.077$  & $30.0$         & $17.6$\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.580\pm 0.085$  & $\phantom{0}7.4$ & $\phantom{0}7.2$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $1.588\pm 0.090$  & $\phantom{0}4.4$ & $\phantom{0}4.4$\\
+\midrule
+FreeSolv      & \texttt{full} (LASSO)                       & RMSE $3.469\pm 0.400$  & $30.0$         & $12.8$\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $3.465\pm 0.394$  & $\phantom{0}8.0$ & $\phantom{0}6.4$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $3.462\pm 0.387$  & $\phantom{0}3.2$ & $\phantom{0}3.2$\\
+\midrule
+Lipophilicity & \texttt{full} (LASSO)                       & RMSE $1.128\pm 0.016$  & $30.0$         & $16.2$\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.137\pm 0.013$  & $\phantom{0}8.0$ & $\phantom{0}7.0$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $1.220^{\,\dagger}$       & $\phantom{0}0.2$ & $\phantom{0}0.2$\\
+\midrule
+BBBP          & \texttt{full} ($\ell_1$-Logistic)           & AUC $0.794\pm 0.019$   & $30.0$         & $11.6$\\
+              & \texttt{pairwise} $\to$ $\ell_1$-Logistic   & AUC $0.787\pm 0.026$   & $\phantom{0}6.0$ & $\phantom{0}6.0$\\
+              & \texttt{combined} $\to$ $\ell_1$-Logistic   & AUC $0.786\pm 0.028$   & $\phantom{0}4.0$ & $\phantom{0}4.0$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\noindent\small{$^\dagger$ Combined screen retains zero features in $4/5$ Lipophilicity folds; the value shown is from the single fold that retained one feature. The same failure mode appears in Table~\ref{tab:ml_benchmark} and is treated as a formal limitation in \S\ref{sub:limitations}.}
+\end{table}
+
+\textbf{Headline reading (matched-model-class).} Within each model
+class, the pairwise-then-LASSO pipeline matches the no-screen
+LASSO baseline within CV noise on every dataset while using
+approximately half the final LASSO-active features: on ESOL
+$\Delta\mathrm{RMSE}\approx +0.04$ at $7.2$ vs.\ $17.6$ active
+features; on FreeSolv $\Delta\mathrm{RMSE}\approx -0.004$ at $6.4$
+vs.\ $12.8$ features (a slight improvement); on Lipophilicity
+$\Delta\mathrm{RMSE}\approx +0.01$ at $7.0$ vs.\ $16.2$ features;
+on BBBP $\Delta\mathrm{AUC}\approx -0.007$ at $6.0$ vs.\ $11.6$
+features. In every case the mean $\pm$ std intervals of
+\texttt{full (LASSO)} and \texttt{pairwise}$\,\to\,$LASSO overlap.
+The combined screen further halves the feature count on ESOL,
+FreeSolv, and BBBP with a similar within-noise penalty, and
+degenerates on Lipophilicity (same failure mode as the RF
+benchmark; see \S\ref{sub:limitations}). The cross-model-class
+qualification on Table~\ref{tab:fs_comparison} is therefore not
+load-bearing: the screen-pipeline's parsimony claim survives a
+fully matched same-model-class comparison.
+
+\FloatBarrier
 
 % =====================================================================
 \section{Discussion}\label{sec:discussion}
@@ -1166,20 +1258,22 @@ column of Table~\ref{tab:ml_benchmark} both illustrate this
 failure mode honestly.
 
 \item \textbf{RandomForest is one model class; the
-linear-comparator benchmark crosses model classes.}
+linear-comparator benchmark crosses model classes, but a matched-
+class same-model benchmark is also reported.}
 Section~\ref{sub:lasso_comparator} compares the screen-pipeline
 configurations against LASSO, ElasticNet, mRMR, Boruta, and
 $\ell_1$-Logistic on all four datasets. The screen-pipeline rows
-use a RandomForest, and the comparators use linear regression
-(regression datasets) or logistic regression (BBBP); the
-\texttt{pairwise\_pruned} RandomForest performs competitively with
-every tested comparator at matched feature count. The reported
-comparison is therefore best read as ``pairwise-pruned
-RandomForest is at least competitive with linear-model LASSO /
-ElasticNet / mRMR / Boruta / $\ell_1$-Logistic'' rather than as a
-head-to-head model-architecture benchmark; a fully matched
-comparison (linear-model screen-pipeline rows or tree-ensemble
-comparators such as XGBoost-mRMR) is left as future work.
+use a RandomForest, and the external comparators use linear
+regression (regression datasets) or logistic regression (BBBP);
+that comparison is therefore cross-model-class. To eliminate this
+qualification, Section~\ref{sub:pipeline_then_lasso} additionally
+reports a matched-model-class same-model benchmark
+(pipeline-then-LASSO vs.\ LASSO-only) on the four datasets; the
+parsimony claim survives the matched comparison (within-CV-noise
+RMSE / AUC at roughly half the LASSO-active features on every
+dataset). A complementary benchmark with a tree-ensemble
+comparator (e.g.\ XGBoost-mRMR vs.\ pipeline-then-XGBoost) is
+left as future work.
 
 \item \textbf{BID dimension bound covers $\Delta \le 4$ only.} The
 Edge-Degree-Pair Basis bound (Theorem~\ref{thm:bid}) is sharp on

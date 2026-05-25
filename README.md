@@ -133,7 +133,7 @@ Section plans and remaining math gaps are tracked in
 | Paper 1 §5 indirect Sombor / $M_1$ bound for $0<\beta<1$      | ✅ done (Proposition 5.5) |
 | Paper 1 §5 sharp $GA$ / $H$ / $ABC$ bounds                    | ⏳ Conjectures 5.6, 5.7 |
 | Paper 1 §6 formal extremal-graph characterization             | ⏳ Conjectures 6.1–6.4 |
-| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.2) |
+| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.3) |
 | Paper 2 submission gated on Paper 1 arXiv ID                  | ⏳ scheduled |
 
 ---
@@ -379,6 +379,7 @@ scripts/
   15_feature_selection_comparison.py LASSO / ElasticNet / mRMR / Boruta on regression; L1-Logistic / mRMR / Boruta on BBBP (Paper 2 Table tab:fs_comparison)
   16_novel_candidates_multidataset.py Cross-dataset alt-family screen on ESOL / FreeSolv / Lipophilicity (Paper 2 Table tab:novel_combined)
   17_bbbp_descriptors_and_altfamily.py BBBP baseline descriptors + BBBP row of alt-family table
+  18_pipeline_then_lasso.py      Matched-model-class pipeline-then-LASSO benchmark (Paper 2 §6.3.2, Table tab:matched_class)
 
 docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation

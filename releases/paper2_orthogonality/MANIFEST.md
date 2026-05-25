@@ -3,11 +3,11 @@
 **Paper.** *Orthogonality Screening of Topological Indices for QSPR Modeling: A Structural and Empirical Redundancy Analysis*
 **Authors.** G. Shiwakoti, A. Natarajan, M. Arockiaraj
 **Repository.** <https://github.com/Singati2/topological-index-orthogonality>
-**Tag.** `v1.2-paper2-orthogonality`
+**Tag.** `v1.3-paper2-orthogonality`
 
 This file lists every script, dataset, results CSV, and figure
 that Paper 2 depends on. A reviewer who clones the repository at
-the tag `v1.2-paper2-orthogonality` and follows the steps below
+the tag `v1.3-paper2-orthogonality` and follows the steps below
 should be able to reproduce every numerical claim and every figure
 in the manuscript. The full reproduction (including BBBP
 descriptor regeneration and the alt-family multi-dataset screen)
@@ -67,6 +67,7 @@ Run from the repository root. All scripts complete in seconds-to-minutes on a si
 | `scripts/15_feature_selection_comparison.py` | `results/paper2_feature_selection_comparison.csv` | Table tab:fs_comparison (LASSO/ElasticNet/mRMR/Boruta on regression datasets; L1-Logistic/mRMR/Boruta on BBBP) |
 | `scripts/16_novel_candidates_multidataset.py` | `results/novel_candidates_experiment/novel_candidates_multidataset.csv` | Cross-dataset alt-family replication on ESOL/FreeSolv/Lipophilicity (rdkit required) |
 | `scripts/17_bbbp_descriptors_and_altfamily.py` | `results/bbbp/descriptors_baseline.csv`, `results/novel_candidates_experiment/novel_candidates_bbbp.csv` | BBBP baseline descriptors + BBBP row of Table tab:novel_combined |
+| `scripts/18_pipeline_then_lasso.py` | `results/paper2_pipeline_then_lasso.csv` | Table tab:matched_class (pipeline-then-LASSO same-model-class benchmark, §6.3.2) |
 
 The threshold-sensitivity table (Table tab:threshold_sensitivity)
 is extracted from `results/cross_dataset_summary.csv` (columns 16–27);
