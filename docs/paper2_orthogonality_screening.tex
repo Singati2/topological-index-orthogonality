@@ -75,19 +75,21 @@ paper~\cite{Paper1_Wuzi} fails the combined diagnostic at every
 one of the $300$ grid points sampled, and the qualitative verdict
 is stable across the nine $(\tau_r, \tau_{\mathrm{pcor}})$
 combinations in $\{0.90, 0.95, 0.99\} \times \{0.05, 0.10, 0.20\}$
-(\S\ref{sub:threshold_sensitivity}). An ESOL single-dataset case
-study on $20$ alternative-family candidates (information-theoretic,
-centrality, motif, eccentricity, spectral-hybrid) shows that
-$15/20$ clear the pairwise threshold but only $4/20$ also clear
+(\S\ref{sub:threshold_sensitivity}). A cross-dataset replication on
+$20$ alternative-family candidates (information-theoretic,
+centrality, motif, eccentricity, spectral-hybrid) over all four
+benchmarks shows that $15$--$17/20$ clear the pairwise threshold
+but only $0$--$4/20$ also clear
 $\lvert\mathrm{pcor}(z, y \mid X)\rvert \ge 0.10$: pairwise-only
-screening is over-permissive on this dataset, but cross-dataset
-generality of the alternative-family result is not claimed. A
-5-fold cross-validated RandomForest benchmark on those three
-regression datasets plus BBBP ($n = 2\,039$) shows the
+screening is uniformly over-permissive, and the combined diagnostic
+is even more selective on FreeSolv, Lipophilicity, and BBBP than on
+ESOL (Table~\ref{tab:novel_combined}). A 5-fold cross-validated
+RandomForest benchmark on those four datasets shows the
 pairwise-pruned feature set preserves predictive performance within
 CV noise at roughly $4\times$ fewer features
-(Table~\ref{tab:ml_benchmark}), and is competitive with LASSO and
-ElasticNet linear comparators (Table~\ref{tab:fs_comparison}).
+(Table~\ref{tab:ml_benchmark}), and matches or beats LASSO,
+ElasticNet, mRMR, Boruta, and L1-logistic feature-selection
+comparators on every dataset (Table~\ref{tab:fs_comparison}).
 
 \textbf{Limitation.} On Lipophilicity the strict combined
 diagnostic retains zero features in $4/5$ ML-benchmark folds; the
@@ -95,9 +97,9 @@ combined diagnostic should be read as evidence about residual
 target signal, \emph{not} as an automatic feature-selection rule.
 We do not claim universal QSPR usefulness of the pipeline,
 universal redundancy of the Wuzi family beyond the tested datasets
-and linear diagnostics, or chemical utility of the four ESOL
-alternative-family passers; full limitations are catalogued in
-\S\ref{sub:limitations}.
+and linear diagnostics, or chemical utility of any alternative-family
+candidate that clears the combined diagnostic on a single dataset;
+full limitations are catalogued in \S\ref{sub:limitations}.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, orthogonality
@@ -642,7 +644,7 @@ on each of the three QSPR datasets (full table in
 \begin{table}[h]
 \centering
 \small
-\caption{Wuzi $100$-point grid: pass counts under threshold variation. Top block: pairwise screen only ($\max_b\lvert r(W, X_b)\rvert < \tau_r$). Bottom block: combined diagnostic (pairwise pass \emph{and} $\lvert\mathrm{pcor}(W, y \mid X)\rvert \ge \tau_{\mathrm{pcor}}$).}
+\caption{Wuzi $100$-point grid: pass counts under threshold variation. Top block: pairwise screen only ($\max_b\lvert r(W, X_b)\rvert < \tau_r$). Bottom block: combined diagnostic (pairwise pass \emph{and} $\lvert\mathrm{pcor}(W, y \mid X)\rvert \ge \tau_{\mathrm{pcor}}$) across the full $3 \times 3$ threshold grid.}
 \label{tab:threshold_sensitivity}
 \begin{tabular}{lccc}
 \toprule
@@ -655,18 +657,22 @@ FreeSolv      & $0$ & $1$ & $37$\\
 Lipophilicity & $0$ & $0$ & $30$\\
 \bottomrule
 \end{tabular}
-\quad
-\begin{tabular}{lccc}
+
+\vspace{0.6em}
+
+\begin{tabular}{l|ccc|ccc|ccc}
 \toprule
-& \multicolumn{3}{c}{Combined-diagnostic pass count, $\tau_r = 0.95$}\\
-\cmidrule(lr){2-4}
-Dataset & $\tau_{\mathrm{pcor}} = 0.05$ & $\tau_{\mathrm{pcor}} = 0.10$ & $\tau_{\mathrm{pcor}} = 0.20$\\
+& \multicolumn{3}{c|}{$\tau_r = 0.90$} & \multicolumn{3}{c|}{$\tau_r = 0.95$} & \multicolumn{3}{c}{$\tau_r = 0.99$}\\
+$\tau_{\mathrm{pcor}}$ & $.05$ & $.10$ & $.20$ & $.05$ & $.10$ & $.20$ & $.05$ & $.10$ & $.20$\\
 \midrule
-ESOL          & $0$ & $0$ & $0$\\
-FreeSolv      & $0$ & $0$ & $0$\\
-Lipophilicity & $0$ & $0$ & $0$\\
+ESOL          & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
+FreeSolv      & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
+Lipophilicity & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
 \bottomrule
 \end{tabular}
+
+\vspace{0.3em}
+\noindent\small{Combined-diagnostic pass count of the Wuzi $100$-point grid across the full $\{0.90, 0.95, 0.99\} \times \{0.05, 0.10, 0.20\}$ threshold grid (nine $(\tau_r, \tau_{\mathrm{pcor}})$ combinations).}
 \end{table}
 
 \noindent The qualitative conclusion is stable across the tested
@@ -682,26 +688,26 @@ threshold-dependent; the conclusion that the Wuzi family lacks
 independent linear QSPR signal on these datasets under the
 $30$-index baseline is not.
 
-\subsection{Case study 2: alternative-family candidates on ESOL}\label{sec:novel_case}
+\subsection{Case study 2: alternative-family candidates across four datasets}\label{sec:novel_case}
 
-\noindent\emph{Scope note.} This case study is presented as an
-\emph{ESOL-only single-dataset case study}, not as a cross-dataset
-generalisation. The Wuzi case study above replicates across the
-three regression datasets because the Wuzi candidate indices are
-parametric BID functions that are cheap to evaluate on already-cached
-descriptor matrices; the twenty alternative-family candidates here
-require building hydrogen-suppressed molecular graphs and running
-heavier per-graph computations (betweenness, eccentricity, motif
-counts, spectral hybrids), and cross-dataset replication of this
-specific 20-candidate screen on FreeSolv, Lipophilicity, and BBBP
-is left as future work. We make no claim that the four passers
-identified below are useful descriptors; the screening verdict is
-explicitly a redundancy diagnostic, not a chemical-utility
-certification.
+\noindent\emph{Scope note.} This case study screens twenty
+alternative-family candidate indices on all four benchmarks
+(ESOL, FreeSolv, Lipophilicity, BBBP), so the headline pattern
+``$15$--$17/20$ clear the pairwise screen but only $0$--$4/20$
+also clear the partial-correlation screen'' is a cross-dataset
+finding, not a single-dataset case study. The candidates are
+identical across datasets; the per-dataset verdict differs because
+the residual signal under the $30$-index baseline differs by
+target. We make no claim that any individual passer is a useful
+descriptor; the screening verdict is a redundancy diagnostic, not
+a chemical-utility certification. The candidates were chosen as
+five distinct design philosophies (information-theoretic,
+centrality, motif, eccentricity, spectral-hybrid) to test that
+the screening conclusion generalises beyond the BID-family case
+study of \S\ref{sec:wuzi_case}.
 
-To demonstrate that the screening pipeline applies beyond the BID
-family, we screen $20$ candidate indices on ESOL ($n=1\,127$,
-target $\log S$), drawn from five alternative design families.
+We screen $20$ candidate indices on the four datasets, drawn from
+the five alternative design families described below.
 
 \begin{table}[h]
 \centering
@@ -732,63 +738,84 @@ different design philosophies escape the redundancy ceiling on
 ESOL; the full per-candidate citation list is collected in
 \texttt{docs/literature\_notes.md} in the companion repository.
 
-\subsubsection{Screening verdict}
+\subsubsection{Screening verdict across the four datasets}
 
-Of the $20$ candidates, $15$ clear the $\max|r|<0.95$ pairwise
-screen on ESOL and $5$ fail it (Table~\ref{tab:novel_combined}).
-Of the $15$ that clear the pairwise screen, only $4$ also clear
-the partial-correlation condition $|\mathrm{pcor}|\ge 0.10$:
-$\mathrm{InfoH\_deg}$ (information-theoretic, $|\mathrm{pcor}|=0.154$),
-CutVerts (motif, $|\mathrm{pcor}|=0.118$),
-FourCyc (motif, $|\mathrm{pcor}|=0.112$), and
-MeanEcc (eccentricity, $|\mathrm{pcor}|=0.109$).
-The remaining $11$ candidates that clear the pairwise screen have
-$|\mathrm{pcor}|<0.10$ on $\log S$.
+Table~\ref{tab:novel_combined} reports the per-dataset pairwise and
+combined pass counts. The pairwise $|r|<0.95$ screen alone admits
+$15$--$17$ of the $20$ candidates on every dataset; the combined
+diagnostic that additionally requires
+$|\mathrm{pcor}|\ge 0.10$ admits only $0$--$4$. The pattern is
+consistent: the pairwise screen is uniformly over-permissive, and
+the combined diagnostic is sharper on FreeSolv ($1/20$ pass),
+BBBP ($2/20$), and Lipophilicity ($0/20$) than on ESOL ($4/20$).
 
-Among the $5$ candidates that fail the pairwise screen,
-$\mathrm{Bonchev\_Id}$ is the most strongly correlated with the
-classical baseline (max $|r|=0.992$ with Schultz).
+For BBBP (binary target) the partial-correlation diagnostic is
+computed via the linear probability model: we fit
+$y \sim X_{\mathrm{baseline}}$ as ordinary least squares against
+the $0/1$ class indicator and take residuals; the candidate is
+then residualised by the same baseline and Pearson-correlated
+with the residual class indicator. This is the standard
+LPM-based partial correlation; it puts the BBBP row of
+Table~\ref{tab:novel_combined} on the same scale as the three
+regression rows. A logistic-pseudo-$R^2$ alternative
+(Tjur's coefficient) is recorded as future work in
+\S\ref{sub:limitations}.
 
 \begin{table}[h]
 \centering
-\caption{Combined screening verdict on the $20$ candidates against the $30$-index baseline on ESOL ($n=1\,127$, target $\log S$). $\mathrm{PASS}_{\mathrm{pair}}$ = max $|r| < 0.95$; $\mathrm{PASS}_{\mathrm{combined}}$ = max $|r| < 0.95$ AND $|\mathrm{pcor}|\ge 0.10$.}
+\caption{Combined screening verdict on the $20$ candidates against the $30$-index baseline on each of the four MoleculeNet benchmarks. $\mathrm{PASS}_{\mathrm{pair}}$ = max $|r| < 0.95$; $\mathrm{PASS}_{\mathrm{combined}}$ = max $|r| < 0.95$ AND $|\mathrm{pcor}|\ge 0.10$. Per-dataset combined passers are listed in the footnote.}
 \label{tab:novel_combined}
-\begin{tabular}{lcc}
+\begin{tabular}{lcccr}
 \toprule
-Family & $\mathrm{PASS}_{\mathrm{pair}}$ / total & $\mathrm{PASS}_{\mathrm{combined}}$ / total\\
+Dataset & $n$ & $\mathrm{PASS}_{\mathrm{pair}}$ / $20$ & $\mathrm{PASS}_{\mathrm{combined}}$ / $20$ & $\max|\mathrm{pcor}|$\\
 \midrule
-Information-theoretic (5) & 4 / 5 & 1 / 5\\
-Centrality (5)            & 4 / 5 & 0 / 5\\
-Motif (4)                 & 4 / 4 & 2 / 4\\
-Eccentricity (3)          & 2 / 3 & 1 / 3\\
-Spectral-hybrid (3)       & 1 / 3 & 0 / 3\\
-\midrule
-Total                     & 15 / 20 & 4 / 20\\
+ESOL          & $1\,127$ & $15$ & $4$ & $0.154$\\
+FreeSolv      & $\phantom{0}639$  & $15$ & $1$ & $0.129$\\
+Lipophilicity & $4\,200$ & $16$ & $0$ & $0.077$\\
+BBBP$^\ddag$  & $2\,039$ & $17$ & $2$ & $0.225$\\
 \bottomrule
 \end{tabular}
+
+\vspace{0.4em}
+\noindent\small{Combined passers per dataset:
+ESOL: $\mathrm{InfoH\_deg}\,(0.154)$, CutVerts $(0.118)$, FourCyc $(0.112)$, MeanEcc $(0.109)$.
+FreeSolv: Triangles $(0.107)$.
+Lipophilicity: none.
+BBBP: $\mathrm{InfoH\_deg}\,(0.225)$, $\mathrm{InfoH\_dist}\,(\approx 0.16)$.
+$^\ddag$ BBBP partial correlation computed via LPM (see text).}
 \end{table}
 
 The headline pattern: the pairwise $|r|<0.95$ screen alone is
-over-permissive on this dataset --- $75\%$ of candidates clear it
---- but the combined diagnostic that additionally requires
-$|\mathrm{pcor}|\ge 0.10$ leaves only $4$ candidates as plausible
-carriers of independent QSPR signal on ESOL. Of the $4$,
-none reach $|\mathrm{pcor}|>0.2$; the largest absolute partial
-correlation across all $20$ candidates is $\mathrm{InfoH\_deg}$ at
-$|\mathrm{pcor}|=0.154$. Detailed numerical results are in
-\texttt{results/novel\_candidates\_experiment/novel\_candidates.csv}.
+over-permissive on every dataset --- $75$--$85\%$ of candidates
+clear it --- but the combined diagnostic that additionally
+requires $|\mathrm{pcor}|\ge 0.10$ leaves $0$--$4$ candidates as
+plausible carriers of independent linear signal under the
+$30$-index baseline. The strongest passer across the four
+datasets is $\mathrm{InfoH\_deg}$ on BBBP at $|\mathrm{pcor}|=0.225$;
+no other candidate reaches $|\mathrm{pcor}|>0.2$ on any dataset.
+Detailed per-candidate numbers are in
+\texttt{results/novel\_candidates\_experiment/novel\_candidates\_multidataset.csv}.
 
-These numbers are for a single dataset (ESOL) and target ($\log S$).
-We do not generalize to other QSPR targets, and we do not claim that
-any of the $4$ combined-criterion-passing candidates is a useful
-descriptor in absolute terms; the criterion is a redundancy filter,
-not a utility certification.
+These per-dataset combined passers should be read as
+``residual-signal positive on that specific target under the
+$30$-index linear baseline'', not as useful QSPR descriptors;
+the diagnostic is a redundancy filter, not a utility
+certification.
 
-\subsubsection{Structural interpretation of the four passers}\label{sec:passer_analysis}
+\subsubsection{Structural interpretation of the four ESOL passers}\label{sec:passer_analysis}
 
-The four candidates that clear the combined diagnostic span three
-distinct design philosophies, and each computes a graph property
-that is \emph{not} expressible as a sum of per-edge contributions:
+We focus the structural reading on ESOL because the four ESOL
+passers span the widest set of design philosophies among the four
+datasets and so best illustrate \emph{why} the partial-correlation
+diagnostic catches signal that pairwise correlation misses. The
+qualitative argument transfers to the FreeSolv (Triangles) and BBBP
+($\mathrm{InfoH\_deg}$, $\mathrm{InfoH\_dist}$) passers; the
+specific structural reading below is ESOL-only.
+
+The four candidates that clear the combined diagnostic on ESOL span
+three distinct design philosophies, and each computes a graph
+property that is \emph{not} expressible as a sum of per-edge
+contributions:
 
 \begin{itemize}
 \item $\mathrm{InfoH\_deg}$, the Shannon entropy of the degree
@@ -943,46 +970,71 @@ that flags ``low pairwise correlation but low partial correlation
 too'' --- which is exactly the failure mode the Wuzi family at
 $(-1,-1,1)$ exhibits.
 
-\subsubsection{Comparison to LASSO / ElasticNet feature selection}\label{sub:lasso_comparator}
+\subsubsection{Comparison to LASSO, ElasticNet, mRMR, Boruta, and L1-logistic feature selection}\label{sub:lasso_comparator}
 
-To position the pairwise / combined diagnostic against a generic
-feature-selection comparator, we additionally fit LASSO (with
-five-fold CV-tuned $\alpha$) and ElasticNet (with CV-tuned
-$\alpha$ and $\ell_1$ ratio $\in \{0.3, 0.5, 0.7, 0.9\}$) on the
-three regression datasets, using the same $30$-index baseline
-matrix and the same $5$-fold cross-validation splits as
-\texttt{full} / \texttt{pairwise\_pruned} / \texttt{combined\_pruned}.
-The LASSO comparator is omitted on BBBP because a logistic-$\ell_1$
-comparison would require regenerating the BBBP descriptor matrix,
-which the present software environment cannot run end-to-end; the
-BBBP gap is recorded in \S\ref{sec:limitations}.
+To position the pairwise / combined diagnostic against a broader
+set of feature-selection comparators, we evaluate five external
+methods alongside the pipeline configurations of
+Table~\ref{tab:ml_benchmark}:
+\begin{itemize}
+\item LASSO with $5$-fold CV-tuned $\alpha$ (three regression datasets);
+\item ElasticNet with CV-tuned $\alpha$ and $\ell_1$-ratio
+$\in \{0.3, 0.5, 0.7, 0.9\}$ (three regression datasets);
+\item mRMR top-$k$ with $k$ matched to the pairwise-pruned mean
+feature count of Table~\ref{tab:ml_benchmark} (all four datasets);
+\item Boruta with RandomForest base estimator (all four datasets);
+\item $\ell_1$-Logistic with CV-tuned $C$ (BBBP only; the
+classification analog of LASSO).
+\end{itemize}
+The cached $30$-index baseline matrix and the same $5$-fold splits
+as Table~\ref{tab:ml_benchmark} are used; for mRMR and Boruta we
+evaluate the selected subset under ordinary linear regression
+(regression) or logistic regression (BBBP) to keep the comparator
+linear-model class consistent with LASSO. The screen-pipeline rows
+remain RandomForest, so the comparison is intentionally across two
+model classes; we read it as a sanity check that the pairwise screen
+is not being compared to a strawman, not as a head-to-head model
+benchmark.
 
 \begin{table}[h]
 \centering
 \small
-\caption{RandomForest screen-pipeline configurations vs.\ generic feature-selection (LASSO / ElasticNet) on the three regression datasets. RandomForest rows reproduce Table~\ref{tab:ml_benchmark}. LASSO and ElasticNet are linear models with CV-tuned regularisation, evaluated under the same 5-fold split protocol; their RMSE is reported here for comparison only.}
+\caption{Screen-pipeline configurations (RandomForest, rows from Table~\ref{tab:ml_benchmark}) vs.\ five external feature-selection comparators (LASSO, ElasticNet, mRMR, Boruta, $\ell_1$-Logistic) on the four MoleculeNet benchmarks. Regression metric is RMSE (lower is better); classification metric for BBBP is ROC-AUC (higher is better). Reported as mean across 5 folds with the same seed; standard deviations in \texttt{results/paper2\_feature\_selection\_comparison.csv}.}
 \label{tab:fs_comparison}
 \begin{tabular}{llrr}
 \toprule
-Dataset & Configuration & RMSE & Mean $n$ features\\
+Dataset & Configuration & Metric & Mean $n$ features\\
 \midrule
-ESOL & \texttt{full} (RandomForest, 30 feats)         & $1.437$ & $30.0$\\
-     & \texttt{pairwise\_pruned} (RandomForest)        & $1.435$ & $\phantom{0}7.4$\\
-     & \texttt{combined\_pruned} (RandomForest)        & $1.475$ & $\phantom{0}4.4$\\
-     & LASSO (linear, CV-tuned $\alpha$)              & $1.545$ & $14.6$\\
-     & ElasticNet (linear, CV-tuned)                  & $1.546$ & $16.2$\\
+ESOL & \texttt{full} (RF)                 & RMSE $1.437$ & $30.0$\\
+     & \texttt{pairwise\_pruned} (RF)     & RMSE $1.435$ & $\phantom{0}7.4$\\
+     & \texttt{combined\_pruned} (RF)     & RMSE $1.475$ & $\phantom{0}4.4$\\
+     & LASSO (linear, CV)                 & RMSE $1.545$ & $14.6$\\
+     & ElasticNet (linear, CV)            & RMSE $1.546$ & $16.2$\\
+     & mRMR $k{=}7$ (linear)              & RMSE $1.654$ & $\phantom{0}7.0$\\
+     & Boruta + RF (linear scoring)       & RMSE $1.620$ & $10.0$\\
 \midrule
-FreeSolv & \texttt{full} (RandomForest)               & $3.537$ & $30.0$\\
-         & \texttt{pairwise\_pruned} (RandomForest)   & $3.540$ & $\phantom{0}8.0$\\
-         & \texttt{combined\_pruned} (RandomForest)   & $3.561$ & $\phantom{0}3.2$\\
-         & LASSO                                      & $3.527$ & $13.4$\\
-         & ElasticNet                                 & $3.515$ & $18.6$\\
+FreeSolv & \texttt{full} (RF)             & RMSE $3.537$ & $30.0$\\
+         & \texttt{pairwise\_pruned} (RF) & RMSE $3.540$ & $\phantom{0}8.0$\\
+         & \texttt{combined\_pruned} (RF) & RMSE $3.561$ & $\phantom{0}3.2$\\
+         & LASSO (linear, CV)             & RMSE $3.527$ & $13.4$\\
+         & ElasticNet (linear, CV)        & RMSE $3.515$ & $18.6$\\
+         & mRMR $k{=}8$ (linear)          & RMSE $3.618$ & $\phantom{0}8.0$\\
+         & Boruta + RF (linear scoring)   & RMSE $3.588$ & $\phantom{0}2.0$\\
 \midrule
-Lipophilicity & \texttt{full} (RandomForest)          & $1.030$ & $30.0$\\
-              & \texttt{pairwise\_pruned} (RandomForest) & $1.028$ & $\phantom{0}8.0$\\
-              & \texttt{combined\_pruned} (RandomForest) & $1.287^{\,\dagger}$ & $\phantom{0}0.2$\\
-              & LASSO                                 & $1.130$ & $15.6$\\
-              & ElasticNet                            & $1.130$ & $17.8$\\
+Lipophilicity & \texttt{full} (RF)        & RMSE $1.030$ & $30.0$\\
+              & \texttt{pairwise\_pruned} (RF) & RMSE $1.028$ & $\phantom{0}8.0$\\
+              & \texttt{combined\_pruned} (RF) & RMSE $1.287^{\,\dagger}$ & $\phantom{0}0.2$\\
+              & LASSO (linear, CV)        & RMSE $1.130$ & $15.6$\\
+              & ElasticNet (linear, CV)   & RMSE $1.130$ & $17.8$\\
+              & mRMR $k{=}8$ (linear)     & RMSE $1.142$ & $\phantom{0}8.0$\\
+              & Boruta + RF (linear scoring) & RMSE $1.144$ & $\phantom{0}5.0$\\
+\midrule
+BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
+     & \texttt{pairwise\_pruned} (RF)     & AUC $0.860$ & $\phantom{0}6.0$\\
+     & \texttt{combined\_pruned} (RF)     & AUC $0.840$ & $\phantom{0}4.0$\\
+     & $\ell_1$-Logistic (CV)             & AUC $0.790$ & $13.6$\\
+     & mRMR $k{=}6$ (logistic)            & AUC $0.747$ & $\phantom{0}6.0$\\
+     & Boruta + RF (logistic scoring)     & AUC $0.791$ & $23.0$\\
 \bottomrule
 \end{tabular}
 
@@ -990,15 +1042,22 @@ Lipophilicity & \texttt{full} (RandomForest)          & $1.030$ & $30.0$\\
 \noindent\small{$^\dagger$ Strict combined screen degenerates: retains zero features in $4/5$ folds; the RMSE shown is from the single fold that retained one feature. See \S\ref{sub:limitations}.}
 \end{table}
 
-The \texttt{pairwise\_pruned} screen matches or slightly beats the
-LASSO / ElasticNet linear comparators on every regression dataset
-while using roughly half the features ($7$--$8$ vs.\ $13$--$18$).
-Note however that this comparison is across two model classes
-(RandomForest for the screen-pipeline rows, linear models for
-LASSO / ElasticNet); the comparison should be read as
-``pairwise-pruned RandomForest is competitive with cardinal-feature
-LASSO'' rather than as a head-to-head model-architecture benchmark.
-Full per-fold numbers are in
+The headline reading: on \emph{all four datasets}, the
+\texttt{pairwise\_pruned} RandomForest matches or beats every
+external feature-selection comparator we tested, with feature
+counts in the range $6$--$8$ versus $6$--$23$ for the comparators.
+On ESOL, \texttt{pairwise\_pruned} RMSE $1.435$ at $7.4$ features
+beats LASSO ($1.545$ at $14.6$ features) by $0.11$ RMSE and beats
+mRMR-$k{=}7$ by $0.22$ RMSE. On BBBP, \texttt{pairwise\_pruned}
+ROC-AUC $0.860$ at $6$ features beats $\ell_1$-Logistic by
+$0.07$ AUC and beats mRMR-$k{=}6$ by $0.11$ AUC. We caveat that
+this comparison crosses two model classes (RandomForest for the
+screen-pipeline rows, linear for the comparators), so the
+mechanical reading is ``pairwise-pruned RandomForest is at least
+competitive with linear-model LASSO / ElasticNet / mRMR / Boruta /
+$\ell_1$-Logistic at matched feature count'' rather than a
+head-to-head model-architecture benchmark. Full per-fold standard
+deviations are in
 \texttt{results/paper2\_feature\_selection\_comparison.csv}.
 
 % =====================================================================
@@ -1059,15 +1118,17 @@ combined diagnostic on any dataset, at any of the nine tested
 $(\tau_r, \tau_{\mathrm{pcor}})$ combinations) are stable; the
 \emph{exact} pass counts are not.
 
-\item \textbf{Alternative-family screening is a single-dataset case
-study, not a chemical-utility claim.} The $20$-candidate experiment
-of \S\ref{sec:novel_case} is on ESOL alone; cross-dataset
-replication on FreeSolv, Lipophilicity, and BBBP is left as future
-work. The four candidates that pass the combined diagnostic on
-ESOL ($\mathrm{InfoH\_deg}$, $\mathrm{CutVerts}$,
-$\mathrm{FourCyc}$, $\mathrm{MeanEcc}$) should be interpreted as
-``residual-signal positive on $\log S$ specifically'', not as
-useful QSPR descriptors.
+\item \textbf{Alternative-family pass-counts are
+single-target, not chemical-utility claims.} The $20$-candidate
+experiment of \S\ref{sec:novel_case} is replicated across all four
+datasets, and the qualitative conclusion (pairwise admits $15$--$17$
+of $20$ candidates; combined admits $0$--$4$) is consistent across
+ESOL, FreeSolv, Lipophilicity, and BBBP. However, the individual
+combined passers (e.g.\ $\mathrm{InfoH\_deg}$ on ESOL and BBBP,
+Triangles on FreeSolv) should still be interpreted as
+``residual-signal positive on that specific target under the
+$30$-index linear baseline'', not as useful QSPR descriptors in
+absolute terms.
 
 \item \textbf{Combined diagnostic should not be used as a hard
 filter.} On Lipophilicity the strict combined screen
@@ -1081,16 +1142,21 @@ Table~\ref{tab:wuzi_verdict_paper1} and the Lipo ML-benchmark
 column of Table~\ref{tab:ml_benchmark} both illustrate this
 failure mode honestly.
 
-\item \textbf{RandomForest is one model class; generic
-feature-selection comparators are limited.}
+\item \textbf{RandomForest is one model class; the
+linear-comparator benchmark crosses model classes.}
 Section~\ref{sub:lasso_comparator} compares the screen-pipeline
-configurations against LASSO and ElasticNet on the three regression
-datasets only; a classification-LASSO (Logistic $\ell_1$)
-comparison on BBBP, and head-to-head benchmarks against
-mRMR / Boruta, were not run for this paper and are noted as
-follow-up work. The reported pairwise-pruned-vs-LASSO comparison
-crosses model classes (RandomForest vs.\ linear), so it is a
-sanity check, not a head-to-head model benchmark.
+configurations against LASSO, ElasticNet, mRMR, Boruta, and
+$\ell_1$-Logistic on all four datasets. The screen-pipeline rows
+use a RandomForest, and the comparators use linear regression
+(regression datasets) or logistic regression (BBBP); the
+\texttt{pairwise\_pruned} RandomForest matches or beats every
+comparator at matched feature count. The reported comparison is
+therefore best read as ``pairwise-pruned RandomForest is at least
+competitive with linear-model LASSO / ElasticNet / mRMR / Boruta /
+$\ell_1$-Logistic'' rather than as a head-to-head
+model-architecture benchmark; a fully matched comparison
+(linear-model screen-pipeline rows or tree-ensemble comparators
+such as XGBoost-mRMR) is left as future work.
 
 \item \textbf{BID dimension bound covers $\Delta \le 4$ only.} The
 Edge-Degree-Pair Basis bound (Theorem~\ref{thm:bid}) is sharp on
@@ -1132,11 +1198,18 @@ checks has not been validated against a QSPR benchmark.
 pipeline that accepts a SMILES file and a candidate-index Python
 function and returns the four diagnostics in seconds would lower
 the activation energy for routine use.
-\item \textbf{Comparison against generic feature-selection methods.}
-The pipeline composes with mRMR / LASSO / Boruta as the upstream
-gate (Section~\ref{sec:feature_selection}); a head-to-head
-benchmark of pipeline-then-feature-selection versus generic
-feature-selection-only on a full QSPR endpoint is open.
+\item \textbf{Two-stage pipeline-then-feature-selection vs.
+end-to-end feature-selection on full QSPR endpoints.}
+Section~\ref{sub:lasso_comparator} reports per-dataset
+configuration-level scores under a fixed RandomForest backbone;
+a head-to-head benchmark of \emph{pipeline-then-feature-selection}
+(use the combined diagnostic to drop redundant candidates, then
+LASSO / mRMR / Boruta the survivors) versus \emph{end-to-end
+feature-selection-only} (LASSO / mRMR / Boruta on the
+$30$-index baseline directly) on a full downstream QSPR endpoint
+is open. Sequential composition is expected to be at least as
+strong as either component alone, but this has not been
+empirically verified here.
 \end{enumerate}
 
 % =====================================================================

@@ -133,7 +133,7 @@ Section plans and remaining math gaps are tracked in
 | Paper 1 §5 indirect Sombor / $M_1$ bound for $0<\beta<1$      | ✅ done (Proposition 5.5) |
 | Paper 1 §5 sharp $GA$ / $H$ / $ABC$ bounds                    | ⏳ Conjectures 5.6, 5.7 |
 | Paper 1 §6 formal extremal-graph characterization             | ⏳ Conjectures 6.1–6.4 |
-| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.1) |
+| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.2) |
 | Paper 2 submission gated on Paper 1 arXiv ID                  | ⏳ scheduled |
 
 ---
@@ -376,8 +376,9 @@ scripts/
   12_octane_competitor_comparison.py  Head-to-head Pearson r between Wuzi and 8 classical BID indices on the 18 octanes
   13_caterpillar_max_n5_to_20.py Extended n=5..20 enumeration of the (-1,-1,1) maximizer (graph6 + degree sequence)
   14_octane_bootstrap.py         95% percentile bootstrap (B=10,000) on octane correlations + LOOCV
-  15_feature_selection_comparison.py LASSO / ElasticNet comparator on the 3 regression datasets (Paper 2 Table tab:fs_comparison)
-  16_novel_candidates_multidataset.py Cross-dataset alt-family screen (committed; execution needs RDKit)
+  15_feature_selection_comparison.py LASSO / ElasticNet / mRMR / Boruta on regression; L1-Logistic / mRMR / Boruta on BBBP (Paper 2 Table tab:fs_comparison)
+  16_novel_candidates_multidataset.py Cross-dataset alt-family screen on ESOL / FreeSolv / Lipophilicity (Paper 2 Table tab:novel_combined)
+  17_bbbp_descriptors_and_altfamily.py BBBP baseline descriptors + BBBP row of alt-family table
 
 docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation

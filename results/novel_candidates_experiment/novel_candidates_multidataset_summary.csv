@@ -1,0 +1,5 @@
+dataset,n_candidates,pairwise_pass,combined_pass,degenerate,max_abs_partial_corr
+esol,20,15,4,0,0.1541
+freesolv,20,15,1,0,0.1291
+lipophilicity,20,16,0,0,0.0772
+bbbp,20,17,2,0,0.225

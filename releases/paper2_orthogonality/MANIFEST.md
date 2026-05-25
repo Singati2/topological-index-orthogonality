@@ -3,15 +3,17 @@
 **Paper.** *Orthogonality Screening of Topological Indices for QSPR Modeling: A Structural and Empirical Redundancy Analysis*
 **Authors.** G. Shiwakoti, A. Natarajan, M. Arockiaraj
 **Repository.** <https://github.com/Singati2/topological-index-orthogonality>
-**Tag.** `v1.1-paper2-orthogonality`
+**Tag.** `v1.2-paper2-orthogonality`
 
 This file lists every script, dataset, results CSV, and figure
 that Paper 2 depends on. A reviewer who clones the repository at
-the tag `v1.1-paper2-orthogonality` and follows the steps below
+the tag `v1.2-paper2-orthogonality` and follows the steps below
 should be able to reproduce every numerical claim and every figure
-in the manuscript, except the BBBP descriptor regeneration which
-requires RDKit (see the limitation note in
-`docs/paper2_orthogonality_screening.tex` §8).
+in the manuscript. The full reproduction (including BBBP
+descriptor regeneration and the alt-family multi-dataset screen)
+requires RDKit; the LASSO / ElasticNet / mRMR rows of
+Table tab:fs_comparison can be re-run without RDKit using the
+cached descriptor matrices.
 
 The repository also hosts the companion graph-theory paper
 (Paper 1, tagged `v1.4-paper1-wuzi`); Paper 2 cites Paper 1 for
@@ -62,8 +64,9 @@ Run from the repository root. All scripts complete in seconds-to-minutes on a si
 | `scripts/04_novel_candidates_test.py` | `results/novel_candidates_experiment/{novel_candidates.csv,novel_candidates_by_family.csv,novel_candidates_summary.txt}` | §6.2 (ESOL case study) |
 | `scripts/08_make_figures.py` | `figures/{fig2,fig3,fig5b,fig8,fig9}.{png,pdf}` | All Paper 2 figures |
 | `scripts/11_ml_benchmark.py` | `results/ml_benchmark.{csv,md}` | Table tab:ml_benchmark + Figure fig9 |
-| `scripts/15_feature_selection_comparison.py` | `results/paper2_feature_selection_comparison.csv` | Table tab:fs_comparison (LASSO/ElasticNet on regression datasets) |
-| `scripts/16_novel_candidates_multidataset.py` | `results/novel_candidates_experiment/novel_candidates_multidataset.csv` (when RDKit available) | Cross-dataset alt-family replication (future-work; current environment uses RDKit) |
+| `scripts/15_feature_selection_comparison.py` | `results/paper2_feature_selection_comparison.csv` | Table tab:fs_comparison (LASSO/ElasticNet/mRMR/Boruta on regression datasets; L1-Logistic/mRMR/Boruta on BBBP) |
+| `scripts/16_novel_candidates_multidataset.py` | `results/novel_candidates_experiment/novel_candidates_multidataset.csv` | Cross-dataset alt-family replication on ESOL/FreeSolv/Lipophilicity (rdkit required) |
+| `scripts/17_bbbp_descriptors_and_altfamily.py` | `results/bbbp/descriptors_baseline.csv`, `results/novel_candidates_experiment/novel_candidates_bbbp.csv` | BBBP baseline descriptors + BBBP row of Table tab:novel_combined |
 
 The threshold-sensitivity table (Table tab:threshold_sensitivity)
 is extracted from `results/cross_dataset_summary.csv` (columns 16–27);
@@ -83,20 +86,29 @@ saved at `results/paper2_threshold_sensitivity.csv` for convenience.
 ## Test suite
 
 The full pytest suite (`pytest -q` from the repo root) executes
-124 tests covering the BID dimension bound, the 30 baseline
-indices' identity tests, the Wuzi reductions, and the ratio-bound
-sanity property. All 124 tests pass at this tag. The test suite
-does not currently include a Paper-2-specific orthogonality-screen
-gating test; adding one is listed as future work.
+130 tests: 124 covering Paper 1 mechanics (BID dimension bound,
+30 baseline indices' identity tests, Wuzi reductions, ratio-bound
+sanity, caterpillar predicate, closed-form values) plus 6 new
+Paper-2-specific reproducibility tests in
+`tests/test_paper2_reproducibility.py` that verify the schema and
+sanity of `results/paper2_threshold_sensitivity.csv`,
+`results/paper2_feature_selection_comparison.csv`, and
+`results/novel_candidates_experiment/novel_candidates_multidataset_summary.csv`,
+and check that LASSO RMSE is within $1.3\times$ of the
+pairwise_pruned RandomForest RMSE on every regression dataset.
+All 130 tests pass at this tag.
 
 ## Software environment
 
 - Python 3.11+
 - `networkx >= 3.0`, `numpy`, `pandas`, `scipy`, `scikit-learn`, `matplotlib`
 - `rdkit` (required to regenerate `descriptors_baseline.csv` from
-  SMILES, and to run scripts 01, 02, 04, 11; **not required** for
+  SMILES, and to run scripts 01, 02, 04, 11, 16, 17; **not required** for
   scripts 03, 15, or for any pure-Python computation on the cached
   descriptor matrices)
+- `mrmr_selection`, `Boruta` (required for the mRMR / Boruta rows of
+  `scripts/15_feature_selection_comparison.py`; not required for the
+  LASSO / ElasticNet / L1-Logistic rows)
 - `pytest` for the test suite
 
 See `requirements.txt` for exact versions.
