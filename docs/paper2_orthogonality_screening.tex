@@ -123,7 +123,9 @@ partial correlation, bond-incident-degree (BID) family.
 The vocabulary of scalar topological indices used in QSPR/QSAR
 modeling has grown over six decades from a handful of
 proposals \cite{Wiener1947, Randic1975, Gutman1972} to several
-hundred. Many indices are interrelated by exact identity (e.g.\
+hundred, and the resulting proliferation has been criticised
+within mathematical chemistry itself~\cite{Gutman2013Degree}.
+Many indices are interrelated by exact identity (e.g.\
 the harmonic index $H$ is $2$ times the special case
 $\beta=-1$ of the general sum-connectivity index $\chi_\beta$), and
 in practice the empirical Pearson correlations between proposed
@@ -298,12 +300,15 @@ BBBP          & blood-brain barrier penetration               & classification &
 \end{tabular}
 \end{table}
 
-The $30$-index classical baseline (Table~\ref{tab:baseline}) is
+Table~\ref{tab:datasets} summarises the four benchmarks; the
+$30$-index classical baseline (Table~\ref{tab:baseline}) is
 implemented in the reference codebase
-(\texttt{src/standard\_indices.py}); each index admits a $\le 20$-line
-Python implementation, and the full $30$-index computation for a
-single graph takes a few milliseconds. The reference
-implementation is open-source under MIT license.
+(\texttt{src/standard\_indices.py}) on top of
+NetworkX, RDKit~\cite{RDKit}, and the scikit-learn machine-learning
+toolkit~\cite{Pedregosa2011sklearn}. Each index admits a
+$\le 20$-line Python implementation, and the full $30$-index
+computation for a single graph takes a few milliseconds. The
+reference implementation is open-source under MIT license.
 
 \begin{table}[h]
 \centering
@@ -433,7 +438,8 @@ $|\{(b_1,b_2):|\mathrm{Cor}(X)_{b_1,b_2}|\ge\tau\}|$, is a
 companion summary statistic of baseline redundancy.
 
 \subsection{Principal-component effective rank}
-Compute the PCA of the standardized baseline $X$. Let
+Compute the PCA~\cite{WoldEsbensenGeladi1987PCA} of the
+standardized baseline $X$. Let
 $\lambda_1\ge\lambda_2\ge\cdots\ge\lambda_p$ be the eigenvalues of
 $\mathrm{Cor}(X)$ and $C_k=\sum_{i\le k}\lambda_i/\sum_i\lambda_i$
 the cumulative variance fraction. The
@@ -444,7 +450,7 @@ $C_k\ge 1-\alpha$; we report $\mathrm{PC}_{95}, \mathrm{PC}_{99}$.
 For each baseline index $b$, $\mathrm{VIF}_b=(1-R_b^2)^{-1}$ where
 $R_b^2$ is the coefficient of determination of $X_b$ regressed on
 the other $p-1$ baseline columns. $\mathrm{VIF}_b>10$ is the
-conventional ``high collinearity'' threshold;
+conventional ``high collinearity'' threshold~\cite{OBrien2007VIF};
 $\mathrm{VIF}_b=\infty$ indicates exact linear dependence within
 the baseline.
 
@@ -727,7 +733,8 @@ the screening conclusion generalises beyond the BID-family case
 study of \S\ref{sec:wuzi_case}.
 
 We screen $20$ candidate indices on the four datasets, drawn from
-the five alternative design families described below.
+the five alternative design families listed in
+Table~\ref{tab:candidates} and described below.
 
 \begin{table}[h]
 \centering
@@ -1487,6 +1494,29 @@ J.~Stat.~Softw.~\textbf{36} (2010), 1--13.
 R.~Tibshirani,
 \emph{Regression shrinkage and selection via the lasso},
 J.~R.~Stat.~Soc.~B \textbf{58} (1996), 267--288.
+
+\bibitem{WoldEsbensenGeladi1987PCA}
+S.~Wold, K.~Esbensen, and P.~Geladi,
+\emph{Principal component analysis},
+Chemometr.~Intell.~Lab.~Syst.~\textbf{2}(1--3) (1987), 37--52.
+
+\bibitem{OBrien2007VIF}
+R.~M.~O'Brien,
+\emph{A caution regarding rules of thumb for variance inflation factors},
+Quality \& Quantity \textbf{41}(5) (2007), 673--690.
+
+\bibitem{Pedregosa2011sklearn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion,
+O.~Grisel, M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg,
+J.~Vanderplas, A.~Passos, D.~Cournapeau, M.~Brucher, M.~Perrot,
+and E.~Duchesnay,
+\emph{Scikit-learn: Machine learning in Python},
+J.~Mach.~Learn.~Res.~\textbf{12} (2011), 2825--2830.
+
+\bibitem{Gutman2013Degree}
+I.~Gutman,
+\emph{Degree-based topological indices},
+Croat.~Chem.~Acta \textbf{86}(4) (2013), 351--361.
 
 \end{thebibliography}
 \end{document}
