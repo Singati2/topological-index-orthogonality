@@ -310,6 +310,29 @@ $\le 20$-line Python implementation, and the full $30$-index
 computation for a single graph takes a few milliseconds. The
 reference implementation is open-source under MIT license.
 
+\noindent\emph{On the baseline composition.} The $30$-index set
+follows the practitioner-standard cheminformatics
+baseline~\cite{TodeschiniConsonniHandbook}: degree-based,
+distance-based, spectral, and other-family indices in the
+proportions in which they are actually used in published QSPR
+modelling. Eighteen of the thirty are degree-based BID indices;
+this is deliberate. Theorem~\ref{thm:bid} shows that the BID
+subspace on $\mathcal{G}_4$ has dimension at most $10$, so the
+baseline needs enough BID indices to span (or come close to
+spanning) that subspace in order for residual partial
+correlations of BID candidates to be informative. Reducing the
+baseline to a single BID representative (e.g.\ Randi\'c only)
+would leave a high-dimensional BID residual space that any new
+BID candidate could readily project onto, making the screen
+trivially over-permissive on BID candidates. The verdict on the
+non-BID alternative-family candidates of \S\ref{sec:novel_case}
+(distance-, motif-, eccentricity-, centrality-, spectral-hybrid)
+is unaffected by this composition choice, because those
+candidates lie in functional subspaces that the BID-heavy
+baseline cannot reach by construction; this is also why the
+combined diagnostic admits non-zero passers on those families
+(Table~\ref{tab:novel_combined}).
+
 \begin{table}[h]
 \centering
 \caption{$30$-index classical baseline used for orthogonality screening.}
@@ -402,6 +425,23 @@ independence from the existing zoo within a $10$-dimensional
 subspace.
 \end{remark}
 
+\begin{remark}\label{rem:rank_vs_bound}
+The bound $\dim_{\mathbb{R}}\bid \le 10$ is a structural property
+of the BID class on $\mathcal{G}_4$, not a property of any
+specific dataset. Empirically, the observed PCA effective rank of
+the $30$-index baseline on the four MoleculeNet datasets is much
+smaller ($\mathrm{PC}_{95}=3$, $\mathrm{PC}_{99}=5$; see
+Table~\ref{tab:baseline_redundancy}), reflecting the specific
+distribution of molecular shapes in those datasets. The
+theoretical bound is the ceiling that the empirical rank
+cannot exceed under any dataset; the empirical rank is the
+sharper, dataset-specific reality. Both numbers are useful: the
+empirical rank quantifies redundancy on the dataset at hand,
+while the theoretical bound tells the reader that no future
+dataset of $\mathcal{G}_4$-molecules and no proposal of further
+BID indices can raise the spanned dimension above ten.
+\end{remark}
+
 \begin{corollary}\label{cor:bid_redundancy}
 On $\mathcal{G}_4$, any $11$ BID indices are linearly dependent.
 Parametric BID families (general Randi\'c $R_\alpha$, general
@@ -462,7 +502,17 @@ $\mathrm{pcor}(z,y\mid X)=\mathrm{cor}(z^{\mathrm{res}},y^{\mathrm{res}})$
 measures the signal in $z$ relative to the target $y$ \emph{after}
 controlling for everything the baseline already captures. We use
 $|\mathrm{pcor}|<0.10$ as the conventional ``negligible
-additional signal'' band.
+additional signal'' band. The cutoff $|\mathrm{pcor}|=0.10$
+corresponds to $\mathrm{pcor}^2 = 0.01$, i.e.\ the candidate
+explains an additional $1\%$ of \emph{residual} variance over
+the baseline. For QSPR endpoints with bulk linear $R^2$ in the
+$0.1$--$0.5$ range (cf.\ the LASSO benchmark of
+Table~\ref{tab:matched_class}), a $1\%$ residual-$R^2$ pickup is
+the smallest effect that is reliably distinguishable from noise
+on samples of size $n \sim 10^3$. The threshold-sensitivity
+table (Table~\ref{tab:threshold_sensitivity}, \S\ref{sub:threshold_sensitivity})
+confirms that the qualitative verdict on the Wuzi family is
+stable for tighter ($0.20$) and looser ($0.05$) cutoffs.
 
 \subsection{Decision summary}
 
@@ -1263,7 +1313,20 @@ ML-benchmark folds; the pairwise screen alone reduces feature count
 by ${\sim}4\times$ while preserving predictive performance within
 CV noise, but the partial-correlation diagnostic should be read as
 evidence about residual target signal rather than as an automatic
-feature-selection rule. The Wuzi Lipophilicity result of
+feature-selection rule. This degeneration is consistent with the
+weak linear signal already present in the $30$-index baseline:
+the full-baseline LASSO $5$-fold-CV $R^2$ on the three regression
+datasets is $0.457$ (ESOL), $0.175$ (FreeSolv), and $0.118$
+(Lipophilicity), and the per-dataset combined-pass counts on
+the $20$ alternative-family candidates
+(Table~\ref{tab:novel_combined}) decrease monotonically with
+baseline $R^2$ across the same three datasets ($4$, $1$, $0$
+combined passers respectively). Lipophilicity is therefore
+not a calibration failure of the $|\mathrm{pcor}|=0.10$ threshold
+in isolation; the linear topology-to-$\log D$ relationship is
+sufficiently weak that once the baseline subtracts what little
+linear signal exists, the residual partial correlations
+naturally collapse. The Wuzi Lipophilicity result of
 Table~\ref{tab:wuzi_verdict_paper1} and the Lipo ML-benchmark
 column of Table~\ref{tab:ml_benchmark} both illustrate this
 failure mode honestly.
