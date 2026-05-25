@@ -154,8 +154,10 @@ operationally so that any author can apply it.
 (Section~\ref{sec:protocol}) covering correlation matrix,
 PCA, VIF, and partial correlation with the QSPR target, using
 a fixed redundancy threshold $|r|\ge 0.95$.
-\item Replication across three independent MoleculeNet
-benchmarks (Section~\ref{sec:datasets}).
+\item Replication across four MoleculeNet benchmarks: three
+regression tasks (ESOL, FreeSolv, Lipophilicity) and one binary
+classification task (BBBP)
+(Section~\ref{sec:datasets}).
 \item A structural observation (Section~\ref{sec:bid}, the
 \emph{Edge-Degree-Pair Basis}) giving a dimension-$10$ ceiling on
 the BID family on $\mathcal{G}_4$ (hydrogen-suppressed molecular
@@ -593,8 +595,9 @@ The maximum partial correlation with the target across the $300$
 grid points is $0.036$ (FreeSolv); the corresponding maxima on
 ESOL and Lipophilicity are $0.028$ and $0.009$ respectively, all
 below $0.10$. By the combined diagnostic of
-Table~\ref{tab:decision} no Wuzi parameter triple in the grid is
-classified as adding meaningful independent QSPR signal.
+Table~\ref{tab:decision}, no Wuzi parameter triple in the grid
+passes the diagnostic for non-negligible residual linear signal
+under the tested $30$-index baseline.
 
 \textbf{The multi-dimensional redundancy at $(-1, -1, 1)$.}
 At this parameter triple the Wuzi value is exactly captured by a
@@ -637,8 +640,9 @@ variance, the empirical effective rank is much lower than $10$; a
 new BID index has at most a $7$-dimensional ``budget''
 within which to be statistically independent of the leading PCA
 factors. The empirical screening verdict that no Wuzi parameter
-point clears $|r|<0.95$ \emph{and} provides meaningful partial
-correlation is consistent with this structural constraint.
+point clears $|r|<0.95$ \emph{and} retains
+$|\mathrm{pcor}|\ge 0.10$ with the QSPR target is consistent
+with this structural constraint.
 
 \subsubsection{Threshold sensitivity of the Wuzi verdict}\label{sub:threshold_sensitivity}
 
