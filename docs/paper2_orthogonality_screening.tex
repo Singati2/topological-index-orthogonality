@@ -92,11 +92,8 @@ CV noise at roughly $4\times$ fewer features
 generic feature-selection comparators (LASSO, ElasticNet, mRMR,
 Boruta, $\ell_1$-logistic) under the reported mixed-model
 benchmark (Table~\ref{tab:fs_comparison}). A matched-model-class
-benchmark (pipeline-then-LASSO vs.\ LASSO-only, same model class
-throughout) replicates the parsimony claim without the
-cross-model-class qualification: on every dataset the
-pairwise-then-LASSO pipeline matches no-screen LASSO within
-$5$-fold CV noise at roughly half the final LASSO-active features
+pipeline-then-LASSO / $\ell_1$-logistic benchmark supports the
+same parsimony claim without the cross-model-class qualification
 (Table~\ref{tab:matched_class}).
 
 \textbf{Limitation.} On Lipophilicity the strict combined
@@ -271,15 +268,15 @@ gates which indices enter the descriptor matrix, after which
 mRMR / LASSO / Boruta / similar methods could be applied
 downstream to the screened set against the modelling task at hand.
 
-The present paper includes a limited comparator benchmark against
-LASSO, ElasticNet, mRMR, Boruta, and $\ell_1$-logistic feature
-selection in Section~\ref{sub:lasso_comparator}. This comparison
-is intended as a sanity check rather than a fully matched
-end-to-end feature-selection study, because the screening-pipeline
-rows use RandomForest whereas most external comparators are
-evaluated with linear or logistic models. A fully matched
-two-stage pipeline-versus-feature-selection benchmark remains
-future work.
+The present paper includes both a mixed-model sanity check
+against LASSO, ElasticNet, mRMR, Boruta, and $\ell_1$-logistic
+feature selection in Section~\ref{sub:lasso_comparator} and a
+matched-model-class pipeline-then-LASSO / $\ell_1$-logistic
+benchmark in Section~\ref{sub:pipeline_then_lasso}. Broader
+matched comparisons involving nonlinear or tree-ensemble
+downstream models (e.g.\ pipeline-then-XGBoost,
+pipeline-then-RandomForest with Boruta- or mRMR-style selection)
+remain future work.
 
 % =====================================================================
 \section{Datasets and implementation}\label{sec:datasets}
@@ -1123,6 +1120,13 @@ exactly the ones the RF benchmark sees. The only difference is the
 downstream model class: LASSO / $\ell_1$-Logistic instead of
 RandomForest.
 
+Table~\ref{tab:fs_comparison} includes a single compact
+\emph{pairwise} $\to$ \emph{LASSO} row per regression dataset for
+side-by-side orientation against the external comparators;
+Table~\ref{tab:matched_class} below gives the full matched-model-class
+benchmark across all four datasets and three configurations and is
+the authoritative source for the pipeline-then-LASSO comparison.
+
 \begin{table}[!htbp]
 \centering
 \small
@@ -1315,18 +1319,16 @@ checks has not been validated against a QSPR benchmark.
 pipeline that accepts a SMILES file and a candidate-index Python
 function and returns the four diagnostics in seconds would lower
 the activation energy for routine use.
-\item \textbf{Two-stage pipeline-then-feature-selection vs.
-end-to-end feature-selection on full QSPR endpoints.}
-Section~\ref{sub:lasso_comparator} reports per-dataset
-configuration-level scores under a fixed RandomForest backbone;
-a head-to-head benchmark of \emph{pipeline-then-feature-selection}
-(use the combined diagnostic to drop redundant candidates, then
-LASSO / mRMR / Boruta the survivors) versus \emph{end-to-end
-feature-selection-only} (LASSO / mRMR / Boruta on the
-$30$-index baseline directly) on a full downstream QSPR endpoint
-is open. Sequential composition is expected to be at least as
-strong as either component alone, but this has not been
-empirically verified here.
+\item \textbf{Two-stage pipeline-then-feature-selection beyond
+LASSO.} Section~\ref{sub:pipeline_then_lasso} verifies the
+two-stage idea for LASSO on the three regression tasks and for
+$\ell_1$-logistic regression on BBBP: pairwise screening followed
+by the same downstream model preserves performance within CV
+noise while reducing the final active feature count. What remains
+open is the broader matched comparison for other downstream
+selectors and nonlinear / tree-ensemble models, such as
+pipeline-then-XGBoost, pipeline-then-RandomForest with Boruta- or
+mRMR-style selection, or nonlinear redundancy diagnostics.
 \end{enumerate}
 
 % =====================================================================
