@@ -62,7 +62,7 @@
 % in case a future revision reintroduces one).
 \newcommand{\todo}[1]{}
 
-\title{\bfseries The Wuzi Index Family:\\ Graph-Theoretic Properties, Bounds, Extremal Graphs,\\ and Sensitivity Analysis}
+\title{\bfseries The Wuzi Index Family and the Ten-Dimensional Ceiling\\ of Molecular BID Descriptors}
 
 \author{
   Advik Natarajan\thanks{Department of Mathematics, Loyola College, Chennai, India.} \and
@@ -129,8 +129,9 @@ correlation regime as the eight classical BID indices, with all
 margins below the bootstrap-CI half-widths characteristic of $n = 18$;
 no claim of QSPR superiority is made. Open problems and conjectures
 are collected in Section~\ref{sec:open}. A companion methodology
-paper~\cite{Paper2_Screening} studies multi-dataset redundancy
-screening of topological indices.
+paper~\cite{Paper2_Screening} studies broader multi-dataset
+redundancy screening; the present paper is self-contained for the
+Wuzi family.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, bond-incident-degree
@@ -1145,7 +1146,12 @@ non-isomorphic trees are recorded and identified by their canonical
 Weisfeiler--Lehman label.
 
 The empirical pattern partitions the eight parameter triples into
-three sign regions:
+three sign regions. The mixed-sign triple $(\alpha, \beta, \gamma) =
+(-1, -1, 1)$ was enumerated through $n = 20$ (Table~\ref{tab:caterpillar_argmax}
+and \texttt{scripts/13\_caterpillar\_max\_n5\_to\_20.py}); the other
+seven triples below are sign-region checks recorded through $n = 12$
+(\texttt{scripts/10\_wuzi\_extremal\_search.py}), which is where the
+sign-region pattern itself is already empirically stable.
 
 \begin{enumerate}[label=(\alph*)]
 \item \textbf{Positive region.} At $(1, 0, 0)$, $(0, 0, 1)$,
@@ -1405,7 +1411,7 @@ top $20$ indices by $SS$.}
 \end{figure}
 
 % =====================================================================
-\section{Open problems and conjectures}\label{sec:open}
+\section{Conjectures and further directions}\label{sec:open}
 % =====================================================================
 
 The rigorous bounds of Section~\ref{sec:bounds} cover the
@@ -1415,18 +1421,28 @@ bound, and the generalised Randi\'c, sum-connectivity, and Sombor
 estimates. The exhaustive enumeration of
 Section~\ref{sec:extremal} establishes the empirical extremal
 pattern across three parameter-sign regions for trees of order
-$n \le 20$. The conjectures collected below are the natural
-mathematical continuations of these results; they record what is
-believed to be true on the basis of computational evidence and
-classical analogy, and explicitly state the gaps that a formal
-derivation must close. They are organised by theme: sharp bounds
-in classical indices (\S\ref{sub:open_bounds}), extremal-graph
-characterisations among trees, unicyclic, and bicyclic graphs
-(\S\ref{sub:open_extremal}), and the non-classical mixed-sign
-maximizer at $(\alpha,\beta,\gamma) = (-1, -1, 1)$
-(\S\ref{sub:open_caterpillar}).
+$n \le 20$ (mixed-sign regime) and $n \le 12$ (positive and
+sign-flipped regions). The \emph{main open problem} of the paper is
+the structural characterisation of the non-classical mixed-sign
+maximizer at $(\alpha, \beta, \gamma) = (-1, -1, 1)$
+(\S\ref{sub:open_caterpillar}, Conjecture~\ref{conj:caterpillar_max});
+the spider / double-spider closed form there is the headline
+extremal-graph claim of the paper and matches the enumeration
+through $n = 20$ at every tested $n$. The remaining items
+collected below --- sharp bounds in classical indices
+(\S\ref{sub:open_bounds}) and extremal-graph characterisations
+for trees, unicyclic, and bicyclic graphs
+(\S\ref{sub:open_extremal}) --- are included as \emph{further
+directions} for the formal extension programme, not as required
+support for the main claims of the paper.
 
-\subsection{Conjectural sharp bounds via classical indices}\label{sub:open_bounds}
+\subsection{Conjectural sharp bounds via classical indices (further directions)}\label{sub:open_bounds}
+
+\noindent\emph{The following items are included as further
+directions for the formal extension programme; the main claims of
+the paper (bounds in \S\ref{sec:bounds} and the spider /
+double-spider maximizer in \S\ref{sub:open_caterpillar}) do not
+depend on resolving them.}
 
 The Nordhaus--Gaddum sum bound and the sharp two-sided bounds via
 the geometric--arithmetic, harmonic, and atom-bond-connectivity
@@ -1537,7 +1553,12 @@ case analysis of $\psi/h$ on the ten admissible pairs and is open
 in the mixed-sign regime $\alpha\beta\gamma < 0$.
 \end{remark}
 
-\subsection{Extremal-graph conjectures}\label{sub:open_extremal}
+\subsection{Extremal-graph conjectures (further directions)}\label{sub:open_extremal}
+
+\noindent\emph{As above, the items in this subsection are recorded
+as further directions; the headline empirical phenomenon of the
+paper is the mixed-sign spider / double-spider regime of
+\S\ref{sub:open_caterpillar}.}
 
 The empirical extremal pattern of Section~\ref{sec:extremal} (three
 sign regions; star / path swap; the non-classical mixed-sign
@@ -1734,6 +1755,15 @@ and to compound-class-specific QSPR endpoints, together with a
 formal study of the Albertson~\cite{Albertson1997} irregularity
 pairing $\mathrm{Alb}(G) = \sum_{uv \in E(G)} |d_u - d_v|$ that
 is the natural mathematical companion of the Wuzi $\gamma$-axis.
+
+The Wuzi family is therefore best viewed not as a claim of
+universal QSPR superiority --- the family is explicitly shown to
+sit inside the same finite-dimensional BID descriptor subspace as
+the established classical indices, and its octane correlations are
+in the same regime as theirs --- but as a controlled parametric
+probe of that finite BID descriptor space, with the mixed-sign
+spider / double-spider regime at $(\alpha, \beta, \gamma) =
+(-1, -1, 1)$ providing the paper's main new extremal phenomenon.
 
 % =====================================================================
 \section*{Data and code availability}
