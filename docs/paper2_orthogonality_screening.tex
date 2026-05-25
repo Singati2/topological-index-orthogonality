@@ -21,6 +21,7 @@
 \setlist[itemize]{topsep=2pt,itemsep=2pt}
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\small,frame=single,breaklines=true,xleftmargin=1em,xrightmargin=1em,numbers=none}
+\usepackage{placeins}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -66,7 +67,7 @@ hard feature-selection filter or a QSPR-utility certification. The
 complementary structural ceiling: every bond-incident-degree (BID)
 index on hydrogen-suppressed molecular graphs with maximum degree
 $\Delta \le 4$ lies in a vector space of dimension at most
-$\binom{5}{2} = 10$.
+$10$.
 
 \textbf{Evidence.} Across three regression QSPR datasets (ESOL,
 FreeSolv, Lipophilicity; $n = 5\,966$ molecules in total), the
@@ -87,9 +88,10 @@ ESOL (Table~\ref{tab:novel_combined}). A 5-fold cross-validated
 RandomForest benchmark on those four datasets shows the
 pairwise-pruned feature set preserves predictive performance within
 CV noise at roughly $4\times$ fewer features
-(Table~\ref{tab:ml_benchmark}), and matches or beats LASSO,
-ElasticNet, mRMR, Boruta, and L1-logistic feature-selection
-comparators on every dataset (Table~\ref{tab:fs_comparison}).
+(Table~\ref{tab:ml_benchmark}), and is competitive with several
+generic feature-selection comparators (LASSO, ElasticNet, mRMR,
+Boruta, $\ell_1$-logistic) under the reported mixed-model
+benchmark (Table~\ref{tab:fs_comparison}).
 
 \textbf{Limitation.} On Lipophilicity the strict combined
 diagnostic retains zero features in $4/5$ ML-benchmark folds; the
@@ -226,11 +228,12 @@ the redundancy-screening consequence.
 
 \subsection{QSPR benchmarks and reproducibility}
 
-The QSPR benchmarks used here (ESOL, FreeSolv, Lipophilicity) are
-drawn from the MoleculeNet collection~\cite{MoleculeNet}, a
-standard reference for molecular property prediction. We use the
-versions distributed via MoleculeNet without resplitting; SMILES
-are processed through RDKit~\cite{RDKit} and converted to
+The QSPR/QSAR benchmarks used here are drawn from the MoleculeNet
+collection~\cite{MoleculeNet}, a standard reference for molecular
+property prediction: three regression benchmarks (ESOL, FreeSolv,
+Lipophilicity) and one binary classification benchmark (BBBP). We
+use the versions distributed via MoleculeNet without resplitting;
+SMILES are processed through RDKit~\cite{RDKit} and converted to
 hydrogen-suppressed molecular graphs through a thin NetworkX
 wrapper.
 
@@ -259,10 +262,16 @@ the two layers compose rather than compete: the screening pipeline
 gates which indices enter the descriptor matrix, after which
 mRMR / LASSO / Boruta / similar methods could be applied
 downstream to the screened set against the modelling task at hand.
-Comparing redundancy-screening pipelines against generic
-feature-selection benchmarks on a full QSPR endpoint is outside
-the scope of the present paper and is noted as future work in
-Section~\ref{sec:discussion}.
+
+The present paper includes a limited comparator benchmark against
+LASSO, ElasticNet, mRMR, Boruta, and $\ell_1$-logistic feature
+selection in Section~\ref{sub:lasso_comparator}. This comparison
+is intended as a sanity check rather than a fully matched
+end-to-end feature-selection study, because the screening-pipeline
+rows use RandomForest whereas most external comparators are
+evaluated with linear or logistic models. A fully matched
+two-stage pipeline-versus-feature-selection benchmark remains
+future work.
 
 % =====================================================================
 \section{Datasets and implementation}\label{sec:datasets}
@@ -270,15 +279,16 @@ Section~\ref{sec:discussion}.
 
 \begin{table}[h]
 \centering
-\caption{QSPR benchmark datasets used in this study.}
+\caption{QSPR/QSAR benchmark datasets used in this study. The $n$ column reports the number of molecules that survive RDKit parsing (largest connected fragment, $\ge 2$ heavy atoms).}
 \label{tab:datasets}
-\begin{tabular}{llrl}
+\begin{tabular}{lllrl}
 \toprule
-Name & Target property & $n$ & Source\\
+Name & Target property & Task & $n$ & Source\\
 \midrule
-ESOL          & $\log S$ (aqueous solubility, mol/L) & $1\,127$ & \cite{Delaney2004ESOL} via \cite{MoleculeNet}\\
-FreeSolv      & $\Delta G_{\mathrm{hyd}}$ (hydration free energy, kcal/mol) & $639$ & \cite{Mobley2014FreeSolv} via \cite{MoleculeNet}\\
-Lipophilicity & $\log D$ at pH 7.4 & $4\,200$ & \cite{LipophilicityChEMBL} via \cite{MoleculeNet}\\
+ESOL          & $\log S$ (aqueous solubility, mol/L)         & regression     & $1\,127$ & \cite{Delaney2004ESOL} via \cite{MoleculeNet}\\
+FreeSolv      & $\Delta G_{\mathrm{hyd}}$ (hydration free energy, kcal/mol) & regression & $639$    & \cite{Mobley2014FreeSolv} via \cite{MoleculeNet}\\
+Lipophilicity & $\log D$ at pH 7.4                            & regression     & $4\,200$ & \cite{LipophilicityChEMBL} via \cite{MoleculeNet}\\
+BBBP          & blood-brain barrier penetration               & classification & $2\,039$ & \cite{Martins2012BBBP} via \cite{MoleculeNet}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -334,7 +344,7 @@ I_f(G)=\sum_{1\le i\le j\le\Delta} f(i,j)\cdot m_{ij}(G),
 \end{equation}
 where $m_{ij}(G)=\bigl|\{uv\in E(G):\{d_u,d_v\}=\{i,j\}\}\bigr|$.
 Restricted to $\mathcal{G}_4$, the vector space spanned by all BID
-indices has dimension at most $\binom{4+1}{2}=10$.
+indices has dimension at most $10$.
 \end{theorem}
 
 \begin{proof}
@@ -365,9 +375,11 @@ $\mathcal{G}_\Delta$, so
 $\bid \subseteq \operatorname{span}_{\mathbb{R}}\{m_{ij}:1\le i\le j\le\Delta\}$.
 A subspace of a span of $N_\Delta$ vectors has dimension at most
 $N_\Delta$, hence
-$\dim_{\mathbb{R}}\bid \le N_\Delta = \binom{\Delta+1}{2}$ by the
-standard multiset-counting identity. For $\Delta=4$ this is
-$\binom{5}{2}=10$.
+\[
+\dim_{\mathbb{R}}\bid \le N_\Delta = \frac{\Delta(\Delta+1)}{2}
+\]
+by the standard multiset-counting identity. For $\Delta=4$ this is
+$N_4=10$.
 \end{proof}
 
 \begin{remark}\label{rem:bid_credit}
@@ -445,14 +457,14 @@ additional signal'' band.
 
 \begin{table}[h]
 \centering
-\caption{Screening pipeline decision summary. Both conditions must hold for the candidate to be flagged as adding meaningful QSPR signal.}
+\caption{Screening diagnostic summary. Satisfying both conditions is interpreted as evidence of non-negligible residual linear signal under the tested baseline, dataset, and thresholds; it is not a proof of QSPR utility.}
 \label{tab:decision}
 \begin{tabular}{lll}
 \toprule
 Diagnostic & Pass condition & Interpretation\\
 \midrule
-$\max_b|\mathrm{cor}(z,X_b)|$ & $<\tau=0.95$ & not statistically redundant with the baseline\\
-$|\mathrm{pcor}(z,y\mid X)|$  & $\ge 0.10$  & adds non-negligible target-relevant signal\\
+$\max_b|\mathrm{cor}(z,X_b)|$ & $<\tau=0.95$ & not strongly pairwise-redundant with any baseline index\\
+$|\mathrm{pcor}(z,y\mid X)|$  & $\ge 0.10$  & non-negligible residual linear association with the target after controlling for the baseline\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -503,7 +515,7 @@ on each of the three regression QSPR datasets.
 \begin{table}[h]
 \centering
 \small
-\caption{Baseline redundancy across the three QSPR datasets. Pair counts are out of $\binom{30}{2}=435$. $\mathrm{PC}_{\alpha}$ is the smallest number of principal components whose cumulative explained variance is at least $\alpha\%$ of the baseline.}
+\caption{Baseline redundancy across the three QSPR datasets. Pair counts are out of $435$ (the number of unordered pairs of $30$ indices). $\mathrm{PC}_{\alpha}$ is the smallest number of principal components whose cumulative explained variance is at least $\alpha\%$ of the baseline.}
 \label{tab:baseline_redundancy}
 \begin{tabular}{lrrrrrr}
 \toprule
@@ -536,7 +548,7 @@ Table~\ref{tab:baseline_redundancy}.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.65\linewidth]{fig3_redundancy_bars.pdf}
-\caption{Redundant index-pair counts out of $\binom{30}{2}=435$ baseline pairs at two thresholds.}
+\caption{Redundant index-pair counts out of $435$ baseline pairs (unordered pairs of $30$ indices) at two thresholds.}
 \label{fig:redundancy_bars}
 \end{figure}
 
@@ -641,7 +653,7 @@ $\tau_{\mathrm{pcor}} \in \{0.05, 0.10, 0.20\}$
 on each of the three QSPR datasets (full table in
 \texttt{results/paper2\_threshold\_sensitivity.csv}).
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 \small
 \caption{Wuzi $100$-point grid: pass counts under threshold variation. Top block: pairwise screen only ($\max_b\lvert r(W, X_b)\rvert < \tau_r$). Bottom block: combined diagnostic (pairwise pass \emph{and} $\lvert\mathrm{pcor}(W, y \mid X)\rvert \ge \tau_{\mathrm{pcor}}$) across the full $3 \times 3$ threshold grid.}
@@ -674,6 +686,7 @@ Lipophilicity & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
 \vspace{0.3em}
 \noindent\small{Combined-diagnostic pass count of the Wuzi $100$-point grid across the full $\{0.90, 0.95, 0.99\} \times \{0.05, 0.10, 0.20\}$ threshold grid (nine $(\tau_r, \tau_{\mathrm{pcor}})$ combinations).}
 \end{table}
+\FloatBarrier
 
 \noindent The qualitative conclusion is stable across the tested
 thresholds: \emph{no} Wuzi grid point clears the combined
@@ -1042,21 +1055,27 @@ BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
 \noindent\small{$^\dagger$ Strict combined screen degenerates: retains zero features in $4/5$ folds; the RMSE shown is from the single fold that retained one feature. See \S\ref{sub:limitations}.}
 \end{table}
 
-The headline reading: on \emph{all four datasets}, the
-\texttt{pairwise\_pruned} RandomForest matches or beats every
-external feature-selection comparator we tested, with feature
-counts in the range $6$--$8$ versus $6$--$23$ for the comparators.
-On ESOL, \texttt{pairwise\_pruned} RMSE $1.435$ at $7.4$ features
-beats LASSO ($1.545$ at $14.6$ features) by $0.11$ RMSE and beats
-mRMR-$k{=}7$ by $0.22$ RMSE. On BBBP, \texttt{pairwise\_pruned}
-ROC-AUC $0.860$ at $6$ features beats $\ell_1$-Logistic by
-$0.07$ AUC and beats mRMR-$k{=}6$ by $0.11$ AUC. We caveat that
-this comparison crosses two model classes (RandomForest for the
-screen-pipeline rows, linear for the comparators), so the
-mechanical reading is ``pairwise-pruned RandomForest is at least
-competitive with linear-model LASSO / ElasticNet / mRMR / Boruta /
+The headline reading is qualified by the cross-model-class
+nature of the comparison. The screen-pipeline rows use a
+RandomForest, and the comparators use linear regression
+(regression datasets) or logistic regression (BBBP); the
+\texttt{pairwise\_pruned} RandomForest performs competitively
+with the tested external feature-selection comparators under this
+mixed-model comparison, with feature counts in the range $6$--$8$
+versus $6$--$23$ for the comparators. On ESOL,
+\texttt{pairwise\_pruned} has lower RMSE than LASSO in this
+benchmark ($1.435$ at $7.4$ features versus $1.545$ at $14.6$
+features) and lower RMSE than mRMR-$k{=}7$ ($1.654$); on BBBP,
+\texttt{pairwise\_pruned} has higher ROC-AUC than $\ell_1$-Logistic
+($0.860$ at $6$ features versus $0.790$ at $13.6$ features) and
+higher AUC than mRMR-$k{=}6$ ($0.747$). Because the comparison
+crosses model classes, the mechanical reading is
+``pairwise-pruned RandomForest is at least competitive with
+linear-model LASSO / ElasticNet / mRMR / Boruta /
 $\ell_1$-Logistic at matched feature count'' rather than a
-head-to-head model-architecture benchmark. Full per-fold standard
+head-to-head model-architecture benchmark; a fully matched
+comparison is left as future work
+(\S\ref{sub:limitations}, item 5). Full per-fold standard
 deviations are in
 \texttt{results/paper2\_feature\_selection\_comparison.csv}.
 
@@ -1149,14 +1168,14 @@ configurations against LASSO, ElasticNet, mRMR, Boruta, and
 $\ell_1$-Logistic on all four datasets. The screen-pipeline rows
 use a RandomForest, and the comparators use linear regression
 (regression datasets) or logistic regression (BBBP); the
-\texttt{pairwise\_pruned} RandomForest matches or beats every
-comparator at matched feature count. The reported comparison is
-therefore best read as ``pairwise-pruned RandomForest is at least
-competitive with linear-model LASSO / ElasticNet / mRMR / Boruta /
-$\ell_1$-Logistic'' rather than as a head-to-head
-model-architecture benchmark; a fully matched comparison
-(linear-model screen-pipeline rows or tree-ensemble comparators
-such as XGBoost-mRMR) is left as future work.
+\texttt{pairwise\_pruned} RandomForest performs competitively with
+every tested comparator at matched feature count. The reported
+comparison is therefore best read as ``pairwise-pruned
+RandomForest is at least competitive with linear-model LASSO /
+ElasticNet / mRMR / Boruta / $\ell_1$-Logistic'' rather than as a
+head-to-head model-architecture benchmark; a fully matched
+comparison (linear-model screen-pipeline rows or tree-ensemble
+comparators such as XGBoost-mRMR) is left as future work.
 
 \item \textbf{BID dimension bound covers $\Delta \le 4$ only.} The
 Edge-Degree-Pair Basis bound (Theorem~\ref{thm:bid}) is sharp on
