@@ -164,6 +164,60 @@ def main() -> None:
         f"median={np.median(hws_arr):.3f}"
     )
 
+    # Leave-one-out cross-validation: for each (index, property), recompute
+    # Pearson r 18 times leaving out one octane at a time. Report the largest
+    # absolute change in r across all 18 leave-one-outs; an outlier-driven
+    # headline correlation shows up as a single large change.
+    print(f"\n=== Leave-one-out robustness check (n=18, 18 LOO refits per cell) ===")
+    loocv_rows = []
+    octane_names = [r["name"] for r in rows]
+    for idx_name, x in x_data.items():
+        fam = "Wuzi" if idx_name.startswith("W(") else "classical"
+        row: dict[str, object] = {"index": idx_name, "family": fam}
+        for p in PROPS:
+            y = y_data[p]
+            r_full = pearson(x, y)
+            r_loo = np.array([
+                pearson(np.delete(x, i), np.delete(y, i)) for i in range(n)
+            ])
+            r_loo_min = float(r_loo.min())
+            r_loo_max = float(r_loo.max())
+            max_drift = float(max(abs(r_full - r_loo_min), abs(r_full - r_loo_max)))
+            row[f"r_{p}"] = round(r_full, 4)
+            row[f"loo_min_{p}"] = round(r_loo_min, 4)
+            row[f"loo_max_{p}"] = round(r_loo_max, 4)
+            row[f"loo_max_drift_{p}"] = round(max_drift, 4)
+            row[f"loo_argmax_drift_{p}"] = octane_names[int(np.argmax(np.abs(r_full - r_loo)))]
+        loocv_rows.append(row)
+
+    loo_csv = os.path.join(PROJECT, "results", "octane_competitor_loocv.csv")
+    with open(loo_csv, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(loocv_rows[0].keys()))
+        writer.writeheader()
+        for r in loocv_rows:
+            writer.writerow(r)
+    print(f"Wrote {loo_csv}")
+
+    # Summary: largest absolute drift across the 80 (index, property) cells, and
+    # which octane drives the headline GA/H/W(0,0,2) dHvap cells.
+    all_drift = np.array([
+        float(r[f"loo_max_drift_{p}"]) for r in loocv_rows for p in PROPS
+    ])
+    print(
+        f"\nLOOCV max-drift summary across all {len(all_drift)} cells: "
+        f"min={all_drift.min():.3f}, max={all_drift.max():.3f}, "
+        f"median={np.median(all_drift):.3f}"
+    )
+    print(f"\nLOOCV drift on the headline dHvap comparison cells:")
+    for r in loocv_rows:
+        if r["index"] in ("GA", "H", "W(0,0,2)"):
+            print(
+                f"  {r['index']:10s}  r={r['r_dHvap']:+.4f}  "
+                f"LOO range=[{r['loo_min_dHvap']:+.4f}, {r['loo_max_dHvap']:+.4f}]  "
+                f"max drift={r['loo_max_drift_dHvap']:.4f}  "
+                f"(argmax: {r['loo_argmax_drift_dHvap']})"
+            )
+
 
 if __name__ == "__main__":
     main()

@@ -150,7 +150,10 @@ The literature on degree-based topological indices in chemical
 graph theory has grown substantially since the seminal Wiener
 index~\cite{Wiener1947}, the Randi\'c index~\cite{Randic1975},
 and the Zagreb indices of Gutman and
-Trinajsti\'c~\cite{Gutman1972}. Among the many
+Trinajsti\'c~\cite{Gutman1972} (see also the survey of
+Nikoli\'c, Kova\v{c}evi\'c, Mili\v{c}evi\'c, and Trinajsti\'c~\cite{NikolicKovacevicMilicevicTrinajstic2003}
+documenting their development through the early
+2000s). Among the many
 parametric extensions are the general Randi\'c index $R_\alpha$
 \cite{BollobasErdos1998}, the general sum-connectivity index
 $\chi_\alpha$~\cite{ZhouTrinajstic2009sumconn}, the Sombor index and
@@ -1154,7 +1157,7 @@ This is consistent with Conjecture~\ref{conj:trees_beta_pos}.
 $(-1/2, 0, 0)$, $(0, -1/2, 0)$, and $(0, -1, 0)$, the extremals
 flip: the observed minimizer is $S_n$ and the observed maximizer
 is $P_n$ for every $n \in \{5, \ldots, 12\}$. This is consistent
-with the classical Bollob\'as--Erd\H{o}s extremal-trees result for
+with the classical Bollob\'as--Erd\H{o}s~\cite{BollobasErdos1998} extremal-trees result for
 the general Randi\'c index $R_\alpha$ with $\alpha < 0$.
 
 \item \textbf{Mixed-sign region.} At $(\alpha, \beta, \gamma) = (-1, -1, 1)$,
@@ -1258,7 +1261,7 @@ full table is in \texttt{results/octane\_competitor\_comparison.\{csv,md\}}.
 
 \begin{table}[h]
 \centering
-\caption{Pearson correlation $r$ between each index and each of the five physicochemical properties of the $18$ octane isomers. Sign carries the index's natural direction; what matters chemically is $|r|$. Bold entries flag the per-column maximum $|r|$ across all listed indices. \textbf{Bootstrap uncertainty (B = 10,000, percentile method, 95\% CI):} full per-cell intervals are tabulated in \texttt{results/octane\_competitor\_bootstrap.csv}; the headline values are $r(\Delta H_\mathrm{vap}, GA) = +0.959$ with CI $[+0.917, +0.986]$, $r(\Delta H_\mathrm{vap}, H) = +0.959$ with CI $[+0.917, +0.986]$, and $r(\Delta H_\mathrm{vap}, W(0,0,2)) = -0.967$ with CI $[-0.991, -0.921]$. The CI half-widths range from $0.019$ (smallest, $M_2$ on $\omega$) to $0.47$ (largest), median $0.13$; differences in $|r|$ smaller than ${\sim}0.10$--$0.15$ are within bootstrap noise at $n = 18$.}
+\caption{Pearson correlation $r$ between each index and each of the five physicochemical properties of the $18$ octane isomers. Sign carries the index's natural direction; what matters chemically is $|r|$. Bold entries flag the per-column maximum $|r|$ across all listed indices. \textbf{Bootstrap uncertainty (B = 10,000, percentile method, 95\% CI):} full per-cell intervals are tabulated in \texttt{results/octane\_competitor\_bootstrap.csv}; the headline values are $r(\Delta H_\mathrm{vap}, GA) = +0.959$ with CI $[+0.917, +0.986]$, $r(\Delta H_\mathrm{vap}, H) = +0.959$ with CI $[+0.917, +0.986]$, and $r(\Delta H_\mathrm{vap}, W(0,0,2)) = -0.967$ with CI $[-0.991, -0.921]$. The CI half-widths range from $0.019$ (smallest, $M_2$ on $\omega$) to $0.47$ (largest), median $0.13$; differences in $|r|$ smaller than ${\sim}0.10$--$0.15$ are within bootstrap noise at $n = 18$. \textbf{Leave-one-out robustness check:} for each cell the correlation was recomputed $18$ times leaving out one octane at a time; the largest absolute change across the $18$ leave-one-outs is at most $0.011$ on the headline dHvap cells ($GA$: $0.008$; $H$: $0.008$; $W(0, 0, 2)$: $0.011$, in each case the largest drift attributable to $2,3,3$-trimethylpentane), confirming that the headline correlations are not driven by a single outlying isomer; full per-cell LOOCV ranges are in \texttt{results/octane\_competitor\_loocv.csv}.}
 \label{tab:octane_competitor}
 \small
 \begin{tabular}{llrrrrr}
@@ -1313,6 +1316,18 @@ index (Proposition~\ref{prop:reductions}), not a Wuzi-specific
 finding; the strongest Wuzi-only triple on $\omega$ is $W(1, 1, 1)$
 at $|r| = 0.981$. The Wuzi family is therefore in the same $|r|$
 regime as established BID indices on this benchmark.
+
+\item \emph{Robustness check.} A leave-one-out cross-validation,
+recomputing each cell's correlation with one of the $18$ octanes
+removed, confirms that the headline correlations are not driven
+by single outliers: the maximum drift in $|r|$ across the $18$
+leave-one-outs is $0.008$ for $GA$ on $\Delta H_\mathrm{vap}$,
+$0.008$ for $H$ on $\Delta H_\mathrm{vap}$, and $0.011$ for
+$W(0, 0, 2)$ on $\Delta H_\mathrm{vap}$, each largest drift
+attributable to the same isomer ($2, 3, 3$-trimethylpentane).
+Full per-cell LOOCV ranges are in
+\texttt{results/octane\_competitor\_loocv.csv}; the median LOOCV
+drift across all $80$ (index, property) cells is $0.039$.
 
 \item These experiments are sensitivity benchmarks, not QSPR model
 validation: we do not claim the Wuzi family outperforms the
@@ -1419,36 +1434,56 @@ indices are the natural counterparts of the rigorous bounds proved
 in \S\ref{sub:R_chi_SO} for the generalised Randi\'c, sum-connectivity,
 and Sombor indices.
 
-\begin{conjecture}[Nordhaus--Gaddum type]\label{conj:NG}
-For every $n \ge 2$ and every parameter triple
-$(\alpha, \beta, \gamma) \in \mathbb{R}^3$, there exists an
-explicit function $f_n(\alpha, \beta, \gamma)$ depending only on
-$n$ and the parameters such that, for every simple graph $G$ of
-order $n$ with no isolated vertex in $G$ or $\bar G$, the Wuzi
-sum on $G$ and its complement satisfies
-\[
+\begin{conjecture}[Nordhaus--Gaddum lower bound]\label{conj:NG}
+Let $G$ be a simple graph of order $n \ge 2$ such that neither $G$
+nor its complement $\bar G$ contains an isolated vertex, and define
+\begin{equation}\label{eq:NG_fn_easy}
+f_n(\alpha, \beta, 0) \;:=\; \binom{n}{2}\, 2^{\beta}\, (n - 1)^{2\alpha + \beta}.
+\end{equation}
+\begin{enumerate}[label=(\alph*)]
+\item For $\alpha \le 0$, $\beta \le 0$, and $\gamma = 0$,
+\begin{equation}\label{eq:NG_easy}
+W(G;\alpha,\beta,0) + W(\bar G;\alpha,\beta,0)
+\;\ge\; f_n(\alpha, \beta, 0).
+\end{equation}
+\item For general $(\alpha, \beta, \gamma) \in \mathbb{R}^3$ we
+conjecture the analogous closed-form lower bound
+\begin{equation}\label{eq:NG_general}
 W(G;\alpha,\beta,\gamma) + W(\bar G;\alpha,\beta,\gamma)
-\;\ge\; f_{n}(\alpha,\beta,\gamma).
-\]
+\;\ge\; \binom{n}{2}\cdot
+\min_{1 \le i \le j \le n-1}\,\psi(i, j;\alpha,\beta,\gamma),
+\end{equation}
+where the minimum is taken over the admissible degree pairs
+realisable on a graph of order $n$.
+\end{enumerate}
 \end{conjecture}
 
 \begin{remark}\label{rem:NG_strategy}
-The classical Nordhaus--Gaddum results for the Zagreb indices
-$M_1, M_2$ \cite{NordhausGaddumOrig1956} are the template. The
-$\gamma$-factor requires extending the classical argument by an
-explicit estimate of $\sum_e \mathrm{imb}(d_u, d_v)$ on $G$ and on
-$\bar G$ combined; since the degree of every vertex in $G$ and
-$\bar G$ sums to $n - 1$, the imbalance on $\bar G$ is determined
-by the imbalance on $G$, and the conjecture reduces to bounding
-$\sum_e \exp(\gamma\cdot\mathrm{imb}(d_u, d_v))$ over the
-$\binom{n}{2}$ pairs that are edges in either $G$ or $\bar G$
-(but not both). An explicit $f_n$ in the mixed-sign parameter
-regime is the missing piece.
+Part (a) is in fact a direct consequence of per-edge monotonicity:
+each of the $\binom{n}{2}$ edges of $K_n = G \cup \bar G$ has
+degree pair satisfying $d_u d_v \le (n-1)^2$ and
+$d_u + d_v \le 2(n-1)$; under $\alpha \le 0$ and $\beta \le 0$
+these flip to $(d_u d_v)^{\alpha} \ge (n-1)^{2\alpha}$ and
+$(d_u + d_v)^{\beta} \ge 2^{\beta}(n-1)^{\beta}$, and summing
+over the $\binom{n}{2}$ edges yields~\eqref{eq:NG_easy}. The bound
+is not sharp: it is approached but never attained, since no vertex
+can simultaneously be universal in $G$ and universal in $\bar G$.
+What remains genuinely open is the sharp value of
+$f_n(\alpha, \beta, 0)$ together with the extremal graph
+characterisation in the $\alpha, \beta \le 0$ regime, and the
+extension to mixed-sign parameters and to $\gamma \ne 0$ in
+part~(b), where the simple per-edge argument no longer suffices
+and the $\gamma$-factor requires an explicit estimate of
+$\sum_{uv} \exp(\gamma\cdot\mathrm{imb}(d_u, d_v))$ combined
+across $G$ and $\bar G$. The classical Nordhaus--Gaddum results
+for the Zagreb indices $M_1, M_2$~\cite{NordhausGaddumOrig1956}
+are the template.
 \end{remark}
 
 \begin{conjecture}[$GA$-controlled bound for the $\gamma$-axis]\label{conj:GA}
 Let $GA(G) = \sum_{uv \in E(G)} 2\sqrt{d_u d_v}/(d_u + d_v)$ be the
-geometric--arithmetic index, which satisfies $GA(G) \le m$ with
+geometric--arithmetic index of Vuki\v{c}evi\'c and
+Furtula~\cite{VukicevicFurtula2009GA}, which satisfies $GA(G) \le m$ with
 equality iff $G$ is regular. For every $\gamma > 0$ there exists a
 non-decreasing function
 $g_\gamma : [0, m] \to [m, m\, e^{\gamma}]$ such that
@@ -1598,7 +1633,7 @@ length-$2$ paths to the respective hubs.
 \begin{conjecture}[Mixed-sign extremal trees: spider / double-spider]
 \label{conj:caterpillar_max}
 For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
-and tree order $n \ge 9$ with $n \ne 8$,
+and tree order $n \ge 9$,
 \begin{enumerate}[label=(\alph*)]
 \item if $n$ is odd, the unique maximizer of $W(T; -1, -1, 1)$
 over all non-isomorphic trees $T$ of order $n$ is the spider
@@ -1696,9 +1731,9 @@ together with explicit proof-strategy remarks. On the chemometric
 side, the natural extensions are to additional compound classes
 (benzene derivatives, alkane homologues beyond octane and decane)
 and to compound-class-specific QSPR endpoints, together with a
-formal study of the Albertson-irregularity pairing
-$\mathrm{Alb}(G) = \sum_e |d_u - d_v|$ that is the natural
-mathematical companion of the Wuzi $\gamma$-axis.
+formal study of the Albertson~\cite{Albertson1997} irregularity
+pairing $\mathrm{Alb}(G) = \sum_{uv \in E(G)} |d_u - d_v|$ that
+is the natural mathematical companion of the Wuzi $\gamma$-axis.
 
 % =====================================================================
 \section*{Data and code availability}
@@ -1810,6 +1845,23 @@ J.~Math.~Chem.~\textbf{44} (2008), 301--310.
 E.~A.~Nordhaus and J.~W.~Gaddum,
 \emph{On complementary graphs},
 Amer.~Math.~Monthly~\textbf{63} (1956), 175--177.
+
+\bibitem{NikolicKovacevicMilicevicTrinajstic2003}
+S.~Nikoli\'c, G.~Kova\v{c}evi\'c, A.~Mili\v{c}evi\'c, and N.~Trinajsti\'c,
+\emph{The Zagreb indices 30 years after},
+Croat.~Chem.~Acta~\textbf{76}(2) (2003), 113--124.
+
+\bibitem{Albertson1997}
+M.~O.~Albertson,
+\emph{The irregularity of a graph},
+Ars Combin.~\textbf{46} (1997), 219--225.
+
+\bibitem{VukicevicFurtula2009GA}
+D.~Vuki\v{c}evi\'c and B.~Furtula,
+\emph{Topological index based on the ratios of geometrical
+and arithmetical means of end-vertex degrees of edges},
+J.~Math.~Chem.~\textbf{46}(4) (2009), 1369--1376.
+\url{https://doi.org/10.1007/s10910-009-9520-x}.
 
 \bibitem{Paper2_Screening}
 G.~Shiwakoti, A.~Natarajan, M.~Arockiaraj,

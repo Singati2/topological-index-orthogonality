@@ -167,8 +167,9 @@ def fig4_octane_heatmap():
     if degenerate:
         note = (f"\nDegenerate (constant on the 18 octanes, |r| undefined): "
                 f"{', '.join(degenerate)}.")
-    ax.set_title("Octane prediction: signed Pearson $r$ "
-                 "(color encodes $|r|$) — $n=18$" + note, fontsize=9)
+    ax.set_title("Octane property-correlation benchmark: "
+                 "signed Pearson $r$ (color encodes $|r|$) — $n=18$" + note,
+                 fontsize=9)
     save_both(fig, "fig4_octane_heatmap")
 
 
