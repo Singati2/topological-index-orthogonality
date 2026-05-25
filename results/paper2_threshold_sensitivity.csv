@@ -1,0 +1,4 @@
+dataset,wuzi_grid_points,pairwise_pass_tau_r_0.90,pairwise_pass_tau_r_0.95,pairwise_pass_tau_r_0.99,combined_pass_tau_r_0.95_pcor_0.05,combined_pass_tau_r_0.95_pcor_0.10,combined_pass_tau_r_0.95_pcor_0.20,combined_pass_tau_r_0.90_pcor_0.10,combined_pass_tau_r_0.99_pcor_0.10
+esol,100,0,0,27,0,0,0,0,0
+freesolv,100,0,1,37,0,0,0,0,0
+lipophilicity,100,0,0,30,0,0,0,0,0
