@@ -38,5 +38,5 @@ abstract: >-
   (VIF), and a combined criterion, applied to a 30-index classical
   baseline on the ESOL, FreeSolv, Lipophilicity, and BBBP datasets,
   together with a 5-fold cross-validated RandomForest benchmark.
-version: "1.6.0"
+version: "1.7.0"
 date-released: "2026-05-25"

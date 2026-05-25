@@ -52,6 +52,7 @@ from sklearn.metrics import (
     mean_squared_error, mean_absolute_error, r2_score,
     roc_auc_score, accuracy_score,
 )
+from scipy import stats as _scipy_stats
 
 
 # === In-fold feature selectors: BYTE-IDENTICAL to those in scripts/11_ml_benchmark.py ===
@@ -219,6 +220,11 @@ def benchmark_dataset(name: str, task: str):
             per_cfg[cfg].append(m)
 
     rows = []
+    primary_metric = "rmse" if task == "regression" else "roc_auc"
+    # Per-fold scores used for paired t-tests
+    per_fold_primary = {cfg: np.array([v[primary_metric] for v in per_cfg[cfg]],
+                                      dtype=float) for cfg in CONFIGS}
+
     for cfg in CONFIGS:
         vals = per_cfg[cfg]
         rec = {"dataset": name, "task": task, "config": cfg, "n": n,
@@ -232,21 +238,41 @@ def benchmark_dataset(name: str, task: str):
         nfa = np.array([v["n_features"] for v in vals], dtype=float)
         rec["n_features_mean"] = round(float(nfa.mean()), 2)
         rec["n_features_std"]  = round(float(nfa.std()), 2)
+        # Paired t-test vs full: H0 = no difference in primary metric
+        # across folds. Two-sided, df = N_FOLDS - 1.
+        if cfg == "full":
+            rec["paired_t_vs_full"] = ""; rec["paired_p_vs_full"] = ""
+        else:
+            diffs = per_fold_primary[cfg] - per_fold_primary["full"]
+            # Use only finite paired diffs (combined_pruned on Lipo can have NaN)
+            mask = np.isfinite(diffs)
+            if mask.sum() >= 2:
+                t_stat, p_val = _scipy_stats.ttest_rel(
+                    per_fold_primary[cfg][mask],
+                    per_fold_primary["full"][mask],
+                )
+                rec["paired_t_vs_full"] = round(float(t_stat), 3)
+                rec["paired_p_vs_full"] = round(float(p_val), 4)
+            else:
+                rec["paired_t_vs_full"] = "NaN"
+                rec["paired_p_vs_full"] = "NaN"
         rows.append(rec)
 
     # console summary
     if task == "regression":
-        print(f"  {'config':>17s}  {'pre-LASSO feats':>17s}  {'final L1 feats':>14s}  {'RMSE (mean±std)':>17s}")
+        print(f"  {'config':>17s}  {'pre-LASSO':>10s}  {'final':>7s}  {'RMSE (mean±std)':>17s}  {'t vs full':>10s}  {'p vs full':>10s}")
         for r in rows:
-            print(f"  {r['config']:>17s}  {r['n_kept_pre_lasso_mean']:>10.1f}±{r['n_kept_pre_lasso_std']:<5.2f}  "
-                  f"{r['n_features_mean']:>10.1f}±{r['n_features_std']:<3.2f}  "
-                  f"{r['rmse_mean']:>10.4f}±{r['rmse_std']:.4f}")
+            print(f"  {r['config']:>17s}  {r['n_kept_pre_lasso_mean']:>5.1f}      "
+                  f"{r['n_features_mean']:>5.1f}    "
+                  f"{r['rmse_mean']:>10.4f}±{r['rmse_std']:.4f}  "
+                  f"{str(r['paired_t_vs_full']):>10s}  {str(r['paired_p_vs_full']):>10s}")
     else:
-        print(f"  {'config':>17s}  {'pre-L1 feats':>14s}  {'final L1 feats':>14s}  {'AUC (mean±std)':>17s}")
+        print(f"  {'config':>17s}  {'pre-L1':>7s}  {'final':>7s}  {'AUC (mean±std)':>17s}  {'t vs full':>10s}  {'p vs full':>10s}")
         for r in rows:
-            print(f"  {r['config']:>17s}  {r['n_kept_pre_lasso_mean']:>9.1f}±{r['n_kept_pre_lasso_std']:<5.2f}  "
-                  f"{r['n_features_mean']:>10.1f}±{r['n_features_std']:<3.2f}  "
-                  f"{r['roc_auc_mean']:>10.4f}±{r['roc_auc_std']:.4f}")
+            print(f"  {r['config']:>17s}  {r['n_kept_pre_lasso_mean']:>5.1f}    "
+                  f"{r['n_features_mean']:>5.1f}    "
+                  f"{r['roc_auc_mean']:>10.4f}±{r['roc_auc_std']:.4f}  "
+                  f"{str(r['paired_t_vs_full']):>10s}  {str(r['paired_p_vs_full']):>10s}")
     return rows
 
 

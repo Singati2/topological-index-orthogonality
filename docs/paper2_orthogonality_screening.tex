@@ -49,62 +49,47 @@
 \maketitle
 
 \begin{abstract}
-\textbf{Problem.} The chemical graph theory literature contains
-many hundreds of scalar topological indices proposed for QSPR/QSAR
-modelling, and the conventional pairwise-correlation criterion for
-``does a new index carry independent information''
-($\max_{b} \lvert r(z, X_b)\rvert < 0.95$ against a classical
+\textbf{Problem.} The chemical-graph-theory literature contains
+hundreds of scalar topological indices, and the conventional
+pairwise-correlation criterion for ``does a new index carry
+independent information''
+($\max_{b}\lvert r(z, X_b)\rvert < 0.95$ against a classical
 baseline) is empirically over-permissive.
 
-\textbf{Method.} We present an open-source diagnostic pipeline
-combining four standard diagnostics --- pairwise correlation, PCA
-effective rank, variance inflation factor, and partial correlation
-with the QSPR target --- into a single \emph{combined diagnostic}
-(Table~\ref{tab:decision}), positioned as a \emph{conservative
-pre-flight screen for independent linear QSPR signal}, not as a
-hard feature-selection filter or a QSPR-utility certification. The
+\textbf{Method.} We present an open-source linear diagnostic
+pipeline combining pairwise correlation, PCA effective rank, VIF,
+and partial correlation with the QSPR target into a \emph{combined
+diagnostic} (Table~\ref{tab:decision}), positioned as a
+pre-flight screen for independent linear QSPR signal, not as a
+hard feature-selection filter or a utility certification. The
 \emph{Edge-Degree-Pair Basis} (Theorem~\ref{thm:bid}) gives a
 complementary structural ceiling: every bond-incident-degree (BID)
-index on hydrogen-suppressed molecular graphs with maximum degree
-$\Delta \le 4$ lies in a vector space of dimension at most
-$10$.
+index on hydrogen-suppressed molecular graphs with $\Delta \le 4$
+lies in a vector space of dimension at most $10$.
 
-\textbf{Evidence.} Across three regression QSPR datasets (ESOL,
-FreeSolv, Lipophilicity; $n = 5\,966$ molecules in total), the
-three-parameter Wuzi index family of the companion
-paper~\cite{Paper1_Wuzi} fails the combined diagnostic at every
-one of the $300$ grid points sampled, and the qualitative verdict
-is stable across the nine $(\tau_r, \tau_{\mathrm{pcor}})$
-combinations in $\{0.90, 0.95, 0.99\} \times \{0.05, 0.10, 0.20\}$
-(\S\ref{sub:threshold_sensitivity}). A cross-dataset replication on
-$20$ alternative-family candidates (information-theoretic,
-centrality, motif, eccentricity, spectral-hybrid) over all four
-benchmarks shows that $15$--$17/20$ clear the pairwise threshold
-but only $0$--$4/20$ also clear
-$\lvert\mathrm{pcor}(z, y \mid X)\rvert \ge 0.10$: pairwise-only
-screening is uniformly over-permissive, and the combined diagnostic
-is even more selective on FreeSolv, Lipophilicity, and BBBP than on
-ESOL (Table~\ref{tab:novel_combined}). A 5-fold cross-validated
-RandomForest benchmark on those four datasets shows the
-pairwise-pruned feature set preserves predictive performance within
-CV noise at roughly $4\times$ fewer features
-(Table~\ref{tab:ml_benchmark}), and is competitive with several
-generic feature-selection comparators (LASSO, ElasticNet, mRMR,
-Boruta, $\ell_1$-logistic) under the reported mixed-model
-benchmark (Table~\ref{tab:fs_comparison}). A matched-model-class
-pipeline-then-LASSO / $\ell_1$-logistic benchmark supports the
-same parsimony claim without the cross-model-class qualification
+\textbf{Evidence.} The three-parameter Wuzi index family
+\cite{Paper1_Wuzi} fails the combined diagnostic at every one of
+$300$ grid points across three regression datasets, with the
+verdict stable across nine $(\tau_r, \tau_{\mathrm{pcor}})$
+threshold combinations (\S\ref{sub:threshold_sensitivity}). Across
+all four datasets, $15$--$17$ of $20$ alternative-family
+candidates clear pairwise but only $0$--$4$ also clear
+$\lvert\mathrm{pcor}\rvert \ge 0.10$
+(Table~\ref{tab:novel_combined}). A $5$-fold-CV RandomForest
+benchmark shows the pairwise-pruned set preserves predictive
+performance within CV noise at $\sim 4\times$ fewer features
+(Table~\ref{tab:ml_benchmark}); a matched-model-class
+pipeline-then-LASSO / $\ell_1$-logistic benchmark with paired
+$t$-tests shows a clean parsimony win on FreeSolv and BBBP
+($p > 0.05$) and a small but statistically detectable
+$<3\%$ RMSE cost on ESOL and Lipophilicity in exchange for
+${\sim}\!2\times$ fewer LASSO-active features
 (Table~\ref{tab:matched_class}).
 
-\textbf{Limitation.} On Lipophilicity the strict combined
-diagnostic retains zero features in $4/5$ ML-benchmark folds; the
-combined diagnostic should be read as evidence about residual
-target signal, \emph{not} as an automatic feature-selection rule.
-We do not claim universal QSPR usefulness of the pipeline,
-universal redundancy of the Wuzi family beyond the tested datasets
-and linear diagnostics, or chemical utility of any alternative-family
-candidate that clears the combined diagnostic on a single dataset;
-full limitations are catalogued in \S\ref{sub:limitations}.
+\textbf{Scope.} Diagnostics are linear; the BID theorem covers
+$\Delta\le 4$; the combined screen degenerates on Lipophilicity
+(zero features in $4/5$ folds) and should not be used as a hard
+filter. Full limitations in \S\ref{sub:limitations}.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, orthogonality
@@ -930,10 +915,15 @@ sufficient for redundancy against the \emph{full} baseline.
 
 We emphasise that the four passing partial correlations are small
 in absolute terms ($0.109 \le |\mathrm{pcor}| \le 0.154$, all under
-$0.2$). The reading we recommend is the structural one --- the
-passers occupy a subspace of feature space outside the linear span
-of the $30$-index baseline --- not a chemical-utility one. Whether
-any of $\mathrm{InfoH\_deg}$, $\mathrm{CutVerts}$, $\mathrm{FourCyc}$,
+$0.2$). The reading we recommend is structural: the partial-correlation
+diagnostic is \emph{consistent with} the hypothesis that these
+candidates capture target-relevant information not linearly
+explained by the $30$-index baseline. Strictly proving subspace
+orthogonality would require an explicit basis decomposition we do
+not undertake here; what the data establish is the weaker statement
+that residual linear association with the target persists after
+projecting out the baseline. Whether any of
+$\mathrm{InfoH\_deg}$, $\mathrm{CutVerts}$, $\mathrm{FourCyc}$,
 or $\mathrm{MeanEcc}$ actually improves QSPR performance on $\log S$
 or any other endpoint is a separate question, answered in part by
 the ML benchmark of Section~\ref{sec:ml_benchmark} and ultimately
@@ -1187,52 +1177,70 @@ the authoritative source for the pipeline-then-LASSO comparison.
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Pipeline-then-LASSO matched-model-class benchmark. Same model class (LASSO for regression, $\ell_1$-Logistic for BBBP) and same 5-fold splits across all three configurations within each dataset, so the comparison isolates the effect of the upstream screening step. ``pre-LASSO feats'' is the mean number of features handed to LASSO after screening; ``final L1 feats'' is the mean number of features with non-zero LASSO coefficient (the screening step shrinks the input set; LASSO further shrinks via $\ell_1$ regularisation). Reported as mean $\pm$ std across the 5 folds. Full per-fold numbers in \texttt{results/paper2\_pipeline\_then\_lasso.csv}.}
+\caption{Pipeline-then-LASSO matched-model-class benchmark with paired $t$-tests. Same model class (LASSO for regression, $\ell_1$-Logistic for BBBP) and same 5-fold splits across all three configurations within each dataset, so the comparison isolates the effect of the upstream screening step. ``pre-LASSO feats'' is the mean number of features handed to LASSO after screening; ``final L1 feats'' is the mean number of features with non-zero LASSO coefficient. ``$t$ vs.\ full'' and ``$p$ vs.\ full'' are the paired $t$-statistic and two-sided $p$-value across the five folds (df $=4$) comparing the primary metric (RMSE for regression, ROC-AUC for BBBP) against the \texttt{full} (no-screen) row of the same dataset. Full per-fold numbers in \texttt{results/paper2\_pipeline\_then\_lasso.csv}.}
 \label{tab:matched_class}
-\begin{tabular}{llcrr}
+\begin{tabular}{llcrrrr}
 \toprule
-Dataset & Configuration & Metric (mean $\pm$ std) & pre-LASSO feats & final L1 feats\\
+Dataset & Configuration & Metric (mean $\pm$ std) & pre & final & $t$ vs.\ full & $p$ vs.\ full\\
 \midrule
-ESOL          & \texttt{full} (LASSO)                       & RMSE $1.536\pm 0.077$  & $30.0$         & $17.6$\\
-              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.580\pm 0.085$  & $\phantom{0}7.4$ & $\phantom{0}7.2$\\
-              & \texttt{combined} $\to$ LASSO               & RMSE $1.588\pm 0.090$  & $\phantom{0}4.4$ & $\phantom{0}4.4$\\
+ESOL          & \texttt{full} (LASSO)                       & RMSE $1.536\pm 0.077$  & $30.0$         & $17.6$ & --- & ---\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.580\pm 0.085$  & $\phantom{0}7.4$ & $\phantom{0}7.2$ & $+3.77$ & $0.020^{*}$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $1.588\pm 0.090$  & $\phantom{0}4.4$ & $\phantom{0}4.4$ & $+3.62$ & $0.022^{*}$\\
 \midrule
-FreeSolv      & \texttt{full} (LASSO)                       & RMSE $3.469\pm 0.400$  & $30.0$         & $12.8$\\
-              & \texttt{pairwise} $\to$ LASSO               & RMSE $3.465\pm 0.394$  & $\phantom{0}8.0$ & $\phantom{0}6.4$\\
-              & \texttt{combined} $\to$ LASSO               & RMSE $3.462\pm 0.387$  & $\phantom{0}3.2$ & $\phantom{0}3.2$\\
+FreeSolv      & \texttt{full} (LASSO)                       & RMSE $3.469\pm 0.400$  & $30.0$         & $12.8$ & --- & ---\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $3.465\pm 0.394$  & $\phantom{0}8.0$ & $\phantom{0}6.4$ & $-0.34$ & $0.748$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $3.462\pm 0.387$  & $\phantom{0}3.2$ & $\phantom{0}3.2$ & $-0.46$ & $0.672$\\
 \midrule
-Lipophilicity & \texttt{full} (LASSO)                       & RMSE $1.128\pm 0.016$  & $30.0$         & $16.2$\\
-              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.137\pm 0.013$  & $\phantom{0}8.0$ & $\phantom{0}7.0$\\
-              & \texttt{combined} $\to$ LASSO               & RMSE $1.220^{\,\dagger}$       & $\phantom{0}0.2$ & $\phantom{0}0.2$\\
+Lipophilicity & \texttt{full} (LASSO)                       & RMSE $1.128\pm 0.016$  & $30.0$         & $16.2$ & --- & ---\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.137\pm 0.013$  & $\phantom{0}8.0$ & $\phantom{0}7.0$ & $+3.45$ & $0.026^{*}$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $1.220^{\,\dagger}$       & $\phantom{0}0.2$ & $\phantom{0}0.2$ & --- & ---\\
 \midrule
-BBBP          & \texttt{full} ($\ell_1$-Logistic)           & AUC $0.794\pm 0.019$   & $30.0$         & $11.6$\\
-              & \texttt{pairwise} $\to$ $\ell_1$-Logistic   & AUC $0.787\pm 0.026$   & $\phantom{0}6.0$ & $\phantom{0}6.0$\\
-              & \texttt{combined} $\to$ $\ell_1$-Logistic   & AUC $0.786\pm 0.028$   & $\phantom{0}4.0$ & $\phantom{0}4.0$\\
+BBBP          & \texttt{full} ($\ell_1$-Logistic)           & AUC $0.794\pm 0.019$   & $30.0$         & $11.6$ & --- & ---\\
+              & \texttt{pairwise} $\to$ $\ell_1$-Logistic   & AUC $0.787\pm 0.026$   & $\phantom{0}6.0$ & $\phantom{0}6.0$ & $-1.71$ & $0.163$\\
+              & \texttt{combined} $\to$ $\ell_1$-Logistic   & AUC $0.786\pm 0.028$   & $\phantom{0}4.0$ & $\phantom{0}4.0$ & $-1.56$ & $0.194$\\
 \bottomrule
 \end{tabular}
 
 \vspace{0.5em}
-\noindent\small{$^\dagger$ Combined screen retains zero features in $4/5$ Lipophilicity folds; the value shown is from the single fold that retained one feature. The same failure mode appears in Table~\ref{tab:ml_benchmark} and is treated as a formal limitation in \S\ref{sub:limitations}.}
+\noindent\small{$^{*}$ significant at $\alpha=0.05$ (two-sided paired $t$-test, df $=4$). $^\dagger$ Combined screen retains zero features in $4/5$ Lipophilicity folds; the value shown is from the single fold that retained one feature. The same failure mode appears in Table~\ref{tab:ml_benchmark} and is treated as a formal limitation in \S\ref{sub:limitations}.}
 \end{table}
 
-\textbf{Headline reading (matched-model-class).} Within each model
-class, the pairwise-then-LASSO pipeline matches the no-screen
-LASSO baseline within CV noise on every dataset while using
-approximately half the final LASSO-active features: on ESOL
-$\Delta\mathrm{RMSE}\approx +0.04$ at $7.2$ vs.\ $17.6$ active
-features; on FreeSolv $\Delta\mathrm{RMSE}\approx -0.004$ at $6.4$
-vs.\ $12.8$ features (a slight improvement); on Lipophilicity
-$\Delta\mathrm{RMSE}\approx +0.01$ at $7.0$ vs.\ $16.2$ features;
-on BBBP $\Delta\mathrm{AUC}\approx -0.007$ at $6.0$ vs.\ $11.6$
-features. In every case the mean $\pm$ std intervals of
-\texttt{full (LASSO)} and \texttt{pairwise}$\,\to\,$LASSO overlap.
+\textbf{Headline reading (matched-model-class), with paired
+$t$-tests across the five folds.}
+The pipeline-then-LASSO pattern is a \emph{parsimony-versus-performance
+trade-off}, not a uniformly costless reduction:
+
+\begin{itemize}
+\item On FreeSolv and BBBP, \texttt{pairwise} $\to$ LASSO / $\ell_1$-Logistic
+matches \texttt{full} within CV noise: the paired $t$-test gives
+$p = 0.748$ (FreeSolv) and $p = 0.163$ (BBBP), neither significant
+at $\alpha = 0.05$. At these two datasets, the parsimony claim is
+clean: $\sim 2\times$ fewer LASSO-active features (FreeSolv:
+$6.4$ vs.\ $12.8$; BBBP: $6.0$ vs.\ $11.6$) at no detectable
+performance cost.
+
+\item On ESOL and Lipophilicity, the screen carries a
+\emph{small but statistically significant} RMSE increase:
+$+0.044$ RMSE on ESOL ($p = 0.020$) and $+0.009$ RMSE on
+Lipophilicity ($p = 0.026$). In absolute terms these are
+$\sim 2.8\%$ and $\sim 0.8\%$ degradations of the no-screen
+LASSO baseline, respectively, in exchange for cutting the
+LASSO-active feature count by approximately $58\%$ and $57\%$
+(ESOL: $7.2$ vs.\ $17.6$; Lipo: $7.0$ vs.\ $16.2$).
+\end{itemize}
+
 The combined screen further halves the feature count on ESOL,
-FreeSolv, and BBBP with a similar within-noise penalty, and
-degenerates on Lipophilicity (same failure mode as the RF
-benchmark; see \S\ref{sub:limitations}). The cross-model-class
-qualification on Table~\ref{tab:fs_comparison} is therefore not
-load-bearing: the screen-pipeline's parsimony claim survives a
-fully matched same-model-class comparison.
+FreeSolv, and BBBP with a similar pattern (FreeSolv non-significant,
+ESOL significantly higher RMSE), and degenerates on Lipophilicity
+(same failure mode as the RF benchmark; see \S\ref{sub:limitations}).
+The matched-model-class evidence is therefore: on $2$ of $4$ datasets
+the parsimony claim is clean within CV noise; on the other $2$ the
+trade-off is small ($<3\%$ degradation) and statistically detectable
+at $5$-fold CV power. The cross-model-class qualification on
+Table~\ref{tab:fs_comparison} is no longer load-bearing: the
+screen-pipeline's parsimony behaviour is recoverable within model
+class, with an honest characterisation of the small per-dataset
+cost.
 
 \FloatBarrier
 
@@ -1392,13 +1400,17 @@ the activation energy for routine use.
 \item \textbf{Two-stage pipeline-then-feature-selection beyond
 LASSO.} Section~\ref{sub:pipeline_then_lasso} verifies the
 two-stage idea for LASSO on the three regression tasks and for
-$\ell_1$-logistic regression on BBBP: pairwise screening followed
-by the same downstream model preserves performance within CV
-noise while reducing the final active feature count. What remains
-open is the broader matched comparison for other downstream
-selectors and nonlinear / tree-ensemble models, such as
-pipeline-then-XGBoost, pipeline-then-RandomForest with Boruta- or
-mRMR-style selection, or nonlinear redundancy diagnostics.
+$\ell_1$-logistic regression on BBBP, with paired $t$-tests across
+the five CV folds: pairwise screening followed by the same
+downstream model preserves performance within CV noise on
+FreeSolv and BBBP, and carries a small but statistically
+detectable RMSE cost ($<3\%$) on ESOL and Lipophilicity in
+exchange for ${\sim}\!2\times$ fewer LASSO-active features
+(Table~\ref{tab:matched_class}). What remains open is the broader
+matched comparison for other downstream selectors and nonlinear /
+tree-ensemble models, such as pipeline-then-XGBoost,
+pipeline-then-RandomForest with Boruta- or mRMR-style selection,
+or nonlinear redundancy diagnostics.
 \end{enumerate}
 
 % =====================================================================
@@ -1409,8 +1421,12 @@ We have introduced an open-source orthogonality-screening pipeline
 for scalar topological indices, applied it across three
 MoleculeNet QSPR regression benchmarks and one classification
 benchmark, and validated that the pairwise screen preserves
-predictive performance within CV noise at roughly $4\times$ fewer
-features. The Edge-Degree-Pair Basis (Theorem~\ref{thm:bid})
+RandomForest predictive performance within CV noise at roughly
+$4\times$ fewer features; in a matched-model-class
+pipeline-then-LASSO benchmark (Table~\ref{tab:matched_class}),
+parsimony at ${\sim}\!2\times$ fewer LASSO-active features comes at
+no statistically detectable cost on $2$ of the $4$ datasets and at
+$<3\%$ RMSE cost on the other $2$. The Edge-Degree-Pair Basis (Theorem~\ref{thm:bid})
 gives the structural reason that the empirical redundancy
 ceiling observed across the three datasets is intrinsic to the
 bond-incident-degree construction on $\mathcal{G}_4$ rather than
@@ -1430,9 +1446,15 @@ Section~\ref{sec:limitations}.
 
 Code, datasets, and figures are publicly available at
 \url{https://github.com/Singati2/topological-index-orthogonality}.
-The pipeline runs in seconds per benchmark on a single laptop;
-adding a candidate index requires a short Python function on the
-hydrogen-suppressed molecular graph.
+The exact snapshot reported here is git tag
+\texttt{v1.3-paper2-orthogonality}; a Zenodo archive of that tag
+(with permanent DOI) will be created upon submission and the DOI
+inserted in the final version of this section. The pipeline runs
+in seconds per benchmark on a single laptop; adding a candidate
+index requires a short Python function on the
+hydrogen-suppressed molecular graph. Software dependencies and
+pinned versions are listed in
+\texttt{requirements.txt}.
 
 % =====================================================================
 \section*{Acknowledgements}
@@ -1442,6 +1464,85 @@ The authors thank colleagues for discussions of the screening
 protocol and the alternative-family candidate index set. Funding
 sources and institutional support to be acknowledged in the final
 version of the manuscript.
+
+% =====================================================================
+\appendix
+\section{Formal definitions of the 20 alternative-family candidate indices}\label{app:candidates}
+% =====================================================================
+
+For reproducibility we give the formal definition of each of the
+twenty candidate indices screened in \S\ref{sec:novel_case}. Let
+$G = (V, E)$ be a simple connected hydrogen-suppressed molecular
+graph with $n = |V|$ vertices, $m = |E|$ edges, degree sequence
+$\{d_v\}_{v\in V}$, geodesic distance matrix $D = (d_{uv})$,
+adjacency matrix $A$, eccentricity $\varepsilon(v) = \max_u d_{uv}$,
+and adjacency-spectrum / Laplacian-spectrum eigenvalues
+$\{\lambda_i\}$ / $\{\mu_i\}$ respectively. All twenty definitions
+are implemented in
+\texttt{src/novel\_candidates.py} of the companion repository.
+
+\paragraph{Information-theoretic (5).}
+With $H(\{c_i\}) = -\sum_i (c_i / \sum_j c_j)\log(c_i / \sum_j c_j)$
+the Shannon entropy of a count distribution:
+\begin{align*}
+\mathrm{InfoH\_deg}(G) &= H\bigl(\{|\{v : d_v = k\}|\}_k\bigr), \\
+\mathrm{InfoH\_dist}(G) &= H\bigl(\{|\{(u,v) : d_{uv} = k,\, u<v\}|\}_k\bigr), \\
+\mathrm{InfoH\_spec}(G) &= -\sum_{i} p_i \log p_i,\ p_i = \lambda_i^2 / \textstyle\sum_j \lambda_j^2, \\
+\mathrm{InfoH\_ecc}(G) &= H\bigl(\{|\{v : \varepsilon(v) = k\}|\}_k\bigr), \\
+\mathrm{Bonchev\_Id}(G) &= W\log_2 W - \sum_{k \ge 1} k\,d_k \log_2(k\,d_k),
+\end{align*}
+where in the last line $d_k = |\{(u,v) : d_{uv}=k,\,u<v\}|$ and
+$W = \sum_k k\,d_k$ is the Wiener index.
+
+\paragraph{Centrality-based (5).}
+With standard NetworkX-style normalised centralities:
+\begin{align*}
+\mathrm{Btw\_sum}(G) &= \sum_{v \in V} c_B(v),\quad c_B(v) = \!\!\sum_{s \ne t \ne v}\!\!
+\frac{\sigma_{st}(v)}{\sigma_{st}}, \\
+\mathrm{Cls\_sum}(G) &= \sum_{v} (n-1)\Bigl(\sum_{u \ne v} d_{uv}\Bigr)^{-1}, \\
+\mathrm{Eig\_sum}(G) &= \sum_{v} x_v,\ x \text{ the (positive) Perron eigenvector of } A, \\
+\mathrm{Harm\_cent}(G) &= \sum_{v}\sum_{u \ne v}\frac{1}{d_{uv}}, \\
+\mathrm{Btw\_var}(G) &= \mathrm{Var}_v\bigl(c_B(v)\bigr).
+\end{align*}
+
+\paragraph{Spectral-hybrid (3).}
+With $\mathrm{diam}(G) = \max_{u,v} d_{uv}$ and Estrada index
+$\mathrm{EE}(G) = \sum_i e^{\lambda_i}$:
+\begin{align*}
+\mathrm{AlgConn}(G) &= \mu_2(G), \text{ second-smallest Laplacian eigenvalue}, \\
+\mathrm{Rho}\!\times\!\mathrm{Dia}(G) &= \rho(G)\cdot\mathrm{diam}(G),\ \rho(G) = \max_i|\lambda_i|, \\
+\mathrm{EE}\!\times\!\mathrm{W}(G) &= \log\bigl(1+\mathrm{EE}(G)\bigr)\cdot\log\bigl(1+W(G)\bigr).
+\end{align*}
+
+\paragraph{Motif / structural (4).}
+\begin{align*}
+\mathrm{Triangles}(G) &= \tfrac{1}{6}\operatorname{tr}(A^3), \\
+\mathrm{MeanClust}(G) &= \frac{1}{n}\sum_{v} \frac{2 t(v)}{d_v(d_v-1)},\ \,t(v) = \text{triangles at } v, \\
+\mathrm{FourCyc}(G) &= \tfrac{1}{8}\bigl(\operatorname{tr}(A^4) - 2\!\sum_v d_v(d_v - 1) - 2m\bigr), \\
+\mathrm{CutVerts}(G) &= |\{v \in V : G - v \text{ is disconnected}\}|.
+\end{align*}
+
+\paragraph{Eccentricity-based (3).}
+\begin{align*}
+\mathrm{TotEcc}(G) &= \sum_{v \in V} \varepsilon(v), \\
+\mathrm{Radius}(G) &= \min_{v \in V} \varepsilon(v), \\
+\mathrm{MeanEcc}(G) &= \frac{1}{n}\sum_{v \in V} \varepsilon(v).
+\end{align*}
+
+None of these twenty candidates is claimed as a newly invented
+index. The information-theoretic family follows Bonchev and
+Trinajsti\'c~\cite{Gutman2013Degree, TodeschiniConsonniHandbook};
+the centrality family follows the standard graph-theory
+literature; the motif and eccentricity families are textbook
+graph invariants; the spectral-hybrid combinations are
+deliberately constructed novel pairings to test whether
+non-standard product indices escape the redundancy ceiling. They
+appear here purely as screening targets to test the generality
+of the combined diagnostic of \S\ref{sec:protocol}, and the
+verdict reported in \S\ref{sec:novel_case} is a statement about
+this particular candidate set under the tested baselines and
+thresholds, not a claim that any individual candidate is or is
+not a useful QSPR descriptor.
 
 % =====================================================================
 \begin{thebibliography}{99}

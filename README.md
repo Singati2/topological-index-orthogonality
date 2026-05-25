@@ -133,7 +133,7 @@ Section plans and remaining math gaps are tracked in
 | Paper 1 §5 indirect Sombor / $M_1$ bound for $0<\beta<1$      | ✅ done (Proposition 5.5) |
 | Paper 1 §5 sharp $GA$ / $H$ / $ABC$ bounds                    | ⏳ Conjectures 5.6, 5.7 |
 | Paper 1 §6 formal extremal-graph characterization             | ⏳ Conjectures 6.1–6.4 |
-| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.3) |
+| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.4) |
 | Paper 2 submission gated on Paper 1 arXiv ID                  | ⏳ scheduled |
 
 ---
