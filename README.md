@@ -125,7 +125,7 @@ Section plans and remaining math gaps are tracked in
 | Degeneracy on 106 trees of order 10                          | ✅ done |
 | Structure sensitivity on 75 decane isomers                   | ✅ done |
 | Reproducible end-to-end pipeline                             | ✅ done |
-| Publication-quality figures (PNG + PDF, 8 figures)           | ✅ done |
+| Publication-quality figures (PNG + PDF, 9 figures)           | ✅ done |
 | Paper 1 §4 bounds in $(n,m,\Delta,\delta)$ — non-negative region | ✅ done (Props 4.7, 4.8) |
 | Paper 1 §4 Nordhaus–Gaddum bound                              | ⏳ Conjecture 4.9 |
 | Paper 1 §5 ratio-bound theorem                                | ✅ done (Theorem 5.2) |
@@ -133,7 +133,7 @@ Section plans and remaining math gaps are tracked in
 | Paper 1 §5 indirect Sombor / $M_1$ bound for $0<\beta<1$      | ✅ done (Proposition 5.5) |
 | Paper 1 §5 sharp $GA$ / $H$ / $ABC$ bounds                    | ⏳ Conjectures 5.6, 5.7 |
 | Paper 1 §6 formal extremal-graph characterization             | ⏳ Conjectures 6.1–6.4 |
-| Paper 2 manuscript polish + final references                  | ⏳ writing |
+| Paper 2 manuscript polish + final references                  | ✅ done (draft v1.1) |
 | Paper 2 submission gated on Paper 1 arXiv ID                  | ⏳ scheduled |
 
 ---
@@ -375,7 +375,9 @@ scripts/
   11_ml_benchmark.py             RandomForest on 4 datasets with 4 feature configurations
   12_octane_competitor_comparison.py  Head-to-head Pearson r between Wuzi and 8 classical BID indices on the 18 octanes
   13_caterpillar_max_n5_to_20.py Extended n=5..20 enumeration of the (-1,-1,1) maximizer (graph6 + degree sequence)
-  14_octane_bootstrap.py         95% percentile bootstrap (B=10,000) on octane correlations
+  14_octane_bootstrap.py         95% percentile bootstrap (B=10,000) on octane correlations + LOOCV
+  15_feature_selection_comparison.py LASSO / ElasticNet comparator on the 3 regression datasets (Paper 2 Table tab:fs_comparison)
+  16_novel_candidates_multidataset.py Cross-dataset alt-family screen (committed; execution needs RDKit)
 
 docs/
   theoretical_foundation.md      Edge-Degree-Pair Basis observation
