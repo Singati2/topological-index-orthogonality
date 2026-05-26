@@ -125,6 +125,13 @@
 % reporting overfull \hbox warnings on long math-containing lines.
 \emergencystretch=3em
 \hbadness=2000
+
+% Pre-set the marginpar width so that any environment-level autoload of
+% todonotes (which the MATCH template itself does not load, but the
+% Overleaf compile environment may pull in transitively) does not
+% warn about a too-narrow marginpar at A5 geometry. Harmless no-op if
+% todonotes is never loaded.
+\setlength{\marginparwidth}{2cm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% make the odd pages have the section name on the top right
