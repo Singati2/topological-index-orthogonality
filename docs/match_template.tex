@@ -1,0 +1,222 @@
+\documentclass[a5paper, 10pt]{article}
+
+
+\usepackage{cite, amsmath, amssymb, booktabs, lastpage, graphicx, float}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{geometry}
+\geometry{margin=1.5cm,a5paper,twoside,inner=2cm}
+
+\usepackage{setspace}
+
+
+\usepackage{amsthm}
+
+%\usepackage[
+%            type={CC},
+%            modifier={by},
+%            version={4.0},
+%            imagewidth=5em,
+%            imagedistance=5em,
+%            ]{doclicense}
+%
+%\makeatletter
+%    \def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+%\makeatother
+
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{corollary}{Corollary}
+\renewcommand{\qedsymbol}{\rule{.7em}{.7em}}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{note}{Note}
+\newtheorem{case}{Case}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+%% Changing the title, author, etc.
+\usepackage{graphicx}
+\makeatletter
+\renewcommand{\maketitle}{
+    \begin{center}
+    \rule[.2em]{\textwidth}{0.353mm}
+        \begin{minipage}[m]{0.35\textwidth}
+            {\scriptsize
+                \begin{center}
+                    \textsf{\textbf{\huge MATCH}\\
+                        \textit{Communications in Mathematical\\
+                            and in Computer Chemistry}
+                    }
+            \end{center}}
+        \end{minipage}\hfill
+        \begin{minipage}[m]{0.65\textwidth}
+            \begin{flushright}
+                \baselineskip=10px
+                {\scriptsize\sffamily{\itshape  MATCH Commun. Math. Comput. Chem.}
+                \textbf{\vol{}}
+                (\pubyear)
+                    \thepage--\pageref{LastPage}}\\
+                {\scriptsize\sffamily {\bfseries ISSN:} 0340--6253}\\
+                {\scriptsize\sffamily \textbf{doi:} \doi{10.46793/match.\vol-\num.\id}}
+            \end{flushright}
+        \end{minipage}
+        \rule[1em]{\textwidth}{.353mm}
+        \baselineskip=0.30in
+        {\Large\bfseries \@title} \par
+        \vspace{5mm}
+        \baselineskip=0.2in
+        {\large\bfseries \@author}\par
+        \vspace{1mm}
+        {\it \@address} \par
+        {\small\tt \@email} \par
+        \vspace{3mm}
+        {\small (Received \@date)} \par
+    \end{center}
+    \vspace{3mm}
+}
+\newcommand{\address}[1]{\def\@address{#1}}
+\newcommand{\email}[1]{\def\@email{#1}}
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{#1}}
+%\title{}
+%\author{}
+%\address{}
+%\email{}
+
+
+\newcommand{\vol}{00}
+\newcommand{\num}{00}
+\newcommand{\pubyear}{0000}
+\newcommand{\id}{xxxxx}
+%%setting page-number
+\setcounter{page}{1}
+
+
+\thispagestyle{empty}
+\makeatother
+
+%% Making << \acknowledgment >> command
+\newcommand{\acknowledgment}[1]{\vspace{5mm}\singlespacing
+    {\noindent\textbf{\textit{Acknowledgment\/}:} #1}
+}
+
+%% Setting page numbers
+\usepackage{fancyhdr}
+
+%% now reset the headers and footers
+\fancyhead{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{.3pt}
+\voffset = 18pt
+\headsep = 3pt
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
+\usepackage[margin=1cm,%
+            font=footnotesize,%
+            format=hang,%
+            labelsep=period,%
+            labelfont=bf]{caption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLACE ADDITIONAL PACKAGES HERE (if it is needed):
+
+% \usepackage{package}
+% \usepackage[options]{package}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% make the odd pages have the section name on the top right
+\fancyhead[RO]{\footnotesize \thepage}
+%% make the even pages have the chapter name on the top left
+\fancyhead[LE]{\footnotesize \thepage}
+
+%% making page-numbers visible
+\pagestyle{fancy}
+
+
+
+
+% YOU MAY ADD SOME ADDITIONAL LATEX PACKAGES TO THE PREAMBLE, BUT DO NOT MODIFY
+% THE EXISTING CODE ABOVE THIS LINE.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\title{Here Place the Title of the Paper}
+\author{First Author$^{a,}$\footnote{Corresponding author.}, Second
+    Author$^b$, Third Author$^c$, Fourth Author$^d$}
+
+% Author = Name Surname ; full name is required
+
+\address{$^a$Address of the First Author\\
+    $^b$Address of the Second Author\\
+    $^c$Address of the Third Author\\
+    $^d$Address of the Fourth Author\\
+    }
+
+\email{first.author@email.com, second.author@email.com, third.author@email.com, fourth.author@email.com}
+
+\date{\today}
+
+% No keywords!
+% No Mathematics Subject Classification!
+
+% !TeX program = pdflatex
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}%\blfootnote{\doclicenseThis}
+% Avoid references to anything in the paper,
+% since the abstract must be understandable for itself.
+\end{abstract}
+
+\onehalfspacing
+
+\section{Title of the first section}
+
+%  Quote references by using \cite. For example
+
+In \cite{Ref3,Ref2,Ref1}, an important theorem is stated.
+
+
+\section{Title of the second section}
+
+
+\acknowledgment{Acknowledgment (if there is any) should be placed here.}
+
+% References should be ordered alphabetically.
+% We noticed that in recent papers, there are some nonexistent references.
+% It is forbidden to do such unethical things. Manuscripts that contain
+% non-existent references will be immediately rejected, and their corresponding
+% authors will be black-listed.
+\singlespacing
+\begin{thebibliography}{00}
+\bibitem{Ref1} H. Abdo, D. Dimitrov, T. R\'eti, D. Stevanovi\'c,
+    Estimating the spectral radius of a graph by the second
+    Zagreb index, \textit{MATCH Commun. Math. Comput. Chem.\/}
+    \textbf{72} (2014) 741--751.
+
+\bibitem{Ref2} H. Abeledo, G. Atkinson, Polyhedral combinatorics
+    of benzenoid problems, in: R. E. Bixby, E. A. Boyd,
+    R. Z. R\'{\i}os--Mercado (Eds.), \textit{Integer Programming and
+    Combinatorial Optimization\/}, Springer, Berlin, 1998, pp. 202--212.
+
+\bibitem{Ref3} X. Li, Y. Shi, I. Gutman, \textit{Graph Energy\/},
+    Springer, New York, 2012.
+
+\end{thebibliography}
+
+\end{document}
