@@ -205,15 +205,32 @@ and the Zagreb indices of Gutman and
 Trinajsti\'c~\cite{Gutman1972} (see also the survey of
 Nikoli\'c, Kova\v{c}evi\'c, Mili\v{c}evi\'c, and
 Trinajsti\'c~\cite{NikolicKovacevicMilicevicTrinajstic2003}
-documenting their development through the early 2000s). Among the
-many parametric extensions are the general Randi\'c index
-$R_{\alpha}$~\cite{BollobasErdos1998}, the general sum-connectivity
-index $\chi_{\alpha}$~\cite{ZhouTrinajstic2009sumconn}, the
-Sombor index and its variants introduced by
-Gutman~\cite{Gutman2021Sombor}, the reduced Sombor and Banhatti
-Sombor indices, and most recently the diminished Sombor index of
-Movahedi, Gutman, Red\v{z}epovi\'c, and
-Furtula~\cite{MovahediGutmanRedzepovicFurtula2026}.
+documenting their development through the early 2000s, the
+textbook of Wagner and
+Wang~\cite{WagnerWang2018ChemGraphTheory}, and the bond-additive
+modelling perspective of Vuki\v{c}evi\'c~\cite{Vukicevic2010BondAdditive2}).
+Among the many parametric extensions are the general Randi\'c
+index $R_{\alpha}$~\cite{BollobasErdos1998}, the general
+sum-connectivity index
+$\chi_{\alpha}$~\cite{ZhouTrinajstic2009sumconn}, the forgotten
+index $F$ revisited by Furtula and
+Gutman~\cite{FurtulaGutman2015F}, the geometric--arithmetic index
+$GA$~\cite{VukicevicFurtula2009GA}, the Albertson irregularity
+index~\cite{Albertson1997} and the inverse $\sigma$-index
+problem~\cite{GutmanToganYurttasCevikCangul2018Sigma}, and the
+Sombor family introduced by Gutman~\cite{Gutman2021Sombor,
+Gutman2021SomborBasic}. The Sombor-family literature has expanded
+rapidly: foundational extremal
+work~\cite{DasCevikCangulShang2021Sombor, DasGutman2022SomborTrees},
+the mean Sombor
+index~\cite{MendezBermudezAguilarSanchez2022MeanSombor}, general
+mathematical properties~\cite{MilovanovicMilovanovicMatejic2021Sombor},
+relations between Sombor and other degree-based
+indices~\cite{WangMaoLiFurtula2022SomborRelations}, the
+elliptic Sombor index~\cite{GutmanFurtulaOz2024Elliptic}, the
+hyperbolic Sombor index~\cite{BarmanDas2026HSO}, and most recently
+the diminished Sombor index of Movahedi, Gutman, Red\v{z}epovi\'c,
+and Furtula~\cite{MovahediGutmanRedzepovicFurtula2026, Movahedi2025DSO}.
 
 A recurring methodological question is: what does a new index
 have to demonstrate to be a meaningful contribution? Closed-form
@@ -506,7 +523,8 @@ $\Wuzi = m \cdot 2^{\beta} r^{2\alpha + \beta}$
 
 \begin{theorem}\label{thm:cs}
 Let $\alpha_1 + \alpha_2 = 2\alpha$, $\beta_1 + \beta_2 = 2\beta$,
-and $\gamma_1 + \gamma_2 = 2\gamma$. Then
+and $\gamma_1 + \gamma_2 = 2\gamma$. Then for every simple
+connected graph $G$ without isolated vertices,
 \[
 W(G; \alpha, \beta, \gamma)
 \;\le\;
@@ -519,15 +537,58 @@ is the same for every edge of $G$.
 \end{theorem}
 
 \begin{proof}
-For each edge $e = uv$ write
-$\psi_e^{(k)} = \psi(d_u, d_v; \alpha_k, \beta_k, \gamma_k)$ for
-$k = 1, 2$. By construction
-$\psi_e^{(1)} \psi_e^{(2)} = \psi(d_u, d_v; \alpha, \beta, \gamma)^2$.
-The Cauchy--Schwarz inequality applied to
-$a_e = \sqrt{\psi_e^{(1)}}, b_e = \sqrt{\psi_e^{(2)}}$ gives
-$\sum_e \sqrt{\psi_e^{(1)} \psi_e^{(2)}}
-   \le \sqrt{\bigl(\sum_e \psi_e^{(1)}\bigr) \bigl(\sum_e \psi_e^{(2)}\bigr)}$,
-which is exactly the statement.
+For each edge $e = uv \in E(G)$ and each $k \in \{1, 2\}$ write
+\[
+\psi_e^{(k)}
+\;:=\; \psi(d_u, d_v; \alpha_k, \beta_k, \gamma_k)
+\;=\; (d_u d_v)^{\alpha_k}\,(d_u + d_v)^{\beta_k}\,
+\exp\!\left(\gamma_k\, \tfrac{|d_u - d_v|}{d_u + d_v}\right).
+\]
+Both $\psi_e^{(1)}$ and $\psi_e^{(2)}$ are strictly positive on
+every edge of a graph without isolated vertices.
+
+By the additivity of the exponents and the hypothesis
+$\alpha_1 + \alpha_2 = 2\alpha$,
+$\beta_1 + \beta_2 = 2\beta$, $\gamma_1 + \gamma_2 = 2\gamma$,
+\begin{align*}
+\psi_e^{(1)}\,\psi_e^{(2)}
+&= (d_u d_v)^{\alpha_1 + \alpha_2}\,(d_u + d_v)^{\beta_1 + \beta_2}\,
+   \exp\!\left((\gamma_1 + \gamma_2)\, \tfrac{|d_u - d_v|}{d_u + d_v}\right) \\
+&= (d_u d_v)^{2\alpha}\,(d_u + d_v)^{2\beta}\,
+   \exp\!\left(2\gamma\, \tfrac{|d_u - d_v|}{d_u + d_v}\right) \\
+&= \psi(d_u, d_v; \alpha, \beta, \gamma)^{2}.
+\end{align*}
+Taking square roots gives
+$\sqrt{\psi_e^{(1)}\,\psi_e^{(2)}} = \psi(d_u, d_v; \alpha, \beta, \gamma)$
+for every edge. Apply the Cauchy--Schwarz inequality to the
+positive sequences $a_e = \sqrt{\psi_e^{(1)}}$,
+$b_e = \sqrt{\psi_e^{(2)}}$ indexed over $E(G)$:
+\[
+\sum_{e \in E(G)} a_e\, b_e
+\;\le\;
+\sqrt{\sum_{e \in E(G)} a_e^{2}}\,
+\sqrt{\sum_{e \in E(G)} b_e^{2}}.
+\]
+Substituting $a_e b_e = \sqrt{\psi_e^{(1)} \psi_e^{(2)}}
+   = \psi(d_u, d_v; \alpha, \beta, \gamma)$,
+$\sum_e a_e^2 = \sum_e \psi_e^{(1)} = W(G; \alpha_1, \beta_1, \gamma_1)$,
+and $\sum_e b_e^2 = \sum_e \psi_e^{(2)} = W(G; \alpha_2, \beta_2, \gamma_2)$
+gives
+\[
+\Wuzi
+\;=\; \sum_{e \in E(G)} \psi(d_u, d_v; \alpha, \beta, \gamma)
+\;\le\;
+\sqrt{W(G; \alpha_1, \beta_1, \gamma_1)\,
+      W(G; \alpha_2, \beta_2, \gamma_2)},
+\]
+which is the asserted inequality.
+
+The Cauchy--Schwarz inequality is an equality if and only if the
+sequences $(a_e)$ and $(b_e)$ are proportional, i.e.\ there exists
+a constant $\lambda \ge 0$ such that $b_e = \lambda\, a_e$ for
+every $e \in E(G)$, equivalently
+$\psi_e^{(2)}/\psi_e^{(1)} = \lambda^{2}$ is the same constant on
+every edge.
 \end{proof}
 
 \subsection{Jensen-type bounds via $M_1$ and $M_2$}\label{sub:m1_m2}
@@ -546,16 +607,44 @@ on every edge of $G$.
 \end{theorem}
 
 \begin{proof}
-The convexity of $t \mapsto t^{\beta}$ on $\mathbb{R}_{> 0}$ for
-$\beta \ge 1$ and Jensen's inequality give
-$\tfrac{1}{m} \sum_e (d_u + d_v)^{\beta}
-   \ge \bigl(\tfrac{1}{m} \sum_e (d_u + d_v)\bigr)^{\beta}
-   = (M_1/m)^{\beta}$.
-Multiplying both sides by $m$ gives the stated bound. At
-$\beta = 1$ the function $t \mapsto t^{\beta} = t$ is linear, so
-$\sum_e (d_u + d_v) = M_1(G)$ identically and equality is
-automatic. For $\beta > 1$, strict convexity of $t^{\beta}$ gives
-equality if and only if $d_u + d_v$ is constant on every edge.
+Setting $\alpha = \gamma = 0$ in Definition~\ref{def:wuzi}
+collapses the edge-contribution function to
+$\psi(d_u, d_v; 0, \beta, 0) = (d_u + d_v)^{\beta}$, so
+\[
+W(G; 0, \beta, 0)
+\;=\; \sum_{uv \in E(G)} (d_u + d_v)^{\beta}.
+\]
+The function $\varphi : \mathbb{R}_{> 0} \to \mathbb{R}_{> 0}$
+defined by $\varphi(t) = t^{\beta}$ satisfies
+$\varphi''(t) = \beta(\beta - 1)\, t^{\beta - 2}$, which is
+nonnegative for $\beta \ge 1$; hence $\varphi$ is convex on
+$\mathbb{R}_{> 0}$, with strict convexity for $\beta > 1$. Apply
+Jensen's inequality (convex case) to the $m = |E(G)|$ positive
+values $\{d_u + d_v : uv \in E(G)\}$ with uniform weights $1/m$:
+\[
+\varphi\!\left(\frac{1}{m}\sum_{uv \in E(G)} (d_u + d_v)\right)
+\;\le\;
+\frac{1}{m}\sum_{uv \in E(G)} \varphi(d_u + d_v).
+\]
+Using the identity $\sum_{uv \in E(G)} (d_u + d_v) = M_1(G)$ and
+$\varphi(t) = t^{\beta}$, this rearranges to
+\[
+\left(\frac{M_1(G)}{m}\right)^{\!\beta}
+\;\le\;
+\frac{1}{m}\sum_{uv \in E(G)} (d_u + d_v)^{\beta}
+\;=\;
+\frac{W(G; 0, \beta, 0)}{m}.
+\]
+Multiplying both sides by $m > 0$ yields the stated bound
+$\Wuzi \ge m^{1 - \beta}\, M_1(G)^{\beta}$.
+
+At $\beta = 1$ the function $\varphi(t) = t$ is affine, so Jensen
+holds as the identity
+$W(G; 0, 1, 0) = \sum_{uv} (d_u + d_v) = M_1(G)$.
+For $\beta > 1$ the strict convexity of $\varphi$ implies that
+the Jensen inequality is an equality if and only if all the
+sampled values $(d_u + d_v)$ are equal, i.e.\ $d_u + d_v$ is
+constant over every edge $uv \in E(G)$.
 \end{proof}
 
 \begin{theorem}[Bound in $M_1$ and $m$, $0 < \beta < 1$]\label{thm:m1_concave}
@@ -640,23 +729,38 @@ $\alpha, \beta \ge 0$ and $\gamma \ge 0$,
 \end{proposition}
 
 \begin{proof}
-For every edge $uv$ of $G$, $1 \le d_u, d_v \le \Delta$. Since
-$\alpha, \beta \ge 0$, the elementary inequalities
-$d_u d_v \le \Delta^2$ and $d_u + d_v \le 2\Delta$ give
-$(d_u d_v)^{\alpha} \le \Delta^{2\alpha}$ and
-$(d_u + d_v)^{\beta} \le (2\Delta)^{\beta}$. The imbalance factor
-$|d_u - d_v|/(d_u + d_v)$ is maximized over the admissible set
-$\{(i, j) : 1 \le i \le j \le \Delta\}$ at the pair $(1, \Delta)$,
-giving $|d_u - d_v|/(d_u + d_v) \le (\Delta - 1)/(\Delta + 1)$.
-Since $\gamma \ge 0$, exponentiation preserves the inequality, so
-$\exp(\gamma\, |d_u - d_v|/(d_u + d_v))
-   \le \exp(\gamma (\Delta - 1)/(\Delta + 1))$.
-Multiplying the three factor-wise bounds yields
-$\psi(d_u, d_v; \alpha, \beta, \gamma)
-   \le \Delta^{2\alpha} (2\Delta)^{\beta}
-       \exp(\gamma (\Delta - 1)/(\Delta + 1))$
-for every edge, and summing over the $m$ edges of $G$
-gives~\eqref{eq:upper_Delta}.
+Fix an edge $uv \in E(G)$. By the definition of $\Delta$ we have
+$1 \le d_u, d_v \le \Delta$. We bound the three multiplicative
+factors of $\psi(d_u, d_v; \alpha, \beta, \gamma)$ separately.
+
+\emph{First factor.} Because $d_u, d_v \le \Delta$ we obtain
+$d_u d_v \le \Delta^{2}$. Since $\alpha \ge 0$ and the map
+$t \mapsto t^{\alpha}$ is non-decreasing on $\mathbb{R}_{> 0}$,
+\[
+(d_u d_v)^{\alpha} \;\le\; \Delta^{2\alpha}.
+\]
+
+\emph{Second factor.} Similarly $d_u + d_v \le 2\Delta$, and the
+map $t \mapsto t^{\beta}$ is non-decreasing for $\beta \ge 0$, so
+\[
+(d_u + d_v)^{\beta} \;\le\; (2\Delta)^{\beta}.
+\]
+
+\emph{Third factor.} The normalised imbalance
+$\mathrm{imb}(x, y) = |x - y|/(x + y)$ is maximised over the
+admissible set $\{(i, j) : 1 \le i \le j \le \Delta\}$ at the
+pair $(1, \Delta)$, where
+$\mathrm{imb}(1, \Delta) = (\Delta - 1)/(\Delta + 1)$. Hence
+$|d_u - d_v|/(d_u + d_v) \le (\Delta - 1)/(\Delta + 1)$ for every
+edge. Because $\gamma \ge 0$ and $\exp$ is non-decreasing,
+\[
+\exp\!\left(\gamma\,\frac{|d_u - d_v|}{d_u + d_v}\right)
+\;\le\;
+\exp\!\left(\gamma\,\frac{\Delta - 1}{\Delta + 1}\right).
+\]
+
+Multiplying the three factor-wise bounds and summing over the
+$m$ edges of $G$ yields~\eqref{eq:upper_Delta}.
 \end{proof}
 
 \begin{proposition}[Lower bound in $\delta$]\label{thm:lower_delta}
@@ -798,16 +902,47 @@ specialises to $W(G; -1/4, -1/4, 0) \le \sqrt{R(G) \cdot \chi(G)}$.
 \end{proposition}
 
 \begin{proof}
-Apply Theorem~\ref{thm:cs} with the split
-$(\alpha_1, \beta_1, \gamma_1) = (2\alpha, 0, 0)$ and
-$(\alpha_2, \beta_2, \gamma_2) = (0, 2\beta, 0)$. The hypotheses
-$\alpha_1 + \alpha_2 = 2\alpha$, $\beta_1 + \beta_2 = 2\beta$,
-$\gamma_1 + \gamma_2 = 0 = 2\gamma$ are satisfied. By definition,
-$W(G; 2\alpha, 0, 0) = R_{2\alpha}(G)$ and
-$W(G; 0, 2\beta, 0) = \chi_{2\beta}(G)$. Substitution into
-Theorem~\ref{thm:cs} yields~\eqref{eq:R_chi_bound}. Equality holds
-if and only if the ratio $(d_u d_v)^{2\alpha}/(d_u + d_v)^{2\beta}$
-is constant over every edge of $G$.
+We apply the Cauchy--Schwarz parameter-splitting theorem
+(Theorem~\ref{thm:cs}) with the parameter split
+\[
+(\alpha_1, \beta_1, \gamma_1) = (2\alpha, 0, 0),
+\qquad
+(\alpha_2, \beta_2, \gamma_2) = (0, 2\beta, 0).
+\]
+Adding the components:
+$\alpha_1 + \alpha_2 = 2\alpha + 0 = 2\alpha$,
+$\beta_1 + \beta_2 = 0 + 2\beta = 2\beta$, and
+$\gamma_1 + \gamma_2 = 0 + 0 = 0$, which equals $2\gamma$ by
+hypothesis $\gamma = 0$. Hence the three additive hypotheses of
+Theorem~\ref{thm:cs} are met.
+
+By Definition~\ref{def:wuzi} applied at these two parameter
+triples,
+\begin{align*}
+W(G; 2\alpha, 0, 0)
+&= \sum_{uv \in E(G)} (d_u d_v)^{2\alpha} \cdot (d_u + d_v)^{0}
+   \cdot e^{0}
+ = \sum_{uv \in E(G)} (d_u d_v)^{2\alpha}
+ = R_{2\alpha}(G), \\
+W(G; 0, 2\beta, 0)
+&= \sum_{uv \in E(G)} (d_u d_v)^{0} \cdot (d_u + d_v)^{2\beta}
+   \cdot e^{0}
+ = \sum_{uv \in E(G)} (d_u + d_v)^{2\beta}
+ = \chi_{2\beta}(G).
+\end{align*}
+Substituting these identifications into the conclusion of
+Theorem~\ref{thm:cs} gives
+\[
+W(G; \alpha, \beta, 0)
+\;\le\;
+\sqrt{W(G; 2\alpha, 0, 0)\, W(G; 0, 2\beta, 0)}
+\;=\;
+\sqrt{R_{2\alpha}(G)\, \chi_{2\beta}(G)},
+\]
+which is~\eqref{eq:R_chi_bound}. The equality case follows
+directly from the equality condition of Theorem~\ref{thm:cs}: the
+ratio $\psi_e^{(1)}/\psi_e^{(2)} = (d_u d_v)^{2\alpha}/(d_u + d_v)^{2\beta}$
+must be constant over every edge of $G$.
 \end{proof}
 
 \begin{proposition}[Indirect bound via Sombor $SO$ and $M_1$]\label{thm:sombor}
@@ -822,16 +957,44 @@ Sombor index.
 \end{proposition}
 
 \begin{proof}
-The Cauchy--Schwarz inequality
-$\sqrt{d_u^2 + d_v^2} \ge \sqrt{(d_u + d_v)^2/2}
-   = (d_u + d_v)/\sqrt{2}$
-holds termwise; summing gives $SO(G) \ge M_1(G)/\sqrt{2}$, i.e.,
-$M_1(G) \le \sqrt{2}\, SO(G)$. For $0 < \beta < 1$ the concave
-Jensen bound of Theorem~\ref{thm:m1_concave} (with $\alpha = 0$)
-gives $W(G; 0, \beta, 0) \le m^{1 - \beta} M_1(G)^{\beta}$. Since
-$M_1(G)^{\beta}$ is non-decreasing in $M_1(G)$ for $M_1(G) \ge 0$
-and $\beta > 0$, substituting the upper bound
-$M_1(G) \le \sqrt{2}\, SO(G)$ yields~\eqref{eq:sombor_bound}.
+For any two positive reals $x, y$ we have the elementary
+inequality
+\[
+x^2 + y^2 \;\ge\; \frac{(x + y)^2}{2},
+\]
+which follows from $(x + y)^2 = x^2 + y^2 + 2xy \le 2(x^2 + y^2)$
+by the arithmetic--geometric mean inequality
+$xy \le (x^2 + y^2)/2$. Taking square roots and applying with
+$x = d_u, y = d_v$ for each edge $uv \in E(G)$ gives
+\[
+\sqrt{d_u^2 + d_v^2}
+\;\ge\;
+\frac{d_u + d_v}{\sqrt{2}}.
+\]
+Summing this inequality over all edges of $G$,
+\[
+SO(G)
+\;=\; \sum_{uv \in E(G)} \sqrt{d_u^2 + d_v^2}
+\;\ge\;
+\frac{1}{\sqrt{2}}\sum_{uv \in E(G)} (d_u + d_v)
+\;=\;
+\frac{M_1(G)}{\sqrt{2}},
+\]
+so $M_1(G) \le \sqrt{2}\, SO(G)$.
+
+For $0 < \beta < 1$, the concave Jensen bound
+(Theorem~\ref{thm:m1_concave}) specialised to $\alpha = \gamma = 0$
+gives
+$W(G; 0, \beta, 0) \le m^{1 - \beta}\, M_1(G)^{\beta}$. The map
+$t \mapsto t^{\beta}$ is non-decreasing on $\mathbb{R}_{\ge 0}$
+for $\beta > 0$, so substituting the upper bound
+$M_1(G) \le \sqrt{2}\, SO(G)$ preserves the direction:
+\[
+W(G; 0, \beta, 0)
+\;\le\;
+m^{1 - \beta}\, \bigl(\sqrt{2}\, SO(G)\bigr)^{\beta},
+\]
+which is~\eqref{eq:sombor_bound}.
 \end{proof}
 
 \subsection{Boundary behaviour on the $\gamma$ axis}\label{sub:gamma_axis}
@@ -1254,6 +1417,11 @@ manuscript.}
 \bibitem{Albertson1997} M. O. Albertson, The irregularity of a
     graph, \textit{Ars Combin.\/} \textbf{46} (1997) 219--225.
 
+\bibitem{BarmanDas2026HSO} J. Barman, S. Das, Geometric approach
+    to degree-based topological index: Hyperbolic Sombor index,
+    \textit{MATCH Commun. Math. Comput. Chem.\/}
+    \textbf{95} (2026) 63--94.
+
 \bibitem{BollobasErdos1998} B. Bollob\'as, P. Erd\H{o}s,
     Graphs of extremal weights,
     \textit{Ars Combin.\/} \textbf{50} (1998) 225--233.
@@ -1263,8 +1431,21 @@ manuscript.}
     \textit{MATCH Commun. Math. Comput. Chem.\/}
     \textbf{78} (2017) 17--100.
 
+\bibitem{DasCevikCangulShang2021Sombor} K. C. Das, A. S. \c{C}evik,
+    I. N. Cangul, Y. Shang, On Sombor index,
+    \textit{Symmetry\/} \textbf{13} (2021) \#140.
+
+\bibitem{DasGutman2022SomborTrees} K. C. Das, I. Gutman,
+    On Sombor index of trees,
+    \textit{Appl. Math. Comput.\/}
+    \textbf{412} (2022) \#126575.
+
 \bibitem{Fajtlowicz1987Harmonic} S. Fajtlowicz, On conjectures of
     Graffiti-II, \textit{Congr. Numer.\/} \textbf{60} (1987) 187--197.
+
+\bibitem{FurtulaGutman2015F} B. Furtula, I. Gutman, A forgotten
+    topological index, \textit{J. Math. Chem.\/}
+    \textbf{53} (2015) 1184--1190.
 
 \bibitem{Gutman1972} I. Gutman, N. Trinajsti\'c, Graph theory and
     molecular orbitals. Total $\pi$-electron energy of alternant
@@ -1276,10 +1457,27 @@ manuscript.}
     Mathematical Chemistry Monographs MCM-6, University of
     Kragujevac and Faculty of Science Kragujevac, Kragujevac, 2008.
 
+\bibitem{GutmanToganYurttasCevikCangul2018Sigma} I. Gutman,
+    M. Togan, A. Yurtta\c{s}, A. S. \c{C}evik, I. N. Cangul,
+    Inverse problem for sigma index,
+    \textit{MATCH Commun. Math. Comput. Chem.\/}
+    \textbf{79} (2018) 491--508.
+
+\bibitem{Gutman2021SomborBasic} I. Gutman, Some basic properties
+    of Sombor indices,
+    \textit{Open J. Discr. Appl. Math.\/}
+    \textbf{4} (2021) 1--3.
+
 \bibitem{Gutman2021Sombor} I. Gutman, Geometric approach to
     degree-based topological indices: Sombor indices,
     \textit{MATCH Commun. Math. Comput. Chem.\/}
     \textbf{86} (2021) 11--16.
+
+\bibitem{GutmanFurtulaOz2024Elliptic} I. Gutman, B. Furtula,
+    M. S. Oz, Geometric approach to vertex-degree-based topological
+    indices: Elliptic Sombor index, theory and application,
+    \textit{Int. J. Quantum Chem.\/}
+    \textbf{124} (2024) \#e27346.
 
 \bibitem{HansenMelot2003unicyclicRandic} P. Hansen, H. M\'elot,
     Variable neighborhood search for extremal graphs. 6.
@@ -1290,6 +1488,22 @@ manuscript.}
 \bibitem{LiuLuTian2008Randic} H. Liu, M. Lu, F. Tian, On the
     Randi\'c index, \textit{J. Math. Chem.\/}
     \textbf{44} (2008) 301--310.
+
+\bibitem{MendezBermudezAguilarSanchez2022MeanSombor}
+    J. A. M\'endez-Berm\'udez, R. Aguilar-S\'anchez,
+    E. D. Molina, J. M. Rodr\'iguez, Mean Sombor index,
+    \textit{Discr. Math. Lett.\/}
+    \textbf{9} (2022) 18--25.
+
+\bibitem{MilovanovicMilovanovicMatejic2021Sombor} I. Milovanovi\'c,
+    E. Milovanovi\'c, M. Mateji\'c, On some mathematical properties
+    of Sombor indices,
+    \textit{Bull. Int. Math. Virtual Inst.\/}
+    \textbf{11} (2021) 341--353.
+
+\bibitem{Movahedi2025DSO} F. Movahedi, Diminished Sombor index and
+    its relationship with topological indices,
+    \textit{Filomat\/} \textbf{39} (2025) 10519--10532.
 
 \bibitem{MovahediGutmanRedzepovicFurtula2026} F. Movahedi,
     I. Gutman, I. Red\v{z}epovi\'c, B. Furtula,
@@ -1319,6 +1533,22 @@ manuscript.}
     Topological index based on the ratios of geometrical and
     arithmetical means of end-vertex degrees of edges,
     \textit{J. Math. Chem.\/} \textbf{46} (2009) 1369--1376.
+
+\bibitem{Vukicevic2010BondAdditive2} D. Vuki\v{c}evi\'c, Bond
+    additive modeling 2. Mathematical properties of max-min
+    rodeg index,
+    \textit{Croat. Chem. Acta\/}
+    \textbf{83} (2010) 261--273.
+
+\bibitem{WagnerWang2018ChemGraphTheory} S. Wagner, H. Wang,
+    \textit{Introduction to Chemical Graph Theory\/},
+    Chapman \& Hall/CRC, Boca Raton, 2018.
+
+\bibitem{WangMaoLiFurtula2022SomborRelations} Z. Wang, Y. Mao,
+    Y. Li, B. Furtula, On relations between Sombor and other
+    degree-based indices,
+    \textit{J. Appl. Math. Comput.\/}
+    \textbf{68} (2022) 1--17.
 
 \bibitem{Wiener1947} H. Wiener, Structural determination of
     paraffin boiling points, \textit{J. Am. Chem. Soc.\/}
