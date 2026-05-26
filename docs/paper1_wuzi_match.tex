@@ -121,6 +121,10 @@
 \usepackage{enumitem}
 \setlist[itemize]{topsep=2pt,itemsep=2pt}
 \setlist[enumerate]{topsep=2pt,itemsep=2pt}
+% A5-paper line-breaking is tight; allow LaTeX more flexibility before
+% reporting overfull \hbox warnings on long math-containing lines.
+\emergencystretch=3em
+\hbadness=2000
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% make the odd pages have the section name on the top right
@@ -547,11 +551,11 @@ $\psi_{\max}$ over $\mathcal{P}(\delta, \Delta)$. The lower
 equality case is dual.
 \end{proof}
 
-\begin{corollary*}\label{cor:regular_value}
+\begin{corollary}\label{cor:regular_value}
 For an $r$-regular graph $G$ of size $m$,
 $\Wuzi = m \cdot 2^{\beta} r^{2\alpha + \beta}$
 (consistent with Proposition~\ref{prop:closedforms}(9)).
-\end{corollary*}
+\end{corollary}
 
 \subsection{Cauchy--Schwarz parameter splitting}\label{sub:cs}
 
