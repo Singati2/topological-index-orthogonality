@@ -109,6 +109,13 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLACE ADDITIONAL PACKAGES HERE (if it is needed):
+\usepackage[T1]{fontenc}    % T1 encoding so \texttt{} underscores render
+                             % as visible solid horizontal strokes even at
+                             % A5 10pt; default OT1 Computer Modern
+                             % underscores are baseline-level thin lines
+                             % that visually disappear at small font sizes.
+\usepackage{lmodern}         % Latin Modern: T1-compatible drop-in
+                             % replacement for Computer Modern.
 \usepackage{mathtools}
 \usepackage{array}
 \usepackage{enumitem}
