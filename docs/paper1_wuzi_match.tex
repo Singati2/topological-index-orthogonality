@@ -178,14 +178,14 @@ $I_h$ with strictly positive edge contribution, sandwiches $\Wuzi$
 as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
 with explicit equality conditions. Bounds via the generalised
 Randi\'c, sum-connectivity, and Sombor indices follow as
-corollaries. Exhaustive enumeration of all non-isomorphic trees of
-order $5 \le n \le 20$ at eight canonical parameter triples
-isolates a non-classical extremal regime at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$: the maximum of $W$ is
-attained by a non-caterpillar tree for every
-$n \in \{7, \ldots, 20\}$, with a sharp odd/even structural
-pattern (spider with length-$2$ spokes for odd $n \ge 9$;
-balanced double-spider for even $n \ge 10$). Sensitivity analysis
+corollaries. Exhaustive enumeration through $n = 20$ for the
+mixed-sign triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$,
+together with sign-region checks through $n = 12$ at seven
+additional canonical triples, isolates a non-classical extremal
+regime at $(-1, -1, 1)$: the maximum of $W$ is attained by a
+non-caterpillar tree for every $n \in \{7, \ldots, 20\}$, with a
+sharp odd/even structural pattern (spider with length-$2$ spokes
+for odd $n \ge 9$; balanced double-spider for even $n \ge 10$). Sensitivity analysis
 on the standard $18$-octane benchmark places the family in the
 same correlation regime as the classical BID indices, with all
 margins below the bootstrap-CI half-widths characteristic of
@@ -1126,16 +1126,16 @@ conjectural; the headline conjecture is stated in
 Section~\ref{sec:conclusion}.
 
 This section establishes the empirical extremal pattern
-computationally. Exhaustive enumeration of all non-isomorphic
-trees of order $5 \le n \le 20$ at eight canonical parameter
-triples partitions parameter space into three sign regions, two
-of which reproduce classical extremal behaviour and one of which
-exhibits a non-classical mixed-sign regime at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$. The mixed-sign triple is
-enumerated through $n = 20$ (Table~\ref{tab:caterpillar_argmax});
-the other seven triples are sign-region checks enumerated through
+computationally via two enumerations of non-isomorphic trees. The
+mixed-sign triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$ is
+enumerated exhaustively through $n = 20$
+(Table~\ref{tab:caterpillar_argmax}); the remaining seven
+canonical triples are enumerated as sign-region checks through
 $n = 12$, where the sign-region pattern is already empirically
-stable. The three sign regions of the parameter panel are as
+stable. Together the two enumerations partition parameter space
+into three sign regions, two of which reproduce classical
+extremal behaviour and one of which exhibits the non-classical
+mixed-sign regime at $(-1, -1, 1)$. The three sign regions of the parameter panel are as
 follows.
 
 \begin{enumerate}[label=(\alph*)]
@@ -1165,28 +1165,28 @@ sequences are listed in Table~\ref{tab:caterpillar_argmax}.
 \begin{table}[H]
 \centering
 \small
-\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $5 \le n \le 20$, identified by degree sequence (descending) and canonical \texttt{graph6} string. For $n = 5$ the maximizer is the path $P_5$; for $n = 6$ it is a caterpillar; for every $n \in \{7, \ldots, 20\}$ the maximizer is neither a path, a star, nor a caterpillar. For odd $n \in \{7, 9, 11, 13, 15, 17, 19\}$ the maximizer is the \emph{spider} with hub degree $h = (n - 1)/2$ and every spoke a length-$2$ path (degree sequence $(h, 2^h, 1^h)$); for even $n \in \{10, 12, 14, 16, 18, 20\}$ the maximizer is the \emph{balanced double-spider} with two adjacent hubs of degrees $a, b$ satisfying $a + b = n/2 + 1$ and $|a - b| \le 1$. The case $n = 8$ is a spider with one spoke extended to length $3$. Computed by exhaustive enumeration; the total number of non-isomorphic trees ranges from $3$ at $n = 5$ to $823\,065$ at $n = 20$ (OEIS A000055).}
+\caption{Observed maximizer of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $5 \le n \le 20$, identified by degree sequence (descending) and canonical \mbox{\texttt{graph6}} string. For $n = 5$ the maximizer is the path $P_5$; for $n = 6$ it is a caterpillar; for every $n \in \{7, \ldots, 20\}$ the maximizer is neither a path, a star, nor a caterpillar. For odd $n \in \{7, 9, 11, 13, 15, 17, 19\}$ the maximizer is the \emph{spider} with hub degree $h = (n - 1)/2$ and every spoke a length-$2$ path (degree sequence $(h, 2^h, 1^h)$); for even $n \in \{10, 12, 14, 16, 18, 20\}$ the maximizer is the \emph{balanced double-spider} with two adjacent hubs of degrees $a, b$ satisfying $a + b = n/2 + 1$ and $|a - b| \le 1$. The case $n = 8$ is a spider with one spoke extended to length $3$. Computed by exhaustive enumeration; the total number of non-isomorphic trees ranges from $3$ at $n = 5$ to $823\,065$ at $n = 20$ (OEIS A000055).}
 \label{tab:caterpillar_argmax}
 \begin{tabular}{rll}
 \toprule
-$n$ & Argmax degree sequence & \texttt{graph6}\\
+$n$ & Argmax degree sequence & \mbox{\texttt{graph6}}\\
 \midrule
-$5$  & $(2, 2, 2, 1, 1)$ \quad (= $P_5$) & \texttt{DqC}\\
-$6$  & $(3, 2, 2, 1, 1, 1)$ & \texttt{EqD?}\\
-$7$  & $(3, 2, 2, 2, 1, 1, 1)$ & \texttt{FqD?G}\\
-$8$  & $(3, 2, 2, 2, 2, 1, 1, 1)$ & \texttt{GpOI?C}\\
-$9$  & $(4, 2, 2, 2, 2, 1, 1, 1, 1)$ & \texttt{HqD?I?@}\\
-$10$ & $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$ & \texttt{Ip\_I?D??G}\\
-$11$ & $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{JqD?I?@O??\_}\\
-$12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \texttt{Kp\_I?D??I??@}\\
-$13$ & $(6, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \texttt{LqD?I?@O??g??@}\\
-$14$ & $(4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \texttt{Mp\_K?D??I??@O???\_}\\
-$15$ & $(7, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{NqD?I?@O??g??@O???G}\\
-$16$ & $(5, 4, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{Op\_K?D??I??@O???g???@}\\
-$17$ & $(8, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{PqD?I?@O??g??@O???I????C}\\
-$18$ & $(5, 5, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{Qp\_K?E??I??@O???g???@O????G}\\
-$19$ & $(9, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{RqD?I?@O??g??@O???I????D?????G}\\
-$20$ & $(6, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ & \texttt{Sp\_K?E??I??@O???g???@O????I?????C}\\
+$5$  & $(2, 2, 2, 1, 1)$ \quad (= $P_5$) & \mbox{\texttt{DqC}}\\
+$6$  & $(3, 2, 2, 1, 1, 1)$ & \mbox{\texttt{EqD?}}\\
+$7$  & $(3, 2, 2, 2, 1, 1, 1)$ & \mbox{\texttt{FqD?G}}\\
+$8$  & $(3, 2, 2, 2, 2, 1, 1, 1)$ & \mbox{\texttt{GpOI?C}}\\
+$9$  & $(4, 2, 2, 2, 2, 1, 1, 1, 1)$ & \mbox{\texttt{HqD?I?@}}\\
+$10$ & $(3, 3, 2, 2, 2, 2, 1, 1, 1, 1)$ & \mbox{\texttt{Ip\_I?D??G}}\\
+$11$ & $(5, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \mbox{\texttt{JqD?I?@O??\_}}\\
+$12$ & $(4, 3, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1)$ & \mbox{\texttt{Kp\_I?D??I??@}}\\
+$13$ & $(6, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{LqD?I?@O??g??@}}\\
+$14$ & $(4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{Mp\_K?D??I??@O???\_}}\\
+$15$ & $(7, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{NqD?I?@O??g??@O???G}}\\
+$16$ & $(5, 4, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{Op\_K?D??I??@O???g???@}}\\
+$17$ & $(8, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{PqD?I?@O??g??@O???I????C}}\\
+$18$ & $(5, 5, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{Qp\_K?E??I??@O???g???@O????G}}\\
+$19$ & $(9, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{RqD?I?@O??g??@O???I????D?????G}}\\
+$20$ & $(6, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1)$ & \mbox{\texttt{Sp\_K?E??I??@O???g???@O????I?????C}}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1330,8 +1330,8 @@ vertices, giving $PI \equiv 7 \cdot 6 = 42$.
 \end{remark}
 
 Figure~\ref{fig:octanes} shows the full signed-$r$ heatmap on the
-five-property octane table for all sixteen indices of
-Table~\ref{tab:octane_competitor}.
+five-property octane table for the $30$-index classical baseline
+together with selected Wuzi parameter triples.
 
 \begin{figure}[H]
 \centering
