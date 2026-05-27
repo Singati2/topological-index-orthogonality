@@ -171,10 +171,23 @@
 \maketitle
 
 \begin{abstract}
-We introduce the \emph{Wuzi index family}, a three-parameter
-generalization of several classical bond-incident-degree (BID)
-indices. For a simple connected graph $G = (V, E)$ with edge
-degree pairs $(d_u, d_v)$,
+We isolate a non-classical extremal regime for a parametric
+bond-incident-degree (BID) index family on trees. At the
+mixed-sign parameter triple
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$, exhaustive enumeration
+through $n = 20$ shows that the maximizer over non-isomorphic
+trees is neither the path nor the star, and is not a caterpillar
+for every $n \in \{7, \ldots, 20\}$, with a sharp odd/even
+structural pattern: spiders $S^{(2)}_{(n-1)/2}$ with length-$2$
+spokes for odd $n \ge 9$, and balanced double-spiders
+$DS(a, b)$ with $a + b = n/2 + 1$ and $|a - b| \le 1$ for even
+$n \ge 10$. This computational evidence is stated as
+Conjecture~\ref{conj:caterpillar_max}; a formal
+transformation-lemma proof is left open.
+
+The parametric setting in which this regime emerges is the
+\emph{Wuzi index family}: for a simple connected graph
+$G = (V, E)$ with edge degree pairs $(d_u, d_v)$,
 \[
 \Wuzi
 \;=\; \sum_{uv \in E(G)}
@@ -186,29 +199,23 @@ degree pairs $(d_u, d_v)$,
 The family recovers the second Zagreb index $M_2$, the Randi\'c
 index $R$, the sum-connectivity index $\chi$, and the harmonic
 index $H$ as boundary cases, and adds a degree-imbalance factor
-through the third parameter $\gamma$. We derive closed-form values
-on nine standard graph classes, prove a bracket bound via the
+through the third parameter~$\gamma$. We derive closed-form
+values on nine standard graph classes, a bracket bound via the
 edge-contribution function $\psi$ that is tight on regular graphs,
 Jensen-type bounds in the first two Zagreb indices $M_1$ and
 $M_2$, Cauchy--Schwarz parameter-splitting bounds, bounds in
-$(n, m, \Delta, \delta)$ for the non-negative parameter region, and
-a uniform ratio-bound theorem that, for every classical BID index
-$I_h$ with strictly positive edge contribution, sandwiches $\Wuzi$
-as $c_{\min}^{h}\, I_h(G) \le \Wuzi \le c_{\max}^{h}\, I_h(G)$
-with explicit equality conditions. Bounds via the generalised
-Randi\'c, sum-connectivity, and Sombor indices follow as
-corollaries. Exhaustive enumeration through $n = 20$ for the
-mixed-sign triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$,
-together with sign-region checks through $n = 12$ at seven
-additional canonical triples, isolates a non-classical extremal
-regime at $(-1, -1, 1)$: the maximum of $W$ is attained by a
-non-caterpillar tree for every $n \in \{7, \ldots, 20\}$, with a
-sharp odd/even structural pattern (spider with length-$2$ spokes
-for odd $n \ge 9$; balanced double-spider for even $n \ge 10$). Sensitivity analysis
-on the standard $18$-octane benchmark places the family in the
-same correlation regime as the classical BID indices, with all
-margins below the bootstrap-CI half-widths characteristic of
-$n = 18$.
+$(n, m, \Delta, \delta)$ for the non-negative parameter region,
+and a uniform ratio-bound theorem that sandwiches $\Wuzi$ between
+explicit multiples of any classical BID index with strictly
+positive edge contribution. The exhaustive tree enumeration
+covers eight canonical parameter triples: the mixed-sign triple
+$(-1, -1, 1)$ is enumerated through $n = 20$, while the
+remaining seven triples serve as sign-region checks through
+$n = 12$. A sensitivity analysis on the standard $18$-octane
+benchmark places the family in the same correlation regime as
+the classical BID indices, with all margins below the
+bootstrap-CI half-widths characteristic of $n = 18$; we make no
+claim of QSPR superiority over established indices.
 \end{abstract}
 
 \onehalfspacing
@@ -251,33 +258,43 @@ hyperbolic Sombor index~\cite{BarmanDas2026HSO}, and most recently
 the diminished Sombor index of Movahedi, Gutman, Red\v{z}epovi\'c,
 and Furtula~\cite{MovahediGutmanRedzepovicFurtula2026, Movahedi2025DSO}.
 
-A recurring methodological question is: what does a new index
-have to demonstrate to be a meaningful contribution? Closed-form
-values on standard graph classes, sharp upper and lower bounds in
-terms of graph parameters and other classical indices, and an
-extremal-graph characterization (among trees, unicyclic, and
-bicyclic graphs) form the established checklist on the
-mathematical side. On the chemometric side, the index must add
-information not already carried by the existing zoo of
-descriptors.
+The main motivation of the present paper is the
+\emph{mixed-sign extremal behaviour} of a parametric BID family
+rather than a claim of universal QSPR superiority. We introduce
+the \emph{Wuzi index family} as a controlled three-parameter BID
+setting in which the standard path/star extremal pattern (on
+trees, in the non-negative parameter region) can be compared
+directly with a non-classical regime that emerges at the
+mixed-sign parameter triple
+$(\alpha, \beta, \gamma) = (-1, -1, 1)$. Exhaustive enumeration
+of all non-isomorphic trees of order $5 \le n \le 20$ at this
+triple produces a stable spider / double-spider maximizer
+pattern that is neither caterpillar nor classical for $n \ge 7$
+(Section~\ref{sec:extremal}, Table~\ref{tab:caterpillar_argmax},
+Figure~\ref{fig:caterpillar_maximizers}), stated formally as
+Conjecture~\ref{conj:caterpillar_max}. The remaining bounds and
+reductions of Section~\ref{sec:bounds} locate this behaviour
+inside the standard BID framework, with the Wuzi family
+recovering $M_2, R, \chi, H$ as boundary cases.
 
-The present work introduces the \emph{Wuzi index family} as a
-three-parameter generalization that subsumes several established
-indices as boundary cases while introducing a degree-imbalance
-factor through a third parameter~$\gamma$. The mathematical
-programme uses the standard mathematical-chemistry checklist for
-parametric BID families --- closed forms on canonical graph
-classes, bracket and Cauchy--Schwarz bounds, classical-index
-reductions, a uniform ratio-bound theorem, and extremal-graph
-analysis --- adopted in recent work such
-as~\cite{MovahediGutmanRedzepovicFurtula2026} as a baseline. The
-distinctive emphases here are the uniform ratio-bound theorem
-(Theorem~\ref{thm:ratio_bound}), the bounds via the generalised
-Randi\'c, sum-connectivity, and Sombor indices, and the
-non-classical mixed-sign extremal regime at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$, isolated through an
-exhaustive enumeration of all non-isomorphic trees of order
-$5 \le n \le 20$.
+A recurring methodological question for any newly proposed index
+is: what does it have to demonstrate to be a meaningful
+contribution? On the mathematical side, closed-form values on
+standard graph classes, sharp upper and lower bounds in terms of
+graph parameters and other classical indices, and an
+extremal-graph characterization (among trees, unicyclic, and
+bicyclic graphs) form the established checklist. On the
+chemometric side, the index must add information not already
+carried by the existing zoo of descriptors. The Wuzi family's
+contribution against this checklist is positioned narrowly: we
+provide the closed forms, bounds, and reductions in the standard
+form expected by recent parametric-BID papers such
+as~\cite{MovahediGutmanRedzepovicFurtula2026}, and the empirical
+sensitivity benchmark on octanes shows the family in the same
+correlation regime as the classical BID indices rather than
+above it. The distinctive content is therefore the mixed-sign
+extremal phenomenon and its odd/even structural pattern, not a
+claim of QSPR superiority.
 
 \paragraph{Structural observation.}
 The Wuzi family belongs to the bond-incident-degree (BID) class,
