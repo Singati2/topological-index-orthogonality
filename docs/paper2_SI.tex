@@ -1,0 +1,291 @@
+% !TEX program = pdflatex
+% Supporting Information for Paper 2 (Molecular Informatics).
+% Compile twice for cross-refs.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}\usepackage{mathtools}
+\usepackage{booktabs}\usepackage{array}\usepackage{graphicx}
+\graphicspath{{../figures/}}
+\usepackage{hyperref}\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage{xcolor}\usepackage{enumitem}
+\newtheorem{theorem}{Theorem}\theoremstyle{definition}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\title{\bfseries Supporting Information for:\\ Orthogonality Screening of Topological Indices for QSPR Modeling}
+\author{G.~Shiwakoti, A.~Natarajan, P.~Chalise, M.~Arockiaraj}
+\date{}
+\begin{document}\maketitle
+
+\section{Proof of the Edge-Degree-Pair Basis (Theorem~1 of the main text)}
+
+\begin{theorem}[Edge-Degree-Pair Basis]\label{thm:bid}
+Let $\mathcal{G}_\Delta$ denote the class of finite simple graphs
+with maximum degree at most $\Delta$. For any BID index
+$I_f\in\bid$ and any $G\in\mathcal{G}_\Delta$,
+\begin{equation}\label{eq:bid_linear}
+I_f(G)=\sum_{1\le i\le j\le\Delta} f(i,j)\cdot m_{ij}(G),
+\end{equation}
+where $m_{ij}(G)=\bigl|\{uv\in E(G):\{d_u,d_v\}=\{i,j\}\}\bigr|$.
+Restricted to $\mathcal{G}_4$, the vector space spanned by all BID
+indices has dimension at most $10$.
+\end{theorem}
+
+\begin{proof}
+We establish the linear-decomposition identity~\eqref{eq:bid_linear}
+first and then deduce the dimension bound.
+
+\emph{Step 1: linear decomposition.} Fix $G\in\mathcal{G}_\Delta$ and,
+for each pair $(i,j)$ with $1\le i\le j\le\Delta$, define
+$E_{ij}(G) = \{ uv\in E(G) \,:\, \{d_u,d_v\}=\{i,j\}\}$,
+so that $m_{ij}(G)=|E_{ij}(G)|$. Because every edge has
+$d_u,d_v\in\{1,\ldots,\Delta\}$, the family $\{E_{ij}(G)\}_{i\le j}$
+partitions $E(G)$. Hence
+\[
+I_f(G) = \sum_{uv\in E(G)} f(d_u,d_v)
+= \sum_{1\le i\le j\le\Delta}\;\sum_{uv\in E_{ij}(G)} f(d_u,d_v).
+\]
+For every $uv\in E_{ij}(G)$ the multiset $\{d_u,d_v\}$ equals
+$\{i,j\}$ and $f$ is symmetric, so $f(d_u,d_v)=f(i,j)$ is constant
+on the inner sum, which collapses to $f(i,j)\cdot m_{ij}(G)$ and
+yields~\eqref{eq:bid_linear}.
+
+\emph{Step 2: dimension bound.} For each admissible pair $(i,j)$
+with $1\le i\le j\le\Delta$, regard the edge-count
+$m_{ij}:\mathcal{G}_\Delta\to\mathbb{N}_{\ge 0}$ as a functional on
+$\mathcal{G}_\Delta$. Equation~\eqref{eq:bid_linear} shows
+$I_f = \sum_{i\le j} f(i,j)\cdot m_{ij}$ as functionals on
+$\mathcal{G}_\Delta$, so
+$\bid \subseteq \operatorname{span}_{\mathbb{R}}\{m_{ij}:1\le i\le j\le\Delta\}$.
+A subspace of a span of $N_\Delta$ vectors has dimension at most
+$N_\Delta$, hence
+\[
+\dim_{\mathbb{R}}\bid \le N_\Delta = \frac{\Delta(\Delta+1)}{2}
+\]
+by the standard multiset-counting identity. For $\Delta=4$ this is
+$N_4=10$.
+\end{proof}
+
+\section{The 30-index classical baseline}
+
+\begin{table}[h]
+\centering
+\caption{$30$-index classical baseline used for orthogonality screening.}
+\label{tab:baseline}
+\small
+\begin{tabular}{ll}
+\toprule
+Family & Indices\\
+\midrule
+Degree-based (18) & $M_1$, $M_2$, $mM_1$, $mM_2$, $F$, $R$, SCI, $H$, $GA$, $AG$, ABC, ABS, AZI, $SO$, $SO_{\mathrm{red}}$, Alb, $\sigma$, $\mathrm{redM}_1$\\
+Distance-based (8) & $W$, WW, HR, MTI (Schultz), Gutman, Mostar, $Sz$, $PI$\\
+Spectral (3) & EE, Energy, Spectral Radius\\
+Other (1) & Balaban $J$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Threshold-sensitivity of the Wuzi screening verdict}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Wuzi $100$-point grid: pass counts under threshold variation. Top block: pairwise screen only ($\max_b\lvert r(W, X_b)\rvert < \tau_r$). Bottom block: combined diagnostic (pairwise pass \emph{and} $\lvert\mathrm{pcor}(W, y \mid X)\rvert \ge \tau_{\mathrm{pcor}}$) across the full $3 \times 3$ threshold grid.}
+\label{tab:threshold_sensitivity}
+\begin{tabular}{lccc}
+\toprule
+& \multicolumn{3}{c}{Pairwise pass count ($\tau_r$)}\\
+\cmidrule(lr){2-4}
+Dataset & $\tau_r = 0.90$ & $\tau_r = 0.95$ & $\tau_r = 0.99$\\
+\midrule
+ESOL          & $0$ & $0$ & $27$\\
+FreeSolv      & $0$ & $1$ & $37$\\
+Lipophilicity & $0$ & $0$ & $30$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+
+\begin{tabular}{l|ccc|ccc|ccc}
+\toprule
+& \multicolumn{3}{c|}{$\tau_r = 0.90$} & \multicolumn{3}{c|}{$\tau_r = 0.95$} & \multicolumn{3}{c}{$\tau_r = 0.99$}\\
+$\tau_{\mathrm{pcor}}$ & $.05$ & $.10$ & $.20$ & $.05$ & $.10$ & $.20$ & $.05$ & $.10$ & $.20$\\
+\midrule
+ESOL          & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
+FreeSolv      & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
+Lipophilicity & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$ & $0$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.3em}
+\noindent\small{Combined-diagnostic pass count of the Wuzi $100$-point grid across the full $\{0.90, 0.95, 0.99\} \times \{0.05, 0.10, 0.20\}$ threshold grid (nine $(\tau_r, \tau_{\mathrm{pcor}})$ combinations).}
+\end{table}
+
+\section{Feature-selection comparison and matched-model-class benchmark}
+
+\begin{table}[h]
+\centering
+\small
+\caption{Screen-pipeline configurations (RandomForest, rows from the RandomForest benchmark of the main text) vs.\ five external feature-selection comparators (LASSO, ElasticNet, mRMR, Boruta, $\ell_1$-Logistic) on the four MoleculeNet benchmarks. Regression metric is RMSE (lower is better); classification metric for BBBP is ROC-AUC (higher is better). Reported as mean across 5 folds with the same seed.}
+\label{tab:fs_comparison}
+\begin{tabular}{llrr}
+\toprule
+Dataset & Configuration & Metric & Mean $n$ features\\
+\midrule
+ESOL & \texttt{full} (RF)                 & RMSE $1.437$ & $30.0$\\
+     & \texttt{pairwise\_pruned} (RF)     & RMSE $1.435$ & $\phantom{0}7.4$\\
+     & \texttt{combined\_pruned} (RF)     & RMSE $1.475$ & $\phantom{0}4.4$\\
+     & LASSO (linear, CV)                 & RMSE $1.545$ & $14.6$\\
+     & ElasticNet (linear, CV)            & RMSE $1.546$ & $16.2$\\
+     & mRMR $k{=}7$ (linear)              & RMSE $1.654$ & $\phantom{0}7.0$\\
+     & Boruta + RF (linear scoring)       & RMSE $1.620$ & $10.0$\\
+     & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $1.580$ & $\phantom{0}7.2$\\
+\midrule
+FreeSolv & \texttt{full} (RF)             & RMSE $3.537$ & $30.0$\\
+         & \texttt{pairwise\_pruned} (RF) & RMSE $3.540$ & $\phantom{0}8.0$\\
+         & \texttt{combined\_pruned} (RF) & RMSE $3.561$ & $\phantom{0}3.2$\\
+         & LASSO (linear, CV)             & RMSE $3.527$ & $13.4$\\
+         & ElasticNet (linear, CV)        & RMSE $3.515$ & $18.6$\\
+         & mRMR $k{=}8$ (linear)          & RMSE $3.618$ & $\phantom{0}8.0$\\
+         & Boruta + RF (linear scoring)   & RMSE $3.588$ & $\phantom{0}2.0$\\
+         & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $3.465$ & $\phantom{0}6.4$\\
+\midrule
+Lipophilicity & \texttt{full} (RF)        & RMSE $1.030$ & $30.0$\\
+              & \texttt{pairwise\_pruned} (RF) & RMSE $1.028$ & $\phantom{0}8.0$\\
+              & \texttt{combined\_pruned} (RF) & RMSE $1.287^{\,\dagger}$ & $\phantom{0}0.2$\\
+              & LASSO (linear, CV)        & RMSE $1.130$ & $15.6$\\
+              & ElasticNet (linear, CV)   & RMSE $1.130$ & $17.8$\\
+              & mRMR $k{=}8$ (linear)     & RMSE $1.142$ & $\phantom{0}8.0$\\
+              & Boruta + RF (linear scoring) & RMSE $1.144$ & $\phantom{0}5.0$\\
+              & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $1.137$ & $\phantom{0}7.0$\\
+\midrule
+BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
+     & \texttt{pairwise\_pruned} (RF)     & AUC $0.860$ & $\phantom{0}6.0$\\
+     & \texttt{combined\_pruned} (RF)     & AUC $0.840$ & $\phantom{0}4.0$\\
+     & $\ell_1$-Logistic (CV)             & AUC $0.790$ & $13.6$\\
+     & mRMR $k{=}6$ (logistic)            & AUC $0.747$ & $\phantom{0}6.0$\\
+     & Boruta + RF (logistic scoring)     & AUC $0.791$ & $23.0$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\noindent\small{$^\dagger$ Strict combined screen degenerates: retains zero features in $4/5$ folds; the RMSE shown is from the single fold that retained one feature. See the Limitations discussion of the main text.}
+\noindent\small{$^\ddagger$ Pipeline-then-LASSO: in-fold pairwise screen $\to$ LASSO on the surviving features, same model class throughout. See this section and Table~\ref{tab:matched_class}.}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Pipeline-then-LASSO matched-model-class benchmark with paired $t$-tests. Same model class (LASSO for regression, $\ell_1$-Logistic for BBBP) and same 5-fold splits across all three configurations within each dataset, so the comparison isolates the effect of the upstream screening step. ``pre-LASSO feats'' is the mean number of features handed to LASSO after screening; ``final L1 feats'' is the mean number of features with non-zero LASSO coefficient. ``$t$ vs.\ full'' and ``$p$ vs.\ full'' are the paired $t$-statistic and two-sided $p$-value across the five folds (df $=4$) comparing the primary metric (RMSE for regression, ROC-AUC for BBBP) against the \texttt{full} (no-screen) row of the same dataset.}
+\label{tab:matched_class}
+\begin{tabular}{llcrrrr}
+\toprule
+Dataset & Configuration & Metric (mean $\pm$ std) & pre & final & $t$ vs.\ full & $p$ vs.\ full\\
+\midrule
+ESOL          & \texttt{full} (LASSO)                       & RMSE $1.536\pm 0.077$  & $30.0$         & $17.6$ & --- & ---\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.580\pm 0.085$  & $\phantom{0}7.4$ & $\phantom{0}7.2$ & $+3.77$ & $0.020^{*}$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $1.588\pm 0.090$  & $\phantom{0}4.4$ & $\phantom{0}4.4$ & $+3.62$ & $0.022^{*}$\\
+\midrule
+FreeSolv      & \texttt{full} (LASSO)                       & RMSE $3.469\pm 0.400$  & $30.0$         & $12.8$ & --- & ---\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $3.465\pm 0.394$  & $\phantom{0}8.0$ & $\phantom{0}6.4$ & $-0.34$ & $0.748$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $3.462\pm 0.387$  & $\phantom{0}3.2$ & $\phantom{0}3.2$ & $-0.46$ & $0.672$\\
+\midrule
+Lipophilicity & \texttt{full} (LASSO)                       & RMSE $1.128\pm 0.016$  & $30.0$         & $16.2$ & --- & ---\\
+              & \texttt{pairwise} $\to$ LASSO               & RMSE $1.137\pm 0.013$  & $\phantom{0}8.0$ & $\phantom{0}7.0$ & $+3.45$ & $0.026^{*}$\\
+              & \texttt{combined} $\to$ LASSO               & RMSE $1.220^{\,\dagger}$       & $\phantom{0}0.2$ & $\phantom{0}0.2$ & --- & ---\\
+\midrule
+BBBP          & \texttt{full} ($\ell_1$-Logistic)           & AUC $0.794\pm 0.019$   & $30.0$         & $11.6$ & --- & ---\\
+              & \texttt{pairwise} $\to$ $\ell_1$-Logistic   & AUC $0.787\pm 0.026$   & $\phantom{0}6.0$ & $\phantom{0}6.0$ & $-1.71$ & $0.163$\\
+              & \texttt{combined} $\to$ $\ell_1$-Logistic   & AUC $0.786\pm 0.028$   & $\phantom{0}4.0$ & $\phantom{0}4.0$ & $-1.56$ & $0.194$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\noindent\small{$^{*}$ significant at $\alpha=0.05$ (two-sided paired $t$-test, df $=4$). $^\dagger$ Combined screen retains zero features in $4/5$ Lipophilicity folds; the value shown is from the single fold that retained one feature. The same failure mode appears in the RandomForest benchmark of the main text and is treated as a formal limitation in the Limitations discussion of the main text.}
+\end{table}
+
+\section{Formal definitions of the 20 alternative-family candidate indices}\label{app:candidates}
+% =====================================================================
+
+For reproducibility we give the formal definition of each of the
+twenty candidate indices screened in the candidate case study of the main text. Let
+$G = (V, E)$ be a simple connected hydrogen-suppressed molecular
+graph with $n = |V|$ vertices, $m = |E|$ edges, degree sequence
+$\{d_v\}_{v\in V}$, geodesic distance matrix $D = (d_{uv})$,
+adjacency matrix $A$, eccentricity $\varepsilon(v) = \max_u d_{uv}$,
+and adjacency-spectrum / Laplacian-spectrum eigenvalues
+$\{\lambda_i\}$ / $\{\mu_i\}$ respectively. All twenty definitions
+are implemented in
+\texttt{src/novel\_candidates.py} of the companion repository.
+
+\paragraph{Information-theoretic (5).}
+With $H(\{c_i\}) = -\sum_i (c_i / \sum_j c_j)\log(c_i / \sum_j c_j)$
+the Shannon entropy of a count distribution:
+\begin{align*}
+\mathrm{InfoH\_deg}(G) &= H\bigl(\{|\{v : d_v = k\}|\}_k\bigr), \\
+\mathrm{InfoH\_dist}(G) &= H\bigl(\{|\{(u,v) : d_{uv} = k,\, u<v\}|\}_k\bigr), \\
+\mathrm{InfoH\_spec}(G) &= -\sum_{i} p_i \log p_i,\ p_i = \lambda_i^2 / \textstyle\sum_j \lambda_j^2, \\
+\mathrm{InfoH\_ecc}(G) &= H\bigl(\{|\{v : \varepsilon(v) = k\}|\}_k\bigr), \\
+\mathrm{Bonchev\_Id}(G) &= W\log_2 W - \sum_{k \ge 1} k\,d_k \log_2(k\,d_k),
+\end{align*}
+where in the last line $d_k = |\{(u,v) : d_{uv}=k,\,u<v\}|$ and
+$W = \sum_k k\,d_k$ is the Wiener index.
+
+\paragraph{Centrality-based (5).}
+With standard NetworkX-style normalised centralities:
+\begin{align*}
+\mathrm{Btw\_sum}(G) &= \sum_{v \in V} c_B(v),\quad c_B(v) = \!\!\sum_{s \ne t \ne v}\!\!
+\frac{\sigma_{st}(v)}{\sigma_{st}}, \\
+\mathrm{Cls\_sum}(G) &= \sum_{v} (n-1)\Bigl(\sum_{u \ne v} d_{uv}\Bigr)^{-1}, \\
+\mathrm{Eig\_sum}(G) &= \sum_{v} x_v,\ x \text{ the (positive) Perron eigenvector of } A, \\
+\mathrm{Harm\_cent}(G) &= \sum_{v}\sum_{u \ne v}\frac{1}{d_{uv}}, \\
+\mathrm{Btw\_var}(G) &= \mathrm{Var}_v\bigl(c_B(v)\bigr).
+\end{align*}
+
+\paragraph{Spectral-hybrid (3).}
+With $\mathrm{diam}(G) = \max_{u,v} d_{uv}$ and Estrada index
+$\mathrm{EE}(G) = \sum_i e^{\lambda_i}$:
+\begin{align*}
+\mathrm{AlgConn}(G) &= \mu_2(G), \text{ second-smallest Laplacian eigenvalue}, \\
+\mathrm{Rho}\!\times\!\mathrm{Dia}(G) &= \rho(G)\cdot\mathrm{diam}(G),\ \rho(G) = \max_i|\lambda_i|, \\
+\mathrm{EE}\!\times\!\mathrm{W}(G) &= \log\bigl(1+\mathrm{EE}(G)\bigr)\cdot\log\bigl(1+W(G)\bigr).
+\end{align*}
+
+\paragraph{Motif / structural (4).}
+\begin{align*}
+\mathrm{Triangles}(G) &= \tfrac{1}{6}\operatorname{tr}(A^3), \\
+\mathrm{MeanClust}(G) &= \frac{1}{n}\sum_{v} \frac{2 t(v)}{d_v(d_v-1)},\ \,t(v) = \text{triangles at } v, \\
+\mathrm{FourCyc}(G) &= \tfrac{1}{8}\bigl(\operatorname{tr}(A^4) - 2\!\sum_v d_v(d_v - 1) - 2m\bigr), \\
+\mathrm{CutVerts}(G) &= |\{v \in V : G - v \text{ is disconnected}\}|.
+\end{align*}
+
+\paragraph{Eccentricity-based (3).}
+\begin{align*}
+\mathrm{TotEcc}(G) &= \sum_{v \in V} \varepsilon(v), \\
+\mathrm{Radius}(G) &= \min_{v \in V} \varepsilon(v), \\
+\mathrm{MeanEcc}(G) &= \frac{1}{n}\sum_{v \in V} \varepsilon(v).
+\end{align*}
+
+None of these twenty candidates is claimed as a newly invented
+index. The information-theoretic family follows Bonchev and
+Trinajsti\'c~\cite{Gutman2013Degree, TodeschiniConsonniHandbook};
+the centrality family follows the standard graph-theory
+literature; the motif and eccentricity families are textbook
+graph invariants; the spectral-hybrid combinations are
+deliberately constructed novel pairings to test whether
+non-standard product indices escape the redundancy ceiling. They
+appear here purely as screening targets to test the generality
+of the combined diagnostic of the screening protocol of the main text, and the
+verdict reported in the candidate case study of the main text is a statement about
+this particular candidate set under the tested baselines and
+thresholds, not a claim that any individual candidate is or is
+not a useful QSPR descriptor.
+
+% =====================================================================
+
+\begin{thebibliography}{9}\small
+\bibitem{Gutman2013Degree} I.~Gutman, \emph{Degree-based topological indices}, Croat.~Chem.~Acta \textbf{86}(4) (2013), 351--361.
+\bibitem{TodeschiniConsonniHandbook} R.~Todeschini and V.~Consonni, \emph{Molecular Descriptors for Chemoinformatics}, 2nd ed., Wiley-VCH, Weinheim, 2009.
+\end{thebibliography}
+\end{document}
