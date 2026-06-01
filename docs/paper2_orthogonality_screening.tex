@@ -14,8 +14,11 @@
 \usepackage{array}
 \usepackage{graphicx}
 \graphicspath{{../figures/}}
+\PassOptionsToPackage{hyphens}{url}
 \usepackage{hyperref}
-\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black,breaklinks=true}
+% allow \url to break at any character if needed (loads after hyperref)
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{}
 \usepackage{xcolor}
 \usepackage{enumitem}
 \setlist[itemize]{topsep=2pt,itemsep=2pt}
@@ -50,47 +53,28 @@
 \maketitle
 
 \begin{abstract}
-\textbf{Problem.} The chemical-graph-theory literature contains
-hundreds of scalar topological indices, and the conventional
-pairwise-correlation criterion for ``does a new index carry
-independent information''
-($\max_{b}\lvert r(z, X_b)\rvert < 0.95$ against a classical
-baseline) is empirically over-permissive.
-
-\textbf{Method.} We present an open-source linear diagnostic
-pipeline combining pairwise correlation, PCA effective rank, VIF,
-and partial correlation with the QSPR target into a \emph{combined
-diagnostic} (Table~\ref{tab:decision}), positioned as a
-pre-flight screen for independent linear QSPR signal, not as a
-hard feature-selection filter or a utility certification. The
-\emph{Edge-Degree-Pair Basis} (Theorem~\ref{thm:bid}) gives a
-complementary structural ceiling: every bond-incident-degree (BID)
-index on hydrogen-suppressed molecular graphs with $\Delta \le 4$
-lies in a vector space of dimension at most $10$.
-
-\textbf{Evidence.} The three-parameter Wuzi index family
-\cite{Paper1_Wuzi} fails the combined diagnostic at every one of
-$300$ grid points across three regression datasets, with the
-verdict stable across nine $(\tau_r, \tau_{\mathrm{pcor}})$
-threshold combinations (\S\ref{sub:threshold_sensitivity}). Across
-all four datasets, $15$--$17$ of $20$ alternative-family
-candidates clear pairwise but only $0$--$4$ also clear
-$\lvert\mathrm{pcor}\rvert \ge 0.10$
-(Table~\ref{tab:novel_combined}). A $5$-fold-CV RandomForest
-benchmark shows the pairwise-pruned set preserves predictive
-performance within CV noise at $\sim 4\times$ fewer features
-(Table~\ref{tab:ml_benchmark}); a matched-model-class
-pipeline-then-LASSO / $\ell_1$-logistic benchmark with paired
-$t$-tests shows a clean parsimony win on FreeSolv and BBBP
-($p > 0.05$) and a small but statistically detectable
-$<3\%$ RMSE cost on ESOL and Lipophilicity in exchange for
-${\sim}\!2\times$ fewer LASSO-active features
-(Table~\ref{tab:matched_class}).
-
-\textbf{Scope.} Diagnostics are linear; the BID theorem covers
-$\Delta\le 4$; the combined screen degenerates on Lipophilicity
-(zero features in $4/5$ folds) and should not be used as a hard
-filter. Full limitations in \S\ref{sub:limitations}.
+Hundreds of scalar topological indices have been proposed for
+QSPR modelling, and the standard novelty test --- a pairwise
+correlation below $0.95$ against a classical baseline --- is
+empirically too permissive. We present an open-source pipeline
+that produces a four-panel diagnostic report on any candidate
+index against an explicit baseline and a modelling target:
+pairwise correlation, principal-component effective rank,
+variance inflation, and partial correlation with the target. The
+\emph{Edge-Degree-Pair Basis} shows that every
+bond-incident-degree index on hydrogen-suppressed molecular
+graphs of maximum degree four lies in a vector space of dimension
+at most ten. Across four MoleculeNet benchmarks --- a
+three-parameter index family and twenty alternative candidate
+indices --- the pairwise panel admits $15$--$17$ of $20$
+candidates per dataset, while the conservative reading that
+additionally requires non-negligible partial correlation admits
+only $0$--$4$. A cross-validated RandomForest and a matched-class
+pipeline-then-LASSO benchmark confirm that the pruned set
+preserves predictive performance at several-fold fewer features.
+On weak-baseline-signal targets such as Lipophilicity, the
+partial-correlation panel should be read descriptively rather
+than as a pass/fail rule.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index, orthogonality
@@ -120,31 +104,54 @@ of pairs.
 
 This raises a recurring methodological question. \emph{What does a
 newly proposed scalar topological index need to demonstrate to be
-treated as a meaningful contribution to QSPR modeling?} Three
-weak forms of justification appear frequently in the literature:
-\begin{enumerate}[label=(\roman*)]
-\item Strong correlation with a chemical property on a small dataset
-(e.g.\ $18$ octanes, $75$ decanes), often without reference to a
-classical-baseline comparison.
-\item A closed-form value on standard graph classes, framed as
-mathematical novelty.
-\item Parametric generality (a new parameter that subsumes the
-classical case at one specific parameter value).
-\end{enumerate}
-None of these by themselves is sufficient to demonstrate
-\emph{independent} predictive value beyond the classical baseline.
+treated as a meaningful contribution to QSPR modeling?} Existing
+proposals routinely report some combination of (i)~a strong
+correlation with a chemical property on a small benchmark
+(typically $18$ octanes or $75$ decanes), (ii)~a closed-form value
+on standard graph classes, and (iii)~parametric generality
+recovering one or more classical indices at specific parameter
+values; many proposals do also include a pairwise-correlation
+comparison against a classical baseline. These contributions are
+valuable in isolation. The methodological gap we address is the
+absence of a \emph{systematic, multi-dataset, multi-diagnostic}
+screen that operationalises ``does this new index carry independent
+linear information beyond an explicit classical baseline'' --- so
+that an author can report a standard answer in a standard form,
+rather than each proposal defending its independence ad hoc.
 
 This paper proposes an explicit pre-flight check for the
 ``does it carry independent information'' question, framed
 operationally so that any author can apply it.
 
+A scoping note for the current state of QSPR practice. Scalar
+topological indices are no longer competitive with extended
+connectivity fingerprints or graph neural networks as
+black-box predictors in production cheminformatics; modern
+benchmark suites such as the Open Graph
+Benchmark~\cite{Hu2020OGB} support GNN-based property prediction
+as the production reference, and the present paper deliberately
+restricts attention to the classical regime where descriptor
+interpretability and linear orthogonality are the natural
+analytic units. We position
+the scalar indices considered here as \emph{interpretable
+descriptors and physics-informed probes} that continue to appear
+in hybrid models, mechanistic QSPR, and the mathematical-chemistry
+literature --- not as competitors to deep models. The screening
+pipeline we propose is correspondingly a redundancy diagnostic for
+the scalar-index ecosystem; it makes no claim about descriptor
+adequacy under non-linear or representation-learning regimes.
+
 \subsection{Contributions}
 
 \begin{enumerate}[label=(\arabic*)]
-\item An open-source orthogonality-screening pipeline
-(Section~\ref{sec:protocol}) covering correlation matrix,
-PCA, VIF, and partial correlation with the QSPR target, using
-a fixed redundancy threshold $|r|\ge 0.95$.
+\item An open-source pipeline (Section~\ref{sec:protocol}) that produces
+a \emph{four-panel diagnostic report} on any candidate scalar
+topological index against an explicit classical baseline and a
+QSPR target --- pairwise correlation, principal-component effective
+rank, variance inflation, and partial correlation with the target
+--- together with a conservative pass/fail \emph{combined reading}
+of the report that requires both $\max_b|r| < 0.95$ and a
+non-negligible $|\mathrm{pcor}|$ with the target.
 \item Replication across four MoleculeNet benchmarks: three
 regression tasks (ESOL, FreeSolv, Lipophilicity) and one binary
 classification task (BBBP)
@@ -157,9 +164,14 @@ graphs).
 (Section~\ref{sec:wuzi_case}, $300$ grid points) and twenty
 alternative-family candidate indices
 (Section~\ref{sec:novel_case}).
-\item Explicit positioning of orthogonality as \emph{necessary but
-not sufficient} for QSPR usefulness, with empirical evidence
-(Section~\ref{sec:discussion}).
+\item A four-panel diagnostic report makes the
+\emph{necessary-but-not-sufficient} status of orthogonality
+visible at the level of individual datasets: passing the report
+removes one well-defined failure mode (linear redundancy plus
+flat partial signal) but is empirically consistent with no
+improvement, or modest degradation, in downstream LASSO and
+$\ell_1$-logistic performance against a 30-feature classical
+baseline (Section~\ref{sec:discussion}).
 \end{enumerate}
 
 % =====================================================================
@@ -168,22 +180,15 @@ not sufficient} for QSPR usefulness, with empirical evidence
 
 \subsection{Relation to the companion graph-theory paper}\label{sec:relation_companion}
 
-The mathematical-chemistry properties of the Wuzi index family ---
-its definition, closed-form values on standard graph classes,
-bracket and ratio bounds, Cauchy--Schwarz and Jensen-type bounds
-in $M_1$, $M_2$, $R$, $\chi$, and $SO$, the empirical
-extremal-graph pattern (including the spider / double-spider
-structural conjecture at the mixed-sign triple
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$ verified through tree
-order $n = 20$), and sensitivity-analysis benchmarks on $18$
-octanes, $106$ trees of order $10$, and $75$ decane isomers ---
-are developed in a companion graph-theory
-paper~\cite{Paper1_Wuzi}. The present paper is focused on the
-screening pipeline as a reusable methodology and uses the Wuzi
-family only as one screened candidate (Section~\ref{sec:wuzi_case}),
-re-deriving no Wuzi-specific mathematical results. A reader
-interested only in the screening methodology can treat the Wuzi
-family as a black-box parametric BID family throughout.
+The mathematical-chemistry properties of the Wuzi index family
+--- closed-form values on standard graph classes, bracket and
+ratio bounds, an extremal-graph conjecture on trees verified
+through order $n = 20$, and sensitivity benchmarks on octane and
+decane isomers --- are developed in a companion graph-theory
+paper~\cite{Paper1_Wuzi}. Here, the Wuzi family appears as one of
+the parametric candidates screened in
+Section~\ref{sec:wuzi_case}; no Wuzi-specific mathematical
+content is re-derived.
 
 \subsection{Orthogonality and redundancy of topological indices}
 
@@ -211,8 +216,10 @@ forgotten $F$, Randi\'c $R$ and general $R_\alpha$,
 sum-connectivity $\chi$ and general $\chi_\beta$, harmonic $H$,
 the geometric--arithmetic index $GA$ of Vuki\v{c}evi\'c and
 Furtula~\cite{VukicevicFurtula2009GA}, arithmetic-geometric $AG$,
-atom-bond connectivity $ABC$, augmented Zagreb $AZI$, Sombor $SO$
-and its variants, the Albertson irregularity index
+atom-bond connectivity $ABC$, augmented Zagreb $AZI$, the
+Sombor index $SO$~\cite{Gutman2021Sombor} and its
+variants~\cite{DasCevikCangulShang2021Sombor,Redzepovic2021ChemSombor},
+the Albertson irregularity index
 $\mathrm{Alb}$~\cite{Albertson1997}, sigma $\sigma$, and reduced
 Zagreb $\mathrm{redM}_1$. The observation that BID
 indices are linear functionals of the edge-degree-pair counts
@@ -247,11 +254,11 @@ and model class.
 
 The present pipeline is positioned at a different layer in the
 modelling stack. The pairwise / PCA / VIF diagnostics are
-\emph{target-agnostic}; the partial-correlation step is
-\emph{target-aware but model-agnostic}; and the combined diagnostic
-is designed as a \emph{pre-flight check for a single proposed new
-topological index} against a fixed classical baseline, not as a
-competitor for end-to-end QSPR feature selection. Conceptually,
+\emph{target-agnostic}; the partial-correlation panel is
+\emph{target-aware but model-agnostic}; the diagnostic report
+evaluates a single proposed new topological index against a fixed
+classical baseline, and is not a competitor for end-to-end QSPR
+feature selection. Conceptually,
 the two layers compose rather than compete: the screening pipeline
 gates which indices enter the descriptor matrix, after which
 mRMR / LASSO / Boruta / similar methods could be applied
@@ -287,9 +294,19 @@ BBBP          & blood-brain barrier penetration               & classification &
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:datasets} summarises the four benchmarks; the
-$30$-index classical baseline (Table~\ref{tab:baseline}) is
-implemented in the reference codebase
+Table~\ref{tab:datasets} summarises the four benchmarks. We
+flag at the outset that Lipophilicity ($n = 4\,200$) is the
+largest dataset but exhibits the weakest linear topology-to-target
+association among the four, with a full-baseline LASSO $R^2$
+near $0.12$; specifically, $\log D_{7.4}$ is dominated by
+non-topological factors --- ionization state at physiological pH,
+conformational flexibility, and partitioning thermodynamics ---
+that scalar invariants of the hydrogen-suppressed connectivity
+graph cannot capture, so partial correlations against this target
+are uniformly small for structural rather than statistical
+reasons; we treat the confounding mechanism this creates for the
+partial-correlation panel in \S\ref{sub:limitations}. The $30$-index classical baseline
+(Table~\ref{tab:baseline}) is implemented in the reference codebase
 (\texttt{src/standard\_indices.py}) on top of
 NetworkX, RDKit~\cite{RDKit}, and the scikit-learn machine-learning
 toolkit~\cite{Pedregosa2011sklearn}. Each index admits a
@@ -303,7 +320,7 @@ baseline~\cite{TodeschiniConsonniHandbook}: degree-based,
 distance-based, spectral, and other-family indices in the
 proportions in which they are actually used in published QSPR
 modelling. Eighteen of the thirty are degree-based BID indices;
-this is deliberate. Theorem~\ref{thm:bid} shows that the BID
+this is deliberate. Proposition~\ref{thm:bid} shows that the BID
 subspace on $\mathcal{G}_4$ has dimension at most $10$, so the
 baseline needs enough BID indices to span (or come close to
 spanning) that subspace in order for residual partial
@@ -317,7 +334,7 @@ non-BID alternative-family candidates of \S\ref{sec:novel_case}
 is unaffected by this composition choice, because those
 candidates lie in functional subspaces that the BID-heavy
 baseline cannot reach by construction; this is also why the
-combined diagnostic admits non-zero passers on those families
+combined reading admits non-zero passers on those families
 (Table~\ref{tab:novel_combined}).
 
 \begin{table}[h]
@@ -355,7 +372,7 @@ itself --- the linearity observation that underpins it is standard
 in the mathematical-chemistry literature~\cite{BorovicaninDasFurtulaGutman2017Zagreb}
 --- but its operational use inside the screening pipeline.
 
-\begin{theorem}[Edge-Degree-Pair Basis]\label{thm:bid}
+\begin{proposition}[Edge-Degree-Pair Basis]\label{thm:bid}
 Let $\mathcal{G}_\Delta$ denote the class of finite simple graphs
 with maximum degree at most $\Delta$. For any BID index
 $I_f\in\bid$ and any $G\in\mathcal{G}_\Delta$,
@@ -365,7 +382,7 @@ I_f(G)=\sum_{1\le i\le j\le\Delta} f(i,j)\cdot m_{ij}(G),
 where $m_{ij}(G)=\bigl|\{uv\in E(G):\{d_u,d_v\}=\{i,j\}\}\bigr|$.
 Restricted to $\mathcal{G}_4$, the vector space spanned by all BID
 indices has dimension at most $10$.
-\end{theorem}
+\end{proposition}
 
 \begin{proof}
 We establish the linear-decomposition identity~\eqref{eq:bid_linear}
@@ -404,12 +421,27 @@ $N_4=10$.
 
 \begin{remark}\label{rem:bid_credit}
 The observation that BID indices are linear in $m_{ij}$ counts is
-standard~\cite{BorovicaninDasFurtulaGutman2017Zagreb}. The contribution here is
+standard~\cite{BorovicaninDasFurtulaGutman2017Zagreb}, and the
+finite-dimensional linear-algebraic view of vertex-degree-based
+indices has recently been developed in general by
+Rada~\cite{Rada2026LinearVDB}. The contribution here is
 (i)~the explicit dimension-$10$ bound on $\mathcal{G}_4$ and
 (ii)~its operational use in the screening pipeline: any new BID
 index proposed for molecular chemistry must justify its
 independence from the existing zoo within a $10$-dimensional
-subspace.
+subspace. For molecular classes that admit hypervalent atoms
+($\Delta \le 6$, covering sulphur, phosphorus and main-group
+hypervalency), the same identity gives a ceiling of
+$N_6 = \Delta(\Delta+1)/2 = 21$; the screening protocol below
+applies verbatim with the wider baseline. We note that the
+operational bite of this bound weakens as $\Delta$ grows:
+at $\Delta = 4$ a candidate must justify linear independence
+within a $10$-dimensional subspace against a $30$-index baseline,
+whereas at $\Delta = 6$ the corresponding subspace has dimension
+up to $21$, so the constraint that ``the candidate already lies
+in the BID linear span'' is a much weaker structural commitment.
+The screening protocol transfers, but the dimensional ceiling
+that gives it teeth on $\mathcal{G}_4$ degrades with $\Delta$.
 \end{remark}
 
 \begin{remark}\label{rem:rank_vs_bound}
@@ -501,11 +533,11 @@ table (Table~\ref{tab:threshold_sensitivity}, \S\ref{sub:threshold_sensitivity})
 confirms that the qualitative verdict on the Wuzi family is
 stable for tighter ($0.20$) and looser ($0.05$) cutoffs.
 
-\subsection{Decision summary}
+\subsection{Reading the diagnostic report}\label{sec:reading_report}
 
 \begin{table}[h]
 \centering
-\caption{Screening diagnostic summary. Satisfying both conditions is interpreted as evidence of non-negligible residual linear signal under the tested baseline, dataset, and thresholds; it is not a proof of QSPR utility.}
+\caption{Conservative reading of the four-panel diagnostic report: a candidate clearing both rows shows non-negligible residual linear signal under the tested baseline, dataset, and linear diagnostics.}
 \label{tab:decision}
 \begin{tabular}{lll}
 \toprule
@@ -517,19 +549,60 @@ $|\mathrm{pcor}(z,y\mid X)|$  & $\ge 0.10$  & non-negligible residual linear ass
 \end{tabular}
 \end{table}
 
-The combined diagnostic of Table~\ref{tab:decision} should be read
-as a \emph{conservative pre-flight diagnostic for independent linear
-QSPR signal}, not as a hard feature-selection filter or a utility
-certification. Passing the screen does not prove utility; failing
-the screen is evidence of redundancy under the tested baseline,
-dataset, and linear diagnostics. We deliberately avoid language
-such as ``meaningful new index'' in favour of the more precise
-``candidate with non-negligible residual linear signal under the
-tested $30$-index baseline''. Threshold sensitivity is documented
-in \S\ref{sub:threshold_sensitivity} and the Lipophilicity failure
-mode --- where the strict combined diagnostic retains zero features
-in $4/5$ ML-benchmark folds --- is treated as a formal limitation
-in \S\ref{sub:limitations}.
+The pipeline outputs a four-panel diagnostic report (pairwise
+correlation, PCA effective rank, VIF, partial correlation with the
+target). The pass/fail rule of Table~\ref{tab:decision} is one
+\emph{conservative reading} of that report, useful on datasets
+where the baseline already has non-trivial linear target signal:
+clearing both rows is evidence of residual linear signal under the
+tested baseline, dataset, and diagnostics, not a proof of QSPR
+utility. On low-baseline-$R^2$ datasets the partial-correlation
+panel should be read descriptively rather than as a pass/fail
+criterion --- failing it there does not constitute proof of
+redundancy, and the pairwise panel remains the reliable redundancy
+view; see \S\ref{sub:limitations} for the learnability-vs.-redundancy
+confounding mechanism. Threshold sensitivity is documented in
+\S\ref{sub:threshold_sensitivity}; the Lipophilicity failure mode
+(strict reading retains zero features in $4/5$ ML-benchmark folds)
+is treated as a formal limitation in \S\ref{sub:limitations}.
+
+\paragraph{Pre-registered thresholds and equivalence margin.}
+The two cutoffs of Table~\ref{tab:decision} ($\tau_r = 0.95$ for
+pairwise, $\tau_{\mathrm{pcor}} = 0.10$ for partial correlation)
+and the equivalence margin used in the downstream-model parsimony
+analyses (Table~\ref{tab:matched_class}: $\pm 5\%$ of the
+no-screen baseline RMSE / AUC) are stated here \emph{before} any
+results are reported, so that no threshold has been tuned to
+results post hoc; this practice follows the recent
+responsible-ML reproducibility standards of
+Heil et al.~\cite{Heil2021ReproML}. The pairwise cutoff is the convention used
+throughout the descriptor-redundancy literature. The
+partial-correlation cutoff $|\mathrm{pcor}| = 0.10$ corresponds to
+$\mathrm{pcor}^2 = 0.01$, i.e.\ the candidate explains at least
+$1\%$ of the target variance not already explained by the
+baseline. The $\pm 5\%$ equivalence margin for two one-sided
+testing (TOST~\cite{Schuirmann1987TOST,Lakens2017Equivalence}) is
+a moderate fraction of the no-screen baseline metric,
+comparable to the within-dataset cross-validation standard
+deviation of the no-screen LASSO baseline on these benchmarks
+(median ${\sim}3.7\%$ across the four datasets), so that
+``equivalent under TOST'' means ``differences operationally
+indistinguishable from CV noise.''
+
+\bigskip
+\noindent\fbox{\parbox{0.96\linewidth}{%
+\small
+\textbf{Reporting recipe for authors proposing a new scalar topological index.}\\[2pt]
+If you are proposing a new scalar topological index, report the four-panel diagnostic against an explicit classical baseline on at least one MoleculeNet (or comparable QSPR) dataset:
+\begin{itemize}[topsep=2pt,itemsep=1pt,leftmargin=*]
+\item \textbf{Panel 1 --- pairwise.} The maximum $|r|$ between your candidate and any baseline index, against $\tau_r$ ($0.95$ used here).
+\item \textbf{Panel 2 --- PCA.} The effective rank of the baseline at $95\%$ and $99\%$ explained variance ($\mathrm{PC}_{95}$, $\mathrm{PC}_{99}$).
+\item \textbf{Panel 3 --- VIF.} The variance inflation factor of the candidate regressed on the baseline.
+\item \textbf{Panel 4 --- partial correlation.} $|\mathrm{pcor}(z, y \mid X)|$ with the QSPR target, against $\tau_{\mathrm{pcor}}$ ($0.10$ used here).
+\end{itemize}
+If the candidate is parametric, also report a threshold-sensitivity table on at least the $3\times 3$ grid of $(\tau_r, \tau_{\mathrm{pcor}})$ values used here. Pass/fail decisions are a conservative reading of the four-panel report; on weak-baseline-signal datasets the partial-correlation panel should be interpreted descriptively (\S\ref{sub:limitations}).
+}}
+\bigskip
 
 % =====================================================================
 \section{Results}\label{sec:results}
@@ -640,7 +713,7 @@ point (FreeSolv at $(-1, -1, 1)$, $\max|r| = 0.943$ with $mM_2$).
 The maximum partial correlation with the target across the $300$
 grid points is $0.036$ (FreeSolv); the corresponding maxima on
 ESOL and Lipophilicity are $0.028$ and $0.009$ respectively, all
-below $0.10$. By the combined diagnostic of
+below $0.10$. By the combined reading of
 Table~\ref{tab:decision}, no Wuzi parameter triple in the grid
 passes the diagnostic for non-negligible residual linear signal
 under the tested $30$-index baseline.
@@ -706,7 +779,7 @@ on each of the three QSPR datasets (full table in
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Wuzi $100$-point grid: pass counts under threshold variation. Top block: pairwise screen only ($\max_b\lvert r(W, X_b)\rvert < \tau_r$). Bottom block: combined diagnostic (pairwise pass \emph{and} $\lvert\mathrm{pcor}(W, y \mid X)\rvert \ge \tau_{\mathrm{pcor}}$) across the full $3 \times 3$ threshold grid.}
+\caption{Wuzi $100$-point grid: pass counts under threshold variation. Top block: pairwise screen only ($\max_b\lvert r(W, X_b)\rvert < \tau_r$). Bottom block: combined reading (pairwise pass \emph{and} $\lvert\mathrm{pcor}(W, y \mid X)\rvert \ge \tau_{\mathrm{pcor}}$) across the full $3 \times 3$ threshold grid.}
 \label{tab:threshold_sensitivity}
 \begin{tabular}{lccc}
 \toprule
@@ -810,7 +883,7 @@ $15$--$17$ of the $20$ candidates on every dataset; the combined
 diagnostic that additionally requires
 $|\mathrm{pcor}|\ge 0.10$ admits only $0$--$4$. The pattern is
 consistent: the pairwise screen is uniformly over-permissive, and
-the combined diagnostic is sharper on FreeSolv ($1/20$ pass),
+the combined reading is sharper on FreeSolv ($1/20$ pass),
 BBBP ($2/20$), and Lipophilicity ($0/20$) than on ESOL ($4/20$).
 
 For BBBP (binary target) the partial-correlation diagnostic is
@@ -827,7 +900,7 @@ regression rows. A logistic-pseudo-$R^2$ alternative
 
 \begin{table}[h]
 \centering
-\caption{Combined screening verdict on the $20$ candidates against the $30$-index baseline on each of the four MoleculeNet benchmarks. $\mathrm{PASS}_{\mathrm{pair}}$ = max $|r| < 0.95$; $\mathrm{PASS}_{\mathrm{combined}}$ = max $|r| < 0.95$ AND $|\mathrm{pcor}|\ge 0.10$. Per-dataset combined passers are listed in the footnote.}
+\caption{Combined reading verdict on the $20$ candidates against the $30$-index baseline on each of the four MoleculeNet benchmarks. $\mathrm{PASS}_{\mathrm{pair}}$ = max $|r| < 0.95$; $\mathrm{PASS}_{\mathrm{combined}}$ = max $|r| < 0.95$ AND $|\mathrm{pcor}|\ge 0.10$. Per-dataset combined passers are listed in the footnote.}
 \label{tab:novel_combined}
 \begin{tabular}{lcccr}
 \toprule
@@ -843,7 +916,7 @@ BBBP$^\ddag$  & $2\,039$ & $17$ & $2$ & $0.225$\\
 \vspace{0.4em}
 \noindent\small{Combined passers per dataset:
 ESOL: $\mathrm{InfoH\_deg}\,(0.154)$, CutVerts $(0.118)$, FourCyc $(0.112)$, MeanEcc $(0.109)$.
-FreeSolv: Triangles $(0.107)$.
+FreeSolv: Triangles $(0.107)$ is the only candidate clearing both panels; the column maximum $\max|\mathrm{pcor}|=0.129$ is attained by a candidate that fails the pairwise screen ($\max|r|\ge 0.95$) and is therefore not a combined passer.
 Lipophilicity: none.
 BBBP: $\mathrm{InfoH\_deg}\,(0.225)$, $\mathrm{InfoH\_dist}\,(\approx 0.16)$.
 $^\ddag$ BBBP partial correlation computed via LPM (see text).}
@@ -851,7 +924,7 @@ $^\ddag$ BBBP partial correlation computed via LPM (see text).}
 
 The headline pattern: the pairwise $|r|<0.95$ screen alone is
 over-permissive on every dataset --- $75$--$85\%$ of candidates
-clear it --- but the combined diagnostic that additionally
+clear it --- but the combined reading that additionally
 requires $|\mathrm{pcor}|\ge 0.10$ leaves $0$--$4$ candidates as
 plausible carriers of independent linear signal under the
 $30$-index baseline. The strongest passer across the four
@@ -866,6 +939,79 @@ $30$-index linear baseline'', not as useful QSPR descriptors;
 the diagnostic is a redundancy filter, not a utility
 certification.
 
+\subsubsection{A positive control: the degree-entropy index $\mathrm{InfoH\_deg}$}\label{sec:infoh_positive}
+
+The combined reading is \emph{not} a universal rejection
+criterion. Of the twenty candidates, one --- the degree-entropy
+index $\mathrm{InfoH\_deg}$ --- clears it on more than one
+dataset, and treating that one in detail is worth doing because
+it doubles as a structural validation of the diagnostic-report
+design.
+
+\paragraph{Definition.} $\mathrm{InfoH\_deg}$ is the Shannon
+entropy of the vertex-degree distribution,
+$-\sum_d p_d \log p_d$, where $p_d$ is the empirical fraction of
+vertices of degree $d$ in the hydrogen-suppressed molecular
+graph. It is a graph-level information-theoretic invariant and
+appears in the chemical-graph-theory literature as a
+``first degree-based entropy'' of a
+graph~\cite{Gutman2013Degree, TodeschiniConsonniHandbook}.
+
+\paragraph{Why $\mathrm{InfoH\_deg}$ sits outside the BID ceiling.}
+A BID index is by Proposition~\ref{thm:bid} a linear functional of
+the ten edge-degree-pair counts
+$\{m_{ij}(G)\}_{1\le i\le j\le 4}$. The degree-entropy index, by
+contrast, is a non-linear functional of the vertex-degree
+distribution: its values cannot be written as a linear combination
+$\sum_{i\le j} c_{ij}\,m_{ij}(G)$ for any choice of constants
+$c_{ij}$, precisely because $p_d \log p_d$ is non-linear in $p_d$
+and the $m_{ij}$ counts are linear in the edge multiset.
+$\mathrm{InfoH\_deg}$ therefore lies outside the $10$-dimensional
+BID descriptor subspace on $\mathcal{G}_4$ identified by
+Proposition~\ref{thm:bid} --- it is exactly the kind of non-BID
+candidate the combined reading is designed to surface when it
+carries residual linear signal against the BID-saturated baseline.
+
+\paragraph{The diagnostic-report reading for $\mathrm{InfoH\_deg}$.}
+The four panels for this candidate read as follows.
+\begin{itemize}
+\item \textbf{Pairwise panel.} $\max_b|r| < 0.95$ on every dataset:
+$\mathrm{InfoH\_deg}$ is one of the $15$--$17$ of $20$ candidates
+clearing the pairwise screen per dataset
+(Table~\ref{tab:novel_combined}).
+\item \textbf{PCA and VIF panels.} Consistent with the structural
+distinctness from the BID subspace above, the candidate does not
+collapse into the $30$-index baseline.
+\item \textbf{Partial-correlation panel.} $|\mathrm{pcor}|=0.225$
+on BBBP and $|\mathrm{pcor}|=0.154$ on ESOL clear the conservative
+$\tau_{\mathrm{pcor}}=0.10$ threshold by comfortable margins, and
+these are the two largest residual partial correlations across all
+twenty candidates and four datasets. On FreeSolv and Lipophilicity
+the candidate falls below the threshold; on Lipophilicity the
+learnability-vs-redundancy confounding documented in
+\S\ref{sub:limitations} applies (full-baseline LASSO
+$R^2\approx 0.12$), so a small partial-correlation magnitude is
+mechanically expected there.
+\end{itemize}
+
+\paragraph{What the green light does and does not say.} The four
+panels together say that $\mathrm{InfoH\_deg}$ carries
+non-negligible residual linear association with the BBBP and ESOL
+targets after the $30$-index baseline has been controlled for,
+and that it does so for a structural reason --- it lies outside
+the BID descriptor subspace. It is the only candidate among the
+twenty to clear the combined reading on more than one dataset. We
+do not claim $\mathrm{InfoH\_deg}$ is a competitive QSPR descriptor
+in isolation: $|\mathrm{pcor}|=0.225$ explains only
+$\mathrm{pcor}^2 \approx 5\%$ of residual target variance, so an
+investigator wanting to use $\mathrm{InfoH\_deg}$ as a QSPR
+descriptor would still need to validate it under a downstream
+model. What the diagnostic report \emph{does} certify is that the
+candidate is non-redundant with the tested baseline and that its
+non-redundancy has a clean structural explanation. This is the
+constructive verdict the report is designed to deliver: the
+diagnostic is balanced, not adversarial.
+
 \subsubsection{Structural interpretation of the four ESOL passers}\label{sec:passer_analysis}
 
 We focus the structural reading on ESOL because the four ESOL
@@ -876,7 +1022,7 @@ qualitative argument transfers to the FreeSolv (Triangles) and BBBP
 ($\mathrm{InfoH\_deg}$, $\mathrm{InfoH\_dist}$) passers; the
 specific structural reading below is ESOL-only.
 
-The four candidates that clear the combined diagnostic on ESOL span
+The four candidates that clear the combined reading on ESOL span
 three distinct design philosophies, and each computes a graph
 property that is \emph{not} expressible as a sum of per-edge
 contributions:
@@ -908,7 +1054,7 @@ retains $|\mathrm{pcor}| = 0.109$ once the full $30$-index linear
 span is regressed out. Pairwise correlation against a single
 baseline does not preclude residual signal orthogonal to the
 $30$-dimensional baseline subspace, and the partial-correlation
-diagnostic is the component of the combined diagnostic that catches
+diagnostic is the component of the combined reading that catches
 this. By contrast, the $11$ candidates that clear the pairwise
 screen with $|\mathrm{pcor}| < 0.10$ are well-approximated by a
 linear combination of the $30$ baseline indices: high pairwise
@@ -934,7 +1080,7 @@ requiring downstream validation on tasks beyond ESOL.
 \subsection{Downstream ML benchmark: does screening preserve predictive performance?}\label{sec:ml_benchmark}
 
 The case studies of Sections~\ref{sec:wuzi_case} and~\ref{sec:novel_case}
-demonstrate that the combined diagnostic is more selective than the
+demonstrate that the combined reading is more selective than the
 pairwise screen alone. They do not yet demonstrate that the criterion
 is useful for building predictive QSPR models. This section closes
 that gap: we train a RandomForest (300 trees, fixed seed,
@@ -943,6 +1089,23 @@ datasets under four feature configurations across $5$-fold
 cross-validation, and report whether the screened feature set
 matches the full-baseline model's predictive performance within
 CV noise.
+
+\textbf{Inferential scope of this section.} The threshold-sensitivity
+grid (Table~\ref{tab:threshold_sensitivity}) and the 20-candidate
+pass counts (Table~\ref{tab:novel_combined}) are descriptive
+screening summaries, not inferential tests, and we report no
+$p$-values for them. Only the matched-model-class benchmark of
+this section (Tables~\ref{tab:matched_class}
+and~\ref{tab:matched_class_ci}) makes inferential claims, and those
+use Benjamini--Hochberg multiple-comparison control across the
+$7$-test family defined there (the eight non-\texttt{full}
+comparisons minus the degenerate Lipophilicity \texttt{combined}
+row, which has no finite $p$-value), together with paired-fold
+bootstrap confidence intervals and equivalence tests against a
+pre-registered $\pm 5\%$ margin. Under this correction none of the
+nominally-significant entries survives at $q=0.05$, so the
+parsimony conclusion rests on the equivalence (TOST) results rather
+than on rejected null hypotheses.
 
 \textbf{Datasets.} The three QSPR regression benchmarks of
 Section~\ref{sec:datasets} are augmented with a fourth dataset to
@@ -971,6 +1134,14 @@ correlation cluster).
 $|\mathrm{pcor}(z, y \mid X_{\mathrm{others}})| \ge 0.10$ on the
 training fold's pairwise-pruned set.
 \end{itemize}
+
+The \texttt{combined\_pruned} configuration is included here as
+the most aggressive reading of the diagnostic report; on
+weak-baseline-signal datasets it may degenerate
+(\S\ref{sub:limitations}), so its performance is interpreted
+together with the baseline LASSO $R^2$ and the
+\texttt{pairwise\_pruned} configuration rather than as a
+standalone feature-selection rule.
 
 \textbf{Results.} Table~\ref{tab:ml_benchmark} and
 Figure~\ref{fig:ml_benchmark} summarize the per-dataset, per-configuration
@@ -1004,7 +1175,7 @@ mean feature count per configuration, error bar = min--max range
 across folds. The pairwise screen matches the full-baseline
 RandomForest on every dataset, with mean differences below CV
 noise, while using roughly $4\times$ (range $3.75$--$5\times$)
-fewer features. On Lipophilicity the strict combined screen retains
+fewer features. On Lipophilicity the strict combined reading retains
 zero features in $4$ of $5$ folds.}
 \label{fig:ml_benchmark}
 \end{figure}
@@ -1026,7 +1197,7 @@ target-relevant directions for these specific QSPR problems.
 The stricter \texttt{combined\_pruned} configuration is more
 aggressive and on the regression datasets shows a small performance
 penalty (mean RMSE up to $0.04$ higher than \texttt{full}, still
-overlapping std bands). On Lipophilicity the combined screen
+overlapping std bands). On Lipophilicity the combined reading
 retains zero features in $4$ of the $5$ folds, an honest failure
 mode that reflects the dataset's weak topology-to-$\log D$
 partial-correlation structure (no pairwise-pruned index has
@@ -1034,17 +1205,20 @@ $|\mathrm{pcor}| \ge 0.10$ with $\log D$ on most folds). The
 threshold $|\mathrm{pcor}| = 0.10$ should be relaxed (or replaced
 with a target-correlation rank cut) on datasets where the underlying
 topology-target relationship is weak. We do not recommend the
-combined screen as a hard filter; it is best read as a diagnostic
-that flags ``low pairwise correlation but low partial correlation
+combined reading as a hard filter; it is best treated as a
+diagnostic flag for ``low pairwise correlation but low partial correlation
 too'' --- which is exactly the failure mode the Wuzi family at
 $(-1,-1,1)$ exhibits.
 
 \subsubsection{Comparison to LASSO, ElasticNet, mRMR, Boruta, and L1-logistic feature selection}\label{sub:lasso_comparator}
 
-To position the pairwise / combined diagnostic against a broader
-set of feature-selection comparators, we evaluate five external
-methods alongside the pipeline configurations of
-Table~\ref{tab:ml_benchmark}:
+To position the pairwise / combined reading against a broader
+set of feature-selection comparators --- for a recent review of
+machine-learning-based chemoinformatics that surveys these and
+related descriptor-selection methods in QSAR/QSPR contexts, see
+Niazi and Mariam~\cite{NiaziMariam2023MLChemoReview} --- we
+evaluate five external methods alongside the pipeline
+configurations of Table~\ref{tab:ml_benchmark}:
 \begin{itemize}
 \item LASSO with $5$-fold CV-tuned $\alpha$ (three regression datasets);
 \item ElasticNet with CV-tuned $\alpha$ and $\ell_1$-ratio
@@ -1068,8 +1242,10 @@ benchmark.
 \begin{table}[h]
 \centering
 \small
-\caption{Screen-pipeline configurations (RandomForest, rows from Table~\ref{tab:ml_benchmark}) vs.\ five external feature-selection comparators (LASSO, ElasticNet, mRMR, Boruta, $\ell_1$-Logistic) on the four MoleculeNet benchmarks. Regression metric is RMSE (lower is better); classification metric for BBBP is ROC-AUC (higher is better). Reported as mean across 5 folds with the same seed; standard deviations in \texttt{results/paper2\_feature\_selection\_comparison.csv}.}
+\caption{\emph{Fixed-model downstream check, split by downstream model class.} The two sub-blocks below use different downstream model classes; comparisons within a block are meaningful, comparisons across blocks are not. Block (a) shows the screen-pipeline configurations with a RandomForest downstream model (rows imported from Table~\ref{tab:ml_benchmark}). Block (b) shows the external feature-selection comparators with their native linear / sparse-linear downstream models. The within-model-class comparison that isolates the screen's effect on a fixed model class is Table~\ref{tab:matched_class}. Reported as mean across 5 folds with the same seed.}
 \label{tab:fs_comparison}
+
+\noindent\textbf{(a) RandomForest downstream block.}
 \begin{tabular}{llrr}
 \toprule
 Dataset & Configuration & Metric & Mean $n$ features\\
@@ -1077,42 +1253,60 @@ Dataset & Configuration & Metric & Mean $n$ features\\
 ESOL & \texttt{full} (RF)                 & RMSE $1.437$ & $30.0$\\
      & \texttt{pairwise\_pruned} (RF)     & RMSE $1.435$ & $\phantom{0}7.4$\\
      & \texttt{combined\_pruned} (RF)     & RMSE $1.475$ & $\phantom{0}4.4$\\
-     & LASSO (linear, CV)                 & RMSE $1.545$ & $14.6$\\
+\midrule
+FreeSolv & \texttt{full} (RF)             & RMSE $3.537$ & $30.0$\\
+         & \texttt{pairwise\_pruned} (RF) & RMSE $3.540$ & $\phantom{0}8.0$\\
+         & \texttt{combined\_pruned} (RF) & RMSE $3.561$ & $\phantom{0}3.2$\\
+\midrule
+Lipophilicity & \texttt{full} (RF)        & RMSE $1.030$ & $30.0$\\
+              & \texttt{pairwise\_pruned} (RF) & RMSE $1.028$ & $\phantom{0}8.0$\\
+              & \texttt{combined\_pruned} (RF) & RMSE $1.287^{\,\dagger}$ & $\phantom{0}0.2$\\
+\midrule
+BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
+     & \texttt{pairwise\_pruned} (RF)     & AUC $0.860$ & $\phantom{0}6.0$\\
+     & \texttt{combined\_pruned} (RF)     & AUC $0.840$ & $\phantom{0}4.0$\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\noindent\rule{\linewidth}{0.6pt}\\[-1pt]
+\noindent\textbf{Warning.}\enspace Block (a) above and Block (b) below use \emph{different downstream model classes}. Absolute RMSE / AUC values across the two blocks are not directly comparable; differences across blocks confound feature selection with model-class capacity. The isolated effect of the screen on a fixed model class is reported in Table~\ref{tab:matched_class}.\\[-1pt]
+\noindent\rule{\linewidth}{0.6pt}
+\vspace{0.4em}
+
+\noindent\textbf{(b) Linear / sparse-linear downstream block.}
+\begin{tabular}{llrr}
+\toprule
+Dataset & Configuration & Metric & Mean $n$ features\\
+\midrule
+ESOL & LASSO (linear, CV)                 & RMSE $1.545$ & $14.6$\\
      & ElasticNet (linear, CV)            & RMSE $1.546$ & $16.2$\\
      & mRMR $k{=}7$ (linear)              & RMSE $1.654$ & $\phantom{0}7.0$\\
      & Boruta + RF (linear scoring)       & RMSE $1.620$ & $10.0$\\
      & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $1.580$ & $\phantom{0}7.2$\\
 \midrule
-FreeSolv & \texttt{full} (RF)             & RMSE $3.537$ & $30.0$\\
-         & \texttt{pairwise\_pruned} (RF) & RMSE $3.540$ & $\phantom{0}8.0$\\
-         & \texttt{combined\_pruned} (RF) & RMSE $3.561$ & $\phantom{0}3.2$\\
-         & LASSO (linear, CV)             & RMSE $3.527$ & $13.4$\\
+FreeSolv & LASSO (linear, CV)             & RMSE $3.527$ & $13.4$\\
          & ElasticNet (linear, CV)        & RMSE $3.515$ & $18.6$\\
          & mRMR $k{=}8$ (linear)          & RMSE $3.618$ & $\phantom{0}8.0$\\
          & Boruta + RF (linear scoring)   & RMSE $3.588$ & $\phantom{0}2.0$\\
          & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $3.465$ & $\phantom{0}6.4$\\
 \midrule
-Lipophilicity & \texttt{full} (RF)        & RMSE $1.030$ & $30.0$\\
-              & \texttt{pairwise\_pruned} (RF) & RMSE $1.028$ & $\phantom{0}8.0$\\
-              & \texttt{combined\_pruned} (RF) & RMSE $1.287^{\,\dagger}$ & $\phantom{0}0.2$\\
-              & LASSO (linear, CV)        & RMSE $1.130$ & $15.6$\\
+Lipophilicity & LASSO (linear, CV)        & RMSE $1.130$ & $15.6$\\
               & ElasticNet (linear, CV)   & RMSE $1.130$ & $17.8$\\
               & mRMR $k{=}8$ (linear)     & RMSE $1.142$ & $\phantom{0}8.0$\\
               & Boruta + RF (linear scoring) & RMSE $1.144$ & $\phantom{0}5.0$\\
               & \emph{pairwise} $\to$ \emph{LASSO} (matched$^{\ddagger}$) & RMSE $1.137$ & $\phantom{0}7.0$\\
 \midrule
-BBBP & \texttt{full} (RF)                 & AUC $0.846$ & $30.0$\\
-     & \texttt{pairwise\_pruned} (RF)     & AUC $0.860$ & $\phantom{0}6.0$\\
-     & \texttt{combined\_pruned} (RF)     & AUC $0.840$ & $\phantom{0}4.0$\\
-     & $\ell_1$-Logistic (CV)             & AUC $0.790$ & $13.6$\\
+BBBP & $\ell_1$-Logistic (CV)             & AUC $0.790$ & $13.6$\\
      & mRMR $k{=}6$ (logistic)            & AUC $0.747$ & $\phantom{0}6.0$\\
      & Boruta + RF (logistic scoring)     & AUC $0.791$ & $23.0$\\
 \bottomrule
 \end{tabular}
 
 \vspace{0.5em}
-\noindent\small{$^\dagger$ Strict combined screen degenerates: retains zero features in $4/5$ folds; the RMSE shown is from the single fold that retained one feature. See \S\ref{sub:limitations}.}
+\noindent\small{$^\dagger$ Strict combined reading degenerates: retains zero features in $4/5$ folds; the RMSE shown is from the single fold that retained one feature. See \S\ref{sub:limitations}.}
 \noindent\small{$^\ddagger$ Pipeline-then-LASSO: in-fold pairwise screen $\to$ LASSO on the surviving features, same model class throughout. See \S\ref{sub:pipeline_then_lasso} and Table~\ref{tab:matched_class}.}
+\noindent\small{\emph{Note on the two full-baseline linear-model rows.} The \texttt{LASSO (linear, CV)} / $\ell_1$-Logistic rows of block (b) and the \texttt{full} rows of Table~\ref{tab:matched_class} both fit a CV-tuned linear model on the full $30$-index baseline, but are produced by two different scripts with independently CV-tuned regularisation paths; they therefore differ slightly (e.g.\ ESOL RMSE $1.545$ vs.\ $1.536$; mean active features $14.6$ vs.\ $17.6$). Table~\ref{tab:matched_class} is the authoritative same-model-class comparison; block (b) here is for side-by-side orientation against the external comparators only.}
 \end{table}
 
 The headline reading is qualified by the cross-model-class
@@ -1179,7 +1373,7 @@ the authoritative source for the pipeline-then-LASSO comparison.
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Pipeline-then-LASSO matched-model-class benchmark with paired $t$-tests. Same model class (LASSO for regression, $\ell_1$-Logistic for BBBP) and same 5-fold splits across all three configurations within each dataset, so the comparison isolates the effect of the upstream screening step. ``pre-LASSO feats'' is the mean number of features handed to LASSO after screening; ``final L1 feats'' is the mean number of features with non-zero LASSO coefficient. ``$t$ vs.\ full'' and ``$p$ vs.\ full'' are the paired $t$-statistic and two-sided $p$-value across the five folds (df $=4$) comparing the primary metric (RMSE for regression, ROC-AUC for BBBP) against the \texttt{full} (no-screen) row of the same dataset. Full per-fold numbers in \texttt{results/paper2\_pipeline\_then\_lasso.csv}.}
+\caption{Pipeline-then-LASSO matched-model-class benchmark. Same model class (LASSO for regression, $\ell_1$-Logistic for BBBP) and the same 5-fold splits across all configurations within each dataset, so the comparison isolates the effect of the upstream screening step. ``pre-LASSO feats'' is the mean number of features handed to LASSO after screening; ``final L1 feats'' is the mean number of features with non-zero LASSO coefficient. ``$t$ vs.\ full'' and ``$p$ vs.\ full'' are the paired $t$-statistic and raw two-sided $p$-value across the five folds (df $=4$) against the \texttt{full} (no-screen) row of the same dataset.}
 \label{tab:matched_class}
 \begin{tabular}{llcrrrr}
 \toprule
@@ -1203,8 +1397,35 @@ BBBP          & \texttt{full} ($\ell_1$-Logistic)           & AUC $0.794\pm 0.01
 \bottomrule
 \end{tabular}
 
-\vspace{0.5em}
-\noindent\small{$^{*}$ significant at $\alpha=0.05$ (two-sided paired $t$-test, df $=4$). $^\dagger$ Combined screen retains zero features in $4/5$ Lipophilicity folds; the value shown is from the single fold that retained one feature. The same failure mode appears in Table~\ref{tab:ml_benchmark} and is treated as a formal limitation in \S\ref{sub:limitations}.}
+\vspace{0.4em}
+\noindent\footnotesize{\textbf{Note.} $^{*}$ \emph{nominally} significant at $\alpha=0.05$ (two-sided paired $t$-test, df $=4$; does not survive multiple-comparison correction --- see below). $^\dagger$ Combined reading retains zero features in $4/5$ Lipophilicity folds; the value shown is from the single fold that retained one feature. The matched-class tests with a finite $p$-value form a single family of size $m=7$ (the eight non-\texttt{full} comparisons minus the degenerate Lipophilicity \texttt{combined} row, which has no $p$-value). Applying the Benjamini--Hochberg step-up procedure at $q=0.05$ with ordered thresholds $iq/m$, \emph{none} of the three nominally-significant entries ($p\in\{0.020,0.022,0.026\}$) is rejected: the smallest $p$ already exceeds $0.05/7=0.0071$, and at rank $3$, $0.026 > 3\cdot 0.05/7 = 0.0214$ (Bonferroni at $0.05/7$ likewise rejects none). We therefore report these three RMSE increases as nominal/exploratory only, consistent with the low power of the df $=4$ design. The four non-significant entries ($p \ge 0.163$) pass an equivalence test (TOST) against a $\pm 5\%$ bound on the no-screen primary metric; the parsimony claim rests on these equivalence results, not on rejected nulls. The same Lipophilicity failure mode appears in Table~\ref{tab:ml_benchmark} and is treated as a formal limitation in \S\ref{sub:limitations}.}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Paired-difference uncertainty for the matched-model-class benchmark of Table~\ref{tab:matched_class}.}
+\label{tab:matched_class_ci}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrcccc}
+\toprule
+Dataset & Configuration vs \texttt{full} & Mean $\Delta$ & $t$-CI ($90\%$) & Bootstrap CI ($95\%$) & $\pm 5\%$ bound & TOST\\
+\midrule
+ESOL          & \texttt{pairwise} $\to$ LASSO              & $+0.0437$ & $[+0.0190, +0.0684]$ & $[+0.0208, +0.0590]$ & $\pm 0.0768$ & yes\\
+ESOL          & \texttt{combined} $\to$ LASSO              & $+0.0524$ & $[+0.0216, +0.0833]$ & $[+0.0237, +0.0723]$ & $\pm 0.0768$ & no\\
+FreeSolv      & \texttt{pairwise} $\to$ LASSO              & $-0.0034$ & $[-0.0242, +0.0175]$ & $[-0.0196, +0.0150]$ & $\pm 0.1734$ & yes\\
+FreeSolv      & \texttt{combined} $\to$ LASSO              & $-0.0071$ & $[-0.0403, +0.0261]$ & $[-0.0353, +0.0183]$ & $\pm 0.1734$ & yes\\
+Lipophilicity & \texttt{pairwise} $\to$ LASSO              & $+0.0090$ & $[+0.0035, +0.0146]$ & $[+0.0046, +0.0135]$ & $\pm 0.0564$ & yes\\
+Lipophilicity & \texttt{combined} $\to$ LASSO              & n/a       & n/a                  & n/a                  & n/a          & degenerate$^{\,\dagger}$\\
+BBBP          & \texttt{pairwise} $\to$ $\ell_1$-Logistic  & $-0.0067$ & $[-0.0150, +0.0017]$ & $[-0.0141, -0.0007]$ & $\pm 0.0397$ & yes\\
+BBBP          & \texttt{combined} $\to$ $\ell_1$-Logistic  & $-0.0078$ & $[-0.0185, +0.0029]$ & $[-0.0164, +0.0003]$ & $\pm 0.0397$ & yes\\
+\bottomrule
+\end{tabular}%
+}
+
+\vspace{0.4em}
+\noindent\footnotesize{\textbf{Note.} $\Delta$ is the paired (screen $-$ \texttt{full}) primary-metric difference. For RMSE (regression rows) positive $\Delta$ indicates worse performance; for BBBP AUC, negative $\Delta$ indicates worse performance. The TOST verdict uses the $t$-based $90\%$ paired-difference CI against a symmetric $\pm 5\%$ bound on the no-screen primary metric; this is the primary equivalence claim. Bootstrap intervals use $B = 10\,000$ paired-fold resamples (seed fixed) and are reported as a sensitivity summary --- with only five folds they should not be read as independent confirmation of the $t$-based TOST verdict. $^{\dagger}$ Lipophilicity \texttt{combined} retains zero features in $4/5$ folds (see Table~\ref{tab:matched_class} and \S\ref{sub:limitations}); only one fold is finite, so no paired-difference CI is computable. Per-fold paired differences and the bootstrap resampler are in \texttt{results/paper2\_pipeline\_then\_lasso\_perfold.csv} and \texttt{results/paper2\_table11\_tost\_bootstrap.csv}.}
 \end{table}
 
 \textbf{Headline reading (matched-model-class), with paired
@@ -1213,13 +1434,27 @@ The pipeline-then-LASSO pattern is a \emph{parsimony-versus-performance
 trade-off}, not a uniformly costless reduction:
 
 \begin{itemize}
-\item On FreeSolv and BBBP, \texttt{pairwise} $\to$ LASSO / $\ell_1$-Logistic
-matches \texttt{full} within CV noise: the paired $t$-test gives
-$p = 0.748$ (FreeSolv) and $p = 0.163$ (BBBP), neither significant
-at $\alpha = 0.05$. At these two datasets, the parsimony claim is
-clean: $\sim 2\times$ fewer LASSO-active features (FreeSolv:
-$6.4$ vs.\ $12.8$; BBBP: $6.0$ vs.\ $11.6$) at no detectable
-performance cost.
+\item On FreeSolv and BBBP, \texttt{pairwise} $\to$ LASSO /
+$\ell_1$-Logistic matches \texttt{full} within CV noise: the paired
+$t$-test against the no-screen LASSO baseline gives $p = 0.748$
+(FreeSolv) and $p = 0.163$ (BBBP), and a two one-sided equivalence
+test (TOST) against a symmetric equivalence bound of $\pm 5\%$ of
+the no-screen RMSE / AUC rejects ``meaningful difference'' on both.
+The $\pm 5\%$ bound is chosen as a moderate fraction of the
+no-screen baseline metric that is comparable to the within-dataset
+cross-validation noise on these benchmarks --- the relative
+cross-validation standard deviation $\sigma/\mu$ of the no-screen
+LASSO baseline ranges from ${\sim}1.4\%$ (Lipophilicity) to
+${\sim}11.5\%$ (FreeSolv) with median ${\sim}3.7\%$ across the four
+datasets --- so that the equivalence claim is ``differences
+operationally indistinguishable from CV noise'' rather than
+``failure to reject a point null at $\alpha = 0.05$.'' At these two
+datasets, the parsimony claim is therefore clean within the stated
+equivalence margin: $\sim 2\times$ fewer LASSO-active features
+(FreeSolv: $6.4$ vs.\ $12.8$; BBBP: $6.0$ vs.\ $11.6$). We caution
+explicitly that the paired $t$-test with $df = 4$ has low power and
+the absence of significance alone is not evidence of equivalence;
+the TOST framing above is the load-bearing statement.
 
 \item On ESOL and Lipophilicity, the screen carries a
 \emph{small but statistically significant} RMSE increase:
@@ -1227,22 +1462,58 @@ $+0.044$ RMSE on ESOL ($p = 0.020$) and $+0.009$ RMSE on
 Lipophilicity ($p = 0.026$). In absolute terms these are
 $\sim 2.8\%$ and $\sim 0.8\%$ degradations of the no-screen
 LASSO baseline, respectively, in exchange for cutting the
-LASSO-active feature count by approximately $58\%$ and $57\%$
+LASSO-active feature count by approximately $59\%$ and $57\%$
 (ESOL: $7.2$ vs.\ $17.6$; Lipo: $7.0$ vs.\ $16.2$).
 \end{itemize}
 
-The combined screen further halves the feature count on ESOL,
+The combined reading further halves the feature count on ESOL,
 FreeSolv, and BBBP with a similar pattern (FreeSolv non-significant,
 ESOL significantly higher RMSE), and degenerates on Lipophilicity
 (same failure mode as the RF benchmark; see \S\ref{sub:limitations}).
-The matched-model-class evidence is therefore: on $2$ of $4$ datasets
-the parsimony claim is clean within CV noise; on the other $2$ the
-trade-off is small ($<3\%$ degradation) and statistically detectable
-at $5$-fold CV power. The cross-model-class qualification on
+Tallying the TOST verdicts of
+Table~\ref{tab:matched_class_ci}, six of the seven non-degenerate
+matched-class comparisons satisfy the $t$-based TOST equivalence
+criterion at the $\pm 5\%$ bound. The single exception is ESOL
+\texttt{combined} $\to$ LASSO, whose $t$-based $90\%$ CI upper
+endpoint $(+0.0833)$ slightly exceeds the equivalence bound
+$(\pm 0.0768)$; the bootstrap CI for that comparison
+$([+0.0237, +0.0723])$ does fit within the bound, but we treat the
+$t$-based result as the primary inference. Lipophilicity
+\texttt{combined} is degenerate and excluded from equivalence
+counting. Pairwise screening alone satisfies the $t$-based TOST
+criterion on all four datasets, which strengthens the practical
+recommendation that the pairwise panel is the safer reduction in
+the parsimony--performance trade-off, while the combined reading is
+best treated as a stricter diagnostic rather than as a standalone
+feature-selection rule. The cross-model-class qualification on
 Table~\ref{tab:fs_comparison} is no longer load-bearing: the
 screen-pipeline's parsimony behaviour is recoverable within model
 class, with an honest characterisation of the small per-dataset
 cost.
+
+\paragraph{What does the pre-screen add over plain LASSO?} A
+reasonable referee question, given Table~\ref{tab:matched_class},
+is whether the upstream pre-screen contributes anything over simply
+running LASSO on the full $30$-index baseline (which already
+performs its own feature selection). The honest answer is that the
+two operations \emph{address different questions}. LASSO chooses a
+sparse predictive model for a fixed target; it does not separate
+``redundant with the baseline'' from ``orthogonal but uninformative
+on this target.'' The pre-screen separates those two by reporting
+the four diagnostic panels (max pairwise correlation, PCA effective
+rank, VIF, partial correlation with target) for a candidate
+\emph{before} a model is fit. Two empirical consequences follow.
+First, the LASSO-active feature counts after pre-screening
+($6$--$8$) are comparable to LASSO's own active counts on the full
+baseline ($12$--$18$), so the pre-screen is not a strict win on
+parsimony; it is roughly a $2\times$ reduction at $\le 3\%$ RMSE
+cost on two of four datasets and no detectable cost on the other
+two. Second, and more importantly for the methodological claim, the
+pre-screen flags an index as \emph{redundant} before any downstream
+model exists, while LASSO can only report which features its own
+optimisation chose. The pre-screen is therefore a tool for
+\emph{evaluating proposed new indices in publications}, not a
+replacement for LASSO when the goal is QSPR prediction.
 
 \FloatBarrier
 
@@ -1256,17 +1527,17 @@ shows that the pairwise diagnostic alone admits a parameter setting
 (the Wuzi FreeSolv point at $(-1, -1, 1)$) that clears
 $|r| < 0.95$ yet has multi-dimensional partial correlation
 identically zero against the baseline on every dataset --- the
-failure mode the combined diagnostic of Table~\ref{tab:decision} is
+failure mode the combined reading of Table~\ref{tab:decision} is
 designed to catch. Section~\ref{sec:ml_benchmark} shows that the
-combined screen is best read as a diagnostic rather than as a hard
-filter: it flags the Wuzi failure mode but degenerates on
+combined reading is best treated as a diagnostic rather than as a
+hard filter: it flags the Wuzi failure mode but degenerates on
 Lipophilicity, where the topology-to-$\log D$ partial-correlation
 structure is too weak for any pairwise-pruned index to clear
 $|\mathrm{pcor}| \ge 0.10$. The threshold should therefore be tied
 to the QSPR utility loss the analyst is willing to tolerate, not
 treated as a fixed cutoff.
 
-Theorem~\ref{thm:bid} (Edge-Degree-Pair Basis) gives the structural
+Proposition~\ref{thm:bid} (Edge-Degree-Pair Basis) gives the structural
 reason for the empirical redundancy ceiling observed across the
 three datasets: the dimension-$10$ cap is intrinsic to the BID
 construction on $\mathcal{G}_4$ rather than an artefact of any
@@ -1294,13 +1565,46 @@ correlation, rank-based equivalents (Spearman), or
 mutual-information-style estimators would close the non-linearity
 gap at the cost of looser interpretability.
 
+\item \textbf{Learnability-vs.-redundancy confounding.}
+A combined-screen failure on a low-baseline-$R^2$ dataset is not
+identifiable in isolation: it may reflect either genuine candidate
+redundancy with the existing baseline or insufficient
+\emph{baseline-target} linear signal for any small partial
+correlation to exceed the threshold. The two cannot be distinguished
+from the screen output alone. We therefore recommend reading
+combined-screen results jointly with the full-baseline LASSO
+$R^2$: when the latter is small (we observe a clean threshold near
+$R^2 \approx 0.2$, with Lipophilicity at $0.118$ degenerating to
+zero combined-passers and ESOL at $0.457$ admitting four), the
+pairwise panel alone is the appropriate redundancy view and the
+partial-correlation panel should be read descriptively rather than
+as a pass/fail criterion. This is a real scope limit, not merely a
+cosmetic threshold issue. Notably, Lipophilicity's large sample
+size ($n = 4\,200$, the largest of the four benchmarks here) does
+not rescue this regime: the bottleneck is the small linear
+topology-to-target association rather than sampling noise.
+log$D_{7.4}$ is dominated by non-topological factors --- ionization
+state at physiological pH, conformational flexibility, and
+partitioning thermodynamics --- that scalar invariants of the
+hydrogen-suppressed connectivity cannot capture, so the screen's
+verdict on Lipophilicity is a property of the descriptor class and
+the target, not of the dataset size or the threshold. Stated
+honestly as a scope boundary: the partial-correlation panel is
+informative only in the regime where scalar topological descriptors
+already carry some linear target signal; on targets where they
+do not, the panel degrades gracefully to its target-agnostic
+panels (pairwise correlation, PCA, VIF), but does not itself
+supply the missing signal. This is the honest scope of any linear
+residual diagnostic and we treat it as a stated limit of the
+report rather than a fixable deficiency.
+
 \item \textbf{Threshold convention.} $\tau_r = 0.95$ for the
 pairwise screen and $\tau_{\mathrm{pcor}} = 0.10$ for the
 partial-correlation condition are conventional but arbitrary
 cutoffs and should be tuned to the QSPR-utility loss the analyst
 is willing to tolerate. The qualitative conclusions of
 \S\ref{sub:threshold_sensitivity} (no Wuzi grid point passes the
-combined diagnostic on any dataset, at any of the nine tested
+combined reading on any dataset, at any of the nine tested
 $(\tau_r, \tau_{\mathrm{pcor}})$ combinations) are stable; the
 \emph{exact} pass counts are not.
 
@@ -1316,8 +1620,8 @@ Triangles on FreeSolv) should still be interpreted as
 $30$-index linear baseline'', not as useful QSPR descriptors in
 absolute terms.
 
-\item \textbf{Combined diagnostic should not be used as a hard
-filter.} On Lipophilicity the strict combined screen
+\item \textbf{The combined reading should not be used as a
+hard filter.} On Lipophilicity the strict combined reading
 ($\tau_{\mathrm{pcor}} \ge 0.10$) retains zero features in $4/5$
 ML-benchmark folds; the pairwise screen alone reduces feature count
 by ${\sim}4\times$ while preserving predictive performance within
@@ -1342,8 +1646,8 @@ column of Table~\ref{tab:ml_benchmark} both illustrate this
 failure mode honestly.
 
 \item \textbf{RandomForest is one model class; the
-linear-comparator benchmark crosses model classes, but a matched-
-class same-model benchmark is also reported.}
+linear-comparator benchmark crosses model classes, but a
+matched-class same-model benchmark is also reported.}
 Section~\ref{sub:lasso_comparator} compares the screen-pipeline
 configurations against LASSO, ElasticNet, mRMR, Boruta, and
 $\ell_1$-Logistic on all four datasets. The screen-pipeline rows
@@ -1360,12 +1664,12 @@ comparator (e.g.\ XGBoost-mRMR vs.\ pipeline-then-XGBoost) is
 left as future work.
 
 \item \textbf{BID dimension bound covers $\Delta \le 4$ only.} The
-Edge-Degree-Pair Basis bound (Theorem~\ref{thm:bid}) is sharp on
+Edge-Degree-Pair Basis bound (Proposition~\ref{thm:bid}) is sharp on
 $\mathcal{G}_4$, which covers C / N / O / halogen and most S
 chemistry; organometallics, hypervalent species, and inorganic
 chemistry fall outside the dimensional cap and require a separate
 analysis. Likewise, non-BID parametric families (distance-based,
-spectral, mixed) are not bounded by Theorem~\ref{thm:bid} and a
+spectral, mixed) are not bounded by Proposition~\ref{thm:bid} and a
 structural dimension bound analogous to it for these families is
 open.
 
@@ -1383,7 +1687,7 @@ formal study of any one of them would be a follow-up project.
 
 \begin{enumerate}
 \item \textbf{Extension beyond the BID family.} A structural
-dimension bound analogous to Theorem~\ref{thm:bid} for
+dimension bound analogous to Proposition~\ref{thm:bid} for
 distance-based, spectral, or mixed-family parametric topological
 indices is open.
 \item \textbf{Threshold sensitivity.} A formal change-point
@@ -1420,27 +1724,27 @@ or nonlinear redundancy diagnostics.
 % =====================================================================
 
 We have introduced an open-source orthogonality-screening pipeline
-for scalar topological indices, applied it across three
+for scalar topological indices and applied it across three
 MoleculeNet QSPR regression benchmarks and one classification
-benchmark, and validated that the pairwise screen preserves
-RandomForest predictive performance within CV noise at roughly
-$4\times$ fewer features; in a matched-model-class
-pipeline-then-LASSO benchmark (Table~\ref{tab:matched_class}),
-parsimony at ${\sim}\!2\times$ fewer LASSO-active features comes at
-no statistically detectable cost on $2$ of the $4$ datasets and at
-$<3\%$ RMSE cost on the other $2$. The Edge-Degree-Pair Basis (Theorem~\ref{thm:bid})
-gives the structural reason that the empirical redundancy
-ceiling observed across the three datasets is intrinsic to the
-bond-incident-degree construction on $\mathcal{G}_4$ rather than
-an artefact of any particular dataset. The combined diagnostic of
-low maximum pairwise correlation against a classical baseline
-\emph{and} non-negligible partial correlation with the QSPR target
-operationalises the ``does a new index carry independent
-information'' question as a pre-flight check for proposed new
-indices; open methodological questions (non-linear diagnostics,
-non-BID extensions of Theorem~\ref{thm:bid}, threshold
-sensitivity, web deployment) are catalogued in
-Section~\ref{sec:limitations}.
+benchmark. The main output is not a single yes/no verdict but a
+\emph{four-panel diagnostic report}: pairwise redundancy against a
+classical baseline, baseline effective rank and variance inflation,
+and residual linear partial correlation with the target. The
+pairwise panel alone preserves cross-validated RandomForest
+performance within noise at roughly four-fold fewer features, and a
+matched-model-class pipeline-then-LASSO benchmark shows comparable
+parsimony at no detectable cost on two of the four datasets and
+under a three-percent RMSE cost on the other two. The
+Edge-Degree-Pair Basis explains why the redundancy ceiling is
+intrinsic to the bond-incident-degree construction rather than an
+artefact of any single dataset. The conservative reading that
+requires both a low maximum pairwise correlation and a
+non-negligible partial correlation with the target is useful when
+the baseline has non-trivial linear target signal; on
+low-baseline-signal datasets the partial-correlation panel should
+be treated descriptively. Non-linear diagnostics, extensions of the
+basis result beyond maximum degree four, threshold sensitivity, and
+a web deployment remain open.
 
 % =====================================================================
 \section*{Data and code availability}
@@ -1540,7 +1844,7 @@ graph invariants; the spectral-hybrid combinations are
 deliberately constructed novel pairings to test whether
 non-standard product indices escape the redundancy ceiling. They
 appear here purely as screening targets to test the generality
-of the combined diagnostic of \S\ref{sec:protocol}, and the
+of the combined reading of \S\ref{sec:protocol}, and the
 verdict reported in \S\ref{sec:novel_case} is a statement about
 this particular candidate set under the tested baselines and
 thresholds, not a claim that any individual candidate is or is
@@ -1580,6 +1884,12 @@ E.~Milovanovi\'c, and I.~Milovanovi\'c (eds.),
 \emph{Bounds in Chemical Graph Theory --- Mainstreams},
 Mathematical Chemistry Monographs MCM-20,
 University of Kragujevac, 2017, pp.~67--153.)
+
+\bibitem{Rada2026LinearVDB}
+J.~Rada,
+\emph{A finite-dimensional linear framework for vertex-degree-based
+topological indices},
+MATCH Commun.~Math.~Comput.~Chem.~\textbf{96} (2026), 841--863.
 
 \bibitem{Albertson1997}
 M.~O.~Albertson,
@@ -1683,6 +1993,59 @@ J.~Mach.~Learn.~Res.~\textbf{12} (2011), 2825--2830.
 I.~Gutman,
 \emph{Degree-based topological indices},
 Croat.~Chem.~Acta \textbf{86}(4) (2013), 351--361.
+
+\bibitem{Gutman2021Sombor}
+I.~Gutman,
+\emph{Geometric approach to degree-based topological indices: Sombor indices},
+MATCH Commun.~Math.~Comput.~Chem.~\textbf{86} (2021), 11--16.
+
+\bibitem{DasCevikCangulShang2021Sombor}
+K.~C.~Das, A.~S.~\c{C}evik, I.~N.~Cangul, and Y.~Shang,
+\emph{On {Sombor} index},
+Symmetry \textbf{13}(1) (2021), Article 140.
+\url{https://doi.org/10.3390/sym13010140}.
+
+\bibitem{Redzepovic2021ChemSombor}
+I.~Red\v{z}epovi\'c,
+\emph{Chemical applicability of {Sombor} indices},
+J.~Serb.~Chem.~Soc.~\textbf{86}(5) (2021), 445--457.
+\url{https://doi.org/10.2298/JSC201215006R}.
+
+\bibitem{Hu2020OGB}
+W.~Hu, M.~Fey, M.~Zitnik, Y.~Dong, H.~Ren, B.~Liu, M.~Catasta,
+and J.~Leskovec,
+\emph{Open Graph Benchmark: Datasets for machine learning on graphs},
+in Advances in Neural Information Processing Systems (NeurIPS) \textbf{33}
+(2020), 22118--22133.
+\url{https://arxiv.org/abs/2005.00687}.
+
+\bibitem{Heil2021ReproML}
+B.~J.~Heil, M.~M.~Hoffman, F.~Markowetz, S.-I.~Lee, C.~S.~Greene,
+and S.~C.~Hicks,
+\emph{Reproducibility standards for machine learning in the life sciences},
+Nature Methods \textbf{18} (2021), 1132--1135.
+\url{https://doi.org/10.1038/s41592-021-01256-7}.
+
+\bibitem{NiaziMariam2023MLChemoReview}
+S.~K.~Niazi and Z.~Mariam,
+\emph{Recent advances in machine-learning-based chemoinformatics:
+a comprehensive review},
+Int.~J.~Mol.~Sci.~\textbf{24}(14) (2023), Article 11488.
+\url{https://doi.org/10.3390/ijms241411488}.
+
+\bibitem{Schuirmann1987TOST}
+D.~J.~Schuirmann,
+\emph{A comparison of the two one-sided tests procedure and the
+power approach for assessing the equivalence of average
+bioavailability},
+J.~Pharmacokinet.~Biopharm.~\textbf{15}(6) (1987), 657--680.
+
+\bibitem{Lakens2017Equivalence}
+D.~Lakens,
+\emph{Equivalence tests: a practical primer for $t$-tests,
+correlations, and meta-analyses},
+Soc.~Psychol.~Personal.~Sci.~\textbf{8}(4) (2017), 355--362.
+\url{https://doi.org/10.1177/1948550617697177}.
 
 \end{thebibliography}
 \end{document}

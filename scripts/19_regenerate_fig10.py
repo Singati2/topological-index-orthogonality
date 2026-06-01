@@ -148,11 +148,20 @@ def draw_tree(ax, G: nx.Graph, pos: dict, title: str):
             node_colors.append(internal_color)
 
     nx.draw_networkx_edges(G, pos, ax=ax, edge_color="black", width=1.2)
-    nx.draw_networkx_nodes(G, pos, ax=ax, node_color=node_colors,
-                           node_size=420, edgecolors="black", linewidths=1.0)
+    nodes = nx.draw_networkx_nodes(G, pos, ax=ax, node_color=node_colors,
+                                   node_size=360, edgecolors="black",
+                                   linewidths=1.0)
+    # keep marker discs from being cut at the axes boundary
+    nodes.set_clip_on(False)
     ax.set_title(title, fontsize=10)
-    ax.axis("off")
     ax.set_aspect("equal")
+    # Pad the data limits generously so NO node disc (especially the bottom
+    # leaf row, formerly at the very edge) is clipped by the 'tight' bbox.
+    xs = [p[0] for p in pos.values()]
+    ys = [p[1] for p in pos.values()]
+    ax.set_xlim(min(xs) - 1.0, max(xs) + 1.0)
+    ax.set_ylim(min(ys) - 0.8, max(ys) + 0.8)
+    ax.axis("off")
 
 
 # ----- Main figure -----
@@ -187,25 +196,20 @@ def main():
                r"graph6: Kp\_I?D??I??@")
     )
 
-    # CRITICAL: the entire title is now plain text (NOT mathtext) with
-    # explicit ASCII hyphen-minus characters. mathtext math-mode minus
-    # signs (longer horizontal "U+2212"-style lines) were rendering thin
-    # enough at the compiled-MATCH A5/10pt font size that a reviewer
-    # mistook them for missing, parsing the title as W(T; 1, 1, 1).
-    # Plain ASCII hyphen-minus rendered in bold serif is visually
-    # unambiguous at every PDF zoom level.
-    fig.suptitle(
-        "Maximizers of W(T; -1, -1, 1) over trees of order n  (non-classical regime)",
-        fontsize=14,
-        weight="bold",
-    )
-
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    # NO in-figure suptitle: the LaTeX \caption{} is the sole label for this
+    # float (Figure 1). A baked-in matplotlib title duplicated the caption,
+    # producing a doubled "Maximizers of W(T;-1,-1,1)..." heading above the
+    # official "Figure 1." caption. Per MATCH / standard journal style the
+    # image carries no title; only the per-panel degree-sequence + graph6
+    # annotations remain, since the caption does not repeat those.
+    plt.tight_layout()
 
     png_path = os.path.join(FIG_DIR, "fig10_caterpillar_maximizers.png")
     pdf_path = os.path.join(FIG_DIR, "fig10_caterpillar_maximizers.pdf")
-    fig.savefig(png_path)
-    fig.savefig(pdf_path)
+    # pad_inches gives extra whitespace margin around the 'tight' bbox so the
+    # outermost node discs are never cropped at the image edge.
+    fig.savefig(png_path, pad_inches=0.25)
+    fig.savefig(pdf_path, pad_inches=0.25)
     plt.close(fig)
     print(f"Wrote {png_path}")
     print(f"Wrote {pdf_path}")

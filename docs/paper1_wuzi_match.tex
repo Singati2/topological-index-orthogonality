@@ -171,42 +171,27 @@
 \maketitle
 
 \begin{abstract}
-For a simple connected graph $G = (V, E)$ with edge degree
-pairs $(d_u, d_v)$, the \emph{Wuzi index family} is the
-three-parameter bond-incident-degree (BID) index
-$W(G; \alpha, \beta, \gamma) =
-\sum_{uv \in E(G)} (d_u d_v)^{\alpha} (d_u + d_v)^{\beta}
-\exp(\gamma\,|d_u - d_v|/(d_u + d_v))$
-with real parameters $\alpha, \beta, \gamma$. The family
-recovers many classical degree-based indices --- the first and
-second Zagreb indices $M_1, M_2$, the hyper-Zagreb index $HM$,
-the modified second Zagreb index ${}^{m}\!M_2$, the
-Randi\'c index $R$, the general Randi\'c $R_\alpha$, the
-sum-connectivity index $\chi$, the general sum-connectivity
-$\chi_\beta$, the half-harmonic index $H/2$, and the inverse-sum
-indeg index $ISI$ exactly, and the geometric-arithmetic index
-$GA$ and arithmetic-geometric index $AG$ up to scale --- as
-exact reductions at specific parameter triples. We make three
-contributions. First, we develop a coherent bounds programme for
-$\Wuzi$: closed forms on nine standard graph classes, Jensen-type
-bounds via $M_1$ and $M_2$, Cauchy--Schwarz parameter-splitting
-bounds, bounds in $(n, m, \Delta, \delta)$, a uniform ratio
-bound, and bounds via the generalised Randi\'c,
-sum-connectivity, and Sombor indices. Second, exhaustive
-enumeration through $n = 20$ at the mixed-sign triple
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$, together with
-sign-region checks through $n = 12$ at seven additional
-canonical triples, isolates a non-classical extremal regime:
-the maximizer over non-isomorphic trees of order $n$ is neither
-a path, a star, nor a caterpillar for $n \ge 7$, with a sharp
-odd/even pattern (spiders $S^{(2)}_{(n-1)/2}$ for odd $n \ge 9$;
-balanced double-spiders $DS(a, b)$ with $a + b = n/2 + 1$ for
-even $n \ge 10$), stated formally as
-Conjecture~\ref{conj:caterpillar_max}. Third, a sensitivity
-benchmark on the $18$ octane isomers places the Wuzi family in
-the same correlation regime as the classical BID indices, with
-all margins within the bootstrap-CI half-widths characteristic
-of $n = 18$; no claim of QSPR superiority is made.
+Degree-based topological indices assign to a molecule a single
+number computed from the degrees of its adjacent atoms; dozens
+have been proposed since the 1970s, including the Zagreb,
+Randi\'c, sum-connectivity, harmonic, and Sombor indices. We
+introduce the \emph{Wuzi index family}, a three-parameter
+degree-based index (defined in Section~\ref{sec:def}) built from
+the product, the sum, and the normalized difference of each pair
+of adjacent degrees. At specific values of its three parameters
+the family reduces exactly to many of these classical indices
+--- among them the first and second Zagreb, Randi\'c,
+sum-connectivity, harmonic, and inverse-sum-indeg indices. We
+derive closed-form values on standard graph classes and a family
+of sharp upper and lower bounds. Exhaustive enumeration of all
+trees of order up to twenty reveals a non-classical extremal
+pattern at a mixed-sign parameter choice: for order at least
+seven the maximizing tree is neither a path, a star, nor a
+caterpillar, but a spider or a balanced double-spider following a
+sharp odd/even rule. A sensitivity benchmark on octane, tree, and
+decane test sets places the family in the same correlation regime
+as the classical indices; no claim of predictive superiority is
+made.
 \end{abstract}
 
 \onehalfspacing
@@ -247,7 +232,9 @@ indices~\cite{WangMaoLiFurtula2022SomborRelations}, the
 elliptic Sombor index~\cite{GutmanFurtulaOz2024Elliptic}, the
 hyperbolic Sombor index~\cite{BarmanDas2026HSO}, and most recently
 the diminished Sombor index of Movahedi, Gutman, Red\v{z}epovi\'c,
-and Furtula~\cite{MovahediGutmanRedzepovicFurtula2026, Movahedi2025DSO}.
+and Furtula~\cite{MovahediGutmanRedzepovicFurtula2026, Movahedi2025DSO};
+the rapidly growing family has recently been surveyed
+comprehensively by Gutman~\cite{Gutman2026SomborSurvey}.
 
 The main motivation of the present paper is the
 \emph{mixed-sign extremal behaviour} of a parametric BID family
@@ -263,29 +250,34 @@ triple produces a stable spider / double-spider maximizer
 pattern that is neither caterpillar nor classical for $n \ge 7$
 (Section~\ref{sec:extremal}, Table~\ref{tab:caterpillar_argmax},
 Figure~\ref{fig:caterpillar_maximizers}), stated formally as
-Conjecture~\ref{conj:caterpillar_max}. The remaining bounds and
-reductions of Section~\ref{sec:bounds} locate this behaviour
-inside the standard BID framework, with the Wuzi family
-recovering $M_2, R, \chi, H$ as boundary cases.
+Conjecture~\ref{conj:caterpillar_max}. The bounds of
+Section~\ref{sec:bounds} locate this behaviour inside the
+standard BID framework, while the exact reductions catalogued at
+the end of this section show the Wuzi family recovering many
+classical indices --- including the first and second Zagreb,
+Randi\'c, sum-connectivity, harmonic, and inverse-sum-indeg
+indices --- as special cases.
 
 A recurring methodological question for any newly proposed index
-is: what does it have to demonstrate to be a meaningful
-contribution? On the mathematical side, closed-form values on
-standard graph classes, sharp upper and lower bounds in terms of
-graph parameters and other classical indices, and an
-extremal-graph characterization (among trees, unicyclic, and
-bicyclic graphs) form the established checklist. On the
-chemometric side, the index must add information not already
-carried by the existing zoo of descriptors. The Wuzi family's
-contribution against this checklist is positioned narrowly: we
-provide the closed forms, bounds, and reductions in the standard
-form expected by recent parametric-BID papers such
-as~\cite{MovahediGutmanRedzepovicFurtula2026}, and the empirical
-sensitivity benchmark on octanes shows the family in the same
-correlation regime as the classical BID indices rather than
-above it. The distinctive content is therefore the mixed-sign
-extremal phenomenon and its odd/even structural pattern, not a
-claim of QSPR superiority.
+is what it must demonstrate to be a meaningful contribution
+rather than a redundant reparametrization of known descriptors.
+On the mathematical side, the established checklist comprises
+closed-form values on standard graph classes, sharp upper and
+lower bounds in terms of the basic graph parameters and of other
+classical indices, and an extremal-graph characterization among
+trees and, where possible, unicyclic and bicyclic graphs. On the
+chemometric side, a new index must carry predictive information
+not already supplied by the existing collection of descriptors.
+We position the Wuzi family against this checklist deliberately
+narrowly. We supply the closed forms, the bounds, and the exact
+reductions in the form expected by recent parametric-BID
+papers~\cite{MovahediGutmanRedzepovicFurtula2026}, and the
+empirical sensitivity benchmark on the octane isomers places the
+family in the same correlation regime as the classical BID
+indices rather than above them. The distinctive contribution is
+therefore not QSPR superiority but the mixed-sign extremal
+phenomenon and its sharp odd/even structural pattern, which is
+the central object of study of this paper.
 
 Direct substitution into Equation~\eqref{eq:wuzi} shows that the
 Wuzi family contains a wide range of classical BID indices as
@@ -337,20 +329,22 @@ sum-connectivity-style $(d_u + d_v)^\beta$ factors in a single
 three-parameter object. The factor is bounded above by
 $e^{\gamma}$ and reduces to $1$ on regular graphs.
 
-As an instance of the bond-incident-degree (BID) class on
-hydrogen-suppressed molecular graphs of maximum degree
-$\Delta \le 4$, the entire Wuzi family
-$\{\Wuzi : (\alpha, \beta, \gamma) \in \mathbb{R}^3\}$ lies in a
-real vector space of dimension at most ten --- the standard span
-of the edge-degree-pair counts $m_{ij}(G) = |\{uv \in E(G) :
-\{d_u, d_v\} = \{i, j\}\}|$ for $1 \le i \le j \le 4$, as
-documented in~\cite{BorovicaninDasFurtulaGutman2017Zagreb}.
-A companion methodology paper~\cite{Paper2_Screening} uses this
-ten-dimensional ceiling as the structural reason that no
-parametric BID family on this molecular class can escape
-redundancy with a sufficiently large classical baseline; the
-present paper is the mathematical and chemometric study of the
-Wuzi family itself.
+It is useful to record, finally, the descriptor-space ceiling in
+which the entire family lives. On hydrogen-suppressed molecular
+graphs of maximum degree at most $4$, every BID index is a linear
+functional of the ten unordered edge-degree-pair counts
+$m_{ij}(G) = |\{uv \in E(G) : \{d_u, d_v\} = \{i, j\}\}|$ for
+$1 \le i \le j \le 4$; this finite-dimensional view of
+vertex-degree-based indices has recently been placed on a formal
+linear-algebraic footing by Rada~\cite{Rada2026LinearVDB}. Thus
+the Wuzi family, like every BID family on this molecular class,
+lies inside a fixed ten-dimensional descriptor
+space~\cite{BorovicaninDasFurtulaGutman2017Zagreb}, no matter how
+its three real parameters are chosen. The redundancy consequences
+of this ceiling --- in particular the extent to which a
+parametric BID family can or cannot escape collinearity with a
+sufficiently large classical baseline --- are taken up in a
+companion methodology paper~\cite{Paper2_Screening}.
 
 % =====================================================================
 \section{Preliminaries}\label{sec:prelim}
@@ -1202,7 +1196,7 @@ formal sense (their pruned-leaf subtree is not a path).
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{fig10_caterpillar_maximizers.pdf}
-\caption{Maximizers of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, for $n = 10, 11, 12$. Internal vertices are coloured green and leaves cream. None of the three trees is a caterpillar (the non-leaf vertices do not form a path). $n = 11$ is the spider $S^{(2)}_{5}$ with $h = (11 - 1)/2 = 5$ length-$2$ spokes; $n = 10$ is the balanced double-spider $DS(3, 3)$; and $n = 12$ is $DS(4, 3)$.}
+\caption{Maximizers of $W(T; -1, -1, 1)$ over all non-isomorphic trees of order $n$, for $n = 10, 11, 12$. Internal vertices are coloured green and leaves cream. None of the three trees is a caterpillar (the non-leaf vertices do not form a path). $n = 10$ is the balanced double-spider $DS(3, 3)$; $n = 11$ is the spider $S^{(2)}_{5}$ with $h = (11 - 1)/2 = 5$ length-$2$ spokes; and $n = 12$ is $DS(4, 3)$.}
 \label{fig:caterpillar_maximizers}
 \end{figure}
 
@@ -1383,31 +1377,27 @@ reported in \cite{MovahediGutmanRedzepovicFurtula2026} Table~2.
 \section{Concluding remarks and open problems}\label{sec:conclusion}
 % =====================================================================
 
-The Wuzi family is a three-parameter parametric BID family that
-recovers a wide range of classical degree-based indices as exact
-reductions and sits inside the same finite-dimensional BID
-descriptor subspace as the established classical indices.
-Mathematically, we have established a coherent programme of
-bounds on $\Wuzi$ --- a bracket bound that is tight on regular
-graphs, Cauchy--Schwarz parameter-splitting bounds, Jensen-type
-bounds via the first and second Zagreb indices,
-$(n, m, \Delta, \delta)$ bounds in the non-negative parameter
-region, a uniform ratio bound that sandwiches $\Wuzi$ between
-explicit multiples of any classical BID index with strictly
-positive edge contribution, and bounds via the generalised
-Randi\'c, sum-connectivity, and Sombor indices.
+The Wuzi family is a three-parameter degree-based index that
+recovers many classical indices as exact reductions and lies
+inside the same finite-dimensional descriptor space as the
+established indices. We have given closed-form values on standard
+graph classes and a programme of sharp upper and lower bounds: a
+bracket bound tight on regular graphs, Cauchy--Schwarz and
+Jensen-type bounds, bounds in the basic graph parameters
+$n, m, \Delta, \delta$, a uniform ratio bound against any
+classical index with positive edge contribution, and bounds via
+the generalised Randi\'c, sum-connectivity, and Sombor indices.
 
-Empirically, the principal new phenomenon of the paper is the
-non-classical extremal regime at
-$(\alpha, \beta, \gamma) = (-1, -1, 1)$. Let $S^{(2)}_{h}$ denote
-the spider with hub degree $h$ and length-$2$ spokes (the tree
-on $2h + 1$ vertices consisting of a single hub of degree $h$
-together with $h$ length-$2$ paths), and let $DS(a, b)$ denote
-the balanced double-spider with hub degrees $a, b$ (the tree on
-$2(a + b - 1)$ vertices obtained by joining two hubs of degrees
-$a, b$ by an edge and attaching $a - 1$ and $b - 1$ length-$2$
-paths). Exhaustive enumeration of all non-isomorphic trees of
-order $5 \le n \le 20$ supports the conjecture:
+The principal new phenomenon is a non-classical extremal regime
+at the mixed-sign triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$.
+Exhaustive enumeration of all non-isomorphic trees of order
+$5 \le n \le 20$ shows that, for $n \ge 7$, the maximizing tree
+is neither a path, a star, nor a caterpillar, but a spider for
+odd $n$ and a balanced double-spider for even $n$. Writing
+$S^{(2)}_{h}$ for the spider with one hub of degree $h$ and $h$
+length-$2$ spokes, and $DS(a, b)$ for the double-spider formed by
+joining two hubs of degrees $a, b$ and attaching length-$2$
+spokes, this is recorded as the following conjecture:
 
 \begin{conjecture}[Mixed-sign extremal trees: spider/double-spider]\label{conj:caterpillar_max}
 For the parameter triple $(\alpha, \beta, \gamma) = (-1, -1, 1)$
@@ -1541,6 +1531,11 @@ manuscript.}
     \textit{Int. J. Quantum Chem.\/}
     \textbf{124} (2024) \#e27346.
 
+\bibitem{Gutman2026SomborSurvey} I. Gutman, Survey of
+    Sombor-type degree-based topological indices,
+    \textit{MATCH Commun. Math. Comput. Chem.\/}
+    \textbf{96} (2026) 819--837.
+
 \bibitem{HansenMelot2003unicyclicRandic} P. Hansen, H. M\'elot,
     Variable neighborhood search for extremal graphs. 6.
     Analysing bounds for the connectivity index,
@@ -1581,6 +1576,11 @@ manuscript.}
 \bibitem{NordhausGaddumOrig1956} E. A. Nordhaus, J. W. Gaddum,
     On complementary graphs, \textit{Amer. Math. Monthly\/}
     \textbf{63} (1956) 175--177.
+
+\bibitem{Rada2026LinearVDB} J. Rada, A finite-dimensional linear
+    framework for vertex-degree-based topological indices,
+    \textit{MATCH Commun. Math. Comput. Chem.\/}
+    \textbf{96} (2026) 841--863.
 
 \bibitem{Randic1975} M. Randi\'c, On characterization of
     molecular branching, \textit{J. Am. Chem. Soc.\/}

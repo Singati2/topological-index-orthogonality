@@ -225,6 +225,27 @@ def benchmark_dataset(name: str, task: str):
     per_fold_primary = {cfg: np.array([v[primary_metric] for v in per_cfg[cfg]],
                                       dtype=float) for cfg in CONFIGS}
 
+    # --- emit per-fold primary metric so downstream scripts can do
+    # bootstrap CIs / TOST CIs without re-running this pipeline.
+    perfold_rows = []
+    for cfg in CONFIGS:
+        for fold_i, v in enumerate(per_fold_primary[cfg]):
+            perfold_rows.append({
+                "dataset": name, "task": task, "config": cfg,
+                "fold": fold_i, "metric": primary_metric,
+                "value": (float(v) if np.isfinite(v) else float("nan")),
+            })
+    # write/append to a side CSV
+    perfold_csv = os.path.join(PROJECT, "results",
+                               "paper2_pipeline_then_lasso_perfold.csv")
+    write_header = not os.path.exists(perfold_csv) or name == "esol"
+    mode = "w" if (name == "esol") else "a"
+    with open(perfold_csv, mode, newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(perfold_rows[0].keys()))
+        if write_header: w.writeheader()
+        for r in perfold_rows: w.writerow(r)
+    print(f"  [perfold] appended {len(perfold_rows)} rows to {perfold_csv}")
+
     for cfg in CONFIGS:
         vals = per_cfg[cfg]
         rec = {"dataset": name, "task": task, "config": cfg, "n": n,
