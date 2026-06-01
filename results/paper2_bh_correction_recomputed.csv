@@ -1,0 +1,8 @@
+dataset,config,raw_p_two_sided,rank,family_size_m,q,bh_critical_value,bh_reject,bonferroni_critical_value,bonferroni_reject
+esol,pairwise_pruned,0.0196,1,7,0.05,0.0071,False,0.0071,False
+esol,combined_pruned,0.0223,2,7,0.05,0.0143,False,0.0071,False
+lipophilicity,pairwise_pruned,0.0260,3,7,0.05,0.0214,False,0.0071,False
+bbbp,pairwise_pruned,0.1629,4,7,0.05,0.0286,False,0.0071,False
+bbbp,combined_pruned,0.1936,5,7,0.05,0.0357,False,0.0071,False
+freesolv,combined_pruned,0.6718,6,7,0.05,0.0429,False,0.0071,False
+freesolv,pairwise_pruned,0.7483,7,7,0.05,0.0500,False,0.0071,False

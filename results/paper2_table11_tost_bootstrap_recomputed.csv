@@ -1,0 +1,9 @@
+dataset,config,n_folds,mean_paired_diff,t_stat,p_two_sided,df,t_ci90_lo,t_ci90_hi,boot_ci95_lo,boot_ci95_hi,equiv_bound_pm5pct,tost_p,tost_t_equivalent,boot_within_bound,note
+esol,pairwise_pruned,5,+0.0437,+3.771,0.0196,4,+0.0190,+0.0684,+0.0209,+0.0590,+/-0.0768,0.0229,yes,yes,
+esol,combined_pruned,5,+0.0524,+3.623,0.0223,4,+0.0216,+0.0833,+0.0237,+0.0723,+/-0.0768,0.0836,no,yes,
+freesolv,pairwise_pruned,5,-0.0034,-0.344,0.7483,4,-0.0242,+0.0175,-0.0196,+0.0150,+/-0.1734,0.0000,yes,yes,
+freesolv,combined_pruned,5,-0.0071,-0.456,0.6718,4,-0.0403,+0.0261,-0.0370,+0.0183,+/-0.1734,0.0002,yes,yes,
+lipophilicity,pairwise_pruned,5,+0.0090,+3.454,0.0260,4,+0.0035,+0.0146,+0.0046,+0.0135,+/-0.0564,0.0000,yes,yes,
+lipophilicity,combined_pruned,1,,,,,,,,,+/-0.0564,,n/a,n/a,combined screen degenerates to zero features in 4/5 lipophilicity folds
+bbbp,pairwise_pruned,5,-0.0067,-1.707,0.1629,4,-0.0150,+0.0017,-0.0141,-0.0002,+/-0.0397,0.0005,yes,yes,
+bbbp,combined_pruned,5,-0.0078,-1.561,0.1936,4,-0.0185,+0.0029,-0.0164,+0.0006,+/-0.0397,0.0016,yes,yes,

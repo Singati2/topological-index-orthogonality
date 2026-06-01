@@ -1,0 +1,103 @@
+==============================================================================
+RECOMPUTE: TOST / bootstrap / BH from per-fold scores
+  input : results/paper2_pipeline_then_lasso_perfold.csv
+  bootstrap seed = 20260531, B = 10000, equiv = +/-5%
+==============================================================================
+
+wrote results/paper2_table11_tost_bootstrap_recomputed.csv  (8 rows)
+
+------------------------------------------------------------------------------
+MULTIPLE-COMPARISON CORRECTION  (family size m = 7, q = 0.05)
+  Degenerate Lipophilicity combined_pruned EXCLUDED (no finite p-value).
+------------------------------------------------------------------------------
+  rank        dataset           config     raw p    BH thr  BH rej  Bonf rej
+     1           esol  pairwise_pruned    0.0196    0.0071   False     False
+     2           esol  combined_pruned    0.0223    0.0143   False     False
+     3  lipophilicity  pairwise_pruned    0.0260    0.0214   False     False
+     4           bbbp  pairwise_pruned    0.1629    0.0286   False     False
+     5           bbbp  combined_pruned    0.1936    0.0357   False     False
+     6       freesolv  combined_pruned    0.6718    0.0429   False     False
+     7       freesolv  pairwise_pruned    0.7483    0.0500   False     False
+
+  BH rejects 0/7 at q=0.05;  Bonferroni rejects 0/7.
+  wrote results/paper2_bh_correction_recomputed.csv
+
+==============================================================================
+VERIFICATION
+==============================================================================
+
+[1] paired-t p-values: recomputed vs manuscript Table 11 (rounded)
+              esol  pairwise_pruned: recomputed=0.0196  manuscript=0.020  OK
+              esol  combined_pruned: recomputed=0.0223  manuscript=0.022  OK
+          freesolv  pairwise_pruned: recomputed=0.7483  manuscript=0.748  OK
+          freesolv  combined_pruned: recomputed=0.6718  manuscript=0.672  OK
+     lipophilicity  pairwise_pruned: recomputed=0.0260  manuscript=0.026  OK
+              bbbp  pairwise_pruned: recomputed=0.1629  manuscript=0.163  OK
+              bbbp  combined_pruned: recomputed=0.1936  manuscript=0.194  OK
+
+[2] recomputed vs existing paper2_table11_tost_bootstrap.csv
+                    dataset/config        field   existing     recomp  match
+              esol/pairwise_pruned    mean_diff    +0.0437    +0.0437     OK
+              esol/pairwise_pruned    t_ci90_lo    +0.0190    +0.0190     OK
+              esol/pairwise_pruned    t_ci90_hi    +0.0684    +0.0684     OK
+              esol/pairwise_pruned    equiv_bnd    +0.0768    +0.0768     OK
+              esol/pairwise_pruned      boot_lo    +0.0208    +0.0209     OK
+              esol/pairwise_pruned      boot_hi    +0.0590    +0.0590     OK
+              esol/pairwise_pruned         TOST        yes        yes     OK
+              esol/combined_pruned    mean_diff    +0.0524    +0.0524     OK
+              esol/combined_pruned    t_ci90_lo    +0.0216    +0.0216     OK
+              esol/combined_pruned    t_ci90_hi    +0.0833    +0.0833     OK
+              esol/combined_pruned    equiv_bnd    +0.0768    +0.0768     OK
+              esol/combined_pruned      boot_lo    +0.0237    +0.0237     OK
+              esol/combined_pruned      boot_hi    +0.0723    +0.0723     OK
+              esol/combined_pruned         TOST         no         no     OK
+          freesolv/pairwise_pruned    mean_diff    -0.0034    -0.0034     OK
+          freesolv/pairwise_pruned    t_ci90_lo    -0.0242    -0.0242     OK
+          freesolv/pairwise_pruned    t_ci90_hi    +0.0175    +0.0175     OK
+          freesolv/pairwise_pruned    equiv_bnd    +0.1734    +0.1734     OK
+          freesolv/pairwise_pruned      boot_lo    -0.0196    -0.0196     OK
+          freesolv/pairwise_pruned      boot_hi    +0.0150    +0.0150     OK
+          freesolv/pairwise_pruned         TOST        yes        yes     OK
+          freesolv/combined_pruned    mean_diff    -0.0071    -0.0071     OK
+          freesolv/combined_pruned    t_ci90_lo    -0.0403    -0.0403     OK
+          freesolv/combined_pruned    t_ci90_hi    +0.0261    +0.0261     OK
+          freesolv/combined_pruned    equiv_bnd    +0.1734    +0.1734     OK
+          freesolv/combined_pruned      boot_lo    -0.0353    -0.0370     OK
+          freesolv/combined_pruned      boot_hi    +0.0183    +0.0183     OK
+          freesolv/combined_pruned         TOST        yes        yes     OK
+     lipophilicity/pairwise_pruned    mean_diff    +0.0090    +0.0090     OK
+     lipophilicity/pairwise_pruned    t_ci90_lo    +0.0035    +0.0035     OK
+     lipophilicity/pairwise_pruned    t_ci90_hi    +0.0146    +0.0146     OK
+     lipophilicity/pairwise_pruned    equiv_bnd    +0.0564    +0.0564     OK
+     lipophilicity/pairwise_pruned      boot_lo    +0.0046    +0.0046     OK
+     lipophilicity/pairwise_pruned      boot_hi    +0.0135    +0.0135     OK
+     lipophilicity/pairwise_pruned         TOST        yes        yes     OK
+     lipophilicity/combined_pruned    mean_diff        nan        nan    n/a
+     lipophilicity/combined_pruned    t_ci90_lo        nan        nan    n/a
+     lipophilicity/combined_pruned    t_ci90_hi        nan        nan    n/a
+     lipophilicity/combined_pruned    equiv_bnd    +0.0564    +0.0564     OK
+     lipophilicity/combined_pruned      boot_lo        nan        nan    n/a
+     lipophilicity/combined_pruned      boot_hi        nan        nan    n/a
+     lipophilicity/combined_pruned         TOST        n/a        n/a     OK
+              bbbp/pairwise_pruned    mean_diff    -0.0067    -0.0067     OK
+              bbbp/pairwise_pruned    t_ci90_lo    -0.0150    -0.0150     OK
+              bbbp/pairwise_pruned    t_ci90_hi    +0.0017    +0.0017     OK
+              bbbp/pairwise_pruned    equiv_bnd    +0.0397    +0.0397     OK
+              bbbp/pairwise_pruned      boot_lo    -0.0141    -0.0141     OK
+              bbbp/pairwise_pruned      boot_hi    -0.0007    -0.0002     OK
+              bbbp/pairwise_pruned         TOST        yes        yes     OK
+              bbbp/combined_pruned    mean_diff    -0.0078    -0.0078     OK
+              bbbp/combined_pruned    t_ci90_lo    -0.0185    -0.0185     OK
+              bbbp/combined_pruned    t_ci90_hi    +0.0029    +0.0029     OK
+              bbbp/combined_pruned    equiv_bnd    +0.0397    +0.0397     OK
+              bbbp/combined_pruned      boot_lo    -0.0164    -0.0164     OK
+              bbbp/combined_pruned      boot_hi    +0.0003    +0.0006     OK
+              bbbp/combined_pruned         TOST        yes        yes     OK
+
+    NOTE: bootstrap CIs use a NEW fixed seed (the original artifact had no
+    committed seed); agreement within ~0.005 Monte-Carlo tolerance is expected.
+
+[3] BH conclusion vs corrected manuscript claim
+    manuscript claim: 'none of the nominally-significant entries survives at q=0.05'
+    recomputed      : BH rejects 0/7 at q=0.05  ->  MATCH
+    nominally significant (raw p<=0.05): 3 entries ['esol/pairwise_pruned', 'esol/combined_pruned', 'lipophilicity/pairwise_pruned']
