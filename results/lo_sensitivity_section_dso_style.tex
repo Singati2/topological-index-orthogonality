@@ -1,0 +1,94 @@
+% =====================================================================
+% DSO-style Sensitivity analysis for the Loyola (LO) index.
+% Honest / publication-safe. Uses only pre-specified reductions + pure-gamma
+% points. Figures: fig_lo_prediction_correlation_heatmap, fig_lo_intercorrelation_heatmap,
+% fig_lo_degeneracy_order10_trees, fig_lo_structure_sensitivity_decanes.
+% Table: \input{lo_sensitivity_prediction_table_latex.tex}
+% =====================================================================
+\section{Sensitivity analysis}\label{sec:sensitivity}
+
+Following the structure of the diminished-Sombor study
+\cite{MovahediGutmanRedzepovicFurtula2026}, we benchmark the Loyola index against
+the classical degree-based indices it reduces to and report prediction ability,
+intercorrelation, degeneracy, and structure sensitivity. To keep the analysis
+honest and reproducible, we use \emph{only} pre-specified parameter values: the
+reductions $M_1,M_2,HM,{}^mM_2,R,\chi,H/2,ISI,GA,AG$ (Section~\ref{sec:intro}) and
+the two pre-specified pure-$\gamma$ points $LO(0,0,1)$ and $LO(0,0,2)$. No
+parameter is tuned after inspecting the property correlations; the reasons for
+excluding such decimal tuning are given in the supplementary note. The edge count
+$m=LO(0,0,0)$ is omitted throughout because it is constant on the octanes.
+
+\subsection{Prediction ability}\label{sub:prediction}
+Table~\ref{tab:lo_octane} and Figure~\ref{fig:lo_pred} report the Pearson
+correlation between each index and five physicochemical properties of the 18
+octane isomers (boiling point $T_B$, enthalpy of formation $\Delta H_f$, heat of
+vaporization $\Delta H_{\mathrm{vap}}$, entropy $S$, acentric factor $\omega$;
+properties from the NIST WebBook). The best $|r|$ per property is highlighted. The
+modified second Zagreb index attains the strongest correlation on $T_B$ and
+$\Delta H_f$, the hyper-Zagreb index on $S$, and the second Zagreb index on
+$\omega$; the pre-specified pure-$\gamma$ point $LO(0,0,2)$ attains the strongest
+correlation on $\Delta H_{\mathrm{vap}}$ $(|r|=0.967)$. The Loyola family is thus
+competitive and, at selected pre-specified parameter settings, improves the
+correlation for some properties. (The properties here are from the NIST WebBook;
+\cite{MovahediGutmanRedzepovicFurtula2026} used a different source, so the
+$\Delta H_{\mathrm{vap}}$ and $S$ correlations may differ by data source rather
+than by index computation.)
+
+\input{lo_sensitivity_prediction_table_latex.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.8\linewidth]{fig_lo_prediction_correlation_heatmap.pdf}
+\caption{Correlation of selected Loyola reductions and pre-specified pure-$\gamma$ points with octane properties. Best absolute correlation per property is marked ($\ast$).}
+\label{fig:lo_pred}\end{figure}
+
+\subsection{Intercorrelation}\label{sub:intercorr}
+Figure~\ref{fig:lo_inter} shows the intercorrelation matrix among the selected
+indices on the 18 octanes. On this small, degree-limited set the pure-$\gamma$
+points are highly collinear with the classical reductions: the maximum absolute
+correlation of $LO(0,0,1)$ and $LO(0,0,2)$ with a classical reduction is $0.983$
+and $0.993$, respectively. This indicates that the $\gamma$-imbalance term does
+\emph{not} add independent linear information on the octane benchmark.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.7\linewidth]{fig_lo_intercorrelation_heatmap.pdf}
+\caption{Intercorrelation among selected Loyola reductions and pure-$\gamma$ points on the octane isomer set. The pure-$\gamma$ points are highly collinear with the classical reductions.}
+\label{fig:lo_inter}\end{figure}
+
+\subsection{Degeneracy}\label{sub:degeneracy}
+Degeneracy measures an index's ability to discriminate among non-isomorphic
+graphs; lower is better. On the $106$ non-isomorphic trees of order $10$ we use
+$\mathrm{Degeneracy}(\%) = 100\,(1 - \#\text{distinct}/N)$ (Figure~\ref{fig:lo_deg}).
+The pure-$\gamma$ points $LO(0,0,1)$ and $LO(0,0,2)$ have degeneracy $25.5\%$,
+among the lowest of the compared indices and comparable to $R$, $GA$, and $AG$;
+$M_1$ ($83.0\%$) and $M_2$ ($67.0\%$) are the most degenerate. (The exact
+degeneracy convention used by \cite{MovahediGutmanRedzepovicFurtula2026} is to be
+verified against its source before final insertion.)
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.85\linewidth]{fig_lo_degeneracy_order10_trees.pdf}
+\caption{Degeneracy percentage of selected indices on the $106$ order-$10$ trees. Lower degeneracy indicates better discrimination.}
+\label{fig:lo_deg}\end{figure}
+
+\subsection{Structure sensitivity}\label{sub:structure}
+We compute structure sensitivity $SS=\sigma/\mu$, abruptness
+$Abr=(\max-\min)/\mu$, and $SA=SS/Abr$ for the index values on the $75$ decane
+isomers (Figure~\ref{fig:lo_ss}). The pure-$\gamma$ point $LO(0,0,2)$ has the
+highest structure sensitivity ($SS=0.165$) and abruptness among the compared
+indices, with $LO(0,0,1)$ also high; the $\gamma$-imbalance term therefore
+contributes most visibly to structure sensitivity rather than to added
+correlation information. (These are standard structure-sensitivity formulas; they
+do not reproduce the numerical values of
+\cite{MovahediGutmanRedzepovicFurtula2026} and are to be reconciled with the
+Raki\'c--Furtula method before final insertion.)
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\linewidth]{fig_lo_structure_sensitivity_decanes.pdf}
+\caption{Structure-sensitivity metrics on the $75$ decane isomers. Formulas for $SS$, $Abr$, and $SA$ are stated in the methods note and should be verified against \cite{MovahediGutmanRedzepovicFurtula2026} before final insertion.}
+\label{fig:lo_ss}\end{figure}
+
+\paragraph{Summary.} The Loyola family unifies several classical degree-based
+indices as exact reductions. In the octane benchmark, selected pre-specified
+Loyola values were competitive with the classical reductions (best on
+$\Delta H_{\mathrm{vap}}$), while the pure-$\gamma$ values showed high structure
+sensitivity but limited independent correlation information on this small,
+degree-limited set.
