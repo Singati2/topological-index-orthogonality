@@ -134,7 +134,7 @@
   \newcommand{\edgepsi}{\psi(x,y;\alpha,\beta,\gamma)}
   \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
 % Path to figures
-\graphicspath{{figures/}{../figures/}}
+\graphicspath{{figures/}{./}{../figures/}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1044,9 +1044,11 @@ $5$   & star  & star  & star  & star\\
 % =====================================================================
 
 We benchmark the Loyola family against the classical indices it
-reduces to, on three standard testbeds: the $18$ octane isomers
-(five NIST physicochemical properties), the $106$ non-isomorphic
-trees of order $10$, and the $75$ decane isomers. The comparison set
+reduces to, on three standard testbeds, following the chemometric
+benchmark of the diminished Sombor
+study~\cite{MovahediGutmanRedzepovicFurtula2026}: the $18$ octane
+isomers (five NIST physicochemical properties), the $106$
+non-isomorphic trees of order $10$, and the $75$ decane isomers. The comparison set
 is restricted to the exact reductions of Section~\ref{sec:intro} ---
 $M_1, M_2, HM, {}^{m}\!M_2, R, \chi, H/2, ISI, GA, AG$ --- together
 with the two \emph{pre-specified} pure-$\gamma$ points $LO(0, 0, 1)$
@@ -1126,7 +1128,8 @@ descriptor within the fixed BID span rather than outside it.
 \subsection{Degeneracy on trees of order 10}\label{sec:degeneracy}
 
 Degeneracy measures an index's ability to discriminate
-non-isomorphic graphs; lower is better. On the $106$ non-isomorphic
+non-isomorphic graphs~\cite{Konstantinova1996Degeneracy}; lower is
+better. On the $106$ non-isomorphic
 trees of order $10$ we use the distinct-value convention
 \[
 \mathrm{Degeneracy}(\%) = 100\Bigl(1 - \tfrac{k}{N}\Bigr),
@@ -1149,8 +1152,13 @@ second Zagreb index $LO(1, 0, 0)$ ($67.0\%$) are the most degenerate
 
 \subsection{Structure sensitivity on decane isomers}\label{sec:ss}
 
-As self-contained dispersion measures over the $75$ decane isomers
-we report the coefficient of variation $SS = \sigma/\mu$, the
+The structure-sensitivity criterion for descriptor quality was
+introduced by Furtula, Gutman and
+Dehmer~\cite{FurtulaGutmanDehmer2013SS}, with a fingerprint-based
+variant due to Rak\'i\'c and Furtula~\cite{RakicFurtula2019SS}. As a
+simple, self-contained proxy used only for within-study comparison,
+we report over the $75$ decane isomers
+the coefficient of variation $SS = \sigma/\mu$, the
 relative range $Abr = (\max - \min)/\mu$, and their ratio
 $SA = SS/Abr$ (Figure~\ref{fig:ss}). The pure-$\gamma$ point
 $LO(0, 0, 2)$ has the highest structure sensitivity ($SS = 0.165$)
@@ -1252,6 +1260,10 @@ manuscript.}
   topological index, \textit{J. Math. Chem.\/} \textbf{53} (2015)
   1184--1190.
 
+  \bibitem{FurtulaGutmanDehmer2013SS} B. Furtula, I. Gutman, M. Dehmer, On
+  structure-sensitivity of degree-based topological indices, \textit{Appl.
+  Math. Comput.\/} \textbf{219} (2013) 8973--8978.
+
   \bibitem{GujiWali2025Lanzhou} R. Guji, M. Wali, The Sombor index
   (coindex) and Lanzhou index (coindex) of some graphs, \textit{Axioms\/}
   \textbf{14} (2025) 164.
@@ -1283,6 +1295,11 @@ manuscript.}
   applications in graph energy prediction, \textit{Front. Chem.\/}
   \textbf{12} (2024) \#1470231.
 
+  \bibitem{Konstantinova1996Degeneracy} E. V. Konstantinova, The
+  discrimination ability of some topological and information distance indices
+  for graphs of unbranched hexagonal systems, \textit{J. Chem. Inf. Comput.
+  Sci.\/} \textbf{36} (1996) 54--57.
+
   \bibitem{KosariDehgardiKhan2023Lower} S. Kosari, N. Dehgardi, A. Khan,
   Lower bound on the KG-Sombor index, \textit{Commun. Comb. Optim.\/}
   \textbf{8} (2023) 751--757.
@@ -1307,6 +1324,10 @@ manuscript.}
   \bibitem{Rada2026LinearVDB} J. Rada, A finite-dimensional linear
   framework for vertex-degree-based topological indices, \textit{MATCH
   Commun. Math. Comput. Chem.\/} \textbf{96} (2026) 841--863.
+
+  \bibitem{RakicFurtula2019SS} M. Raki\'c, B. Furtula, A novel method for
+  measuring the structure sensitivity of molecular descriptors, \textit{J.
+  Chemometrics\/} \textbf{33} (2019) e3138.
 
   \bibitem{Shang2022Simplicial}
   Y. Shang, Sombor index and degree-related properties of simplicial

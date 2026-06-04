@@ -1,63 +1,56 @@
-PAPER 1 — LOYOLA INDEX — REVISION BUNDLE
-=========================================
-Built from your exact Paper_1-18 source. Compile on Overleaf with pdfLaTeX.
+PAPER 1 — LOYOLA INDEX — REVISION BUNDLE  (corrected)
+=====================================================
+Everything is in THIS folder, flat (no subfolders). Compile with pdfLaTeX.
 
-CONTENTS
-  main.tex                  full revised manuscript (drop-in replacement)
-  figures/                  four LO-labelled figures used by Section 6
-    fig_lo_prediction_correlation_heatmap.pdf
-    fig_lo_degeneracy_order10_trees.pdf
-    fig_lo_structure_sensitivity_decanes.pdf
-    fig_lo_intercorrelation_heatmap.pdf   (spare; not currently \included)
+FILES
+  main.tex                                     the manuscript (compile this)
+  fig_lo_prediction_correlation_heatmap.pdf    Figure 1 (octane correlations)
+  fig_lo_degeneracy_order10_trees.pdf          Figure 2 (degeneracy)
+  fig_lo_structure_sensitivity_decanes.pdf     Figure 3 (structure sensitivity)
+  fig_lo_intercorrelation_heatmap.pdf          spare (not currently included)
+  octane_correlation_table.tex                 Table 2, as a standalone file
+  ("Paper 1 Revision.zip" one level up = this same folder, zipped)
 
-WHAT CHANGED (vs. your source)
-  KEPT VERBATIM: preamble, abstract, introduction, preliminaries,
-    definition, closed forms, and ALL bounds (your text, unchanged except
-    the Wuzi->Loyola rename and a one-line honesty note on the Delta-upper
-    bound not being sharp).
+HOW TO GET FIGURES TO SHOW IN OVERLEAF  (the only thing wrong before)
+  The figures were blank "[Figure not uploaded yet]" boxes because the figure
+  PDFs were not in the Overleaf project. Two ways to fix:
 
-  NEW Section 4  "Descriptor-space saturation"  (Theorem 1)
-    Promotes your one-line ten-dimensional remark to an EXACT theorem:
-    the family's descriptor span = col(M), dim = rank[m_ij] <= D(D+1)/2,
-    exactly 10 on molecular graphs. Proof by distinct-frequency linear
-    independence. (Verified: realised rank = 10 numerically.)
+  EASIEST: Overleaf -> New Project -> Upload Project -> choose
+           "Paper 1 Revision.zip".  main.tex + all figures arrive together.
+           Menu -> Compiler -> pdfLaTeX -> Recompile. Figures render.
 
-  NEW Section 5  "A gamma-dependent extremal characterization"  (Theorem 2)
-    Proves gamma is NOT redundant: over trees of order n the maximiser of
-    LO is the PATH at gamma=0 (Randic, Bollobas-Erdos [5]) and the STAR for
-    gamma>gamma_0 (explicit threshold). This finally JUSTIFIES the
-    "Extremal Graph Characterizations" in your title. Includes a table
-    computed exactly over all trees n=7..10 (path -> ... -> star).
+  PASTE ROUTE: create a Blank project, paste main.tex, then click Upload and
+           drag the THREE figure PDFs in. Recompile. (main.tex now finds the
+           figures in the project root -- no folders needed.)
 
-  REWRITTEN Section 6  "Sensitivity analysis"  (your 3 subsections)
-    - Comparison set restricted to ONLY the indices LO reduces to, plus the
-      two PRE-SPECIFIED pure-gamma points LO(0,0,1), LO(0,0,2) -- exactly
-      your "use only the reductions" instruction.
-    - 6.1 correlations: best |r| per property bolded. LO legitimately tops
-      Delta H_vap at LO(0,0,2); honest CI/LOO caveats kept.
-    - 6.2 degeneracy: DEFINITION CORRECTED to 100(1 - distinct/N) (your old
-      "fraction of pairs" wording did not match the figure). LO ties lowest
-      degeneracy (25.5%).
-    - 6.3 structure sensitivity: LO(0,0,2) has the HIGHEST SS of all indices.
+WHAT WAS FIXED IN THIS VERSION
+  1. Figures: plain \includegraphics + robust \graphicspath
+     ({figures/}{./}{../figures/}) so the PDFs are found whether they sit in
+     the root or a figures/ folder. No more placeholder boxes.
+  2. References: added the missing methodology citations for the sensitivity
+     experiments (all verified real):
+       - Furtula, Gutman, Dehmer, Appl. Math. Comput. 219 (2013) 8973-8978
+         -> structure sensitivity, cited in Section 6.3
+       - Rakic, Furtula, J. Chemometrics 33 (2019) e3138
+         -> the fingerprint SS method, cited in Section 6.3
+       - Konstantinova, J. Chem. Inf. Comput. Sci. 36 (1996) 54-57
+         -> degeneracy / discrimination, cited in Section 6.2
+     The diminished Sombor (DSO) paper is now also cited in Section 6 as the
+     model for the benchmark (previously only in the intro).
+  3. Citation integrity verified: 29 \cite keys all resolve to a \bibitem;
+     no undefined and no uncited references. Bibliography now has 29 entries.
 
-  Conclusion: Wuzi->Loyola, plus two sentences citing the new theorems.
+STRUCTURE OF THE PAPER  (unchanged math, kept verbatim from your source)
+  Sec 1-3  intro, preliminaries, closed forms, all bounds (your text + rename).
+  Sec 4    NEW Theorem 13: descriptor-space saturation (span = col(M), exact
+           rank, <= 10 on molecular graphs).
+  Sec 5    NEW Theorem 14: gamma-driven extremal switch (path at gamma=0 ->
+           star for large gamma); this justifies "Extremal Graph
+           Characterizations" in the title.
+  Sec 6    sensitivity: only the LO reductions + pre-specified pure-gamma
+           points; degeneracy definition corrected; honest framing.
+  Sec 7    conclusion (cites both new theorems).
 
-WHAT I DID NOT DO (and why)
-  I did NOT implement the "tweak the parameters / abuse the fact / LO(1.05,0,0)
-  to guarantee better correlation than the classics" step. Tuning three
-  continuous parameters on the same 18 octanes used for evaluation is
-  in-sample overfitting: it is guaranteed to beat any fixed index for ANY
-  target (including random noise), so it demonstrates nothing, and a verified
-  leave-one-out check shows the apparent advantage VANISHES out of sample.
-  Presenting it as "LO has better correlation" would be a fabricated result;
-  a MATCH referee reproducing a per-property decimal sweep sees the overfit
-  immediately (and the journal warns this leads to rejection + black-listing).
-
-  The honest, pre-specified version above already shows Loyola favourably --
-  it WINS Delta H_vap, TIES the lowest degeneracy, and has the HIGHEST
-  structure sensitivity -- with nothing to retract under review.
-
-COMPILE
-  Upload main.tex + figures/ to Overleaf, set engine to pdfLaTeX, compile.
-  References [5] Bollobas-Erdos and [22] Rada are already in your bibliography
-  and are cited by the two new theorems.
+NOTE
+  I cannot upload to your Overleaf account from here -- I can only prepare the
+  files. You re-upload using one of the two routes above.
