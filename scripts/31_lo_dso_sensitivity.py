@@ -30,16 +30,16 @@ PROP_LABEL={"T_B":r"$T_B$","dHf":r"$\Delta H_f$","dHvap":r"$\Delta H_{\rm vap}$"
 def _ga(a,b): return 2*np.sqrt(a*b)/(a+b)
 def _ag(a,b): return (a+b)/(2*np.sqrt(a*b))
 INDICES=[
- ("M1",   r"$M_1$",        lambda a,b: a+b),
- ("M2",   r"$M_2$",        lambda a,b: a*b),
- ("HM",   r"$HM$",         lambda a,b: (a+b)**2),
- ("mM2",  r"${}^mM_2$",    lambda a,b: 1.0/(a*b)),
- ("R",    r"$R$",          lambda a,b: 1.0/np.sqrt(a*b)),
- ("chi",  r"$\chi$",       lambda a,b: 1.0/np.sqrt(a+b)),
- ("H/2",  r"$H/2$",        lambda a,b: 1.0/(a+b)),
- ("ISI",  r"$ISI$",        lambda a,b: (a*b)/(a+b)),
- ("GA",   r"$GA$",         _ga),
- ("AG",   r"$AG$",         _ag),
+ ("M1",   r"$M_1{=}LO(0,1,0)$",          lambda a,b: a+b),
+ ("M2",   r"$M_2{=}LO(1,0,0)$",          lambda a,b: a*b),
+ ("HM",   r"$HM{=}LO(0,2,0)$",           lambda a,b: (a+b)**2),
+ ("mM2",  r"${}^mM_2{=}LO(-1,0,0)$",     lambda a,b: 1.0/(a*b)),
+ ("R",    r"$R{=}LO(-1/2,0,0)$",         lambda a,b: 1.0/np.sqrt(a*b)),
+ ("chi",  r"$\chi{=}LO(0,-1/2,0)$",      lambda a,b: 1.0/np.sqrt(a+b)),
+ ("H/2",  r"$H/2{=}LO(0,-1,0)$",         lambda a,b: 1.0/(a+b)),
+ ("ISI",  r"$ISI{=}LO(1,-1,0)$",         lambda a,b: (a*b)/(a+b)),
+ ("GA",   r"$GA{=}2\,LO(1/2,-1,0)$",     _ga),
+ ("AG",   r"$AG{=}\frac{1}{2}LO(-1/2,1,0)$", _ag),
  ("LO(0,0,1)", r"$LO(0,0,1)$", lambda a,b: np.exp(np.abs(a-b)/(a+b))),
  ("LO(0,0,2)", r"$LO(0,0,2)$", lambda a,b: np.exp(2*np.abs(a-b)/(a+b))),
 ]
@@ -171,10 +171,10 @@ def main():
 
     # ================= FIGURES =================
     # Fig 1: prediction correlation heatmap
-    fig,ax=plt.subplots(figsize=(6.2,5.4))
+    fig,ax=plt.subplots(figsize=(8.6,5.6))
     im=ax.imshow(C,cmap="RdBu_r",vmin=-1,vmax=1,aspect="auto")
     ax.set_xticks(range(len(PROPS))); ax.set_xticklabels([PROP_LABEL[p] for p in PROPS])
-    ax.set_yticks(range(len(NAMES))); ax.set_yticklabels(LABELS,fontsize=9)
+    ax.set_yticks(range(len(NAMES))); ax.set_yticklabels(LABELS,fontsize=8)
     for i in range(len(NAMES)):
         for j in range(len(PROPS)):
             txt=f"{C[i,j]:+.2f}"
@@ -188,31 +188,31 @@ def main():
     fig.savefig(os.path.join(FIG,"fig_lo_prediction_correlation_heatmap.pdf")); plt.close(fig)
 
     # Fig 2: intercorrelation heatmap
-    fig,ax=plt.subplots(figsize=(6.8,5.8))
+    fig,ax=plt.subplots(figsize=(9.4,8.4))
     im=ax.imshow(IC,cmap="RdBu_r",vmin=-1,vmax=1,aspect="auto")
-    ax.set_xticks(range(len(NAMES))); ax.set_xticklabels(LABELS,rotation=90,fontsize=8)
-    ax.set_yticks(range(len(NAMES))); ax.set_yticklabels(LABELS,fontsize=8)
+    ax.set_xticks(range(len(NAMES))); ax.set_xticklabels(LABELS,rotation=90,fontsize=7)
+    ax.set_yticks(range(len(NAMES))); ax.set_yticklabels(LABELS,fontsize=7)
     fig.colorbar(im,ax=ax,fraction=0.046,pad=0.04,label="Pearson $r$")
     ax.set_title("Intercorrelation on the 18 octane isomers",fontsize=10)
     fig.tight_layout(); fig.savefig(os.path.join(FIG,"fig_lo_intercorrelation_heatmap.png"),dpi=200)
     fig.savefig(os.path.join(FIG,"fig_lo_intercorrelation_heatmap.pdf")); plt.close(fig)
 
     # Fig 3: degeneracy bars
-    fig,ax=plt.subplots(figsize=(7.2,4.2))
+    fig,ax=plt.subplots(figsize=(9.6,5.8))
     vals=[deg[n] for n in NAMES]
     ax.bar(range(len(NAMES)),vals,color="#4477AA",edgecolor="black",linewidth=0.4)
-    ax.set_xticks(range(len(NAMES))); ax.set_xticklabels(LABELS,rotation=45,ha="right",fontsize=8)
+    ax.set_xticks(range(len(NAMES))); ax.set_xticklabels(LABELS,rotation=90,ha="center",fontsize=7)
     ax.set_ylabel("Degeneracy (\\%)"); ax.set_title("Degeneracy on the 106 order-10 trees (lower = better discrimination)",fontsize=9)
     for i,v in enumerate(vals): ax.text(i,v+0.4,f"{v:.1f}",ha="center",fontsize=7)
     fig.tight_layout(); fig.savefig(os.path.join(FIG,"fig_lo_degeneracy_order10_trees.png"),dpi=200)
     fig.savefig(os.path.join(FIG,"fig_lo_degeneracy_order10_trees.pdf")); plt.close(fig)
 
     # Fig 4: structure sensitivity 3 panels
-    fig,axes=plt.subplots(1,3,figsize=(12,4.2))
+    fig,axes=plt.subplots(1,3,figsize=(13.5,5.8))
     for ax,k,title in zip(axes,[0,1,2],["SS","Abr","SA"]):
         vv=[SSrows[n][k] for n in NAMES]
         ax.bar(range(len(NAMES)),vv,color="#4477AA",edgecolor="black",linewidth=0.4)
-        ax.set_xticks(range(len(NAMES))); ax.set_xticklabels(LABELS,rotation=90,fontsize=7)
+        ax.set_xticks(range(len(NAMES))); ax.set_xticklabels(LABELS,rotation=90,fontsize=6)
         ax.set_title(title,fontsize=11)
     fig.suptitle("Structure-sensitivity metrics on the 75 decane isomers (standard formulas; see methods note)",fontsize=9)
     fig.tight_layout(); fig.savefig(os.path.join(FIG,"fig_lo_structure_sensitivity_decanes.png"),dpi=200)
