@@ -28,15 +28,24 @@ cached RDKit descriptors on 4200 lipophilicity molecules to 100% exact (M1/M2/R/
 
 **Degeneracy** (order-10 trees, $N=106$ from `networkx.nonisomorphic_trees(10)`):
 $$\text{Degeneracy}(\%)=100\Big(1-\tfrac{\#\text{distinct index values}}{N}\Big).$$
-**Status:** formula stated explicitly here. The DSO PDF does **not** print its degeneracy
-formula (it cites Konstantinova [8]); this formula is **to be verified against [8]**
-before manuscript insertion. (Distinct values counted after rounding to 6 decimals.)
+**Status: CONFIRMED.** This formula reproduces the DSO paper's Figure-5 percentages
+*exactly* as integer distinct-counts out of $N=106$: DSO $19.81\%\to85$ distinct,
+ESO (least degenerate) $16.98\%\to88$, RSO (most degenerate) $22.64\%\to82$
+(each $=100(1-k/106)$ for integer $k$). So our convention is the Konstantinova [8]
+convention DSO used; no further reconciliation needed. (Distinct values counted after
+rounding to 6 decimals.)
 
 **Structure sensitivity** (decanes, $N=75$): for index values $\{I_i\}$ with mean $\mu$,
-$$SS=\sigma/\mu,\qquad Abr=(\max I-\min I)/\mu,\qquad SA=SS/Abr.$$
-**Status:** these are *standard* CV-based structure-sensitivity formulas. They do **NOT**
-reproduce the DSO Table 2 numbers (our `SO` gives $SS=0.098,\ Abr=0.446,\ SA=0.219$ vs
-DSO's $0.193,\ 0.396,\ 0.488$). The DSO PDF does not print the SS/Abr formulas (it cites
-Rakić–Furtula [12]). **These formulas must be reconciled with [12] before manuscript
-insertion; do not claim "following DSO exactly."** SA=SS/Abr does match DSO's definition
-of SA.
+we use two simple **dispersion** measures defined entirely from the descriptor values,
+$$SS=\sigma/\mu\ \text{(coefficient of variation)},\qquad Abr=(\max I-\min I)/\mu\ \text{(relative range)},\qquad SA=SS/Abr.$$
+**Status: these are OUR OWN measures, NOT the DSO / Rakić–Furtula procedure.** DSO's
+method [12] (Rakić–Furtula 2019, *J. Chemometrics*) is **fingerprint-based** — it builds
+Morgan circular fingerprints for each molecule and weights descriptor differences by
+pairwise **Tanimoto** structural similarity. That requires cheminformatics fingerprinting
+(RDKit-class tooling) and is **not reproducible in this no-install environment, and not
+validatable against DSO Table 2** (our `SO` gives $SS=0.098$ vs DSO's $0.193$ — different
+method, as expected). **Therefore the manuscript must NOT claim to follow DSO or
+Rakić–Furtula for §5.4, and the values are NOT directly comparable to DSO Table 2.** We
+present $SS,Abr,SA$ only as a self-contained, reproducible within-study comparison; the
+relative ranking (LO(0,0,2) most sensitive) is the only claim made. SA$=SS/Abr$ does
+coincide with DSO's *definition* of SA, but the underlying SS/Abr differ.

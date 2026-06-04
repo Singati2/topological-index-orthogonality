@@ -60,9 +60,11 @@ graphs; lower is better. On the $106$ non-isomorphic trees of order $10$ we use
 $\mathrm{Degeneracy}(\%) = 100\,(1 - \#\text{distinct}/N)$ (Figure~\ref{fig:lo_deg}).
 The pure-$\gamma$ points $LO(0,0,1)$ and $LO(0,0,2)$ have degeneracy $25.5\%$,
 among the lowest of the compared indices and comparable to $R$, $GA$, and $AG$;
-$M_1$ ($83.0\%$) and $M_2$ ($67.0\%$) are the most degenerate. (The exact
-degeneracy convention used by \cite{MovahediGutmanRedzepovicFurtula2026} is to be
-verified against its source before final insertion.)
+$M_1$ ($83.0\%$) and $M_2$ ($67.0\%$) are the most degenerate. This convention
+matches the one used by \cite{MovahediGutmanRedzepovicFurtula2026}: it reproduces
+their reported percentages exactly as integer distinct-counts out of $106$ (e.g.
+their $19.81\%$, $16.98\%$, $22.64\%$ correspond to $85$, $88$, $82$ distinct
+values).
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\linewidth]{fig_lo_degeneracy_order10_trees.pdf}
@@ -70,20 +72,25 @@ verified against its source before final insertion.)
 \label{fig:lo_deg}\end{figure}
 
 \subsection{Structure sensitivity}\label{sub:structure}
-We compute structure sensitivity $SS=\sigma/\mu$, abruptness
-$Abr=(\max-\min)/\mu$, and $SA=SS/Abr$ for the index values on the $75$ decane
-isomers (Figure~\ref{fig:lo_ss}). The pure-$\gamma$ point $LO(0,0,2)$ has the
-highest structure sensitivity ($SS=0.165$) and abruptness among the compared
-indices, with $LO(0,0,1)$ also high; the $\gamma$-imbalance term therefore
-contributes most visibly to structure sensitivity rather than to added
-correlation information. (These are standard structure-sensitivity formulas; they
-do not reproduce the numerical values of
-\cite{MovahediGutmanRedzepovicFurtula2026} and are to be reconciled with the
-Raki\'c--Furtula method before final insertion.)
+To gauge how strongly each index responds to structural variation within a class
+of isomers, we use two simple dispersion measures computed directly from the index
+values $\{I_i\}$ over the $75$ decane isomers: the coefficient of variation
+$SS=\sigma/\mu$, the relative range $Abr=(\max I-\min I)/\mu$, and their ratio
+$SA=SS/Abr$ (Figure~\ref{fig:lo_ss}). A larger $SS$ indicates a stronger response
+to structural change. The pure-$\gamma$ point $LO(0,0,2)$ has the highest $SS$
+($0.165$) and the largest relative range among the compared indices, with
+$LO(0,0,1)$ also high; the $\gamma$-imbalance term therefore contributes most
+visibly to structural responsiveness, complementing its limited role in linear
+correlation. We emphasise that these are self-contained, within-study dispersion
+measures: they are \emph{not} the fingerprint-based Rak\'i\'c--Furtula procedure
+used by \cite{MovahediGutmanRedzepovicFurtula2026} (which weights descriptor
+differences by Tanimoto similarities of Morgan fingerprints), and the numerical
+values are therefore not directly comparable to that work. Only the within-study
+ranking is claimed.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\linewidth]{fig_lo_structure_sensitivity_decanes.pdf}
-\caption{Structure-sensitivity metrics on the $75$ decane isomers. Formulas for $SS$, $Abr$, and $SA$ are stated in the methods note and should be verified against \cite{MovahediGutmanRedzepovicFurtula2026} before final insertion.}
+\caption{Within-study dispersion measures on the $75$ decane isomers: coefficient of variation $SS=\sigma/\mu$, relative range $Abr=(\max-\min)/\mu$, and $SA=SS/Abr$. These are self-contained measures, not the fingerprint-based Rak\'i\'c--Furtula procedure of \cite{MovahediGutmanRedzepovicFurtula2026}; values are not directly comparable to that work.}
 \label{fig:lo_ss}\end{figure}
 
 \paragraph{Summary.} The Loyola family unifies several classical degree-based

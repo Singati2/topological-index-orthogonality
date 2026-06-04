@@ -32,15 +32,18 @@ on this small, degree-limited benchmark.** Figure:
 ## 5.3 Degeneracy (106 order-10 trees)
 Degeneracy(%) = 100(1 − #distinct/N). LO(0,0,1)=LO(0,0,2)=**25.5%** (among the
 lowest = best discrimination, ties R/GA/AG); M1 = 83.0%, M2 = 67.0% (most
-degenerate). Formula to be verified against DSO's source [8]. Figure:
+degenerate). ✅ **CONFIRMED** = DSO's convention: reproduces their Fig-5 numbers
+exactly as integer distinct-counts /106 (19.81%→85, 16.98%→88, 22.64%→82). Figure:
 `fig_lo_degeneracy_order10_trees.{png,pdf}`.
 
-## 5.4 Structure sensitivity (75 decanes)
-SS = σ/μ, Abr = (max−min)/μ, SA = SS/Abr. **LO(0,0,2) has the highest SS (0.165)
-and Abr** among the compared indices; LO(0,0,1) also high → the γ term's
-contribution shows up in structure sensitivity. ⚠ Standard formulas; they do **not**
-reproduce DSO Table 2 (our SO = 0.098/0.446/0.219 vs DSO 0.193/0.396/0.488) — to be
-reconciled with Rakić–Furtula [12]. Figure:
+## 5.4 Structure sensitivity (75 decanes) — SELF-DEFINED dispersion measures
+SS = σ/μ (coeff. of variation), Abr = (max−min)/μ (relative range), SA = SS/Abr.
+**LO(0,0,2) has the highest SS (0.165) and Abr** among the compared indices;
+LO(0,0,1) also high → the γ term's contribution shows up in structural
+responsiveness. ⚠ **These are OUR OWN measures, NOT DSO/Rakić–Furtula.** DSO's [12]
+is fingerprint-based (Morgan + Tanimoto) → needs RDKit-class tooling, NOT reproducible
+here and NOT validatable against DSO Table 2 (our SO=0.098 vs DSO 0.193 — different
+method). Manuscript claims only the within-study ranking; no DSO comparability. Figure:
 `fig_lo_structure_sensitivity_decanes.{png,pdf}`.
 
 ## Safe summary sentence (manuscript-ready)
