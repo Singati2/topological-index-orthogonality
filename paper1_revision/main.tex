@@ -1,0 +1,1335 @@
+\documentclass[a5paper, 10pt]{article}
+
+
+\usepackage{cite, amsmath, amssymb, booktabs, lastpage, graphicx, float}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{geometry}
+\geometry{margin=1.5cm,a5paper,twoside,inner=2cm}
+
+\usepackage{setspace}
+
+
+\usepackage{amsthm}
+
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem*{corollary}{Corollary}
+\renewcommand{\qedsymbol}{\rule{.7em}{.7em}}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{note}{Note}
+\newtheorem{case}{Case}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+%% Changing the title, author, etc.
+\usepackage{graphicx}
+\makeatletter
+\renewcommand{\maketitle}{
+    \begin{center}
+    \rule[.2em]{\textwidth}{0.353mm}
+        \begin{minipage}[m]{0.35\textwidth}
+            {\scriptsize
+                \begin{center}
+                    \textsf{\textbf{\huge MATCH}\\
+                        \textit{Communications in Mathematical\\
+                            and in Computer Chemistry}
+                    }
+            \end{center}}
+        \end{minipage}\hfill
+        \begin{minipage}[m]{0.65\textwidth}
+            \begin{flushright}
+                \baselineskip=10px
+                {\scriptsize\sffamily{\itshape  MATCH Commun. Math. Comput. Chem.}
+                \textbf{\vol{}}
+                (\pubyear)
+                    \thepage--\pageref{LastPage}}\\
+                {\scriptsize\sffamily {\bfseries ISSN:} 0340--6253}\\
+                {\scriptsize\sffamily \textbf{doi:} \doi{10.46793/match.\vol-\num.\id}}
+            \end{flushright}
+        \end{minipage}
+        \rule[1em]{\textwidth}{.353mm}
+        \baselineskip=0.30in
+        {\Large\bfseries \@title} \par
+        \vspace{5mm}
+        \baselineskip=0.2in
+        {\large\bfseries \@author}\par
+        \vspace{1mm}
+        {\it \@address} \par
+        {\small\tt \@email} \par
+        \vspace{3mm}
+        {\small (Received \@date)} \par
+    \end{center}
+    \vspace{3mm}
+}
+\newcommand{\address}[1]{\def\@address{#1}}
+\newcommand{\email}[1]{\def\@email{#1}}
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{#1}}
+
+\newcommand{\vol}{00}
+\newcommand{\num}{00}
+\newcommand{\pubyear}{0000}
+\newcommand{\id}{xxxxx}
+%%setting page-number
+\setcounter{page}{1}
+
+
+\thispagestyle{empty}
+\makeatother
+
+%% Making << \acknowledgment >> command
+\newcommand{\acknowledgment}[1]{\vspace{5mm}\singlespacing
+    {\noindent\textbf{\textit{Acknowledgment\/}:} #1}
+}
+
+%% Setting page numbers
+\usepackage{fancyhdr}
+
+%% now reset the headers and footers
+\fancyhead{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{.3pt}
+\voffset = 18pt
+\headsep = 3pt
+
+\renewcommand*{\thefootnote}{\fnsymbol{footnote}}
+
+\usepackage[margin=1cm,%
+            font=footnotesize,%
+            format=hang,%
+            labelsep=period,%
+            labelfont=bf]{caption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PLACE ADDITIONAL PACKAGES HERE (if it is needed):
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage{enumitem}
+\setlist[itemize]{topsep=2pt,itemsep=2pt}
+\setlist[enumerate]{topsep=2pt,itemsep=2pt}
+\emergencystretch=3em
+\hbadness=2000
+\setlength{\marginparwidth}{2cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% make the odd pages have the section name on the top right
+\fancyhead[RO]{\footnotesize \thepage}
+%% make the even pages have the chapter name on the top left
+\fancyhead[LE]{\footnotesize \thepage}
+
+%% making page-numbers visible
+\pagestyle{fancy}
+
+% Custom macros for the Loyola index family
+    \newcommand{\Wuzi}{LO(G;\alpha,\beta,\gamma)}
+  \newcommand{\edgepsi}{\psi(x,y;\alpha,\beta,\gamma)}
+  \newcommand{\bid}{\mathcal{F}_{\mathrm{BID}}}
+% Path to figures
+\graphicspath{{figures/}{../figures/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{The Loyola Index Family, Extremal Graph Characterizations and Sensitivity Analysis}
+\author{Advik Natarajan$^{a}$\footnote{Corresponding author.}, Ganesh Shiwakoti$^{b,}$, Micheal Arockiaraj$^{a}$}
+
+\address{$^a$Department of Mathematics, Loyola College, Chennai, India\\
+    $^b$Department of Mathematics and Statistics, Florida Atlantic University, USA
+    }
+
+\email{adviknatarajan@gmail.com}
+
+\date{\today}
+
+% !TeX program = pdflatex
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  Several degree-based topological indices
+  have been proposed since the 1970s, including the Zagreb,
+  Randi\'c, Geometric-Arithmetic, Sum-Connectivity, Harmonic, and Sombor
+  indices. In this paper, we
+  introduce the \emph{Loyola index family}, a three-parameter
+  degree-based topological index built from
+  the product, the sum, and the normalized difference of each pair
+  of adjacent degrees. For
+  $\alpha, \beta, \gamma \in \mathbb{R}$, the \emph{Loyola index}
+  is defined as,
+  \begin{equation}
+  LO(G;\alpha,\beta,\gamma)
+  \;=\; \sum_{uv \in E(G)}
+  (d_u d_v)^{\alpha}\,(d_u + d_v)^{\beta}\,
+  \exp\!\left(\gamma\,\frac{|d_u - d_v|}{d_u + d_v}\right)
+  \end{equation} At specific values of its three parameters,
+  the \emph{Loyola index family} reduces to many of the classical
+  degree-based topological indices.
+  Closed-form values of the \emph{Loyola index} for standard graph classes
+  are derived. Some sharp upper and lower bounds are also derived.
+  Sensitivity analysis is carried out on octane isomers, non-isomorphic
+  trees, decane isomers, and the correlations of the \emph{Loyola index}
+  are compared with several classical topological indices.
+  \end{abstract}
+
+\onehalfspacing
+
+% =====================================================================
+\section{Introduction}\label{sec:intro}
+  % =====================================================================
+
+  The literature on degree-based topological indices in chemical
+  graph theory has grown substantially since the seminal Wiener
+  index, the Randi\'c index,
+  and the Zagreb indices of Gutman and
+  Trinajsti\'c.
+  Among the many parametric extensions are the general Randi\'c
+  index $R_{\alpha}$~\cite{BollobasErdos1998}, the general
+  sum-connectivity index
+  $\chi_{\alpha}$~\cite{ZhouTrinajstic2009sumconn}, the forgotten
+  index $F$ revisited by Furtula and
+  Gutman~\cite{FurtulaGutman2015F}, the geometric--arithmetic index
+  $GA$~\cite{VukicevicFurtula2009GA}, the Albertson irregularity
+  index~\cite{Albertson1997} and the inverse $\sigma$-index
+  problem~\cite{GutmanToganYurttasCevikCangul2018Sigma}.
+
+  While historical literature focused primarily on algebraic formulations
+  to capture molecular branching and structural invariants, a distinct
+  shift toward geometric interpretations occurred when Gutman introduced
+  the Sombor index family \cite{Gutman2021Sombor, Gutman2021SomborBasic}.
+  This formulation led to work such as establishing fundamental bounds
+  \cite{MilovanovicMilovanovicMatejic2021Sombor} and evaluating how these
+  new geometric invariants correlated with traditional degree-based metrics
+  \cite{WangMaoLiFurtula2022SomborRelations}. Much of this initial work
+  concentrated on identifying extremal bounds within fundamental graph
+  classes, particularly optimizing the general and standard variants of the
+  index over molecular trees and related networks
+  \cite{DasCevikCangulShang2021Sombor, DasGutman2022SomborTrees,
+  AhmadFarooqDas2025Extremal}.
+
+   Contemporary studies have introduced modified metrics such as the mean
+  Sombor index \cite{MendezBermudezAguilarSanchez2022MeanSombor}, the
+  elliptic Sombor index \cite{GutmanFurtulaOz2024Elliptic}, and the
+  hyperbolic Sombor index \cite{BarmanDas2026HSO}. Concurrently, parameters
+  like the diminished Sombor index \cite{Movahedi2025DSO,
+  MovahediGutmanRedzepovicFurtula2026} and the hybrid vertex-edge KG-Sombor
+  index \cite{KosariDehgardiKhan2023Lower} have been developed to handle
+  unique structural constraints. Beyond purely theoretical analysis, these
+  descriptors are increasingly integrated into practical quantitative
+  structure-property relationship (QSPR) models and spectral evaluations.
+  For instance, hybrid geometric-harmonic-Zagreb descriptors are now
+  utilized to optimize the predictive analysis of polycyclic aromatic
+  hydrocarbons \cite{ArockiarajPaulClement2023Hybrid}, while modified
+  reverse degree invariants help characterize the graph energy and entropy
+  of complex 2D metal-organic frameworks \cite{KalaamGreeniArockiaraj2024}.
+  This rapid diversification of structural metrics is currently being
+  unified through generalized matrix methods
+  \cite{ZuoRatherImranAli2022Modified}, dual coindex formulations
+  \cite{GujiWali2025Lanzhou}, simplicial network assessments
+  \cite{Shang2022Simplicial}, and finite-dimensional linear frameworks
+  \cite{Rada2026LinearVDB}, as documented in recent comprehensive
+  literature surveys \cite{Gutman2026SomborSurvey}.
+
+  In this paper, we introduce
+  the \emph{Loyola index family} as a controlled three-parameter
+  Bond-Incident Degree (BID) index. The bounds of
+  Section~\ref{sec:bounds} locate this behaviour inside the
+  standard BID framework. The exact reductions of the \emph{Loyola index}
+  show that this topological index recovers many of the
+  classical indices.
+
+
+
+  Direct substitution into Equation~\eqref{eq:wuzi} shows that the
+  Loyola family contains a wide range of classical BID indices as
+  exact reductions at specific parameter triples, either
+  identically or up to a multiplicative scaling constant. The reductions
+  verified by direct substitution
+  include the edge count $m$ at $(0, 0, 0)$, the first Zagreb
+  index $M_1$ at $(0, 1, 0)$, the second Zagreb
+  index $M_2$ at $(1, 0, 0)$, the hyper-Zagreb
+  index $HM$ at $(0, 2, 0)$, the modified second Zagreb index
+  ${}^{m}\!M_2$ at
+  $(-1, 0, 0)$, the Randi\'c index $R$ at
+  $(-1/2, 0, 0)$, the sum-connectivity index
+  $\chi$ at $(0, -1/2, 0)$, the
+  half harmonic index $H/2$ at
+  $(0, -1, 0)$, the inverse sum indeg index
+  $ISI$ at $(1, -1, 0)$, the
+  geometric-arithmetic index
+  $GA$ (up to a factor of $2$) at
+  $(1/2, -1, 0)$, and the arithmetic-geometric index $AG$ (up to a
+  factor of $2$) at $(-1/2, 1, 0)$. The whole general Randi\'c
+  family $R_\alpha$~\cite{BollobasErdos1998} is recovered as the
+  $\beta = \gamma = 0$ axis $LO(G; \alpha, 0, 0)$, and the general
+  sum-connectivity family
+  $\chi_\beta$~\cite{ZhouTrinajstic2009sumconn} as the
+  $\alpha = \gamma = 0$ axis $LO(G; 0, \beta, 0)$. The Loyola family
+  thus interpolates among the major degree-based indices.
+
+
+  On the mathematical side, this paper comprises the
+  closed-form values on standard graph classes, sharp upper and
+  lower bounds in terms of the basic graph parameters and of other
+  classical indices. On the
+  chemometric side, by performing a sensitivity analysis  similar
+  to~\cite{MovahediGutmanRedzepovicFurtula2026}, we observe that
+   the Loyola index
+  family  falls in the same correlation regime as the classical BID
+  indices rather than above them.
+
+  The distinguishing feature of the Loyola family within the
+  degree-based BID class is the multiplicative
+  $\exp(\gamma \cdot \mathrm{imb}(d_u, d_v))$ factor, where
+  $\mathrm{imb}(x, y) = |x - y|/(x + y) \in [0, 1)$ is the
+  normalized degree imbalance. The same imbalance ratio appears
+  in the diminished Sombor
+  index~\cite{MovahediGutmanRedzepovicFurtula2026} and in
+  irregularity-based BID variants; the Loyola family combines it
+  multiplicatively with the Randi\'c-style $(d_u d_v)^\alpha$ and
+  sum-connectivity-style $(d_u + d_v)^\beta$ factors in a single
+  three-parameter object. The factor is bounded above by
+  $e^{\gamma}$ and reduces to $1$ on regular graphs.
+
+  Also, it is useful to demonstrate the descriptor-space ceiling in
+  which the entire family lives. On hydrogen-suppressed molecular
+  graphs of maximum degree at most $4$, every BID index is a linear
+  functional of the ten unordered edge-degree-pair counts
+  $m_{ij}(G) = |\{uv \in E(G) : \{d_u, d_v\} = \{i, j\}\}|$ for
+  $1 \le i \le j \le 4$; this finite-dimensional view of
+  vertex-degree-based indices has recently been placed on a formal
+  linear-algebraic footing by Rada~\cite{Rada2026LinearVDB}. Thus
+  the Loyola family, like every BID family on this molecular class,
+  lies inside a fixed ten-dimensional descriptor
+  space, no matter how
+  its three real parameters are chosen; we make this precise in
+  Theorem~\ref{thm:saturation}.
+
+% =====================================================================
+\section{Preliminaries}\label{sec:prelim}
+% =====================================================================
+
+\subsection{Notation}\label{sec:notation}
+
+Let $G = (V, E)$ be a finite simple connected graph of order
+$n = |V|$ and size $m = |E|$. For a vertex $v \in V$, the degree
+$d_v = d_G(v)$ counts the edges incident to $v$. The maximum and
+minimum degrees are denoted $\Delta = \Delta(G)$ and
+$\delta = \delta(G)$. In the chemometric sections we work with
+hydrogen-suppressed molecular graphs, where the assumption
+$\Delta \le 4$ is natural for organic molecules built from
+$\{$C, N, O, S, P, halogens$\}$.
+
+The classical graph families used throughout are: the complete
+graph $K_n$, the cycle $C_n$, the path $P_n$, the star $S_n$, the complete
+bipartite graph $K_{p,q}$, the hypercube $Q_k$ (the
+$k$-dimensional binary hypercube; $2^k$ vertices,
+$k \cdot 2^{k - 1}$ edges, $k$-regular), the wheel $W_n$ (an
+$(n - 1)$-cycle plus a universal vertex), the friendship graph
+$F_p$ ($p$ triangles sharing a common vertex), and the
+$r$-regular graphs.
+
+For an edge $e = uv \in E(G)$ we write $(d_u, d_v)$ for its
+\emph{degree pair} understood as an unordered multiset
+$\{d_u, d_v\}$.
+
+\subsection{Definition}\label{sec:def}
+
+\begin{definition}[Loyola index family]\label{def:wuzi}
+Let $G = (V, E)$ be a simple connected graph. For
+$\alpha, \beta, \gamma \in \mathbb{R}$, the \emph{Loyola index family}
+is defined as,
+\begin{equation}\label{eq:wuzi}
+\Wuzi
+\;=\; \sum_{uv \in E(G)}
+(d_u d_v)^{\alpha}\,(d_u + d_v)^{\beta}\,
+\exp\!\left(\gamma\,\frac{|d_u - d_v|}{d_u + d_v}\right)
+\end{equation}
+\end{definition}
+
+Equation~\eqref{eq:wuzi} is well defined for all
+$\alpha, \beta \in \mathbb{R}$ on graphs without isolated vertices
+(so that $d_u, d_v \ge 1$ on every edge). The expression is
+invariant under permutations of $(u, v)$ because
+$d_u d_v = d_v d_u$, $d_u + d_v = d_v + d_u$, and
+$|d_u - d_v| = |d_v - d_u|$; hence $\Wuzi$ depends only on the
+multiset of unordered edge degree pairs of~$G$. When $\gamma = 0$
+the family reduces to the standard two-parameter
+$(\alpha, \beta)$ degree-based family; the exact reductions to
+classical BID indices at specific parameter triples are
+catalogued in Section~\ref{sec:intro}.
+\subsection{Closed-form values on standard graphs}\label{sec:closedforms}
+
+  \begin{proposition}\label{prop:closedforms}
+  Let $\alpha, \beta, \gamma \in \mathbb{R}$. Then:
+  \begin{enumerate}
+  \item  $LO(K_n; \alpha, \beta, \gamma) =
+    \dfrac{n(n-1)}{2}\,2^{\beta}(n - 1)^{2\alpha + \beta}$ for $n \ge 2$.
+  \item  $LO(C_n; \alpha, \beta, \gamma) = n \cdot 4^{\alpha +
+  \beta}$
+    for $n \ge 3$.
+  \item
+    $LO(P_n; \alpha, \beta, \gamma) =
+    \begin{cases}
+      2^{\beta}, & n = 2,\\[2pt]
+      2 \cdot 2^{\alpha} 3^{\beta} e^{\gamma/3}, & n = 3,\\[2pt]
+      2 \cdot 2^{\alpha} 3^{\beta} e^{\gamma/3} + (n - 3) \cdot 4^{\alpha +
+  \beta},
+         & n \ge 4.
+    \end{cases}$
+  \item  $LO(S_n; \alpha, \beta, \gamma) =
+    (n - 1)\,(n - 1)^{\alpha} n^{\beta} \exp\!\left(\gamma\,\dfrac{n -
+  2}{n}\right)$
+    for $n \ge 2$.
+  \item  $LO(K_{p,q}; \alpha, \beta, \gamma) =
+    pq\,(pq)^{\alpha}(p + q)^{\beta}\exp\!\left(\gamma\,\dfrac{|p - q|}{p +
+  q}\right)$.
+  \item  $LO(Q_k; \alpha, \beta, \gamma) =
+    k \cdot 2^{k - 1} \cdot 2^{\beta} k^{2\alpha + \beta}$ for $k \ge 1$.
+  \item  For $n \ge 5$, $W_n$ has $n - 1$ spoke edges with
+    degree pair $(3, n - 1)$ and $n - 1$ rim edges with degree pair
+    $(3, 3)$, so
+    \[
+    LO(W_n; \alpha, \beta, \gamma)
+    = (n - 1)\Bigl[\,3^{\alpha} (n - 1)^{\alpha}(n + 2)^{\beta}
+         \exp\!\left(\gamma\,\tfrac{n - 4}{n + 2}\right)
+       + 9^{\alpha} 6^{\beta}\Bigr].
+    \]
+  \item  For $p \ge 1$, $F_p$ has $2p$ spoke edges
+    $(2, 2p)$ and $p$ outer edges $(2, 2)$, so
+    \[
+    LO(F_p; \alpha, \beta, \gamma)
+    = p \cdot 4^{\alpha + \beta}
+     + 2p\,(4p)^{\alpha}(2p + 2)^{\beta}
+         \exp\!\left(\gamma\,\tfrac{p - 1}{p + 1}\right).
+    \]
+  \item  For an $r$-regular graph $G$ with $m$ edges,
+    $\Wuzi = m \cdot 2^{\beta} r^{2\alpha + \beta}$.
+  \end{enumerate}
+  \end{proposition}
+
+  \begin{proof}
+  Each case is obtained by enumerating the edge degree pairs of the
+  graph and applying Definition~\ref{def:wuzi}. For $r$-regular
+  graphs and for $K_n, C_n, Q_k$ (all regular), every edge has
+  $d_u = d_v = r$, so $\mathrm{imb} = 0$ and
+  $(d_u d_v)^{\alpha}(d_u + d_v)^{\beta}
+     = r^{2\alpha}(2r)^{\beta} = 2^{\beta} r^{2\alpha + \beta}$.
+  Items (1), (2), (6), and (9) follow immediately. For $S_n$ all
+  $n - 1$ edges have degree pair $(1, n - 1)$ with
+  $\mathrm{imb} = (n - 2)/n$; item (4) follows. For $K_{p, q}$ all
+  $pq$ edges have degree pair $(p, q)$; item (5) follows. For $P_n$
+  ($n \ge 4$) there are exactly two pendant edges with pair $(1, 2)$
+  and $n - 3$ interior edges with pair $(2, 2)$; item (3) follows by
+  direct summation. The boundary cases $n = 2, 3$ are immediate.
+  Items (7) and (8) are obtained by partitioning the edges of $W_n$
+  and $F_p$ into their two edge-degree-pair classes respectively and
+  summing.
+  \end{proof}
+
+ % =====================================================================
+  \section{Bounds for the Loyola family}\label{sec:bounds}
+  % =====================================================================
+
+  This section establishes a coherent set of upper and lower bounds
+  on $\Wuzi$. The development proceeds from a bracket bound via the
+  edge-contribution function $\psi$,  bounds in $(n, m, \Delta, \delta)$
+  for the non-negative
+  parameter region, Cauchy--Schwarz and
+  Jensen-type bounds in the first two Zagreb indices $M_1$ and
+  $M_2$,
+  a uniform ratio-bound theorem, and bounds via the generalised
+  Randi\'c, sum-connectivity, and Sombor indices. Throughout, $G$
+  is a simple connected graph with $\delta \le d_v \le \Delta$ for
+  every $v \in V(G)$.
+
+  The summand in~\eqref{eq:wuzi} depends only on the unordered
+  edge degree pair $(d_u, d_v)$. We isolate this dependence as follows:
+
+  \begin{definition}\label{def:psi}
+  For real parameters $\alpha, \beta, \gamma$ and positive reals
+  $x, y$,
+  \begin{equation}\label{eq:psi}
+  \edgepsi = (xy)^{\alpha}(x + y)^{\beta}
+  \exp\!\left(\gamma\,\tfrac{|x - y|}{x + y}\right).
+  \end{equation}
+  \end{definition}
+
+  With this notation $\Wuzi = \sum_{uv \in E(G)} \psi(d_u, d_v; \alpha,
+  \beta, \gamma)$.
+
+  \begin{proposition}\label{thm:bracket}
+  Let $G$ be a simple connected graph of size $m \ge 1$ with
+  degrees in $[\delta, \Delta]$. Then
+  \begin{equation}\label{eq:bracket}
+  m \cdot \psi_{\min}(\delta, \Delta; \alpha, \beta, \gamma)
+  \;\le\; \Wuzi \;\le\;
+  m \cdot \psi_{\max}(\delta, \Delta; \alpha, \beta, \gamma),
+  \end{equation}
+  where,
+  $\psi_{\min} = \min\{\psi(i, j; \alpha, \beta, \gamma)
+                : \delta \le i \le j \le \Delta\}$
+  and $\psi_{\max} = \max\{\psi(i, j; \alpha, \beta, \gamma)
+                : \delta \le i \le j \le \Delta\}$. The upper
+  inequality is an equality if and only if every edge of $G$ has a
+  degree pair attaining $\psi_{\max}$, and the lower
+  inequality is an equality if and only if every edge has a degree
+  pair attaining $\psi_{\min}$.
+  \end{proposition}
+
+  \begin{proof}
+  Because $G$ has $\delta \le d_v \le \Delta$ for every
+  $v \in V(G)$, every edge $uv \in E(G)$ has its degree
+  pair $\{d_u, d_v\}$ in the admissible set
+  $\mathcal{P}(\delta, \Delta) := \{(i, j) : \delta \le i \le j \le
+  \Delta\}$.
+  By the definitions of $\psi_{\min}$ and $\psi_{\max}$ as the
+  minimum and maximum of $\psi$ over $\mathcal{P}(\delta, \Delta)$,
+  \[
+  \psi_{\min}(\delta, \Delta; \alpha, \beta, \gamma)
+  \;\le\;
+  \psi(d_u, d_v; \alpha, \beta, \gamma)
+  \;\le\;
+  \psi_{\max}(\delta, \Delta; \alpha, \beta, \gamma)
+  \qquad. \]
+  Summing each of the two per-edge inequalities over the $m$ edges
+  of $G$ and using $\sum_{uv \in E(G)} \psi(d_u, d_v; \alpha, \beta,
+  \gamma) = \Wuzi$
+  gives
+  \[
+  m \cdot \psi_{\min}(\delta, \Delta; \alpha, \beta, \gamma)
+  \;\le\;
+  \Wuzi
+  \;\le\;
+  m \cdot \psi_{\max}(\delta, \Delta; \alpha, \beta, \gamma),
+  \]
+
+  For the equality cases, the upper inequality
+  $\Wuzi \le m \cdot \psi_{\max}$ is the sum of $m$ per-edge
+  inequalities $\psi(d_u, d_v; \alpha, \beta, \gamma) \le \psi_{\max}$;
+  this sum is an equality if and only if every per-edge inequality
+  is, equivalently every edge $uv$ has a degree pair attaining
+  $\psi_{\max}$ over $\mathcal{P}(\delta, \Delta)$. The lower
+  equality case is the dual.
+  \end{proof}
+
+  \begin{theorem}\label{thm:cs}
+  Let $\alpha_1 + \alpha_2 = 2\alpha$, $\beta_1 + \beta_2 = 2\beta$,
+  and $\gamma_1 + \gamma_2 = 2\gamma$. Then for every simple
+  connected graph $G$ without isolated vertices,
+  \[
+  LO(G; \alpha, \beta, \gamma)
+  \;\le\;
+  \sqrt{LO(G; \alpha_1, \beta_1, \gamma_1)
+         \cdot LO(G; \alpha_2, \beta_2, \gamma_2)}
+  \]
+  Equality holds if and only if the ratio
+  $\psi(d_u, d_v; \alpha_1, \beta_1, \gamma_1)/\psi(d_u, d_v; \alpha_2,
+  \beta_2, \gamma_2)$
+  is the same for every edge of $G$.
+  \end{theorem}
+
+  \begin{proof}
+  For each edge $e = uv \in E(G)$ and each $k \in \{1, 2\}$ write
+  \[
+  \psi_e^{(k)}
+  \;:=\; \psi(d_u, d_v; \alpha_k, \beta_k, \gamma_k)
+  \;=\; (d_u d_v)^{\alpha_k}\,(d_u + d_v)^{\beta_k}\,
+  \exp\!\left(\gamma_k\, \tfrac{|d_u - d_v|}{d_u + d_v}\right).
+  \]
+  Both $\psi_e^{(1)}$ and $\psi_e^{(2)}$ are strictly positive on
+  every edge of a graph without isolated vertices.
+
+  By the additivity of the exponents and the hypothesis
+  $\alpha_1 + \alpha_2 = 2\alpha$,
+  $\beta_1 + \beta_2 = 2\beta$, $\gamma_1 + \gamma_2 = 2\gamma$,
+  \begin{align*}
+  \psi_e^{(1)}\,\psi_e^{(2)}
+  &= (d_u d_v)^{\alpha_1 + \alpha_2}\,(d_u + d_v)^{\beta_1 + \beta_2}\,
+     \exp\!\left((\gamma_1 + \gamma_2)\, \tfrac{|d_u - d_v|}{d_u +
+  d_v}\right) \\
+  &= (d_u d_v)^{2\alpha}\,(d_u + d_v)^{2\beta}\,
+     \exp\!\left(2\gamma\, \tfrac{|d_u - d_v|}{d_u + d_v}\right) \\
+  &= \psi(d_u, d_v; \alpha, \beta, \gamma)^{2}.
+  \end{align*}
+  Taking square roots gives
+  $\sqrt{\psi_e^{(1)}\,\psi_e^{(2)}} = \psi(d_u, d_v; \alpha, \beta,
+  \gamma)$
+  for every edge. Apply the Cauchy--Schwarz inequality to the
+  positive sequences $a_e = \sqrt{\psi_e^{(1)}}$,
+  $b_e = \sqrt{\psi_e^{(2)}}$ indexed over $E(G)$:
+  \[
+  \sum_{e \in E(G)} a_e\, b_e
+  \;\le\;
+  \sqrt{\sum_{e \in E(G)} a_e^{2}}\,
+  \sqrt{\sum_{e \in E(G)} b_e^{2}}.
+  \]
+  Substituting $a_e b_e = \sqrt{\psi_e^{(1)} \psi_e^{(2)}}
+     = \psi(d_u, d_v; \alpha, \beta, \gamma)$,
+  $\sum_e a_e^2 = \sum_e \psi_e^{(1)} = LO(G; \alpha_1, \beta_1,
+  \gamma_1)$,
+  and $\sum_e b_e^2 = \sum_e \psi_e^{(2)} = LO(G; \alpha_2, \beta_2,
+  \gamma_2)$
+  gives
+  \[
+  \Wuzi
+  \;=\; \sum_{e \in E(G)} \psi(d_u, d_v; \alpha, \beta, \gamma)
+  \;\le\;
+  \sqrt{LO(G; \alpha_1, \beta_1, \gamma_1)\,
+        LO(G; \alpha_2, \beta_2, \gamma_2)},
+  \]
+  which is the inequality.
+
+  The Cauchy--Schwarz inequality is an equality if and only if the
+  sequences $(a_e)$ and $(b_e)$ are proportional, i.e.\ there exists
+  a constant $\lambda \ge 0$ such that $b_e = \lambda\, a_e$ for
+  every $e \in E(G)$, equivalently
+  $\psi_e^{(2)}/\psi_e^{(1)} = \lambda^{2}$ is the same constant on
+  every edge.
+  \end{proof}
+
+  \begin{proposition}\label{thm:upper_Delta}
+  Let $G$ be a graph of size $m$ and maximum degree $\Delta$. For
+  $\alpha, \beta \ge 0$ and $\gamma \ge 0$,
+  \begin{equation}\label{eq:upper_Delta}
+  \Wuzi \;\le\; m \cdot \Delta^{2\alpha} \cdot (2\Delta)^{\beta}
+  \cdot \exp\!\left(\gamma\,\frac{\Delta - 1}{\Delta + 1}\right).
+  \end{equation}
+  \end{proposition}
+
+  \begin{proof}
+  Fix an edge $uv \in E(G)$. By the definition of $\Delta$ we have
+  $1 \le d_u, d_v \le \Delta$. We bound the three multiplicative
+  factors of $\psi(d_u, d_v; \alpha, \beta, \gamma)$ separately.
+
+  \emph{First factor.} Because $d_u, d_v \le \Delta$ we obtain
+  $d_u d_v \le \Delta^{2}$. Since $\alpha \ge 0$ and the map
+  $t \mapsto t^{\alpha}$ is non-decreasing on $\mathbb{R}_{> 0}$,
+  $(d_u d_v)^{\alpha} \le \Delta^{2\alpha}$.
+
+  \emph{Second factor.} Similarly $d_u + d_v \le 2\Delta$, and the
+  map $t \mapsto t^{\beta}$ is non-decreasing for $\beta \ge 0$, so
+  $(d_u + d_v)^{\beta} \le (2\Delta)^{\beta}$.
+
+  \emph{Third factor.} The normalised imbalance
+  $\mathrm{imb}(x, y) = |x - y|/(x + y)$ is maximised over the
+  admissible set $\{(i, j) : 1 \le i \le j \le \Delta\}$ at the
+  pair $(1, \Delta)$, where
+  $\mathrm{imb}(1, \Delta) = (\Delta - 1)/(\Delta + 1)$. Hence
+  $|d_u - d_v|/(d_u + d_v) \le (\Delta - 1)/(\Delta + 1)$ for every
+  edge. Because $\gamma \ge 0$ and $\exp$ is non-decreasing,
+  $\exp(\gamma\,|d_u - d_v|/(d_u + d_v)) \le \exp(\gamma(\Delta - 1)/(\Delta + 1))$.
+  Multiplying the three factor-wise bounds and summing over the
+  $m$ edges of $G$ yields~\eqref{eq:upper_Delta}. We note that the
+  three per-factor maxima are not simultaneously attainable for
+  $\gamma > 0$, so the bound, while valid, is not sharp in that range.
+  \end{proof}
+
+  \begin{proposition}\label{thm:lower_delta}
+  Let $G$ be a graph of size $m$ and minimum degree $\delta$. For
+  $\alpha, \beta \ge 0$ and $\gamma \ge 0$,
+  \begin{equation}\label{eq:lower_delta}
+  \Wuzi \;\ge\; m \cdot \delta^{2\alpha} \cdot (2\delta)^{\beta},
+  \end{equation}
+  with equality if and only if $G$ is $\delta$-regular.
+  \end{proposition}
+
+  \begin{proof}
+  Fix an arbitrary edge $uv \in E(G)$. By the definition of
+  $\delta = \delta(G)$ we have $d_u, d_v \ge \delta$, and we bound
+  the three multiplicative factors of
+  $\psi(d_u, d_v; \alpha, \beta, \gamma)$ separately. Because
+  $d_u, d_v \ge \delta$ and $\alpha \ge 0$, $(d_u d_v)^{\alpha} \ge
+  \delta^{2\alpha}$; similarly $(d_u + d_v)^{\beta} \ge (2\delta)^{\beta}$;
+  and since $\gamma \ge 0$ and the imbalance is non-negative,
+  $\exp(\gamma\,|d_u - d_v|/(d_u + d_v)) \ge 1$. Multiplying the three
+  lower bounds gives $\psi(d_u, d_v; \alpha, \beta, \gamma) \ge
+  \delta^{2\alpha}(2\delta)^{\beta}$ for every edge, and summing over
+  the $m$ edges yields~\eqref{eq:lower_delta}.
+
+  For the equality case, the first two per-edge inequalities are
+  equalities if and only if $d_u = d_v = \delta$, and under this
+  condition the third factor is automatically $1$. Hence equality
+  holds throughout if and only if $G$ is $\delta$-regular.
+  \end{proof}
+
+  \begin{theorem}\label{thm:m1_bound}
+  Let $\alpha = \gamma = 0$ and $\beta \ge 1$. Then
+  \[
+  \Wuzi
+  \;=\; \sum_e (d_u + d_v)^{\beta}
+  \;\ge\; m^{1 - \beta}\, M_1(G)^{\beta},
+  \]
+  where $M_1(G) = \sum_{v \in V} d_v^2 = \sum_{uv \in E}(d_u + d_v)$.
+  At $\beta = 1$ both sides equal $M_1(G)$ identically; for
+  $\beta > 1$ equality holds if and only if $d_u + d_v$ is constant
+  on every edge of $G$.
+  \end{theorem}
+
+  \begin{proof}
+  Setting $\alpha = \gamma = 0$ in Definition~\ref{def:wuzi}
+  collapses the edge-contribution function to
+  $\psi(d_u, d_v; 0, \beta, 0) = (d_u + d_v)^{\beta}$, so
+  $LO(G; 0, \beta, 0) = \sum_{uv \in E(G)} (d_u + d_v)^{\beta}$.
+  The function $\varphi(t) = t^{\beta}$ satisfies
+  $\varphi''(t) = \beta(\beta - 1)\, t^{\beta - 2} \ge 0$ for
+  $\beta \ge 1$; hence $\varphi$ is convex on
+  $\mathbb{R}_{> 0}$, with strict convexity for $\beta > 1$. Apply
+  Jensen's inequality (convex case) to the $m = |E(G)|$ positive
+  values $\{d_u + d_v : uv \in E(G)\}$ with uniform weights $1/m$:
+  \[
+  \left(\frac{M_1(G)}{m}\right)^{\!\beta}
+  = \varphi\!\left(\frac{1}{m}\sum_{uv} (d_u + d_v)\right)
+  \;\le\;
+  \frac{1}{m}\sum_{uv} (d_u + d_v)^{\beta}
+  = \frac{LO(G; 0, \beta, 0)}{m},
+  \]
+  using $\sum_{uv \in E(G)} (d_u + d_v) = M_1(G)$. Multiplying both
+  sides by $m > 0$ yields the bound. At $\beta = 1$, $\varphi$ is
+  affine and Jensen is the identity $LO(G; 0, 1, 0) = M_1(G)$; for
+  $\beta > 1$ strict convexity gives equality if and only if
+  $d_u + d_v$ is constant over every edge.
+  \end{proof}
+
+  \begin{theorem}\label{thm:m1_concave}
+  Let $\alpha = \gamma = 0$ and $0 < \beta < 1$. Then
+  $\Wuzi = \sum_e (d_u + d_v)^{\beta} \le m^{1 - \beta}\, M_1(G)^{\beta}$,
+  with equality if and only if $d_u + d_v$ is constant on every
+  edge of $G$.
+  \end{theorem}
+
+  \begin{proof}
+  The function $t \mapsto t^{\beta}$ is strictly concave on
+  $\mathbb{R}_{> 0}$ for $\beta \in (0, 1)$. Jensen's inequality in
+  the concave case applied to the values $\{d_u + d_v : uv \in E(G)\}$
+  gives $\frac{1}{m} \sum_e (d_u + d_v)^{\beta} \le ( M_1(G) / m )^{\beta}$,
+  using $M_1(G) = \sum_{uv} (d_u + d_v)$. Multiplying by $m$ gives
+  the upper bound; strict concavity gives equality if and only if
+  $d_u + d_v$ is constant on every edge.
+  \end{proof}
+
+  \begin{theorem}\label{thm:m2_alpha}
+  Let $\beta = \gamma = 0$ and $\alpha \ge 1$. Then
+  \[
+  \Wuzi
+  \;=\; \sum_{uv \in E(G)} (d_u d_v)^{\alpha}
+  \;=\; R_{\alpha}(G)
+  \;\ge\; m^{\,1 - \alpha}\, M_2(G)^{\alpha},
+  \]
+  where $M_2(G) = \sum_{uv \in E(G)} d_u d_v$ is the second Zagreb
+  index and $R_{\alpha}(G) = \sum_{uv \in E(G)} (d_u d_v)^{\alpha}$
+  is the general Randi\'c index. At $\alpha = 1$ both sides equal
+  $M_2(G)$ identically; for $\alpha > 1$ equality holds if and only
+  if the product $d_u d_v$ is constant on every edge of $G$.
+  \end{theorem}
+
+  \begin{proof}
+  Setting $\beta = \gamma = 0$ collapses the edge contribution to
+  $(d_u d_v)^{\alpha}$, so $\Wuzi = R_{\alpha}(G)$. The function
+  $\varphi(t) = t^{\alpha}$ has
+  $\varphi''(t) = \alpha(\alpha - 1)\, t^{\alpha - 2} \ge 0$ for
+  $\alpha \ge 1$ and is convex, strictly for $\alpha > 1$. Jensen
+  (convex case) on $\{d_u d_v : uv \in E(G)\}$ with weights $1/m$
+  gives $(M_2(G)/m)^{\alpha} \le R_{\alpha}(G)/m$, using
+  $\sum_{uv} d_u d_v = M_2(G)$. Multiplying by $m$ yields the bound;
+  $\alpha = 1$ is the affine identity, and for $\alpha > 1$ strict
+  convexity gives equality if and only if $d_u d_v$ is constant on
+  every edge.
+  \end{proof}
+
+  \begin{proposition}\label{thm:R_chi}
+  Let $\gamma = 0$, and define
+  $R_a(G) = \sum_{uv \in E(G)} (d_u d_v)^{a}$ and
+  $\chi_b(G) = \sum_{uv \in E(G)} (d_u + d_v)^{b}$ (so $R = R_{-1/2}$
+  and $\chi = \chi_{-1/2}$). Then for every graph $G$,
+  \begin{equation}\label{eq:R_chi_bound}
+  LO(G; \alpha, \beta, 0)
+  \;\le\; \sqrt{R_{2\alpha}(G) \cdot \chi_{2\beta}(G)}.
+  \end{equation}
+  In particular, at $(\alpha, \beta) = (-1/4, -1/4)$ this
+  specialises to $LO(G; -1/4, -1/4, 0) \le \sqrt{R(G) \cdot \chi(G)}$.
+  \end{proposition}
+
+  \begin{proof}
+  Apply Theorem~\ref{thm:cs} with
+  $(\alpha_1, \beta_1, \gamma_1) = (2\alpha, 0, 0)$ and
+  $(\alpha_2, \beta_2, \gamma_2) = (0, 2\beta, 0)$, whose components
+  sum to $(2\alpha, 2\beta, 0)$, meeting the hypotheses since
+  $\gamma = 0$. By Definition~\ref{def:wuzi},
+  $LO(G; 2\alpha, 0, 0) = R_{2\alpha}(G)$ and
+  $LO(G; 0, 2\beta, 0) = \chi_{2\beta}(G)$, so Theorem~\ref{thm:cs}
+  gives~\eqref{eq:R_chi_bound}. The equality case is that of
+  Theorem~\ref{thm:cs}: the ratio
+  $(d_u d_v)^{2\alpha}/(d_u + d_v)^{2\beta}$ is constant over every
+  edge.
+  \end{proof}
+
+  \begin{proposition}\label{thm:sombor}
+  For $\alpha = 0$, $0 < \beta < 1$, and $\gamma = 0$, the Loyola
+  quantity $LO(G; 0, \beta, 0) = \chi_{\beta}(G)$ satisfies
+  \begin{equation}\label{eq:sombor_bound}
+  LO(G; 0, \beta, 0)
+  \;\le\; m^{1 - \beta} \cdot \bigl(\sqrt{2}\, SO(G)\bigr)^{\beta},
+  \end{equation}
+  where $SO(G) = \sum_{uv \in E(G)} \sqrt{d_u^2 + d_v^2}$ is the
+  Sombor index.
+  \end{proposition}
+
+  \begin{proof}
+  For positive reals $x, y$, $x^2 + y^2 \ge (x + y)^2/2$ follows from
+  $(x + y)^2 \le 2(x^2 + y^2)$ by the AM--GM inequality
+  $xy \le (x^2 + y^2)/2$. Taking square roots with $x = d_u, y = d_v$
+  and summing over $E(G)$ gives
+  $SO(G) \ge M_1(G)/\sqrt{2}$, i.e.\ $M_1(G) \le \sqrt{2}\, SO(G)$.
+  For $0 < \beta < 1$, the concave Jensen bound
+  (Theorem~\ref{thm:m1_concave}) gives
+  $LO(G; 0, \beta, 0) \le m^{1 - \beta}\, M_1(G)^{\beta}$, and since
+  $t \mapsto t^{\beta}$ is non-decreasing for $\beta > 0$,
+  substituting $M_1(G) \le \sqrt{2}\, SO(G)$
+  yields~\eqref{eq:sombor_bound}.
+  \end{proof}
+
+  The next theorem gives a single uniform template for bounding
+  $\Wuzi$ both above and below in terms of any classical
+  bond-incident-degree index whose edge contribution is strictly
+  positive on the admissible degree pairs of the graph.
+
+  \begin{theorem}\label{thm:ratio_bound}
+  Let $G \in \mathcal{G}_{\Delta}$ be a simple graph and let
+  $I_h(G) = \sum_{uv \in E(G)} h(d_u, d_v)$ be a BID index with
+  edge contribution $h(i, j)$ strictly positive on every degree pair
+  $(i, j)$ that appears in $G$. Define
+  \[
+  c_{\min}^{h} = \min_{(i, j)}\,\frac{\psi(i, j; \alpha, \beta,
+  \gamma)}{h(i, j)},
+  \qquad
+  c_{\max}^{h} = \max_{(i, j)}\,\frac{\psi(i, j; \alpha, \beta,
+  \gamma)}{h(i, j)},
+  \]
+  where the extrema range over the admissible degree pairs of $G$.
+  Then
+  \begin{equation}\label{eq:ratio_bound}
+  c_{\min}^{h} \cdot I_h(G)
+  \;\le\; \Wuzi
+  \;\le\; c_{\max}^{h} \cdot I_h(G),
+  \end{equation}
+  with equality on either side if and only if every edge of $G$
+  attains the corresponding extremum of $\psi/h$.
+  \end{theorem}
+
+  \begin{proof}
+  Fix an edge $uv \in E(G)$ and define
+  $r_{uv} := \psi(d_u, d_v; \alpha, \beta, \gamma)/h(d_u, d_v) > 0$.
+  By definition $c_{\min}^{h} \le r_{uv} \le c_{\max}^{h}$, so
+  multiplying by $h(d_u, d_v) > 0$ gives the per-edge sandwich
+  $c_{\min}^{h} h(d_u, d_v) \le \psi(d_u, d_v; \alpha, \beta, \gamma)
+  \le c_{\max}^{h} h(d_u, d_v)$. Summing over $E(G)$ and using
+  $\sum_{uv} h(d_u, d_v) = I_h(G)$ and $\sum_{uv} \psi = \Wuzi$
+  gives~\eqref{eq:ratio_bound}; the equality conditions are that
+  every edge attains the corresponding extremum of $\psi/h$.
+  \end{proof}
+
+  \begin{proposition}\label{prop:gamma_eq_0_or_inf}
+  At $\gamma = 0$, $LO(G; \alpha, \beta, 0)$ coincides with the
+  two-parameter $(\alpha, \beta)$ degree-based index
+  $\sum_{uv \in E(G)} (d_u d_v)^{\alpha}(d_u + d_v)^{\beta}$.
+  Let $E^{*}(G)$ denote the set of edges realising
+  $\mathrm{imb}_{\max}(G) = \max_{uv} \mathrm{imb}(d_u, d_v)$
+  and $E_{*}(G)$ the set realising
+  $\mathrm{imb}_{\min}(G) = \min_{uv} \mathrm{imb}(d_u, d_v)$.
+  Then as $\gamma \to +\infty$,
+  \[
+  \frac{\Wuzi}{e^{\gamma\, \mathrm{imb}_{\max}(G)}}
+  \;\longrightarrow\;
+  \sum_{uv \in E^{*}(G)} (d_u d_v)^{\alpha}(d_u + d_v)^{\beta},
+  \]
+  and as $\gamma \to -\infty$,
+  $\Wuzi / e^{\gamma\, \mathrm{imb}_{\min}(G)} \longrightarrow
+  \sum_{uv \in E_{*}(G)} (d_u d_v)^{\alpha}(d_u + d_v)^{\beta}$.
+  \end{proposition}
+
+  \begin{proof}
+  At $\gamma = 0$ the exponential factor is $1$ on every edge.
+  For the asymptotics, write $M(G) := \mathrm{imb}_{\max}(G)$ and
+  $\Delta_{uv} := M(G) - \mathrm{imb}(d_u, d_v) \ge 0$, so that
+  $\Wuzi / e^{\gamma M(G)} = \sum_{uv} (d_u d_v)^{\alpha}(d_u +
+  d_v)^{\beta} e^{-\gamma \Delta_{uv}}$. For $uv \in E^{*}(G)$,
+  $\Delta_{uv} = 0$ and the summand is $\gamma$-independent; for
+  $uv \notin E^{*}(G)$, $\Delta_{uv} > 0$ and $e^{-\gamma \Delta_{uv}}
+  \to 0$ as $\gamma \to +\infty$. Since $E(G)$ is finite the limit
+  is termwise, giving the identity. The $\gamma \to -\infty$ case is
+  dual.
+  \end{proof}
+
+% =====================================================================
+\section{Descriptor-space saturation}\label{sec:saturation}
+% =====================================================================
+
+Section~\ref{sec:intro} observed that on molecular graphs every BID
+index is a linear functional of the edge-degree-pair counts. We now
+make this precise for the Loyola family, and show that the resulting
+bound is not merely a containment but an exact equality: the three
+continuous parameters realise the whole available descriptor space,
+and nothing beyond it.
+
+Fix $\Delta_0 \in \mathbb{N}$ and let
+$\mathcal{G} = \{G_1, \dots, G_N\}$ be graphs with
+$\Delta(G_k) \le \Delta_0$. For $1 \le i \le j \le \Delta_0$ write
+$m_{ij}(G) = |\{uv \in E(G) : \{d_u, d_v\} = \{i, j\}\}|$ and let
+$M = [\,m_{ij}(G_k)\,] \in \mathbb{R}^{N \times D}$ with
+$D = \binom{\Delta_0 + 1}{2} = \tfrac{\Delta_0(\Delta_0 + 1)}{2}$.
+
+\begin{theorem}\label{thm:saturation}
+For every $(\alpha, \beta, \gamma) \in \mathbb{R}^3$,
+\[
+\bigl(LO(G_k; \alpha, \beta, \gamma)\bigr)_{k=1}^{N}
+= M\,\psi(\alpha, \beta, \gamma),
+\qquad
+\psi(\alpha, \beta, \gamma)
+= \bigl(\psi(i, j; \alpha, \beta, \gamma)\bigr)_{1 \le i \le j \le \Delta_0},
+\]
+and moreover
+\[
+\operatorname{span}\bigl\{(LO(G_k; \alpha, \beta, \gamma))_k :
+(\alpha, \beta, \gamma) \in \mathbb{R}^3\bigr\}
+= \operatorname{col}(M),
+\qquad
+\dim = \operatorname{rank}(M) \le \tfrac{\Delta_0(\Delta_0 + 1)}{2}.
+\]
+In particular, on hydrogen-suppressed molecular graphs
+$(\Delta_0 = 4)$ the entire three-parameter family spans a space of
+dimension exactly $\operatorname{rank}(M) \le 10$, attained but never
+exceeded.
+\end{theorem}
+
+\begin{proof}
+Since $\psi(d_u, d_v; \alpha, \beta, \gamma)$ depends only on the
+unordered pair $\{d_u, d_v\}$, partitioning $E(G)$ by degree-pair
+class gives
+$LO(G; \alpha, \beta, \gamma)
+= \sum_{1 \le i \le j \le \Delta_0} \psi(i, j; \alpha, \beta, \gamma)\,
+m_{ij}(G)$, i.e.\ the stated vector identity. Writing the edge weight
+in exponential form,
+\[
+\psi(i, j; \alpha, \beta, \gamma)
+= \exp\!\bigl(\alpha \ln(ij) + \beta \ln(i + j)
++ \gamma\, \mathrm{imb}(i, j)\bigr)
+= \exp\langle \theta, v_{ij} \rangle,
+\]
+with $\theta = (\alpha, \beta, \gamma)$ and frequency vector
+$v_{ij} = (\ln(ij), \ln(i + j), \mathrm{imb}(i, j))$. The $D$
+admissible pairs yield $D$ \emph{distinct} frequency vectors: the
+sum $i + j$ and product $ij$ determine $\{i, j\}$, so distinct
+classes already differ in their first two coordinates. Exponentials
+$\theta \mapsto \exp\langle \theta, v \rangle$ with distinct
+frequencies are linearly independent as functions of $\theta$; hence
+the only covector annihilating every $\psi(\theta)$ is $0$, so
+$\{\psi(\theta) : \theta \in \mathbb{R}^3\}$ spans all of
+$\mathbb{R}^{D}$. Therefore
+$\operatorname{span}\{M\psi(\theta)\} = M\,\mathbb{R}^{D}
+= \operatorname{col}(M)$, of dimension $\operatorname{rank}(M) \le D$.
+For $\Delta_0 = 4$ the ten frequency vectors are distinct and the
+realised rank equals $10$.
+\end{proof}
+
+Theorem~\ref{thm:saturation} sharpens the descriptor-space remark of
+Section~\ref{sec:intro} from a containment to an exact span. No
+amount of continuous parameter freedom in a BID index escapes the
+finite basis of edge-degree-pair counts: the Loyola family is a
+smooth three-parameter surface filling a fixed finite-dimensional
+space, not a route out of it. This is the structural reason the
+chemometric study of Section~\ref{sec:sensitivity} finds the family
+in the same correlation regime as the classical indices.
+
+% =====================================================================
+\section{A \texorpdfstring{$\gamma$}{gamma}-dependent extremal characterization}\label{sec:extremal}
+% =====================================================================
+
+While Theorem~\ref{thm:saturation} shows the imbalance parameter
+$\gamma$ adds no descriptor \emph{dimension}, $\gamma$ is decisive
+for extremal problems: it controls which tree maximises the index.
+Throughout, $\mathcal{T}_n$ denotes the set of trees of order $n$.
+
+\begin{theorem}\label{thm:switch}
+Let $n \ge 4$ and $\alpha, \beta \in \mathbb{R}$.
+\begin{enumerate}
+\item There is a threshold $\gamma_0 = \gamma_0(\alpha, \beta, n)$
+such that for every $\gamma > \gamma_0$ the star $S_n$ is the unique
+maximiser of $LO(\cdot\,; \alpha, \beta, \gamma)$ over
+$\mathcal{T}_n$; one may take
+\[
+\gamma_0 = \max\!\Bigl(0,\ \tfrac{n(n-1)}{2}
+\ln \tfrac{m_n}{(n-1)^{\alpha} n^{\beta}}\Bigr),
+\qquad
+m_n = \max_{1 \le i \le j \le n-2} (ij)^{\alpha}(i+j)^{\beta}.
+\]
+\item For $(\alpha, \beta) = (-\tfrac12, 0)$,
+$LO(\cdot\,; -\tfrac12, 0, 0) = R$ is the Randi\'c index, whose
+unique maximiser over $\mathcal{T}_n$ is the path
+$P_n$~\cite{BollobasErdos1998}; by continuity $P_n$ remains the
+maximiser for $\gamma$ in a right-neighbourhood of $0$.
+\end{enumerate}
+Hence the maximising tree depends on $\gamma$ --- the path for small
+$\gamma$, the star for large $\gamma$ --- so $\gamma$ is not
+redundant for extremal problems.
+\end{theorem}
+
+\begin{proof}
+(1) Every edge of $S_n$ is the pair $(1, n-1)$ with imbalance
+$\tfrac{n-2}{n}$. A non-star tree $T$ has $\Delta(T) \le n-2$, so
+each of its edges has imbalance at most $\tfrac{n-3}{n-1}$, and
+\[
+\frac{n-2}{n} - \frac{n-3}{n-1} = \frac{2}{n(n-1)} > 0;
+\]
+thus every star edge strictly exceeds every non-star edge in
+imbalance. With $m_n$ as above (finite and positive) and since a
+tree has $n-1$ edges, for $\gamma \ge 0$,
+\[
+LO(T) \le (n-1)\, m_n\, e^{\gamma \frac{n-3}{n-1}},
+\qquad
+LO(S_n) = (n-1)(n-1)^{\alpha} n^{\beta}\, e^{\gamma \frac{n-2}{n}},
+\]
+whence
+\[
+\frac{LO(S_n)}{LO(T)}
+\ge \frac{(n-1)^{\alpha} n^{\beta}}{m_n}\,
+\exp\!\Bigl(\gamma \cdot \tfrac{2}{n(n-1)}\Bigr)
+\xrightarrow[\gamma \to \infty]{} \infty.
+\]
+As $\mathcal{T}_n$ is finite, the displayed $\gamma_0$ makes
+$LO(S_n) > LO(T)$ for every non-star $T$, with strict inequality
+giving uniqueness. (2) At $\gamma = 0$,
+$LO(\cdot\,; -\tfrac12, 0, 0) = \sum_{uv} (d_u d_v)^{-1/2} = R$,
+whose maximum over $\mathcal{T}_n$ is attained uniquely by $P_n$.
+Each map $\gamma \mapsto LO(T; -\tfrac12, 0, \gamma)$ is continuous
+and $\mathcal{T}_n$ is finite, so $P_n$ remains the strict maximiser
+on a right-neighbourhood of $\gamma = 0$.
+\end{proof}
+
+A direct computation over all trees of order $n$ confirms the
+transition (Table~\ref{tab:switch}): the maximiser is the path at
+$\gamma = 0$ and the star for large $\gamma$, passing through
+intermediate (broom-like) trees in between; characterising the
+intermediate maximisers is an open problem.
+
+\begin{table}[H]
+\centering
+\caption{Maximiser of $LO(\cdot\,; -1/2, 0, \gamma)$ over all trees of order $n$, computed exactly over the full tree set.}
+\label{tab:switch}
+\small
+\begin{tabular}{lcccc}
+\toprule
+$\gamma$ & $n = 7$ & $n = 8$ & $n = 9$ & $n = 10$\\
+\midrule
+$0$   & path  & path  & path  & path\\
+$0.5$ & other & other & other & other\\
+$1$   & star  & other & other & other\\
+$2$   & star  & star  & star  & star\\
+$5$   & star  & star  & star  & star\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =====================================================================
+\section{Sensitivity analysis}\label{sec:sensitivity}
+% =====================================================================
+
+We benchmark the Loyola family against the classical indices it
+reduces to, on three standard testbeds: the $18$ octane isomers
+(five NIST physicochemical properties), the $106$ non-isomorphic
+trees of order $10$, and the $75$ decane isomers. The comparison set
+is restricted to the exact reductions of Section~\ref{sec:intro} ---
+$M_1, M_2, HM, {}^{m}\!M_2, R, \chi, H/2, ISI, GA, AG$ --- together
+with the two \emph{pre-specified} pure-$\gamma$ points $LO(0, 0, 1)$
+and $LO(0, 0, 2)$, fixed in advance. No parameter is tuned against
+the property data; the edge count $m = LO(0, 0, 0)$ is omitted as it
+is constant on the octanes.
+
+\subsection{Property correlations on the octane isomers}\label{sec:octanes}
+
+Table~\ref{tab:lo_octane} reports the Pearson correlation $r$ between
+each index and each of the five physicochemical properties of the
+$18$ octane isomers (boiling point $T_B$, enthalpy of formation
+$\Delta H_f$, enthalpy of vaporization $\Delta H_{\mathrm{vap}}$,
+entropy $S$, acentric factor $\omega$; property data from the NIST
+WebBook).
+
+\begin{table}[H]
+\centering
+\caption{Pearson correlation $r$ between the Loyola reductions and the pre-specified pure-$\gamma$ Loyola points and the five physicochemical properties of the $18$ octane isomers (NIST WebBook). Bold flags the best $|r|$ per column. The edge count $m = LO(0,0,0)$ is omitted (constant on octanes).}
+\label{tab:lo_octane}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Index & $T_B$ & $\Delta H_f$ & $\Delta H_{\mathrm{vap}}$ & $S$ & $\omega$\\
+\midrule
+$M_1 = LO(0,1,0)$ & $-0.718$ & $-0.762$ & $-0.912$ & $-0.973$ & $-0.970$\\
+$M_2 = LO(1,0,0)$ & $-0.503$ & $-0.553$ & $-0.775$ & $-0.942$ & $\mathbf{-0.987}$\\
+$HM = LO(0,2,0)$ & $-0.655$ & $-0.712$ & $-0.873$ & $\mathbf{-0.975}$ & $-0.982$\\
+${}^{m}\!M_2 = LO(-1,0,0)$ & $\mathbf{+0.861}$ & $\mathbf{+0.888}$ & $+0.942$ & $+0.866$ & $+0.799$\\
+$R = LO(-1/2,0,0)$ & $+0.821$ & $+0.848$ & $+0.956$ & $+0.935$ & $+0.901$\\
+$\chi = LO(0,-1/2,0)$ & $+0.801$ & $+0.829$ & $+0.953$ & $+0.950$ & $+0.927$\\
+$H/2 = LO(0,-1,0)$ & $+0.822$ & $+0.846$ & $+0.959$ & $+0.935$ & $+0.904$\\
+$ISI = LO(1,-1,0)$ & $-0.037$ & $-0.047$ & $-0.363$ & $-0.632$ & $-0.760$\\
+$GA = 2\,LO(1/2,-1,0)$ & $+0.823$ & $+0.856$ & $+0.959$ & $+0.942$ & $+0.909$\\
+$AG = \tfrac12 LO(-1/2,1,0)$ & $-0.817$ & $-0.856$ & $-0.951$ & $-0.941$ & $-0.903$\\
+$LO(0,0,1)$ & $-0.828$ & $-0.831$ & $-0.966$ & $-0.931$ & $-0.930$\\
+$LO(0,0,2)$ & $-0.830$ & $-0.844$ & $\mathbf{-0.967}$ & $-0.939$ & $-0.926$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The best correlation per property is split among the reductions and
+the pure-$\gamma$ points: the modified second Zagreb index
+$LO(-1, 0, 0)$ is strongest on $T_B$ and $\Delta H_f$, the
+hyper-Zagreb index $LO(0, 2, 0)$ on $S$, the second Zagreb index
+$LO(1, 0, 0)$ on $\omega$, and the pre-specified pure-$\gamma$ point
+$LO(0, 0, 2)$ on $\Delta H_{\mathrm{vap}}$ ($|r| = 0.967$). At the
+exact-reduction triples the Loyola correlations coincide with the
+corresponding classical indices to floating-point precision, as they
+must. All per-property margins are within the bootstrap confidence
+half-width at $n = 18$ (a percentile bootstrap with
+$B = 10\,000$ resamples gives half-widths of order $0.03$ on the
+headline cells), so no index --- classical reduction or Loyola point
+--- is significantly separated from its competitors on this small
+set; the value of $LO(0, 0, 2)$ on $\Delta H_{\mathrm{vap}}$ is a
+pre-specified, not a tuned, result. A leave-one-out check across the
+$18$ isomers shifts every headline $|r|$ by at most $0.011$,
+confirming the correlations are not driven by a single outlying
+isomer.
+
+Figure~\ref{fig:octanes} shows the signed-$r$ heatmap of the
+compared indices against the five properties.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{fig_lo_prediction_correlation_heatmap.pdf}
+\caption{Signed Pearson $r$ between the Loyola reductions and pre-specified pure-$\gamma$ points and the five octane physicochemical properties on the $18$ isomers. The best absolute correlation per property is marked.}
+\label{fig:octanes}
+\end{figure}
+
+On the octanes the pure-$\gamma$ points are highly collinear with
+the classical reductions (maximum $|r|$ with a reduction equal to
+$0.983$ for $LO(0, 0, 1)$ and $0.993$ for $LO(0, 0, 2)$), consistent
+with Theorem~\ref{thm:saturation}: the parameter $\gamma$ moves the
+descriptor within the fixed BID span rather than outside it.
+
+\subsection{Degeneracy on trees of order 10}\label{sec:degeneracy}
+
+Degeneracy measures an index's ability to discriminate
+non-isomorphic graphs; lower is better. On the $106$ non-isomorphic
+trees of order $10$ we use the distinct-value convention
+\[
+\mathrm{Degeneracy}(\%) = 100\Bigl(1 - \tfrac{k}{N}\Bigr),
+\qquad k = \#\{\text{distinct index values}\}, \quad N = 106,
+\]
+i.e.\ the fraction of the $N$ structures that fail to receive a
+unique value. The pure-$\gamma$ points $LO(0, 0, 1)$ and
+$LO(0, 0, 2)$ attain degeneracy $25.5\%$ ($79$ distinct values),
+among the lowest of all compared indices and tied with $R$, $GA$,
+and $AG$; the first Zagreb index $LO(0, 1, 0)$ ($83.0\%$) and the
+second Zagreb index $LO(1, 0, 0)$ ($67.0\%$) are the most degenerate
+(Figure~\ref{fig:degeneracy}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{fig_lo_degeneracy_order10_trees.pdf}
+\caption{Degeneracy percentage of the compared indices on the $106$ non-isomorphic trees of order $10$ (lower is better).}
+\label{fig:degeneracy}
+\end{figure}
+
+\subsection{Structure sensitivity on decane isomers}\label{sec:ss}
+
+As self-contained dispersion measures over the $75$ decane isomers
+we report the coefficient of variation $SS = \sigma/\mu$, the
+relative range $Abr = (\max - \min)/\mu$, and their ratio
+$SA = SS/Abr$ (Figure~\ref{fig:ss}). The pure-$\gamma$ point
+$LO(0, 0, 2)$ has the highest structure sensitivity ($SS = 0.165$)
+and the largest relative range among all compared indices, with
+$LO(0, 0, 1)$ also high; the imbalance parameter's contribution
+surfaces here, in structural responsiveness, rather than in added
+linear correlation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{fig_lo_structure_sensitivity_decanes.pdf}
+\caption{Structure-sensitivity measures $SS = \sigma/\mu$, $Abr = (\max-\min)/\mu$, and $SA = SS/Abr$ of the compared indices on the $75$ decane isomers.}
+\label{fig:ss}
+\end{figure}
+
+% =====================================================================
+\section{Conclusion and further directions}\label{sec:conclusion}
+% =====================================================================
+
+The Loyola family is a three-parameter degree-based index that
+recovers many classical indices as exact reductions and lies
+inside the same finite-dimensional descriptor space as the
+established indices. We have given closed-form values on standard
+graph classes and several sharp upper and lower bounds: a
+bracket bound tight on regular graphs, Cauchy--Schwarz and
+Jensen-type bounds, bounds using the basic graph parameters
+$n, m, \Delta, \delta$, bounds via
+the generalised Randi\'c, sum-connectivity, and Sombor indices, and a uniform ratio bound against any
+classical index with positive edge contribution. We have further
+proved that the family's descriptor span is exactly the column space
+of the edge-degree-pair count matrix (Theorem~\ref{thm:saturation}),
+and that the imbalance parameter, though adding no descriptor
+dimension, controls the extremal tree, switching the maximiser from
+the path to the star (Theorem~\ref{thm:switch}).
+
+Chemometrically, a sensitivity benchmark on $18$ octane isomers, $106$
+non-isomorphic trees of order $10$, and $75$ decane isomers
+places the Loyola family in the same correlation regime as the
+classical BID indices. The Loyola family is hence best viewed as a controlled
+parametric probe of the finite BID descriptor space.
+
+Ultimately, the biggest open problem would be to propose a new non-redundant topological index that performs better than all of the existing ones in regard to prediction of physiochemical properties. The work in this paper following the Loyola index can be extended by research directions that can be taken by the following open problems:
+\begin{enumerate}
+\item Sharp two-sided bounds for $\Wuzi$ via popular topological indices, including the
+geometric--arithmetic index
+$GA$~\cite{VukicevicFurtula2009GA}, the harmonic index $H$, and
+the atom-bond-connectivity index $ABC$.
+
+
+\item Extremal-graph characterisations for further graph classes, including unicyclic and
+bicyclic graphs, and a description of the intermediate-$\gamma$ tree maximisers of Theorem~\ref{thm:switch}.
+
+\item Chemometric extension to additional chemical compound classes
+(benzene derivatives, alkane homologues beyond octane and
+decane) and to compound-class-specific QSPR endpoints.
+\end{enumerate}
+
+\acknowledgment{The authors thank colleagues for discussions of
+the computational extremal-graph search. Funding sources and institutional
+support to be acknowledged in the final version of the
+manuscript.}
+
+% References should be ordered alphabetically.
+\singlespacing
+
+ \begin{thebibliography}{99}
+
+  \bibitem{AhmadFarooqDas2025Extremal}
+  S. Ahmad, R. Farooq, K. C. Das, The general Sombor index of extremal
+  trees with a given maximum degree, \textit{MATCH Commun. Math. Comput.
+  Chem.\/} \textbf{94} (2025) 825--853.
+
+  \bibitem{Albertson1997}
+  M. O. Albertson, The irregularity of a graph, \textit{Ars Combin.\/}
+  \textbf{46} (1997) 219--225.
+
+  \bibitem{ArockiarajPaulClement2023Hybrid} M. Arockiaraj, D. Paul, J.
+  Clement, S. Tigga, K. Jacob, K. Balasubramanian, Novel molecular hybrid
+  geometric-harmonic-Zagreb degree based descriptors and their efficacy in
+  QSPR studies of polycyclic aromatic hydrocarbons, \textit{SAR QSAR
+  Environ. Res.\/} \textbf{34} (2023) 569--589.
+
+  \bibitem{BarmanDas2026HSO} J. Barman, S. Das, Geometric approach to
+  degree-based topological index: Hyperbolic Sombor index, \textit{MATCH
+  Commun. Math. Comput. Chem.\/} \textbf{95} (2026) 63--94.
+
+  \bibitem{BollobasErdos1998}
+  B. Bollobás, P. Erdős, Graphs of extremal weights, \textit{Ars Combin.\/}
+  \textbf{50} (1998) 225--233.
+
+  \bibitem{DasCevikCangulShang2021Sombor} K. C. Das, A. S. \c{C}evik, I. N.
+  Cangul, Y. Shang, On Sombor index, \textit{Symmetry\/} \textbf{13}
+  (2021) \#140.
+
+  \bibitem{DasGutman2022SomborTrees} K. C. Das, I. Gutman, On Sombor index
+  of trees, \textit{Appl. Math. Comput.\/} \textbf{412} (2022) \#126575.
+
+  \bibitem{FurtulaGutman2015F} B. Furtula, I. Gutman, A forgotten
+  topological index, \textit{J. Math. Chem.\/} \textbf{53} (2015)
+  1184--1190.
+
+  \bibitem{GujiWali2025Lanzhou} R. Guji, M. Wali, The Sombor index
+  (coindex) and Lanzhou index (coindex) of some graphs, \textit{Axioms\/}
+  \textbf{14} (2025) 164.
+
+  \bibitem{GutmanToganYurttasCevikCangul2018Sigma} I. Gutman, M. Togan, A.
+  Yurttaş, A. S. Çevik, I. N. Cangul, Inverse problem for sigma index,
+  \textit{MATCH Commun. Math. Comput. Chem.\/} \textbf{79} (2018) 491--508.
+
+  \bibitem{Gutman2021Sombor} I. Gutman, Geometric approach to degree-based
+  topological indices: Sombor indices, \textit{MATCH Commun. Math. Comput.
+  Chem.\/} \textbf{86} (2021) 11--16.
+
+  \bibitem{Gutman2021SomborBasic} I. Gutman, Some basic properties of
+  Sombor indices, \textit{Open J. Discr. Appl. Math.\/} \textbf{4} (2021)
+  1--3.
+
+  \bibitem{GutmanFurtulaOz2024Elliptic} I. Gutman, B. Furtula, M. S. Oz,
+  Geometric approach to vertex-degree-based topological indices: Elliptic
+  Sombor index, theory and application, \textit{Int. J. Quantum Chem.\/}
+  \textbf{124} (2024) \#e27346.
+
+  \bibitem{Gutman2026SomborSurvey} I. Gutman, Survey of Sombor-type
+  degree-based topological indices, \textit{MATCH Commun. Math. Comput.
+  Chem.\/} \textbf{96} (2026) 819--837.
+
+  \bibitem{KalaamGreeniArockiaraj2024} A. R. A. Kalaam, A. B. Greeni, M.
+  Arockiaraj, Modified reverse degree descriptors for combined topological
+  and entropy characterizations of 2D metal organic frameworks:
+  applications in graph energy prediction, \textit{Front. Chem.\/}
+  \textbf{12} (2024) \#1470231.
+
+  \bibitem{KosariDehgardiKhan2023Lower} S. Kosari, N. Dehgardi, A. Khan,
+  Lower bound on the KG-Sombor index, \textit{Commun. Comb. Optim.\/}
+  \textbf{8} (2023) 751--757.
+
+  \bibitem{MendezBermudezAguilarSanchez2022MeanSombor} J. A.
+  Méndez-Bermúdez, R. Aguilar-Sánchez, E. D. Molina, J. M. Rodríguez, Mean
+  Sombor index, \textit{Discr. Math. Lett.\/} \textbf{9} (2022) 18--25.
+
+  \bibitem{MilovanovicMilovanovicMatejic2021Sombor} I. Milovanović, E.
+  Milovanović, M. Matejić, On some mathematical properties of Sombor
+  indices, \textit{Bull. Int. Math. Virtual Inst.\/} \textbf{11} (2021)
+  341--353.
+
+  \bibitem{Movahedi2025DSO} F. Movahedi, Diminished Sombor index and its
+  relationship with topological indices, \textit{Filomat\/} \textbf{39}
+  (2025) 10519--10532.
+
+  \bibitem{MovahediGutmanRedzepovicFurtula2026} F. Movahedi, I. Gutman, I.
+  Redžepović, B. Furtula, Diminished Sombor index, \textit{MATCH Commun.
+  Math. Comput. Chem.\/} \textbf{95} (2026) 141--162.
+
+  \bibitem{Rada2026LinearVDB} J. Rada, A finite-dimensional linear
+  framework for vertex-degree-based topological indices, \textit{MATCH
+  Commun. Math. Comput. Chem.\/} \textbf{96} (2026) 841--863.
+
+  \bibitem{Shang2022Simplicial}
+  Y. Shang, Sombor index and degree-related properties of simplicial
+  networks, \textit{Appl. Math. Comput.\/} \textbf{419} (2022) 126881.
+
+  \bibitem{VukicevicFurtula2009GA} D. Vukičević, B. Furtula, Topological
+  index based on the ratios of geometrical and arithmetical means of
+  end-vertex degrees of edges, \textit{J. Math. Chem.\/} \textbf{46} (2009)
+  1369--1376.
+
+  \bibitem{WangMaoLiFurtula2022SomborRelations} Z. Wang, Y. Mao, Y. Li, B.
+  Furtula, On relations between Sombor and other degree-based indices,
+  \textit{J. Appl. Math. Comput.\/} \textbf{68} (2022) 1--17.
+
+  \bibitem{ZhouTrinajstic2009sumconn}
+  B. Zhou, N. Trinajstić, On a novel connectivity index, \textit{J. Math.
+  Chem.\/} \textbf{46} (2009) 1252--1270.
+
+  \bibitem{ZuoRatherImranAli2022Modified}
+  X. Zuo, B. A. Rather, M. Imran, A. Ali, On some topological indices
+  defined via the modified Sombor matrix, \textit{Molecules\/} \textbf{27}
+  (2022) 6772.
+
+  \end{thebibliography}
+
+\end{document}
