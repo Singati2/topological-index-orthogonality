@@ -1,0 +1,5 @@
+dataset,file,sha256,official_copy,smiles_col,target_col,n_rows,n_missing_smiles,n_missing_target,target_min,target_max,target_mean,n_invalid_smiles,n_multifragment,n_conflicting_groups_dropped,n_curated,n_distinct_graphs,pct_graph_shared,matches_benchmark_curation
+esol,esol.csv,8c06a76f0c6487d29ab0f903e6a7a7139f189ab3c1178f159c8be8964602f189,identical,smiles,measured log solubility in mols per litre,1128,0,0,-11.6,1.58,-3.05010195035461,0,0,1,1115,628,55.52,True
+freesolv,freesolv.csv,ab5895d914ee87cb563bd7b9611e869527bba45bec6b014d34dc495a0f9dcb72,identical,smiles,expt,642,0,0,-25.47,3.43,-3.8030062305295944,0,0,0,639,236,74.33,True
+lipophilicity,lipophilicity.csv,aed41590cb30609d51d8e08ad3ff06495a76e80e211358801f596b10da69bacd,identical,smiles,exp,4200,0,0,-1.5,4.5,2.1863357142857143,0,1,0,4200,3472,28.24,True
+bbbp,bbbp.csv,d07a38487aeac5cee5508413e468043ef3097451d2a112701c2d60be9ec6b662,identical,smiles,p_np,2050,0,0,0.0,1.0,0.764390243902439,11,105,11,1955,1693,22.56,True
