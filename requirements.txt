@@ -1,4 +1,4 @@
-rdkit>=2024.3
+rdkit>=2022.9
 networkx>=3.0
 pandas>=2.0
 numpy>=1.24

@@ -1,0 +1,5 @@
+dataset,n_raw,n_invalid_smiles,n_multifragment_stripped,n_valid,n_dup_canonical_groups,n_rows_in_dup_groups,n_conflicting_dup_groups_dropped,n_after_dedup,n_no_graph_dropped(<2 heavy atoms),n_final,n_distinct_graphs,pct_mols_graph_shared,n_mols_max_degree_gt4(mij_capped),"within_graph_target_sd(pooled, shared groups)",overall_target_sd,graph_only_rmse_floor(sqrt SSwithin/N),graph_only_rmse_floor_dofcorr(sqrt SSwithin/(N-G)),frac_shared_groups_mixed_labels,max_group_size
+esol,1128,0,0,1128,11,22,1,1116,1,1115,628,55.52,0,1.2885,2.0935,0.8516,1.2885,,22
+freesolv,642,0,0,642,0,0,0,642,3,639,236,74.33,0,3.1832,3.848,2.528,3.1832,,24
+lipophilicity,4200,0,1,4200,0,0,0,4200,0,4200,3472,28.24,0,0.617,1.203,0.2569,0.617,,12
+bbbp,2050,11,105,2039,68,141,11,1955,0,1955,1693,22.56,0,0.2558,0.4246,0.0937,0.2558,0.1564,10

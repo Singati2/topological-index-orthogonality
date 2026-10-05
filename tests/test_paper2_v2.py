@@ -138,7 +138,9 @@ def test_generated_tables_match_committed():
     try:
         shutil.copytree(os.path.join(PROJECT, "results"), os.path.join(tmp, "results"))
         os.makedirs(os.path.join(tmp, "scripts"))
-        shutil.copy(os.path.join(PROJECT, "scripts", "75_make_v2_tables.py"), os.path.join(tmp, "scripts"))
+        shutil.copytree(os.path.join(PROJECT, "src"), os.path.join(tmp, "src"))
+        for f in ("70_bid_span_certificate.py", "75_make_v2_tables.py"):
+            shutil.copy(os.path.join(PROJECT, "scripts", f), os.path.join(tmp, "scripts"))
         subprocess.run([sys.executable, os.path.join(tmp, "scripts", "75_make_v2_tables.py")],
                        check=True, capture_output=True)
         for f in os.listdir(committed):

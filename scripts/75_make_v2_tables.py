@@ -38,7 +38,7 @@ def cert_table():
     tex = r"""\begin{table}[h]
 \centering
 \small
-\caption{Span certificate on the four datasets. $|P_D|$: realised degree pairs; ranks are numerical ranks of the column-centred, column-normalised matrices (relative tolerance $10^{-9}$). ``Resid.'' columns give the largest relative residual $\|r\|/\|z-\bar z\|$ on the baseline of the ten counts $m_{ij}$, of the $14$ published BID indices of Table~\ref{tab:census}, and of the $100$ Loyola grid points.}
+\caption{Span certificate on the four datasets. $|P_D|$: realised degree pairs; ranks are numerical ranks of the column-centred, column-normalised matrices (relative tolerance $10^{-9}$). ``Resid.'' columns give the largest relative residual $\|r\|/\|z-\bar z\|$ on the baseline of the ten counts $m_{ij}$, of the $15$ published BID instances of Table~\ref{tab:census}, and of the $100$ Loyola grid points.}
 \label{tab:cert}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrrrrccc}
@@ -182,10 +182,123 @@ Dataset & Target & raw & invalid & multi-frag. & dup.\ rows & conflicts & curate
 \end{tabular}
 \end{table}
 """
+    tex = tex.replace("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{%\n\\begin{tabular}").replace("\\end{tabular}", "\\end{tabular}}")
     open(os.path.join(OUT, "data.tex"), "w").write(tex)
 
 
+MODELS = [("a_full30_lasso", "full 30, LASSO / $\\ell_1$-logistic"),
+          ("b_pairwise_lasso", "pairwise-screened, LASSO"),
+          ("c_combined_lasso", "combined-screened, LASSO"),
+          ("d_full30_rf", "full 30, random forest"),
+          ("e_pairwise_rf", "pairwise-screened, random forest"),
+          ("g_mij_rf", "ten counts $m_{ij}$, random forest"),
+          ("g_mij_lasso", "ten counts $m_{ij}$, LASSO"),
+          ("f_rdkit2d_rf", "RDKit 2D descriptors, random forest")]
+COMPS = [("b_pairwise_lasso - a_full30_lasso", "pairwise vs full (LASSO)"),
+         ("c_combined_lasso - a_full30_lasso", "combined vs full (LASSO)"),
+         ("e_pairwise_rf - d_full30_rf", "pairwise vs full (RF)"),
+         ("g_mij_rf - d_full30_rf", "$m_{ij}$ vs full 30 (RF)"),
+         ("f_rdkit2d_rf - d_full30_rf", "RDKit 2D vs full 30 (RF)")]
+
+
+def bench_table():
+    sm = pd.read_csv(os.path.join(R, "benchmark_v2_summary.csv"))
+    ts = pd.read_csv(os.path.join(R, "benchmark_v2_tests.csv"))
+    rows = []
+    for key, lab in MODELS:
+        cells = []
+        for d in DS:
+            r = sm[(sm.dataset == d) & (sm.model == key)]
+            if r.empty:
+                cells.append("--"); continue
+            r = r.iloc[0]
+            star = "$^{\\ast}$" if r.n_intercept_only_folds > 0 else ""
+            cells.append(f"${r['mean']:.3f}$ ({r.mean_n_features:.1f}){star}")
+        rows.append(lab + " & " + " & ".join(cells) + "\\\\")
+    trows = []
+    for key, lab in COMPS:
+        cells = []
+        for d in DS:
+            r = ts[(ts.dataset == d) & (ts.comparison.str.replace(" ", "") == key.replace(" ", ""))]
+            if r.empty:
+                cells.append("--"); continue
+            r = r.iloc[0]
+            eq = "eq." if r.tost_verdict == "equivalent" else ""
+            cells.append(f"${r.mean_diff:+.3f}$ $[{r.ci90_lo:+.3f},{r.ci90_hi:+.3f}]$ {eq}")
+        trows.append(lab + " & " + " & ".join(cells) + "\\\\")
+    nint = int(sm[(sm.dataset == "lipophilicity") & (sm.model == "c_combined_lasso")].n_intercept_only_folds.iloc[0])
+    tex = r"""\begin{table}[h]
+\centering
+\footnotesize
+\caption{Downstream benchmark on the curated data: $5\\times5$ repeated cross-validation with folds grouped by graph, all preprocessing and selection inside the training folds. Top: mean RMSE (ESOL, FreeSolv, Lipophilicity) or ROC-AUC (BBBP), with the mean number of active features in parentheses. Bottom: mean paired difference (model minus reference; lower RMSE and higher AUC are better) with Nadeau--Bengio corrected $90\\%$ intervals; ``eq.'' marks equivalence (TOST) within $5\\%$ of the reference RMSE or $5\\%$ of the reference AUC above $0.5$.""" + f" $^{{\\ast}}$On Lipophilicity the combined screen kept no feature in {nint} of 25 folds (intercept-only model)." + r"""}
+\label{tab:bench}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lcccc}
+\toprule
+Model & ESOL & FreeSolv & Lipophilicity & BBBP (AUC)\\\\
+\midrule
+""" + "\n".join(rows) + r"""
+\midrule
+Comparison & \multicolumn{4}{c}{difference [corrected 90\\% CI]}\\\\
+\midrule
+""" + "\n".join(trows) + r"""
+\bottomrule
+\end{tabular}
+\end{table}
+"""
+    tex = (tex.replace(r"5\\times5", r"5\times5").replace(r"\\%", r"\%")
+           .replace("(AUC)\\\\\\\\", "(AUC)\\\\").replace("CI]}\\\\\\\\", "CI]}\\\\"))
+    tex = tex.replace("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{%\n\\begin{tabular}").replace("\\end{tabular}", "\\end{tabular}}")
+    open(os.path.join(OUT, "bench.tex"), "w").write(tex)
+
+
+FORMULAS = {
+    "M1": "a+b", "M2": "ab", "mM1": "a^{-3}+b^{-3}",
+    "mM2": "1/(ab)", "F": "a^2+b^2", "R": "(ab)^{-1/2}", "SCI": "(a+b)^{-1/2}",
+    "H": "2/(a+b)", "GA": "2\\sqrt{ab}/(a+b)", "AG": "(a+b)/(2\\sqrt{ab})",
+    "ABC": "\\sqrt{(a+b-2)/(ab)}", "ABS": "\\sqrt{(a+b-2)/(a+b)}",
+    "AZI": "\\bigl(ab/(a+b-2)\\bigr)^3\\;(0\\text{ on }K_2)", "SO": "\\sqrt{a^2+b^2}",
+    "SO_red": "\\sqrt{(a-1)^2+(b-1)^2}", "Alb": "|a-b|", "Sigma": "(a-b)^2",
+    "redM1": "(a-1)^2/a+(b-1)^2/b",
+}
+LABEL = {"SO_red": "SO$_{\\mathrm{red}}$", "Sigma": "$\\sigma$", "redM1": "redM$_1$",
+         "mM1": "$mM_1$", "mM2": "$mM_2$", "M1": "$M_1$", "M2": "$M_2$"}
+
+
+def fb_table():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("cert", os.path.join(P, "scripts", "70_bid_span_certificate.py"))
+    cert = importlib.util.module_from_spec(spec); spec.loader.exec_module(cert)
+    F = cert.f_matrix(cert.BID18)
+    head = " & ".join(f"$({i},{j})$" for i, j in cert.P4)
+    rows = []
+    for k, name in enumerate(cert.BID18):
+        vals = " & ".join(("$0$" if abs(x) < 1e-12 else f"${x:.3g}$") for x in F[k])
+        rows.append(f"{LABEL.get(name, name)} & ${FORMULAS[name]}$ & {vals}\\\\")
+    sv = np.linalg.svd(F, compute_uv=False)
+    tex = r"""\begin{table}[h]
+\centering
+\caption{The value matrix $\\Phi_B$ of the $18$ degree-based baseline indices on the ten degree pairs $(i,j)\\in P_4$: entry $f_b(i,j)$, obtained by evaluating each index on $K_{i,j}$ and dividing by its $ij$ edges. Vertex-degree sums $\\sum_v g(d_v)$ are written as $f(a,b)=g(a)/a+g(b)/b$. The matrix has rank $10$""" + f" (smallest/largest singular value ${sv[-1]/sv[0]:.1e}$)" + r""".}
+\label{tab:phi}
+\resizebox{\\textwidth}{!}{%
+\begin{tabular}{ll""" + "r" * 10 + r"""}
+\toprule
+Index & $f(a,b)$ & """ + head + r"""\\\\
+\midrule
+""" + "\n".join(rows) + r"""
+\bottomrule
+\end{tabular}}
+\end{table}
+"""
+    tex = tex.replace("\\\\\\\\", "\\\\")
+    for a in ["Phi", "in P", "textwidth", "sum_v"]:
+        tex = tex.replace("\\\\" + a, "\\" + a)
+    open(os.path.join(OUT, "phi.tex"), "w").write(tex)
+
+
 if __name__ == "__main__":
+    fb_table()
     data_table()
+    bench_table()
     cert_table(); census_table(); nonbid_table()
     print("tables written to", OUT)
