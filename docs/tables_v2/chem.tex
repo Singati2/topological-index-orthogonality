@@ -1,0 +1,19 @@
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The target-aware screen against a chemistry-aware baseline. $p_{\mathrm{RD}}$: RDKit 2D descriptors retained (finite, non-constant, not collinear); $p_{\mathrm{both}}$: columns of the union with the $30$ topological indices after removing exact collinearity (none of the $30$ was collinear with the RDKit block). $R^2$: in-sample OLS. CV: $5$-fold cross-validated RMSE (ridge, penalty by inner CV) or ROC-AUC (BBBP, $\ell_2$-logistic). Candidates: interval verdicts given the union baseline (pass / inconclusive / negligible; the remaining candidate is in span). Last column: number of the $30$ topological indices whose interval for $|\pcor|$ given the RDKit block lies above $0.10$.}
+\label{tab:chem}
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrccccccccc}
+\toprule
+ & & & \multicolumn{3}{c}{in-sample $R^2$} & \multicolumn{3}{c}{CV RMSE / AUC} & candidates & topo.\\
+Dataset & $p_{\mathrm{RD}}$ & $p_{\mathrm{both}}$ & RD & RD+topo & RD+topo+cand & RD & RD+topo & RD+topo+cand & pass/inc./negl. & beyond RD\\
+\midrule
+ESOL & $161$ & $191$ & $0.929$ & $0.940$ & $0.944$ & $0.729$ & $0.731$ & $0.705$ & $0$ / $13$ / $6$ & $1$\\
+FreeSolv & $149$ & $179$ & $0.972$ & $0.976$ & $0.977$ & $1.051$ & $1.044$ & $1.043$ & $0$ / $18$ / $1$ & $0$\\
+Lipophilicity & $158$ & $188$ & $0.591$ & $0.607$ & $0.617$ & $0.829$ & $0.824$ & $0.820$ & $0$ / $3$ / $16$ & $0$\\
+BBBP & $162$ & $192$ & $0.545$ & $0.559$ & $0.566$ & $0.891$ & $0.892$ & $0.894$ & $0$ / $1$ / $18$ & $0$\\
+\bottomrule
+\end{tabular}}
+\end{table}

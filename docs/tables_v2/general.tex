@@ -1,0 +1,27 @@
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{The span certificate on thirteen MoleculeNet SMILES datasets (no targets used). $n$: parsed molecules; $n_{>4}$: molecules containing an atom of degree above four; $\Delta$: largest degree; $|P_D|$: realised degree pairs; ranks of the count matrix $M$ and of the $18$-index baseline block $B$; largest relative residual of an $m_{ij}$ column on $B$; whether $\operatorname{rank}[\mathbf 1,B]=\operatorname{rank}[\mathbf 1,M]$ with residuals below $10^{-8}$.}
+\label{tab:general}
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrcl}
+\toprule
+Dataset & $n$ & $n_{>4}$ & $\Delta$ & $|P_D|$ & rk $M$ & rk $B$ & max resid. & certified\\
+\midrule
+ESOL & $1127$ & $0$ & $4$ & $10$ & $10$ & $10$ & $4.6\times10^{-13}$ & yes\\
+FreeSolv & $639$ & $0$ & $4$ & $10$ & $10$ & $10$ & $2.1\times10^{-12}$ & yes\\
+Lipophilicity & $4200$ & $0$ & $4$ & $9$ & $9$ & $9$ & $2.6\times10^{-12}$ & yes\\
+BBBP & $2039$ & $0$ & $4$ & $10$ & $10$ & $10$ & $1.1\times10^{-12}$ & yes\\
+BACE & $1513$ & $0$ & $4$ & $9$ & $9$ & $9$ & $1.8\times10^{-12}$ & yes\\
+ClinTox & $1477$ & $1$ & $6$ & $11$ & $11$ & $11$ & $2.4\times10^{-12}$ & yes (on the $\Delta\le4$ subset, $n=1476$: ranks $10$/$10$, yes)\\
+SIDER & $1396$ & $1$ & $6$ & $11$ & $11$ & $11$ & $7.7\times10^{-12}$ & yes (on the $\Delta\le4$ subset, $n=1395$: ranks $10$/$10$, yes)\\
+Tox21 & $7812$ & $2$ & $6$ & $12$ & $12$ & $12$ & $6.6\times10^{-11}$ & yes (on the $\Delta\le4$ subset, $n=7810$: ranks $10$/$10$, yes)\\
+ToxCast & $8566$ & $3$ & $6$ & $13$ & $13$ & $13$ & $1.6\times10^{-9}$ & yes (on the $\Delta\le4$ subset, $n=8563$: ranks $10$/$10$, yes)\\
+QM8 & $21783$ & $0$ & $4$ & $10$ & $10$ & $10$ & $3.6\times10^{-11}$ & yes\\
+QM9 & $133882$ & $0$ & $4$ & $10$ & $10$ & $10$ & $1.4\times10^{-10}$ & yes\\
+MUV & $93087$ & $0$ & $4$ & $9$ & $9$ & $9$ & $2.0\times10^{-11}$ & yes\\
+HIV & $41127$ & $350$ & $10$ & $37$ & $36$ & $17$ & $9.9\times10^{-1}$ & \textbf{no} (on the $\Delta\le4$ subset, $n=40777$: ranks $10$/$10$, yes)\\
+\bottomrule
+\end{tabular}}
+\end{table}

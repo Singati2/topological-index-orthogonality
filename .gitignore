@@ -14,3 +14,6 @@ __pycache__/
 
 # local run logs
 logs_v2/
+
+# extra MoleculeNet files downloaded by scripts/78 (provenance recorded in results/certificate_generality.csv)
+data/moleculenet_extra/

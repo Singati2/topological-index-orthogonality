@@ -172,3 +172,50 @@ def test_curated_counts():
             pytest.skip("no curated data")
         df = pd.read_csv(p)
         assert len(df) == n and df.graph_wl_hash.nunique() == g, name
+
+
+# ------------------------------------------------------------- v2.1 additions
+
+def test_certify_tool_data_free_and_identity():
+    import math
+    from src.certify import certify, phi_matrix, BID18 as B18
+    assert np.linalg.matrix_rank(phi_matrix(B18), tol=1e-9) == 10
+    graphs = _random_g4_graphs(25, 7)
+    rep = certify(graphs, f=lambda a, b: math.sqrt(a * a + b * b + a * b))   # Euler Sombor
+    assert rep["data_free_certified"] and rep["certified"] and rep["in_span"]
+    assert rep["identity_max_error"] < 1e-9
+    # hyper-Zagreb (a+b)^2 = F + 2 M2 exactly; coefficients are unique only on a
+    # 10-index basis (on the 18-index baseline they are unique up to ker Phi^T)
+    basis10 = ["M1", "M2", "mM1", "mM2", "F", "R", "SCI", "H", "GA", "AG"]
+    rep2 = certify(graphs, f=lambda a, b: (a + b) ** 2, baseline=basis10)
+    c = rep2["coefficients"]
+    assert c["F"] == pytest.approx(1.0, abs=1e-8) and c["M2"] == pytest.approx(2.0, abs=1e-8)
+    assert all(abs(v) < 1e-8 for k, v in c.items() if k not in ("F", "M2"))
+
+
+def test_certificate_generality_results():
+    g = _csv("certificate_generality.csv")
+    assert len(g) >= 13
+    ok = g[g.dataset != "HIV"]
+    assert ok.certificate_holds.all() and (ok.max_rel_resid_mij_on_BID18 < 1e-8).all()
+    hiv = g[g.dataset == "HIV"].iloc[0]
+    assert (not hiv.certificate_holds) and hiv.n_maxdeg_gt4 > 0 and hiv.rank_BID18 < hiv.rank_mij
+    if "restricted_certificate_holds" in g.columns:
+        assert bool(hiv.restricted_certificate_holds)
+
+
+def test_chemistry_baseline_screen_results():
+    s = _csv("screen_vs_chemistry_summary.csv")
+    assert set(s.dataset) == {"esol", "freesolv", "lipophilicity", "bbbp"}
+    assert int(s.cand_pass_both.sum()) == 0
+    c = _csv("screen_vs_chemistry_candidates.csv")
+    assert (c.verdict_both != "PASS").all()
+
+
+def test_graph_oracle_floor_consistent_with_curation():
+    o = _csv("graph_oracle_floor.csv").set_index("dataset")
+    cur = _csv("benchmark_v2_curation.csv").set_index("dataset")
+    for d in ["esol", "freesolv", "lipophilicity"]:
+        # in-sample group-mean RMSE equals sqrt(SS_within / N) reported by scripts/72
+        assert o.loc[d, "oracle_in_sample_rmse"] == pytest.approx(
+            cur.loc[d, "graph_only_rmse_floor(sqrt SSwithin/N)"], rel=1e-3)

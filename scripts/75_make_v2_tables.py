@@ -296,7 +296,122 @@ Index & $f(a,b)$ & """ + head + r"""\\\\
     open(os.path.join(OUT, "phi.tex"), "w").write(tex)
 
 
+def chem_table():
+    S = pd.read_csv(os.path.join(R, "screen_vs_chemistry_summary.csv")).set_index("dataset")
+    T = pd.read_csv(os.path.join(R, "screen_vs_chemistry_topo30.csv"))
+    rows = []
+    for d in DS:
+        r = S.loc[d]
+        metric = "AUC" if d == "bbbp" else "RMSE"
+        rows.append(f"{NICE[d]} & ${int(r.n_rdkit_cols)}$ & ${int(r.n_both_cols)}$ & "
+                    f"${r.r2_rdkit:.3f}$ & ${r.r2_rdkit_topo:.3f}$ & ${r.r2_rdkit_topo_cands:.3f}$ & "
+                    f"${r.cv_rdkit:.3f}$ & ${r.cv_rdkit_topo:.3f}$ & ${r.cv_rdkit_topo_cands:.3f}$ & "
+                    f"${int(r.cand_pass_both)}$ / ${int(r.cand_inconclusive_both)}$ / ${int(r.cand_negligible_both)}$ & "
+                    f"${int(r.topo_pass_given_rdkit)}$\\\\")
+    tex = r"""\begin{table}[h]
+\centering
+\footnotesize
+\caption{The target-aware screen against a chemistry-aware baseline. $p_{\\mathrm{RD}}$: RDKit 2D descriptors retained (finite, non-constant, not collinear); $p_{\\mathrm{both}}$: columns of the union with the $30$ topological indices after removing exact collinearity (none of the $30$ was collinear with the RDKit block). $R^2$: in-sample OLS. CV: $5$-fold cross-validated RMSE (ridge, penalty by inner CV) or ROC-AUC (BBBP, $\\ell_2$-logistic). Candidates: interval verdicts given the union baseline (pass / inconclusive / negligible; the remaining candidate is in span). Last column: number of the $30$ topological indices whose interval for $|\\pcor|$ given the RDKit block lies above $0.10$.}
+\label{tab:chem}
+\setlength{\\tabcolsep}{3pt}
+\resizebox{\\textwidth}{!}{%
+\begin{tabular}{lrrccccccccc}
+\toprule
+ & & & \\multicolumn{3}{c}{in-sample $R^2$} & \\multicolumn{3}{c}{CV RMSE / AUC} & candidates & topo.\\\\
+Dataset & $p_{\\mathrm{RD}}$ & $p_{\\mathrm{both}}$ & RD & RD+topo & RD+topo+cand & RD & RD+topo & RD+topo+cand & pass/inc./negl. & beyond RD\\\\
+\midrule
+""" + "\n".join(rows) + r"""
+\bottomrule
+\end{tabular}}
+\end{table}
+"""
+    tex = tex.replace("\\\\\\\\", "\\\\")
+    for a in ["mathrm", "ell", "multicolumn", "tabcolsep", "textwidth", "pcor"]:
+        tex = tex.replace("\\\\" + a, "\\" + a)
+    open(os.path.join(OUT, "chem.tex"), "w").write(tex)
+
+
+def generality_table():
+    g = pd.read_csv(os.path.join(R, "certificate_generality.csv"))
+    order = ["esol", "freesolv", "lipophilicity", "bbbp", "bace", "clintox", "sider", "tox21", "toxcast_data", "qm8", "qm9", "muv", "HIV"]
+    nice = dict(NICE, bace="BACE", clintox="ClinTox", sider="SIDER", tox21="Tox21", toxcast_data="ToxCast", qm8="QM8", qm9="QM9", muv="MUV", HIV="HIV")
+    gi = g.set_index("dataset")
+    g = gi.loc[[o for o in order if o in gi.index]]
+    rows = []
+    for d, r in g.iterrows():
+        cert = "yes" if r.certificate_holds else "\\textbf{no}"
+        extra = ""
+        if "restricted_n" in g.columns and pd.notna(r.get("restricted_n", np.nan)):
+            extra = f" (on the $\\Delta\\le4$ subset, $n={int(r.restricted_n)}$: ranks ${int(r.restricted_rank_mij)}$/${int(r.restricted_rank_BID18)}$, " + ("yes" if r.restricted_certificate_holds else "no") + ")"
+        rows.append(f"{nice.get(d, d)} & ${int(r.n_graphs)}$ & ${int(r.n_maxdeg_gt4)}$ & ${int(r.max_degree)}$ & ${int(r.degree_pairs_realised)}$ & "
+                    f"${int(r.rank_mij)}$ & ${int(r.rank_BID18)}$ & {sci(r.max_rel_resid_mij_on_BID18)} & {cert}{extra}\\\\")
+    tex = r"""\begin{table}[h]
+\centering
+\footnotesize
+\caption{The span certificate on thirteen MoleculeNet SMILES datasets (no targets used). $n$: parsed molecules; $n_{>4}$: molecules containing an atom of degree above four; $\\Delta$: largest degree; $|P_D|$: realised degree pairs; ranks of the count matrix $M$ and of the $18$-index baseline block $B$; largest relative residual of an $m_{ij}$ column on $B$; whether $\\operatorname{rank}[\\mathbf 1,B]=\\operatorname{rank}[\\mathbf 1,M]$ with residuals below $10^{-8}$.}
+\label{tab:general}
+\setlength{\\tabcolsep}{3pt}
+\resizebox{\\textwidth}{!}{%
+\begin{tabular}{lrrrrrrcl}
+\toprule
+Dataset & $n$ & $n_{>4}$ & $\\Delta$ & $|P_D|$ & rk $M$ & rk $B$ & max resid. & certified\\\\
+\midrule
+""" + "\n".join(rows) + r"""
+\bottomrule
+\end{tabular}}
+\end{table}
+"""
+    tex = tex.replace("\\\\\\\\", "\\\\")
+    for a in ["textbf", "Delta", "le4", "operatorname", "mathbf", "tabcolsep", "textwidth"]:
+        tex = tex.replace("\\\\" + a, "\\" + a)
+    open(os.path.join(OUT, "general.tex"), "w").write(tex)
+
+
+def numbers_macros():
+    """Key numbers of the new analyses as LaTeX macros (docs/tables_v2/numbers.tex)."""
+    L = []
+    def m(name, val):
+        L.append(f"\\newcommand{{\\{name}}}{{{val}}}")
+    o = pd.read_csv(os.path.join(R, "graph_oracle_floor.csv")).set_index("dataset")
+    for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo")]:
+        m(f"oracleRmse{tag}", f"{o.loc[d, 'oracle_in_sample_rmse']:.2f}")
+        m(f"oracleRsq{tag}", f"{o.loc[d, 'oracle_in_sample_r2']:.2f}")
+        m(f"looRmse{tag}", f"{o.loc[d, 'oracle_loo_rmse']:.2f}")
+    m("oracleAucBbbp", f"{o.loc['bbbp', 'oracle_in_sample']:.3f}"); m("looAucBbbp", f"{o.loc['bbbp', 'oracle_loo']:.2f}")
+    sm = pd.read_csv(os.path.join(R, "benchmark_v2_summary.csv")); cur = pd.read_csv(os.path.join(R, "benchmark_v2_curation.csv")).set_index("dataset")
+    for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo")]:
+        rd = sm[(sm.dataset == d) & (sm.model == "f_rdkit2d_rf")]["mean"].iloc[0]
+        m(f"rdkitRsq{tag}", f"{1 - (rd / cur.loc[d, 'overall_target_sd']) ** 2:.2f}")
+    g = pd.read_csv(os.path.join(R, "certificate_generality.csv"))
+    m("nGenDatasets", str(len(g))); m("nGenCertified", str(int(g.certificate_holds.sum())))
+    m("nGenMolecules", f"{int(g.n_graphs.sum()):,}".replace(",", "\\,"))
+    hiv = g[g.dataset == "HIV"].iloc[0] if (g.dataset == "HIV").any() else None
+    if hiv is not None:
+        m("hivHyper", str(int(hiv.n_maxdeg_gt4))); m("hivPairs", str(int(hiv.degree_pairs_realised))); m("hivRankM", str(int(hiv.rank_mij))); m("hivRankB", str(int(hiv.rank_BID18)))
+        if "restricted_n" in g.columns and pd.notna(hiv.get("restricted_n", np.nan)):
+            m("hivRestrictedN", f"{int(hiv.restricted_n):,}".replace(",", "\\,")); m("hivRestrictedResid", sci(hiv.restricted_max_rel_resid).strip("$"))
+    m("genMaxResid", sci(g[g.certificate_holds].max_rel_resid_mij_on_BID18.max()).strip("$"))
+    fp = os.path.join(R, "nonlinear_noise_floor_summary.csv")
+    if os.path.exists(fp):
+        s = pd.read_csv(fp); b = s[s.null == "B_inspan"]; a = s[s.null == "A_noise"]
+        m("nullBandB", f"{b.p99_abs.max():.3f}"); m("nullBandA", f"{a.p99_abs.max():.3f}")
+        m("nullKB", str(int(b.K.iloc[0]))); m("nullKA", str(int(a.K.iloc[0])))
+        m("nullPmin", f"{1.0 / (int(b.K.iloc[0]) + 1):.3f}")
+        for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo"), ("bbbp", "Bbbp")]:
+            m(f"nullB{tag}", f"{b[b.dataset == d].p99_abs.iloc[0]:.2f}"); m(f"nullA{tag}", f"{a[a.dataset == d].p99_abs.iloc[0]:.2f}")
+        c = pd.read_csv(os.path.join(R, "nonlinear_noise_floor_candidates.csv"))
+        m("nullSurvivors", str(int((c.q_bh < 0.05).sum())))
+        for d, k, tag in [("esol", "InfoH_deg", "qInfoEsol"), ("bbbp", "FourCyc", "qFourBbbp")]:
+            rr = c[(c.dataset == d) & (c.candidate == k)]
+            if len(rr): m(tag, f"{rr.q_bh.iloc[0]:.3f}")
+    S = pd.read_csv(os.path.join(R, "screen_vs_chemistry_summary.csv")).set_index("dataset")
+    m("chemPassTotal", str(int(S.cand_pass_both.sum()))); m("chemTopoBeyond", str(int(S.topo_pass_given_rdkit.sum())))
+    m("chemCvGainMax", f"{(S.cv_rdkit - S.cv_rdkit_topo_cands)[['esol','freesolv','lipophilicity']].max():.3f}")
+    open(os.path.join(OUT, "numbers.tex"), "w").write("\n".join(L) + "\n")
+
+
 if __name__ == "__main__":
+    chem_table(); generality_table(); numbers_macros()
     fb_table()
     data_table()
     bench_table()

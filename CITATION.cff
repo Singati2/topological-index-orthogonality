@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software or data, please cite the manuscript and this repository."
-title: "Exact redundancy of degree-based topological indices: span certificate and target-aware screen"
+title: "Ten edge-degree counts are all a degree-based topological index can see: exact redundancy certificate and target-aware screen"
 authors:
   - family-names: "Shiwakoti"
     given-names: "Ganesh"
@@ -34,5 +34,5 @@ abstract: >-
   on four MoleculeNet benchmarks, a target-aware screen with intervals and a
   cross-fitted non-linear check for non-degree-based candidates, and a
   graph-collision information ceiling with a graph-grouped benchmark.
-version: "2.0.0"
+version: "2.1.0"
 date-released: "2026-10-05"
