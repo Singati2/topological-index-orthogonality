@@ -75,8 +75,9 @@ RDKit-2D reference (documented in `scripts/72_benchmark_v2.py`).
 
 ## History
 
-Version 1 of the paper (tags `v1.0`–`v1.4-paper2-orthogonality`) and the Paper 1
-material that previously lived here remain available in the git history.
+This repository contains only Paper 2 (v2). Version 1 of the paper and the Paper 1
+material that previously lived here have been removed; Paper 1 is maintained in
+[Singati2/LOYOLA-PAPER](https://github.com/Singati2/LOYOLA-PAPER).
 
 ## License
 
