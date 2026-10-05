@@ -30,6 +30,7 @@ THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 PROJECT = os.path.abspath(os.path.join(THIS_DIR, ".."))
 sys.path.insert(0, PROJECT)
 
+from src import orthogonality as ortho
 from src.mol_to_graph import smiles_to_graph
 from src.standard_indices import compute_all
 from src.wuzi_index import wuzi
@@ -40,6 +41,8 @@ ALPHA_GRID = [-1.0, -0.5, 0.0, 0.5, 1.0]
 BETA_GRID  = [-1.0, -0.5, 0.0, 0.5, 1.0]
 GAMMA_GRID = [0.0, 0.5, 1.0, 2.0]
 
+
+PCOR_TAU = 0.10  # effect-size margin for |pcor| (not a significance threshold)
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__)
@@ -97,13 +100,21 @@ def main():
         best = max(abs_corrs, key=abs_corrs.get)
         max_r = abs_corrs[best]
         raw_corr = float(np.corrcoef(w, y)[0, 1])
-        w_res = w - LinearRegression().fit(Xb, w).predict(Xb)
-        partial = 0.0 if np.std(w_res) < 1e-12 else float(np.corrcoef(w_res, y_res)[0, 1])
+        cert = ortho.span_certified_pcor(w, Xb, y)
+        partial = cert["pcor"]
+        lo, hi = ortho.fisher_ci(partial, cert["df"]) if not cert["in_span"] else (0.0, 0.0)
+        abs_lo = 0.0 if lo <= 0 <= hi else min(abs(lo), abs(hi))
+        abs_hi = max(abs(lo), abs(hi))
+        pcor_ci_verdict = ("IN_SPAN" if cert["in_span"] else
+                           "PASS" if abs_lo >= PCOR_TAU else
+                           "NEGLIGIBLE" if abs_hi < PCOR_TAU else "INCONCLUSIVE")
         rows.append({"alpha": alpha, "beta": beta, "gamma": gamma,
                      "max_abs_r_baseline": max_r,
                      "most_correlated_baseline": best,
                      "raw_corr_target": raw_corr,
                      "partial_corr_target": partial,
+                     "pcor_ci_lo": lo, "pcor_ci_hi": hi, "rel_resid": cert["rel_resid"],
+                     "in_span": cert["in_span"], "pcor_ci_verdict": pcor_ci_verdict,
                      "screen_verdict": "PASS" if max_r < 0.95 else "FAIL"})
         if (i + 1) % 25 == 0:
             print(f"      {i+1}/{total_pts}")

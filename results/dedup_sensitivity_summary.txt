@@ -1,0 +1,4 @@
+esol: {'n_raw': 1128, 'n_valid': 1128, 'n_unique': 1117, 'n_conflicting_dropped': 1, 'n_curated': 1116}; max |pcor change| = 0.0062; verdict changes: none
+freesolv: {'n_raw': 642, 'n_valid': 642, 'n_unique': 642, 'n_conflicting_dropped': 0, 'n_curated': 642}; max |pcor change| = 0.0000; verdict changes: none
+lipophilicity: {'n_raw': 4200, 'n_valid': 4200, 'n_unique': 4200, 'n_conflicting_dropped': 0, 'n_curated': 4200}; max |pcor change| = 0.0000; verdict changes: none
+bbbp: {'n_raw': 2050, 'n_valid': 2039, 'n_unique': 1966, 'n_conflicting_dropped': 11, 'n_curated': 1955}; max |pcor change| = 0.0088; verdict changes: none
