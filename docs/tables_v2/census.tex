@@ -1,0 +1,32 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Census of published BID indices ($f(a,b)$ with $a,b$ the end degrees of an edge) and two non-BID Sombor-type controls. Columns 3--6: largest $|r|$ with any of the $30$ baseline indices on each dataset (the conventional pairwise screen). Last column: largest relative residual on the baseline over the four datasets . For KG-Sombor $e=a+b-2$ is the edge degree. Every BID index is in the span to machine precision; the controls are not.}
+\label{tab:census}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llccccc}
+\toprule
+Index & $f(a,b)$ & ESOL & FreeSolv & Lipo & BBBP & max resid.\\
+\midrule
+Modified Sombor~\cite{KulliGutman2021Modified} & $1/\sqrt{a^2+b^2}$ & $0.999$ & $0.999$ & $0.999$ & $1.000$ & $8.6\times10^{-14}$\\
+Elliptic Sombor~\cite{GutmanFurtulaOz2024Elliptic} & $(a+b)\sqrt{a^2+b^2}$ & $1.000$ & $0.999$ & $0.999$ & $1.000$ & $4.1\times10^{-14}$\\
+Euler Sombor~\cite{Gutman2024Euler} & $\sqrt{a^2+b^2+ab}$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $6.8\times10^{-14}$\\
+Diminished Sombor~\cite{MovahediGutmanRedzepovicFurtula2026} & $\sqrt{a^2+b^2}/(a+b)$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $4.6\times10^{-14}$\\
+Hyperbolic Sombor~\cite{BarmanDas2026Hyperbolic} & $\sqrt{a^2+b^2}/\min(a,b)$ & $0.987$ & $0.983$ & $0.985$ & $0.990$ & $3.5\times10^{-13}$\\
+$p$-Sombor, $p=\tfrac12$~\cite{RetiDoslicAli2021} & $(a^{1/2}+b^{1/2})^{2}$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $5.9\times10^{-14}$\\
+$p$-Sombor, $p=3$~\cite{RetiDoslicAli2021} & $(a^3+b^3)^{1/3}$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $4.6\times10^{-14}$\\
+KG-Sombor~\cite{KulliHarishChaluvarajuGutman2022KG} & $\sqrt{a^2+e^2}+\sqrt{b^2+e^2}$ & $0.999$ & $0.999$ & $0.999$ & $0.999$ & $1.1\times10^{-13}$\\
+Inverse sum indeg~\cite{VukicevicGasperov2010Adriatic} & $ab/(a+b)$ & $0.998$ & $0.997$ & $0.998$ & $0.998$ & $1.2\times10^{-13}$\\
+Symmetric division deg~\cite{VukicevicGasperov2010Adriatic} & $a/b+b/a$ & $0.993$ & $0.992$ & $0.992$ & $0.994$ & $1.1\times10^{-13}$\\
+Nirmala~\cite{Kulli2021Nirmala} & $\sqrt{a+b}$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $4.7\times10^{-14}$\\
+First inverse Nirmala~\cite{KulliLokeshaNirupadi2021InvNirmala} & $\sqrt{1/a+1/b}$ & $0.999$ & $0.999$ & $0.999$ & $0.999$ & $4.9\times10^{-14}$\\
+Second inverse Nirmala~\cite{KulliLokeshaNirupadi2021InvNirmala} & $\sqrt{ab/(a+b)}$ & $1.000$ & $0.999$ & $0.999$ & $1.000$ & $1.8\times10^{-13}$\\
+First Gourava~\cite{Kulli2017Gourava} & $a+b+ab$ & $0.999$ & $0.999$ & $0.999$ & $0.999$ & $4.6\times10^{-14}$\\
+Hyper-Zagreb~\cite{ShirdelRezapourSayadi2013HyperZagreb} & $(a+b)^2$ & $0.999$ & $0.998$ & $0.998$ & $0.999$ & $4.1\times10^{-14}$\\
+\midrule
+Sombor coindex (control) & non-BID & $0.999$ & $0.998$ & $0.997$ & $0.999$ & $7.7\times10^{-3}$\\
+Eccentric Sombor (control) & non-BID & $0.971$ & $0.976$ & $0.943$ & $0.947$ & $7.5\times10^{-2}$\\
+\bottomrule
+\end{tabular}
+\end{table}

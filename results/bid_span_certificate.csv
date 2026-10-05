@@ -1,0 +1,5 @@
+dataset,n,max_degree,degree_pairs_realised,rank_mij,rank_BID18,rank_BID18_plus_mij,max_rel_resid_mij_on_BID18,certificate_holds,greedy_minimal_certifying_subset,size_minimal_subset
+esol,1127,4,10,10,10,10,4.522735414528785e-13,True,M1 M2 mM1 mM2 F R SCI H GA AG,10
+freesolv,639,4,10,10,10,10,2.071691721345673e-12,True,M1 M2 mM1 mM2 F R SCI H GA AG,10
+lipophilicity,4200,4,9,9,9,9,2.585555613825218e-12,True,M1 M2 mM1 mM2 F R SCI H GA,9
+bbbp,2039,4,10,10,10,10,1.0996881543562607e-12,True,M1 M2 mM1 mM2 F R SCI H GA AG,10

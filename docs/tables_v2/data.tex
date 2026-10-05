@@ -1,0 +1,18 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Datasets and curation. Raw rows of the MoleculeNet files; invalid SMILES; multi-fragment SMILES reduced to the largest fragment; rows in exact canonical-SMILES duplicate groups; duplicate groups dropped for conflicting labels; molecules after curation (also dropping graphs with fewer than two heavy atoms); distinct hydrogen-suppressed unlabelled graphs (Weisfeiler--Lehman hash); and the percentage of curated molecules whose graph is shared with another molecule.}
+\label{tab:data}
+\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrrrr}
+\toprule
+Dataset & Target & raw & invalid & multi-frag. & dup.\ rows & conflicts & curated & graphs & shared (\%)\\
+\midrule
+ESOL & $\log S$ (mol/L) & $1128$ & $0$ & $0$ & $22$ & $1$ & $1115$ & $628$ & $55.5$\\
+FreeSolv & $\Delta G_{\mathrm{hyd}}$ (kcal/mol) & $642$ & $0$ & $0$ & $0$ & $0$ & $639$ & $236$ & $74.3$\\
+Lipophilicity & $\log D_{7.4}$ & $4200$ & $0$ & $1$ & $0$ & $0$ & $4200$ & $3472$ & $28.2$\\
+BBBP & BBB penetration (0/1) & $2050$ & $11$ & $105$ & $141$ & $11$ & $1955$ & $1693$ & $22.6$\\
+\bottomrule
+\end{tabular}}
+\end{table}

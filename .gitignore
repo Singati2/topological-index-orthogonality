@@ -1,6 +1,4 @@
-# Cached datasets — re-downloadable via src/load_data.py from
-# MoleculeNet; kept locally for fast iteration but not committed.
-data/
+# Datasets in data/ are committed (verified copies; see data/README.md).
 
 # Python
 __pycache__/
@@ -13,3 +11,6 @@ __pycache__/
 .DS_Store
 .ipynb_checkpoints/
 *.swp
+
+# local run logs
+logs_v2/

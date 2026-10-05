@@ -108,3 +108,90 @@ def kill_test(corr: pd.DataFrame, new_name: str, threshold: float = 0.95) -> dic
         "threshold": threshold,
         "verdict": verdict,
     }
+
+
+# ---------------------------------------------------------------------------
+# Span certificate and numerically safe partial correlation (v2, 2026-10).
+#
+# The earlier code declared a residual "zero" only when its *absolute* standard
+# deviation fell below 1e-12.  For an index that lies exactly in the column
+# span of the baseline (every bond-additive degree-based index does, once the
+# baseline spans the edge-degree-pair counts), the least-squares residual is
+# floating-point noise of relative size ~1e-14 but absolute size well above
+# 1e-12, and correlating that noise with the target produced spurious
+# "partial correlations" of order 0.01-0.04.  The helpers below use a
+# *relative* residual and report the in-span status explicitly.
+# ---------------------------------------------------------------------------
+SPAN_RTOL = 1e-8
+
+
+def _design(X: np.ndarray) -> np.ndarray:
+    X = np.asarray(X, dtype=float)
+    return np.hstack([np.ones((X.shape[0], 1)), X])
+
+
+def residualize(v: np.ndarray, X: np.ndarray) -> np.ndarray:
+    """OLS residual of v on [1, X] via a rank-revealing least-squares solve."""
+    A = _design(X)
+    beta, *_ = np.linalg.lstsq(A, np.asarray(v, float), rcond=None)
+    return np.asarray(v, float) - A @ beta
+
+
+def relative_residual(v: np.ndarray, X: np.ndarray) -> float:
+    """||resid(v | 1, X)|| / ||v - mean(v)||  (0 for v exactly in span)."""
+    v = np.asarray(v, float)
+    denom = np.linalg.norm(v - v.mean())
+    if denom == 0:
+        return 0.0
+    return float(np.linalg.norm(residualize(v, X)) / denom)
+
+
+def numerical_rank(X: np.ndarray, rtol: float = 1e-9) -> int:
+    """Numerical rank of the column-centred, column-normalised matrix."""
+    X = np.asarray(X, float)
+    Xc = X - X.mean(0)
+    norms = np.linalg.norm(Xc, axis=0)
+    Xc = Xc[:, norms > 0] / norms[norms > 0]
+    if Xc.shape[1] == 0:
+        return 0
+    s = np.linalg.svd(Xc, compute_uv=False)
+    return int((s > s[0] * rtol).sum())
+
+
+def span_certified_pcor(z: np.ndarray, X: np.ndarray, y: np.ndarray,
+                        rtol: float = SPAN_RTOL) -> dict:
+    """Partial correlation of z with y given X, with an exact-span certificate.
+
+    Returns dict(pcor, rel_resid, in_span, df) where df = n - rank([1,X])
+    (= n - k - 1 for k non-redundant conditioning columns); Fisher-z intervals
+    then use SE = 1/sqrt(df - 2) = 1/sqrt(n - k - 3).  If z lies in
+    span([1, X]) to relative tolerance ``rtol`` the partial correlation is
+    reported as exactly 0.0 and ``in_span`` is True.
+    """
+    z = np.asarray(z, float); y = np.asarray(y, float)
+    rr = relative_residual(z, X)
+    n = len(z)
+    rank = (numerical_rank(X) if X.shape[1] else 0) + 1  # + intercept
+    df = n - rank
+    if rr < rtol:
+        return {"pcor": 0.0, "rel_resid": rr, "in_span": True, "df": df}
+    zr = residualize(z, X); yr = residualize(y, X)
+    if np.linalg.norm(yr) == 0:
+        return {"pcor": 0.0, "rel_resid": rr, "in_span": False, "df": df}
+    return {"pcor": float(np.corrcoef(zr, yr)[0, 1]), "rel_resid": rr,
+            "in_span": False, "df": df}
+
+
+def fisher_ci(r: float, df: int, level: float = 0.95) -> tuple[float, float]:
+    """Fisher-z confidence interval for a (partial) correlation.
+
+    ``df`` = n - rank([1, X]); the standard error of atanh(r) is
+    1/sqrt(df - 2) = 1/sqrt(n - k - 3).
+    """
+    from scipy.stats import norm
+    if df <= 3 or not np.isfinite(r):
+        return (float("nan"), float("nan"))
+    r = float(np.clip(r, -0.999999, 0.999999))
+    z = np.arctanh(r); se = 1.0 / np.sqrt(df - 2)
+    q = norm.ppf(0.5 + level / 2)
+    return (float(np.tanh(z - q * se)), float(np.tanh(z + q * se)))

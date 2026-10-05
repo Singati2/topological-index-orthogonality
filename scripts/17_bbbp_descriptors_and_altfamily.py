@@ -46,6 +46,7 @@ warnings.filterwarnings("ignore")
 from sklearn.linear_model import LinearRegression  # noqa: E402
 
 from src.load_data import load                      # noqa: E402
+from src import orthogonality as ortho
 from src.mol_to_graph import smiles_to_graph        # noqa: E402
 from src.standard_indices import compute_all        # noqa: E402
 from src.novel_candidates import CANDIDATE_INDICES  # noqa: E402
@@ -69,6 +70,8 @@ FAMILY_OF = {
 PAIRWISE_THRESHOLD = 0.95
 PCOR_THRESHOLD = 0.10
 
+
+PCOR_TAU = 0.10  # effect-size margin for |pcor| (not a significance threshold)
 
 def main():
     print("--- bbbp ---")
@@ -136,8 +139,14 @@ def main():
         best_baseline = max(abs_corrs, key=abs_corrs.get)
         max_r = abs_corrs[best_baseline]
         raw_corr = float(np.corrcoef(vals, y)[0, 1])  # point-biserial on 0/1
-        v_res = vals - LinearRegression().fit(Xb, vals).predict(Xb)
-        partial = 0.0 if np.std(v_res) < 1e-12 else float(np.corrcoef(v_res, y_res)[0, 1])
+        cert = ortho.span_certified_pcor(vals, Xb, y)
+        partial = cert["pcor"]
+        lo, hi = ortho.fisher_ci(partial, cert["df"]) if not cert["in_span"] else (0.0, 0.0)
+        abs_lo = 0.0 if lo <= 0 <= hi else min(abs(lo), abs(hi))
+        abs_hi = max(abs(lo), abs(hi))
+        pcor_ci_verdict = ("IN_SPAN" if cert["in_span"] else
+                           "PASS" if abs_lo >= PCOR_TAU else
+                           "NEGLIGIBLE" if abs_hi < PCOR_TAU else "INCONCLUSIVE")
         pairwise_pass = max_r < PAIRWISE_THRESHOLD
         combined_pass = pairwise_pass and abs(partial) >= PCOR_THRESHOLD
         rows.append({
@@ -146,6 +155,8 @@ def main():
             "most_correlated_baseline": best_baseline,
             "raw_corr_target": round(raw_corr, 4),  # point-biserial
             "partial_corr_target": round(partial, 4),  # LPM partial r
+            "pcor_ci_lo": lo, "pcor_ci_hi": hi, "rel_resid": cert["rel_resid"],
+            "in_span": cert["in_span"], "pcor_ci_verdict": pcor_ci_verdict,
             "pairwise_verdict": "PASS" if pairwise_pass else "FAIL",
             "combined_verdict": "PASS" if combined_pass else "FAIL",
             "n_compute_fail": n_fail,

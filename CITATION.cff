@@ -1,14 +1,17 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite the relevant manuscript and this repository."
-title: "Topological-Index Pilot: Wuzi index family and orthogonality-screening pipeline for QSPR"
+message: "If you use this software or data, please cite the manuscript and this repository."
+title: "Exact redundancy of degree-based topological indices: span certificate and target-aware screen"
 authors:
-  - family-names: "Natarajan"
-    given-names: "Advik"
-    affiliation: "Department of Mathematics, Loyola College, Chennai"
   - family-names: "Shiwakoti"
     given-names: "Ganesh"
     affiliation: "Department of Mathematics and Statistics, Florida Atlantic University"
     email: "ganshiwakoti@gmail.com"
+  - family-names: "Natarajan"
+    given-names: "Advik"
+    affiliation: "Department of Mathematics, Loyola College, Chennai"
+  - family-names: "Chalise"
+    given-names: "Parik"
+    affiliation: "Department of Applied Mathematics and Statistics, Johns Hopkins University"
   - family-names: "Arockiaraj"
     given-names: "Michael"
     affiliation: "Department of Mathematics, Loyola College, Chennai"
@@ -16,27 +19,20 @@ repository-code: "https://github.com/Singati2/topological-index-orthogonality"
 license: MIT
 keywords:
   - "topological indices"
-  - "Wuzi index family"
-  - "bond-incident-degree"
-  - "ratio-bound theorem"
-  - "extremal graphs"
+  - "degree-based indices"
+  - "Sombor index"
+  - "redundancy"
+  - "partial correlation"
   - "QSPR"
-  - "orthogonality screening"
-  - "cheminformatics"
+  - "molecular descriptors"
 abstract: >-
-  Companion software for two manuscripts.
-
-  Paper 1 (Wuzi index family): graph-theoretic properties, closed-form
-  values on standard graph classes, a rigorous ratio-bound theorem with
-  respect to classical bond-incident-degree (BID) indices, a
-  computational extremal-tree study, and a sensitivity analysis on the
-  18 octanes, 106 trees of order 10, and 75 decane isomers.
-
-  Paper 2 (orthogonality-screening pipeline): an open-source pipeline
-  combining pairwise correlation, principal-component (PCA) effective
-  rank, partial correlation with the target, variance inflation factor
-  (VIF), and a combined criterion, applied to a 30-index classical
-  baseline on the ESOL, FreeSolv, Lipophilicity, and BBBP datasets,
-  together with a 5-fold cross-validated RandomForest benchmark.
-version: "1.7.0"
-date-released: "2026-05-25"
+  Code, verified data and results for "Degree-Based Topological Indices Are
+  Exactly Redundant on Molecular Data: A Span Certificate and a Target-Aware
+  Screen for New Descriptors" (v2): a rank certificate under which every
+  bond-incident-degree index is an exact linear combination of a classical
+  baseline, a census of published Sombor-type and other degree-based indices
+  on four MoleculeNet benchmarks, a target-aware screen with intervals and a
+  cross-fitted non-linear check for non-degree-based candidates, and a
+  graph-collision information ceiling with a graph-grouped benchmark.
+version: "2.0.0"
+date-released: "2026-10-05"

@@ -1,0 +1,35 @@
+WUZI PARAMETER SWEEP — dataset = lipophilicity  target = logD
+Generated: 2026-10-05 08:50:09
+Grid: alpha=[-1.0, -0.5, 0.0, 0.5, 1.0], beta=[-1.0, -0.5, 0.0, 0.5, 1.0], gamma=[0.0, 0.5, 1.0, 2.0]
+Total points: 100; molecules: 4200
+
+Screen verdict: PASS=0, FAIL=100, DEGENERATE=0
+  (PASS = max |r| with every baseline is strictly below 0.95;
+   FAIL = highly correlated with at least one classical baseline;
+   DEGENERATE = Wuzi value is constant on this dataset.)
+
+--- 10 best points by |partial corr with target| ---
+ alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target screen_verdict
+  -1.0  -1.0    0.0            0.992743                      mM2         0.168880                  0.0           FAIL
+   0.5  -1.0    2.0            0.986611                   SO_red         0.147940                  0.0           FAIL
+   0.5   0.5    0.5            0.999089                       SO         0.191479                  0.0           FAIL
+   0.5   0.5    0.0            0.999005                       M1         0.201371                  0.0           FAIL
+   0.5   0.0    2.0            0.989918                   SO_red         0.149082                  0.0           FAIL
+   0.5   0.0    1.0            0.998145                       SO         0.181837                  0.0           FAIL
+   0.5   0.0    0.5            0.999649                       SO         0.194683                  0.0           FAIL
+   0.5   0.0    0.0            0.999231                       M1         0.205244                  0.0           FAIL
+   0.5  -0.5    2.0            0.989172                   SO_red         0.148934                  0.0           FAIL
+   0.5  -0.5    1.0            0.997894                       SO         0.183348                  0.0           FAIL
+
+--- 10 failing points closest to passing (smallest max|r|) ---
+ alpha  beta  gamma  max_abs_r_baseline most_correlated_baseline  raw_corr_target  partial_corr_target screen_verdict
+  -0.5   0.5    2.0            0.965388                   SO_red         0.111387                  0.0           FAIL
+  -0.5   0.0    2.0            0.966729                      mM1         0.108302                  0.0           FAIL
+  -0.5   1.0    2.0            0.967524                   SO_red         0.113892                  0.0           FAIL
+  -0.5  -0.5    2.0            0.970451                      mM1         0.104700                  0.0           FAIL
+   0.0  -1.0    2.0            0.970707                   SO_red         0.126599                  0.0           FAIL
+  -0.5  -1.0    2.0            0.971290                      mM1         0.100642                  0.0           FAIL
+   0.0  -0.5    2.0            0.976448                   SO_red         0.129446                  0.0           FAIL
+  -1.0  -1.0    1.0            0.976633                      mM2         0.123836                  0.0           FAIL
+  -1.0  -1.0    2.0            0.977045                      mM1         0.072896                  0.0           FAIL
+  -1.0   1.0    2.0            0.978077                      mM1         0.089116                  0.0           FAIL

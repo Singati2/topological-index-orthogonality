@@ -1,0 +1,30 @@
+\begin{table}[h]
+\centering
+\footnotesize
+\caption{Downstream benchmark on the curated data: $5\times5$ repeated cross-validation with folds grouped by graph, all preprocessing and selection inside the training folds. Top: mean RMSE (ESOL, FreeSolv, Lipophilicity) or ROC-AUC (BBBP), with the mean number of active features in parentheses. Bottom: mean paired difference (model minus reference; lower RMSE and higher AUC are better) with Nadeau--Bengio corrected $90\%$ intervals; ``eq.'' marks equivalence (TOST) within $5\%$ of the reference RMSE or $5\%$ of the reference AUC above $0.5$. $^{\ast}$On Lipophilicity the combined screen kept no feature in 24 of 25 folds (intercept-only model).}
+\label{tab:bench}
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Model & ESOL & FreeSolv & Lipophilicity & BBBP (AUC)\\
+\midrule
+full 30, LASSO / $\ell_1$-logistic & $1.535$ (16.0) & $3.516$ (11.6) & $1.130$ (13.9) & $0.808$ (27.1)\\
+pairwise-screened, LASSO & $1.580$ (7.2) & $3.515$ (5.9) & $1.139$ (6.9) & $0.791$ (5.8)\\
+combined-screened, LASSO & $1.590$ (4.3) & $3.519$ (3.1) & $1.204$ (0.0)$^{\ast}$ & $0.791$ (4.0)\\
+full 30, random forest & $1.479$ (30.0) & $3.443$ (30.0) & $1.086$ (30.0) & $0.831$ (30.0)\\
+pairwise-screened, random forest & $1.474$ (7.5) & $3.429$ (7.8) & $1.079$ (8.0) & $0.847$ (6.0)\\
+ten counts $m_{ij}$, random forest & $1.458$ (10.0) & $3.499$ (10.0) & $1.150$ (10.0) & $0.841$ (10.0)\\
+ten counts $m_{ij}$, LASSO & $1.621$ (8.8) & $3.498$ (7.0) & $1.135$ (8.6) & $0.800$ (9.0)\\
+RDKit 2D descriptors, random forest & $0.674$ (159.7) & $1.267$ (148.9) & $0.714$ (160.2) & $0.935$ (172.5)\\
+\midrule
+Comparison & \multicolumn{4}{c}{difference [corrected 90\% CI]}\\
+\midrule
+pairwise vs full (LASSO) & $+0.045$ $[+0.023,+0.066]$ eq. & $-0.001$ $[-0.072,+0.071]$ eq. & $+0.009$ $[+0.004,+0.013]$ eq. & $-0.018$ $[-0.036,+0.001]$ \\
+combined vs full (LASSO) & $+0.055$ $[+0.031,+0.079]$  & $+0.004$ $[-0.078,+0.085]$ eq. & $+0.073$ $[+0.060,+0.086]$  & $-0.017$ $[-0.035,+0.001]$ \\
+pairwise vs full (RF) & $-0.006$ $[-0.032,+0.021]$ eq. & $-0.014$ $[-0.099,+0.071]$ eq. & $-0.007$ $[-0.015,+0.000]$ eq. & $+0.016$ $[+0.004,+0.028]$ \\
+$m_{ij}$ vs full 30 (RF) & $-0.021$ $[-0.088,+0.046]$  & $+0.056$ $[-0.187,+0.299]$  & $+0.064$ $[+0.039,+0.089]$  & $+0.010$ $[-0.005,+0.025]$ \\
+RDKit 2D vs full 30 (RF) & $-0.805$ $[-0.892,-0.718]$  & $-2.176$ $[-2.441,-1.911]$  & $-0.372$ $[-0.390,-0.354]$  & $+0.105$ $[+0.084,+0.126]$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
