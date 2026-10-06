@@ -87,7 +87,7 @@ def census_table():
     tex = r"""\begin{table}[h]
 \centering
 \small
-\caption{Census of published BID indices ($f(a,b)$ with $a,b$ the end degrees of an edge) and two non-BID Sombor-type controls. Columns 3--6: largest $|r|$ with any of the $30$ baseline indices on each dataset (the conventional pairwise screen). Last column: largest relative residual on the baseline over the four datasets . For KG-Sombor $e=a+b-2$ is the edge degree. Every BID index is in the span to machine precision; the controls are not.}
+\caption{Census of published BID indices ($f(a,b)$ with $a,b$ the end degrees of an edge) and two non-BID Sombor-type controls. Columns 3--6: largest $|r|$ with any of the $30$ baseline indices on each dataset (the conventional pairwise screen). Last column: largest relative residual on the baseline over the four datasets. For KG-Sombor $e=a+b-2$ is the edge degree. Every BID index is in the span to machine precision; the controls are not.}
 \label{tab:census}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -163,19 +163,20 @@ def data_table():
     rows = []
     for d in DS:
         r = c.loc[d]
+        parsed = int(r.n_valid) - int(r["n_no_graph_dropped(<2 heavy atoms)"])
         rows.append(f"{NICE[d]} & {target[d]} & ${int(r.n_raw)}$ & ${int(r.n_invalid_smiles)}$ & "
-                    f"${int(r.n_multifragment_stripped)}$ & ${int(r.n_rows_in_dup_groups)}$ & "
+                    f"${int(r.n_multifragment_stripped)}$ & ${parsed}$ & ${int(r.n_rows_in_dup_groups)}$ & "
                     f"${int(r.n_conflicting_dup_groups_dropped)}$ & ${int(r.n_final)}$ & "
                     f"${int(r.n_distinct_graphs)}$ & ${r.pct_mols_graph_shared:.1f}$\\\\")
     tex = r"""\begin{table}[h]
 \centering
 \small
-\caption{Datasets and curation. Raw rows of the MoleculeNet files; invalid SMILES; multi-fragment SMILES reduced to the largest fragment; rows in exact canonical-SMILES duplicate groups; duplicate groups dropped for conflicting labels; molecules after curation (also dropping graphs with fewer than two heavy atoms); distinct hydrogen-suppressed unlabelled graphs (Weisfeiler--Lehman hash); and the percentage of curated molecules whose graph is shared with another molecule.}
+\caption{Datasets and curation. Raw rows of the MoleculeNet files; invalid SMILES; multi-fragment SMILES reduced to the largest fragment; molecules parsed to a graph with at least two heavy atoms (the sets used by the screens); rows in exact canonical-SMILES duplicate groups; duplicate groups dropped for conflicting labels; molecules after curation (also dropping graphs with fewer than two heavy atoms); distinct hydrogen-suppressed unlabelled graphs (Weisfeiler--Lehman hash); and the percentage of curated molecules whose graph is shared with another molecule.}
 \label{tab:data}
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{llrrrrrrrr}
+\begin{tabular}{llrrrrrrrrr}
 \toprule
-Dataset & Target & raw & invalid & multi-frag. & dup.\ rows & conflicts & curated & graphs & shared (\%)\\
+Dataset & Target & raw & invalid & multi-frag. & parsed & dup.\ rows & conflicts & curated & graphs & shared (\%)\\
 \midrule
 """ + "\n".join(rows) + r"""
 \bottomrule

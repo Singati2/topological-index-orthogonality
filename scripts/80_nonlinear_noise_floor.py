@@ -45,7 +45,7 @@ from src.standard_indices import compute_all                # noqa: E402
 
 SEED = 20261005
 N_TREES_NULL = 100
-K_A, K_B = 100, 60
+K_A, K_B = 100, 500
 RERUN_ABS = 0.08
 RES = os.path.join(PROJECT, "results")
 m73.N_TREES = N_TREES_NULL   # all residualizations in this script use the reduced forest

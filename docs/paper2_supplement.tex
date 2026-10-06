@@ -25,6 +25,7 @@
 \setlist[itemize]{topsep=2pt,itemsep=2pt}
 \setlist[enumerate]{topsep=2pt,itemsep=2pt}
 \usepackage{placeins}
+\usepackage{float}
 \input{tables_v2/numbers.tex}
 \usepackage{xr}
 \externaldocument{paper2_orthogonality_screening}
@@ -58,6 +59,24 @@
 
 \begin{document}
 \maketitle
+
+\section{The baseline}\label{sup:baseline}
+\begin{table}[H]
+\centering
+\small
+\caption{The $30$-index classical baseline.}
+\label{tab:baseline}
+\begin{tabular}{lp{0.68\linewidth}}
+\toprule
+Family & Indices\\
+\midrule
+Degree-based, BID (18) & $M_1$, $M_2$, $mM_1$, $mM_2$, $F$, $R$, SCI, $H$, $GA$~\cite{VukicevicFurtula2009GA}, $AG$, ABC, ABS, AZI, $SO$~\cite{Gutman2021Sombor}, $SO_{\mathrm{red}}$, Alb~\cite{Albertson1997}, $\sigma$, $\mathrm{redM}_1$\\
+Distance-based (8) & $W$, WW, HR, degree distance, Gutman, Mostar, $Sz$, $PI$\\
+Spectral (3) & Estrada EE, energy, spectral radius\\
+Other (1) & Balaban $J$\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{The value matrix of the baseline}\label{sup:phi}
 \input{tables_v2/phi.tex}
@@ -157,6 +176,16 @@ declared when the $90\%$ interval lies inside $[-\delta,\delta]$.
 Within each dataset the five comparisons are Holm-adjusted. The
 inner cross-validation that selects the LASSO or $\ell_1$-logistic
 penalty is also grouped by graph. Random forests use $300$ trees.
+
+\paragraph{Screened subsets and the combined screen.} Restricting the baseline to its pairwise-screened
+subset (about $6$--$8$ indices) is equivalent within $5\%$ for the
+random forest on the three regression sets and slightly better on BBBP;
+for LASSO it is equivalent within the margin on the regression sets,
+although the cost is distinguishable from zero on ESOL ($+0.045$) and
+Lipophilicity ($+0.009$), and it is not shown equivalent on BBBP.
+The combined screen, which also requires $|\pcor|\ge0.10$, is a
+diagnostic and not a feature selector: on Lipophilicity it removes every
+feature in $24$ of $25$ folds.
 
 \section{Datasets used for the generality check}\label{sup:data}
 The nine additional MoleculeNet files (BACE, ClinTox, SIDER, Tox21,
