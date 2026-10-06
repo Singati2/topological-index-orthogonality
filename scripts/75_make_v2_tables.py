@@ -402,9 +402,11 @@ def numbers_macros():
             m(f"nullB{tag}", f"{b[b.dataset == d].p99_abs.iloc[0]:.2f}"); m(f"nullA{tag}", f"{a[a.dataset == d].p99_abs.iloc[0]:.2f}")
         c = pd.read_csv(os.path.join(R, "nonlinear_noise_floor_candidates.csv"))
         m("nullSurvivors", str(int((c.q_bh < 0.05).sum())))
-        for d, k, tag in [("esol", "InfoH_deg", "qInfoEsol"), ("bbbp", "FourCyc", "qFourBbbp")]:
+        for d, k, tag in [("esol", "InfoH_deg", "InfoEsol"), ("bbbp", "FourCyc", "FourBbbp"), ("freesolv", "InfoH_deg", "InfoFsv")]:
             rr = c[(c.dataset == d) & (c.candidate == k)]
-            if len(rr): m(tag, f"{rr.q_bh.iloc[0]:.3f}")
+            if len(rr):
+                m("q" + tag, f"{rr.q_bh.iloc[0]:.2f}"); m("p" + tag, f"{rr.p_emp_nullB.iloc[0]:.3f}")
+        m("nullExceedAll", str(int((c.p_emp_nullB <= 1.0 / (int(b.K.iloc[0]) + 1) + 1e-12).sum())))
     S = pd.read_csv(os.path.join(R, "screen_vs_chemistry_summary.csv")).set_index("dataset")
     m("chemPassTotal", str(int(S.cand_pass_both.sum()))); m("chemTopoBeyond", str(int(S.topo_pass_given_rdkit.sum())))
     m("chemCvGainMax", f"{(S.cv_rdkit - S.cv_rdkit_topo_cands)[['esol','freesolv','lipophilicity']].max():.3f}")

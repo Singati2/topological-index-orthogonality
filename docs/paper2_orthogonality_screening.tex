@@ -81,10 +81,10 @@ implementation is provided. For indices outside the BID class the
 question is empirical: of $20$ alternative candidates, $15$--$17$ per
 dataset pass a pairwise screen; against the topological baseline two
 show residual association under both linear and cross-fitted non-linear
-residualization, but a null distribution of exactly redundant draws
-reveals a leakage floor of $0.08$--$0.13$ for the non-linear statistic,
-against which neither is significant after multiplicity correction; and
-none passes once standard RDKit 2D descriptors enter the baseline. Finally, hydrogen-suppressed unlabelled
+residualization and exceed every one of \nullKB{} exactly redundant
+null draws ($p=\pInfoEsol$ each; $q=\qInfoEsol$ after correction over
+$80$ pairs), so they are suggestive rather than established; and none
+passes once standard RDKit 2D descriptors enter the baseline. Finally, hydrogen-suppressed unlabelled
 graphs collide: $56\%$ (ESOL) and $74\%$ (FreeSolv) of molecules share
 their graph with another, and the in-sample graph oracle bounds the
 variance any topology-only model can explain at $R^2\le\oracleRsqEsol$
@@ -571,27 +571,34 @@ random-forest residualization is not perfect --- on Lipophilicity even
 the two null references have intervals that exclude zero --- we drew a
 null distribution for $\rho_{\mathrm{nl}}$ with the same procedure:
 \nullKB{} random BID indices $Mc$, $c\sim N(0,I)$, which are exactly in
-the linear span of the baseline, and \nullKA{} pure-noise columns, per
-dataset. The result is sobering. The $99$th percentile of
-$|\rho_{\mathrm{nl}}|$ under the in-span null is $\nullBEsol$ (ESOL),
-$\nullBFsv$ (FreeSolv), $\nullBLipo$ (Lipophilicity) and $\nullBBbbp$
-(BBBP) --- the noise null gives $\nullAEsol$, $\nullAFsv$, $\nullALipo$
-and $\nullABbbp$ --- so the residualization leaks structure of order
-$0.1$ for columns that lie in the span but are hard for a forest to
-fit, and any ``robust signal'' must be judged against that floor
-rather than against zero (Figure~\ref{fig:screen}b). Two
-candidate--dataset pairs exceed every one of the \nullKB{} exactly
-redundant draws on their dataset, the degree entropy
-$\mathrm{InfoH\_deg}$ on ESOL ($\rho_{\mathrm{nl}}=0.14$, $[0.08,0.20]$)
-and the four-cycle count on BBBP ($-0.17$, $[-0.21,-0.13]$); with
-\nullKB{} draws the smallest attainable empirical $p$-value is
-$\nullPmin$, and after Benjamini--Hochberg adjustment over the $80$
-pairs $q=\qInfoEsol$ for both, so \nullSurvivors{} pairs are significant
-at $q<0.05$. The two are suggestive at the resolution of this test, no
-more. Several linear ``signals'' vanish once the baseline is allowed to
-act non-linearly --- most strikingly the BBBP triangle count
-($0.225\to0.013$) --- which means that their linear residual
-association was information the baseline already carries in
+the linear span of the baseline (the relevant null for a redundant
+index), and \nullKA{} pure-noise columns, per dataset. The $99$th
+percentile of $|\rho_{\mathrm{nl}}|$ under the in-span null is
+$\nullBEsol$ (ESOL), $\nullBFsv$ (FreeSolv), $\nullBLipo$
+(Lipophilicity) and $\nullBBbbp$ (BBBP); under pure noise it is
+$\nullAEsol$, $\nullAFsv$, $\nullALipo$ and $\nullABbbp$. The null
+width is therefore sampling variance ($\approx2.6/\sqrt n$) plus, on
+ESOL, Lipophilicity and BBBP, an additional contribution from columns
+that lie in the span but that a forest residualizes imperfectly; on
+FreeSolv the two nulls coincide. Any residual association must be judged
+against this null width, not against zero (Figure~\ref{fig:screen}b).
+Two candidate--dataset pairs exceed every one of the \nullKB{} in-span
+draws on their dataset: the degree entropy $\mathrm{InfoH\_deg}$ on
+ESOL ($\rho_{\mathrm{nl}}=0.14$, $[0.08,0.20]$; $p=\pInfoEsol$) and the
+four-cycle count on BBBP ($-0.17$, $[-0.21,-0.13]$; $p=\pFourBbbp$); a
+third, $\mathrm{InfoH\_deg}$ on FreeSolv ($-0.10$, $[-0.18,-0.03]$), is
+exceeded by nine draws ($p=\pInfoFsv$). After Benjamini--Hochberg
+adjustment over the $80$ pairs the first two reach $q=\qInfoEsol$ and
+the third $q=\qInfoFsv$;
+\nullSurvivors{} pairs are significant at $q<0.05$. The two strongest
+also have linear intervals that exclude zero, so they are the only
+pairs with support from both residualizations; we call them suggestive.
+(The empirical $p$-values use the $100$-tree statistic of the null
+run; Table~\ref{tab:nonbid} reports the $300$-tree values, which differ
+by at most $0.004$.) Several linear ``signals'' vanish once the
+baseline is allowed to act non-linearly --- most strikingly the BBBP
+triangle count ($0.225\to0.013$) --- which means that their linear
+residual association was information the baseline already carries in
 non-linear form. Permutation $p$-values of a distance correlation
 between the residuals were not calibrated (the exactly redundant
 reference was rejected on two datasets) and are not used.
@@ -607,11 +614,11 @@ $10^{-2}$--$10^{-1}$): all lie at $|r|\ge0.94$. The certificate separates
 them by ten orders of magnitude. (b) The candidate--dataset pairs of
 Table~\ref{tab:nonbid}: linear partial correlation (hollow) and
 non-linear $\rho_{\mathrm{nl}}$ (filled) with $95\%$ intervals; the
-shaded band is the widest of the four in-span null bands ($99$th
+shaded band is the widest of the four in-span null widths ($99$th
 percentile of $|\rho_{\mathrm{nl}}|$ over \nullKB{} exactly redundant
 draws; per-dataset values in the text). ESOL/InfoH\_deg and
-BBBP/FourCyc exceed every draw on their own dataset but are not
-significant after correction over the $80$ pairs.}
+BBBP/FourCyc exceed every draw on their own dataset ($p=\pInfoEsol$,
+$q=\qInfoEsol$ over the $80$ pairs); no pair reaches $q<0.05$.}
 \label{fig:screen}
 \end{figure}
 
@@ -837,9 +844,10 @@ RDKit reference omits $28$ descriptors for software reasons
 intervals so that readers can apply their own.
 \item The non-linear check relies on random-forest residualization,
 whose null distribution for exactly redundant columns has a $99$th
-percentile of $0.08$--$0.13$ depending on the dataset; effects below
-that floor are not resolved, and with \nullKB{} draws per dataset the
-smallest attainable $p$-value is \nullPmin.
+percentile of $0.08$--$0.14$ depending on the dataset; effects below
+that width are not resolved, and with \nullKB{} draws per dataset the
+smallest attainable $p$-value is \nullPmin, so a single pair can reach
+at best $q\approx\qInfoEsol$ after correction over $80$ pairs.
 \item BBBP partial correlations use a linear probability model.
 \item The candidate set of Section~\ref{sec:nonbid} is illustrative,
 not exhaustive.
@@ -861,9 +869,9 @@ variants, and showed that statistical diagnostics computed without this
 knowledge can produce spurious signal. For indices outside the class, a
 target-aware screen with intervals, a calibrated non-linear check and a
 chemistry-aware baseline is informative, and on these benchmarks it
-finds at most two suggestive signals against a topological baseline,
-neither significant against a calibrated null, and none against a
-chemistry-aware one. Both results sit under an information ceiling set by graph
+finds two suggestive signals against a topological baseline (each
+exceeding $500$ exactly redundant null draws, neither reaching $q<0.05$
+over $80$ pairs) and none against a chemistry-aware one. Both results sit under an information ceiling set by graph
 collisions, which limits every topology-only descriptor.
 
 % =====================================================================
