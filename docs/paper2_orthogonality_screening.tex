@@ -25,6 +25,7 @@
 \setlist[itemize]{topsep=2pt,itemsep=2pt}
 \setlist[enumerate]{topsep=2pt,itemsep=2pt}
 \usepackage{placeins}
+\usepackage{float}
 \input{tables_v2/numbers.tex}
 \setlength{\emergencystretch}{2em}
 
@@ -1227,6 +1228,19 @@ Iranian J.~Math.~Chem.~\textbf{4}(2) (2013), 213--220.
 \url{https://doi.org/10.22052/ijmc.2013.5294}.
 
 \end{thebibliography}
+
+\clearpage
+% =====================================================================
+% Supplementary Information (also available as a standalone document)
+% =====================================================================
+\setcounter{section}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\section*{Supplementary Information}
+\input{supplement_body}
 
 
 \end{document}
