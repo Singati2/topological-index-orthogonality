@@ -57,24 +57,23 @@ An Exact Redundancy Certificate and What It Leaves for New Molecular Descriptors
 
 \begin{abstract}
 On molecular graphs an edge has one of ten degree types, so every
-bond-incident-degree (BID) index $\sum_{uv\in E} f(d_u,d_v)$ --- Zagreb,
+bond-incident-degree index $\sum_{uv\in E} f(d_u,d_v)$ --- Zagreb,
 Randi\'c, Sombor and their many variants --- is a linear combination of
-the ten edge-type counts. We turn this classical fact into a checkable
+the ten edge-type counts. We turn this classical fact into a
 \emph{span certificate}: a rank condition on a baseline of classical
-indices under which every BID index, for every $f$, is an exact linear
-combination of the baseline and adds no linear information about any
-target. A standard $18$-index baseline satisfies it on all graphs of
-maximum degree four; on \nGenDatasets{} MoleculeNet datasets
-(\nGenMolecules{} molecules) the only failure, HIV, is caused by
-organometallic molecules with atoms of degree up to ten. A census of
-$14$ published degree-based indices confirms exact redundancy and
-exposes a numerical pitfall that turns exact zeros into spurious partial
-correlations. For $20$ indices outside the BID class, a target-aware
-screen with intervals, a calibrated non-linear check and a
-chemistry-aware baseline finds at most two suggestive signals and none
-once RDKit descriptors are present. Hydrogen-suppressed graphs also
-collide ($74\%$ of FreeSolv molecules share a graph), which bounds every
-topology-only model below what chemistry-aware descriptors reach.
+indices under which every such index, whatever its formula or
+parameters, is an exact linear combination of the baseline and cannot
+add linear information about any target. The certificate holds for a
+standard baseline on all molecular graphs without hypervalent atoms; we
+verify it across the MoleculeNet benchmarks, where the single failure is
+diagnosed and recovered, and on a census of published degree-based
+indices, which also exposes a numerical pitfall that turns exact zeros
+into spurious partial correlations. For indices outside this class we
+give a target-aware screen with confidence intervals, a calibrated
+non-linear check and a chemistry-aware baseline, and find little
+residual signal. Finally, we show that hydrogen-suppressed graphs
+collide so often that every topology-only descriptor is bounded below
+what chemistry-aware descriptors already reach.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index; degree-based index;
@@ -837,24 +836,24 @@ not exhaustive.
 \section{Conclusion}\label{sec:conclusion}
 % =====================================================================
 
-For bond-incident-degree indices on molecular graphs, redundancy is
-not a matter of thresholds: a rank condition on the baseline, met by
-any ten generic classical degree-based indices, makes every such
-index an exact linear combination of the baseline, with zero partial
-correlation with every target. We verified this on \nGenDatasets{} MoleculeNet datasets
-(\nGenMolecules{} molecules; the one exception contains organometallic
-centres and is caught by the data-level check) and on fourteen
-published indices ($15$ instances), including eight recent Sombor-type
-variants, and showed that statistical diagnostics computed without this
-knowledge can produce spurious signal. For indices outside the class, a
-target-aware screen with intervals, a calibrated non-linear check and a
-chemistry-aware baseline is informative, and on these benchmarks it
-finds two suggestive signals against a topological baseline (each
-exceeding $500$ exactly redundant null draws, neither reaching $q<0.05$
-over $80$ pairs) and none against a chemistry-aware one. Both results sit under an information ceiling set by graph
-collisions, which limits every topology-only descriptor.
+We showed that, for bond-incident-degree indices on molecular graphs,
+redundancy is not a matter of correlation thresholds but of linear
+algebra: once a baseline of classical indices spans the edge-type
+counts, every such index --- published or yet to be proposed --- is an
+exact linear combination of the baseline and can contribute no linear
+information about any target. We verified this certificate across the
+MoleculeNet benchmarks and on a census of published degree-based
+indices, diagnosed the one dataset on which it fails, and showed how
+statistical diagnostics computed without this knowledge manufacture
+spurious signal. For indices outside the class we replaced the pairwise
+screen by a target-aware one with intervals, a calibrated non-linear
+check and a chemistry-aware baseline, and found that the little
+residual signal that survives against a topological baseline
+disappears against a chemistry-aware one. Finally, we quantified the
+information ceiling imposed by graph collisions, which bounds every
+topology-only descriptor and explains why chemistry-aware descriptors
+outperform them.
 
-% =====================================================================
 \section*{Data and code availability}
 % =====================================================================
 
