@@ -56,40 +56,26 @@ An Exact Redundancy Certificate and What It Leaves for New Molecular Descriptors
 \maketitle
 
 \begin{abstract}
-On molecular graphs no atom has more than four bonds, so an edge has one
-of ten degree types, and every bond-incident-degree (BID) index
-$\sum_{uv\in E} f(d_u,d_v)$ --- Zagreb, Randi\'c, Sombor and their
-hundreds of variants --- is a linear combination of the ten edge-type
-counts $m_{ij}$ (Gutman 2013; Rada 2026). We turn this known fact into a
-checkable \emph{span certificate}: a rank condition on a baseline of
-classical indices which, when it holds, makes every BID index, for every
-$f$ and every parameter value, an exact linear combination of the
-baseline, with zero residual, infinite variance inflation and no
-residual direction that could correlate with any target. A standard
-$18$-index degree-based baseline satisfies the certificate for all graphs
-of maximum degree four, hence on all molecular datasets without
-hypervalent atoms; we verify it on \nGenDatasets{} MoleculeNet SMILES
-datasets (\nGenMolecules{} molecules, including QM9 and MUV), where it
-holds on \nGenCertified{} and fails exactly on the one (HIV) containing
-\hivHyper{} organometallic molecules with atoms of degree up to ten. A
-census of $14$ published degree-based indices ($15$ instances, eight
-Sombor-type) and a three-parameter family confirms exact redundancy to
-relative residuals below $2\times10^{-12}$, exposes a numerical pitfall
-that turns exact zeros into spurious partial correlations of order
-$10^{-2}$, and gives each index its coefficient vector; a one-function
-implementation is provided. For indices outside the BID class the
-question is empirical: of $20$ alternative candidates, $15$--$17$ per
-dataset pass a pairwise screen; against the topological baseline two
-show residual association under both linear and cross-fitted non-linear
-residualization and exceed every one of \nullKB{} exactly redundant
-null draws ($p=\pInfoEsol$ each; $q=\qInfoEsol$ after correction over
-$80$ pairs), so they are suggestive rather than established; and none
-passes once standard RDKit 2D descriptors enter the baseline. Finally, hydrogen-suppressed unlabelled
-graphs collide: $56\%$ (ESOL) and $74\%$ (FreeSolv) of molecules share
-their graph with another, and the in-sample graph oracle bounds the
-variance any topology-only model can explain at $R^2\le\oracleRsqEsol$
-and $\oracleRsqFsv$, below what a chemistry-aware random forest reaches
-out of sample ($\rdkitRsqEsol$, $\rdkitRsqFsv$).
+On molecular graphs an edge has one of ten degree types, so every
+bond-incident-degree (BID) index $\sum_{uv\in E} f(d_u,d_v)$ --- Zagreb,
+Randi\'c, Sombor and their many variants --- is a linear combination of
+the ten edge-type counts $m_{ij}$ (Gutman 2013; Rada 2026). We turn this
+known fact into a checkable \emph{span certificate}: a rank condition on
+a baseline of classical indices under which every BID index, for every
+$f$, is an exact linear combination of the baseline and can add no
+linear information about any target. A standard $18$-index baseline
+satisfies it on all graphs of maximum degree four; we verify this on
+\nGenDatasets{} MoleculeNet datasets (\nGenMolecules{} molecules), where
+the one failure, HIV, is caused by \hivHyper{} organometallic molecules
+with atoms of degree up to ten. A census of $14$ published degree-based
+indices confirms exact redundancy and exposes a numerical pitfall that
+turns exact zeros into spurious partial correlations. For $20$ indices
+outside the BID class, a target-aware screen with intervals, a
+calibrated non-linear check and a chemistry-aware baseline finds at
+most two suggestive signals and none once RDKit descriptors are
+present. Finally, hydrogen-suppressed graphs collide ($74\%$ of FreeSolv
+molecules share a graph), which bounds every topology-only model below
+what chemistry-aware descriptors reach.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index; degree-based index;
@@ -188,13 +174,11 @@ graph-grouped, corrected benchmark places the indices against this
 oracle and against an atom- and bond-aware descriptor reference.
 \end{enumerate}
 
-The paper is a companion to a mathematical study of the
-three-parameter Loyola family~\cite{Paper1_Loyola}, which concludes
-on independent grounds that its imbalance parameter is an
-interpretable, analytically tractable direction rather than a
-predictive upgrade; the span certificate explains why no BID family can add
-linearly to a classical baseline. (The two papers share authors; the
-companion paper is in preparation.)
+One of the parametric families screened below, the three-parameter
+Loyola family of Section~\ref{sec:census}, is studied mathematically in
+separate work by a subset of the present authors; here it serves only
+as a generic parametric BID family, and the span certificate explains
+why no such family can add linearly to a classical baseline.
 
 % =====================================================================
 \section{Related work}\label{sec:related}
@@ -457,7 +441,7 @@ index at two values of $p$) and seven other degree-based indices ---
 and all $100$ points of the Loyola grid
 $(\alpha,\beta,\gamma)\in\{-1,-\tfrac12,0,\tfrac12,1\}^2\times\{0,\tfrac12,1,2\}$
 of $LO(G;\alpha,\beta,\gamma)=\sum_{uv}(d_ud_v)^\alpha(d_u+d_v)^\beta
-\exp\bigl(\gamma\,|d_u-d_v|/(d_u+d_v)\bigr)$~\cite{Paper1_Loyola} on each
+\exp\bigl(\gamma\,|d_u-d_v|/(d_u+d_v)\bigr)$ (a three-parameter BID family that reduces to the Gutman--Milovanovi\'c family at $\gamma=0$) on each
 of the four datasets. As controls outside the BID class we added the
 Sombor coindex (sum over non-adjacent pairs) and the eccentric Sombor
 index (eccentricities in place of degrees).
@@ -796,10 +780,7 @@ graphs (maximum degree four) a new BID index cannot be linearly
 independent of a baseline that includes ten generic classical
 degree-based indices; this is a theorem, not an empirical finding.
 Its justification must therefore come from elsewhere: parsimony and interpretability (one number that summarises the ten
-counts for a given property; the companion study, still in
-preparation, reports that its untuned point $LO(0,0,1)$, essentially the
-irregularity index $IRLA$, matches its tuned models~\cite{Paper1_Loyola}),
-mathematical properties, or
+counts for a given property), mathematical properties, or
 behaviour under models that are not linear in the descriptors. We
 suggest that a proposal of a new BID index report its coefficient
 vector $(f(i,j))_{(i,j)\in P_4}$, which places it exactly in the
@@ -1016,12 +997,6 @@ J.~Rada,
 \emph{A finite-dimensional linear framework for vertex-degree-based topological indices},
 MATCH Commun.~Math.~Comput.~Chem.~\textbf{96}(3) (2026), 841--863.
 \url{https://doi.org/10.46793/match.96-3.32925}.
-
-\bibitem{Paper1_Loyola}
-A.~Natarajan, G.~Shiwakoti, M.~Arockiaraj,
-\emph{The Loyola Index Family: What a Degree-Imbalance Coordinate Can and Cannot Resolve},
-in preparation, 2026; manuscript and code at \url{https://github.com/Singati2/LOYOLA-PAPER}.
-(Companion mathematical paper.)
 
 \bibitem{Hollas2006Redundancy}
 B.~Hollas,
