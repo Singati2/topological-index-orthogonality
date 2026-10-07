@@ -59,23 +59,22 @@ An Exact Redundancy Certificate and What It Leaves for New Molecular Descriptors
 On molecular graphs an edge has one of ten degree types, so every
 bond-incident-degree (BID) index $\sum_{uv\in E} f(d_u,d_v)$ --- Zagreb,
 Randi\'c, Sombor and their many variants --- is a linear combination of
-the ten edge-type counts $m_{ij}$ (Gutman 2013; Rada 2026). We turn this
-known fact into a checkable \emph{span certificate}: a rank condition on
-a baseline of classical indices under which every BID index, for every
-$f$, is an exact linear combination of the baseline and can add no
-linear information about any target. A standard $18$-index baseline
-satisfies it on all graphs of maximum degree four; we verify this on
-\nGenDatasets{} MoleculeNet datasets (\nGenMolecules{} molecules), where
-the one failure, HIV, is caused by \hivHyper{} organometallic molecules
-with atoms of degree up to ten. A census of $14$ published degree-based
-indices confirms exact redundancy and exposes a numerical pitfall that
-turns exact zeros into spurious partial correlations. For $20$ indices
-outside the BID class, a target-aware screen with intervals, a
-calibrated non-linear check and a chemistry-aware baseline finds at
-most two suggestive signals and none once RDKit descriptors are
-present. Finally, hydrogen-suppressed graphs collide ($74\%$ of FreeSolv
-molecules share a graph), which bounds every topology-only model below
-what chemistry-aware descriptors reach.
+the ten edge-type counts. We turn this classical fact into a checkable
+\emph{span certificate}: a rank condition on a baseline of classical
+indices under which every BID index, for every $f$, is an exact linear
+combination of the baseline and adds no linear information about any
+target. A standard $18$-index baseline satisfies it on all graphs of
+maximum degree four; on \nGenDatasets{} MoleculeNet datasets
+(\nGenMolecules{} molecules) the only failure, HIV, is caused by
+organometallic molecules with atoms of degree up to ten. A census of
+$14$ published degree-based indices confirms exact redundancy and
+exposes a numerical pitfall that turns exact zeros into spurious partial
+correlations. For $20$ indices outside the BID class, a target-aware
+screen with intervals, a calibrated non-linear check and a
+chemistry-aware baseline finds at most two suggestive signals and none
+once RDKit descriptors are present. Hydrogen-suppressed graphs also
+collide ($74\%$ of FreeSolv molecules share a graph), which bounds every
+topology-only model below what chemistry-aware descriptors reach.
 
 \medskip
 \noindent\textbf{Keywords.} Topological index; degree-based index;
