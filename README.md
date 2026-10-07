@@ -4,7 +4,7 @@
 
 Code, data and results for the manuscript
 
-> G. Shiwakoti, A. Natarajan, P. Chalise, M. Arockiaraj,
+> G. Shiwakoti, A. Natarajan, M. Arockiaraj,
 > *Ten Edge-Degree Counts Are All a Degree-Based Topological Index Can See:
 > An Exact Redundancy Certificate and What It Leaves for New Molecular Descriptors* (v2.1, in preparation).
 
