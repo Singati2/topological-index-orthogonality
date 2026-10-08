@@ -38,7 +38,7 @@ def cert_table():
     tex = r"""\begin{table}[h]
 \centering
 \small
-\caption{Span certificate on the four datasets. $|P_D|$: realised degree pairs; ranks are numerical ranks of the column-centred, column-normalised matrices (relative tolerance $10^{-9}$). ``Resid.'' columns give the largest relative residual $\|r\|/\|z-\bar z\|$ on the baseline of the ten counts $m_{ij}$, of the $15$ published BID instances of Table~\ref{tab:census}, and of the $100$ Loyola grid points.}
+\caption{Span certificate on the four datasets. $|P_D|$: realised degree pairs; ranks are numerical ranks of the column-centred, column-normalised matrices (relative tolerance $10^{-9}$). ``Resid.'' columns give the largest relative residual $\|r\|/\|z-\bar z\|$ on the baseline of the ten counts $m_{ij}$, of the \nCensusInst{} published BID instances of Table~\ref{tab:census}, and of the $100$ Loyola grid points.}
 \label{tab:cert}
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrrrrccc}
@@ -57,6 +57,9 @@ CITE = {
     "mSO (modified Sombor)": ("Modified Sombor", r"$1/\sqrt{a^2+b^2}$", "KulliGutman2021Modified"),
     "ESO (elliptic Sombor)": ("Elliptic Sombor", r"$(a+b)\sqrt{a^2+b^2}$", "GutmanFurtulaOz2024Elliptic"),
     "EU (Euler Sombor)": ("Euler Sombor", r"$\sqrt{a^2+b^2+ab}$", "Gutman2024Euler"),
+    "ASO (augmented Sombor)": ("Augmented Sombor", r"$\sqrt{(a^2+b^2)/(a+b-2)}$", "DasGutmanAli2026ASO"),
+    "CoRSO_60 (cosine-rule Sombor, theta=60)": (r"Cosine-rule Sombor, $\theta=60^\circ$", r"$\sqrt{a^2+b^2-ab}$", "NyauliBuragohain2026CoRSO"),
+    "EU_lambda=1/2 (variable Euler-Sombor)": (r"Variable Euler Sombor, $\lambda=\tfrac12$", r"$\sqrt{a^2+b^2+\tfrac12 ab}$", "GutmanRedzepovicKizilirmakKulli2025Euler"),
     "DSO (diminished Sombor)": ("Diminished Sombor", r"$\sqrt{a^2+b^2}/(a+b)$", "MovahediGutmanRedzepovicFurtula2026"),
     "HSO (hyperbolic Sombor)": ("Hyperbolic Sombor", r"$\sqrt{a^2+b^2}/\min(a,b)$", "BarmanDas2026Hyperbolic"),
     "SO_p, p=1/2 (p-Sombor)": ("$p$-Sombor, $p=\\tfrac12$", r"$(a^{1/2}+b^{1/2})^{2}$", "RetiDoslicAli2021"),
@@ -317,7 +320,7 @@ def chem_table():
     tex = r"""\begin{table}[h]
 \centering
 \footnotesize
-\caption{The target-aware screen against a chemistry-aware baseline, on the curated data. $n$: molecules; groups: isomorphism classes; $p_{\\mathrm{RD}}$, $p_{\\mathrm{both}}$: RDKit 2D columns, and columns of the union with the $30$ topological indices, after removing non-finite, constant and collinear columns on the full sample (the $18$ degree-based indices contribute ten independent columns). CV: $5$-fold cross-validation grouped by isomorphism class, column cleaning, scaling and penalty selection inside the training folds; RMSE for the regression sets (ridge), ROC-AUC for BBBP ($\\ell_2$-logistic). Candidates: interval verdicts (pass / inconclusive / negligible; the remaining candidate is in span) given RDKit alone and given the union.}
+\caption{The target-aware screen against a chemistry-aware baseline, on the curated data. $n$: molecules; groups: isomorphism classes; $p_{\\mathrm{RD}}$, $p_{\\mathrm{both}}$: RDKit 2D columns, and columns of the union with the $30$ topological indices, after removing non-finite, constant and collinear columns on the full sample (the $18$ degree-based indices contribute only as many independent columns as there are realised degree pairs, ten, or nine on Lipophilicity). CV: $5$-fold cross-validation grouped by isomorphism class, column cleaning, scaling and penalty selection inside the training folds; RMSE for the regression sets (ridge), ROC-AUC for BBBP ($\\ell_2$-logistic). Candidates: interval verdicts (pass / inconclusive / negligible) given RDKit alone and given the union; given the union, the harmonic-centrality candidate is in span and is not counted.}
 \label{tab:chem}
 \setlength{\\tabcolsep}{3pt}
 \resizebox{\\textwidth}{!}{%

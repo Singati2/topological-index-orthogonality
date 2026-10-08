@@ -50,7 +50,7 @@ An Exact Redundancy Certificate and What It Leaves for New Molecular Descriptors
   Michael Arockiaraj\footnotemark[2]
 }
 
-\date{Draft v2.1 of \today}
+\date{Draft v2.2 of \today}
 
 \begin{document}
 \maketitle
@@ -64,7 +64,8 @@ the ten edge-type counts. We turn this classical fact into a
 indices under which every such index, whatever its formula or
 parameters, is an exact linear combination of the baseline and cannot
 add linear information about any target. The certificate holds for a
-standard baseline on all molecular graphs without hypervalent atoms.
+baseline of eighteen classical degree-based indices on all molecular
+graphs without hypervalent atoms.
 We verify it across the MoleculeNet benchmarks, where the single
 failure is diagnosed and recovered, and on a census of published
 degree-based indices; the census also exposes a numerical pitfall that
@@ -152,8 +153,8 @@ vectors (Corollary~\ref{cor:datafree}). Rada gives a data-free
 realisation of any weight system by a symmetric polynomial; the
 corollary instead gives the rank condition and the coefficient vectors
 on a \emph{named} baseline of indices that are actually computed. We
-then observe that a standard $18$-index baseline satisfies the
-condition, and verify it on benchmark data.
+then observe that an $18$-index baseline of classical degree-based
+indices satisfies the condition, and verify it on benchmark data.
 \item \emph{Generality} (Section~\ref{sec:general}). The certificate
 is checked on \nGenDatasets{} MoleculeNet SMILES datasets
 (\nGenMolecules{} molecules): it holds on \nGenCertified{}, and the one
@@ -164,8 +165,8 @@ excludes and the data-level check catches.
 degree-based indices (\nCensusInst{} instances, \nSomborInst{} of them
 Sombor-type, including the 2025--2026 augmented, variable-Euler and
 cosine-rule variants) and $100$ points of a three-parameter family, on
-four MoleculeNet datasets: all exactly redundant, as the corollary
-predicts, which verifies in exact arithmetic what earlier correlational
+four MoleculeNet datasets: all redundant to relative residuals below
+$10^{-11}$, as the corollary predicts, where earlier correlational
 reports could only approximate; two non-BID Sombor-type controls
 correctly fall outside the span.
 \item \emph{A numerical pitfall and a tool} (Section~\ref{sec:pitfall}).
@@ -222,8 +223,8 @@ indices appear in~\cite{GutmanBuragohainNyauli2026Concealed}, and the
 edge-type-count view underlies recent extremal-graph work for chemical
 graphs of maximum degree
 three~\cite{Bonte2025Extremal,Dusollier2025Polyhedral,Bonte2025ChemicHull}.
-The boundary between that literature and this paper is drawn once,
-under Contribution~(1), and not redrawn below.
+Contribution~(1) states what this paper takes from that literature
+and what it adds.
 
 Recent ``modified bond-based'' families that weight each edge by a
 function of its end degrees~\cite{Altairi2026Modified} are BID indices in
@@ -327,8 +328,8 @@ $\Phi_B\in\mathbb{R}^{k\times|P_D|}$, $(\Phi_B)_{b,(i,j)}=f_b(i,j)$. The
 baseline's BID columns are $B=M\Phi_B^{\top}\in\mathbb{R}^{n\times k}$.
 Write $\mathbf 1$ for the all-ones vector.
 
-The following is an elementary consequence of Remark~\ref{rem:linear};
-its statistical reading (i)--(iv) is the point.
+The following is an elementary consequence of Remark~\ref{rem:linear}.
+Its content lies in the statistical reading (i)--(iv).
 
 \begin{proposition}[Span certificate]\label{prop:cert}
 If $\operatorname{rank}[\mathbf 1, B]=\operatorname{rank}[\mathbf 1,M]$,
@@ -394,11 +395,12 @@ does not say that a BID index is useless: a parsimonious index can
 summarise the ten counts well, and a model that is not
 rotation-invariant (e.g.\ a tree ensemble) may use a BID index
 differently from its constituents. It does say that no BID index can
-add linearly to a certified baseline, so linear redundancy
-diagnostics --- pairwise correlation, the variance inflation factor
-(VIF), partial correlation, and
-the gain of an ordinary least-squares model --- are decided in advance
-for this class.
+add linearly to a certified baseline, so the multivariate linear
+redundancy diagnostics (the variance inflation factor, the partial
+correlation and the gain of an ordinary least-squares model) are
+decided in advance for this class. Pairwise correlations with
+individual baseline indices are not decided, which is why they cannot
+detect this redundancy.
 The certificate covers edge-additive indices only; it does not
 cover normalised or averaged indices such as $I_f/|E|$, multiplicative
 indices $\prod f$, non-linear transforms such as $\log I_f$, products
@@ -426,12 +428,11 @@ have rank only $17$ ($\sigma=F-2M_2$ exactly), so at most seven pairs
 beyond $P_4$ can ever be absorbed. These datasets realise one to three
 such pairs and pass. HIV fails. \hivHyper{} of its $41\,127$ molecules
 are organometallic complexes (Co, Ni, Cu, Rh, Fe, Mn, Cr, Mo, Ir
-centres with five to ten bonds, and pentavalent phosphorus), and they
-realise \hivPairs{} degree pairs, more than any $18$ functions can span
-(ranks \hivRankM{} versus \hivRankB{}). On its \hivRestrictedN{}
+centres with five to ten bonds, and pentavalent phosphorus). With
+them the dataset realises \hivPairs{} degree pairs, more than any $18$
+functions can span (ranks \hivRankM{} versus \hivRankB{}). On its \hivRestrictedN{}
 molecules of maximum degree four the certificate holds again. The
-check behaves as the theory predicts. Its practical content is the
-diagnosis: a dataset with hypervalent or metal centres needs the
+practical content of the check is the diagnosis: a dataset with hypervalent or metal centres needs the
 counts $m_{ij}$ themselves, or a larger baseline, before any BID index
 can be certified.
 
@@ -460,7 +461,8 @@ points of the Loyola grid
 $(\alpha,\beta,\gamma)\in\{-1,-\tfrac12,0,\tfrac12,1\}^2\times\{0,\tfrac12,1,2\}$
 of $LO(G;\alpha,\beta,\gamma)=\sum_{uv}(d_ud_v)^\alpha(d_u+d_v)^\beta
 \exp\bigl(\gamma\,|d_u-d_v|/(d_u+d_v)\bigr)$, a three-parameter BID
-family that reduces to the Gutman--Milovanovi\'c family at $\gamma=0$.
+family that reduces to the Gutman--Milovanovi\'c
+family~\cite{GutmanMilovanovic2020AKCE} at $\gamma=0$.
 Everything was evaluated on each of the four datasets. As controls
 outside the BID class we added the Sombor coindex (sum over
 non-adjacent pairs) and the eccentric Sombor index (eccentricities in
@@ -499,7 +501,8 @@ pairwise correlations happened to fall below any threshold.
 
 An earlier draft of this work reported maximal partial correlations of
 $0.028$ (ESOL), $0.036$ (FreeSolv) and $0.009$ (Lipophilicity) for the
-Loyola grid. By Proposition~\ref{prop:cert} the true value is zero.
+Loyola grid. By Proposition~\ref{prop:cert} these quantities are
+undefined and are reported as zero.
 The nonzero values arose because a residual was declared zero only
 when its absolute standard deviation fell below $10^{-12}$. For
 indices of magnitude $10^2$--$10^4$ the least-squares residual of an
@@ -551,9 +554,9 @@ column, and a deliberately leaky column $y+\varepsilon$.
 
 The $20$ candidates span information-theoretic, centrality,
 spectral-hybrid, motif and eccentricity families
-(Supplementary Information, Section~S3); none is claimed as new except
-two product indices constructed here as controls, and none is a BID
-index. (Harmonic centrality is identically twice the Harary
+(Supplementary Information, Section~S3). None is claimed as a newly
+invented index (two product indices are constructed here as controls),
+and none is a BID index. (Harmonic centrality is identically twice the Harary
 index and is correctly flagged as in span.)
 
 \input{tables_v2/nonbid.tex}
@@ -571,8 +574,8 @@ are negligible. Only on BBBP do two candidates, the triangle and
 four-cycle counts, clear the margin with their whole interval
 (linear-probability partial correlations $0.225$ and $-0.220$).
 
-The non-linear check is where a referee should look hardest, and it
-ends in a withdrawal. The calibration references behave as intended:
+The non-linear check is the weakest part of the screen, and it ends
+in a withdrawal. The calibration references behave as intended:
 the leaky column gives $\rho_{\mathrm{nl}}=0.57$--$0.66$ on every
 dataset, while the exactly redundant reference and the noise column
 stay small. Because the random-forest residualization is not perfect,
@@ -591,43 +594,56 @@ $\nullBBbbp$ / $\nullCBbbp$ / $\nullDBbbp$ (BBBP) under nulls B / C / D.
 So a column that carries no information beyond the baseline can show
 $|\rho_{\mathrm{nl}}|$ up to about $0.17$, for no better reason than
 that a forest residualizes a smooth function of ten counts
-imperfectly. That disposes of the degree entropy $\mathrm{InfoH\_deg}$
-on ESOL ($\rho_{\mathrm{nl}}=0.14$). It is a deterministic function of
-the certified counts and its value sits inside null~D
-($p=\pDInfoEsol$); what looked like residual association is
-approximation error. One candidate survives every null. The four-cycle
-count on BBBP ($-0.17$, $[-0.21,-0.13]$) is not a function of the
-baseline (it needs $\operatorname{tr}A^4$), and it exceeds every draw
-of nulls B, C and D ($p=\pFourBbbp$, $\pCFourBbbp$ and $\pDFourBbbp$).
-After Benjamini--Hochberg adjustment over the $80$ pairs it reaches
-only $q\ge0.2$, and it does not pass against the chemistry-aware
-baseline below. No other candidate approaches the null width. (The
+imperfectly. Two candidate--dataset pairs exceed the linear null~B.
+The first is the degree entropy $\mathrm{InfoH\_deg}$ on ESOL
+($\rho_{\mathrm{nl}}=0.14$): $p=\pInfoEsol$ against null~B and
+$p=\pCInfoEsol$ against null~C, but $p=\pDInfoEsol$ against null~D.
+Null~D was constructed after this value was seen, and we say so; its
+justification is not post hoc, because the degree entropy is provably
+a deterministic function of the certified counts (the identity above),
+so a null of exactly that class is the right comparison, and inside it
+the value is unremarkable. What looked like residual association is
+approximation error. The second is the four-cycle count on BBBP
+($-0.17$, $[-0.21,-0.13]$), which is not a function of the baseline
+(it needs $\operatorname{tr}A^4$) and exceeds every draw of nulls B,
+C and D ($p=\pFourBbbp$, $\pCFourBbbp$ and $\pDFourBbbp$). After
+Benjamini--Hochberg adjustment over the $80$ pairs (the four in-span
+harmonic-centrality pairs included) it reaches $q=\qFourBbbp$ against
+null~B and $q=0.4$ and $0.2$ against nulls C and D, and it is negligible
+against the chemistry-aware baseline below (partial correlation
+$-0.02$ given RDKit descriptors alone). The degree entropy on FreeSolv
+($p=\pInfoFsv$ against null~B) is the only other pair below $0.05$
+on any null, and it is inside nulls C and D. (The
 empirical $p$-values use the $100$-tree statistic of the null runs;
 Table~\ref{tab:nonbid} reports the $300$-tree values, which differ by at
 most $0.004$; the Fisher intervals shown for $\rho_{\mathrm{nl}}$ are
 descriptive.) Several linear ``signals'' vanish once the baseline is
 allowed to act non-linearly; the BBBP triangle count is the clearest
-case ($0.225\to0.013$). Their linear residual association was
-information the baseline already carries in non-linear form.
+case ($0.225\to0.013$). The natural reading is that the baseline
+already carries that information in non-linear form, but we have not
+calibrated how much of a true signal the residualizer attenuates, so
+we do not press the point.
 
-We draw a blunt conclusion from this. Random-forest residualization,
-fashionable as it is under the double-machine-learning label, cannot
-certify non-linear redundancy at the sample sizes of descriptor
-papers. Our own earlier draft reported the ESOL degree entropy as a
-suggestive signal on exactly this basis, and it was wrong. The exact
-certificate and the chemistry-aware baseline, not this check, carry
-the conclusions of the paper. Permutation $p$-values of a distance
-correlation between the residuals were not calibrated either (the
-exactly redundant reference was rejected on two datasets) and are not
-used.
+We draw a plain conclusion from this. With one learner (a random
+forest, five folds) and $n$ between $639$ and $4200$, the
+residualization is not accurate enough to certify non-linear
+redundancy: the theory behind the generalised covariance measure
+requires the nuisance regressions to be accurate, and here they are
+not, which is what the nulls measure. Our own earlier draft reported
+the ESOL degree entropy as a suggestive signal on exactly this basis,
+and that reading was wrong. The exact certificate and the
+chemistry-aware baseline, not this check, carry the conclusions of
+the paper. Permutation $p$-values of a distance correlation between
+the residuals were not calibrated either (the exactly redundant
+reference was rejected on two datasets) and are not used.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{fig1_certificate_and_screen.pdf}
 \caption{(a) The conventional pairwise screen (largest $|r|$ with any
 of the $30$ baseline indices) cannot separate the \nCensusInst{} published BID
-instances and the $100$ Loyola points (all exactly in span, residual
-$10^{-15}$--$10^{-12}$) from the two non-BID controls (residual
+instances and the $100$ Loyola points (all in span, relative residual
+at most $2\times10^{-12}$) from the two non-BID controls (residual
 $6\times10^{-3}$--$8\times10^{-2}$): all lie at $|r|\ge0.94$. The certificate separates
 them by ten orders of magnitude. (b) The candidate--dataset pairs of
 Table~\ref{tab:nonbid}: linear partial correlation (hollow) and
@@ -655,8 +671,11 @@ elsewhere). The passers are distance-based and eccentricity-based
 information indices, plus the two product controls; they carry signal
 that RDKit's descriptor set does not. Given RDKit descriptors
 \emph{and} the $30$ classical indices, \chemPassTotal{} pairs pass.
-That signal is already carried by the classical distance and spectral
-indices (the Wiener, Harary, Estrada and related indices). On ESOL and
+The classical indices absorb that signal; we did not isolate which of
+them do so, but the passers are themselves distance- and
+eccentricity-based, like the classical Wiener, Harary and Estrada
+indices, and among the $30$ only the Mostar index on ESOL passes the
+same interval screen against RDKit alone. On ESOL and
 FreeSolv most verdicts become inconclusive at these sample sizes
 (\chemIncEsol{} and \chemIncFsv{} of $20$) rather than negligible. Out
 of sample the verdict does not change. Adding the $30$ indices and the
@@ -686,8 +705,8 @@ the hydrogen-suppressed, atom- and bond-unlabelled molecular graph.
 Molecules with the same graph receive identical descriptor vectors,
 whatever their atoms, bonds or stereochemistry. We grouped the curated
 molecules by a Weisfeiler--Lehman hash~\cite{Shervashidze2011WL} of
-this graph, a canonical label built by four rounds of
-neighbourhood-label aggregation and identical for isomorphic graphs.
+this graph, an isomorphism invariant built by four rounds of
+neighbourhood-label aggregation.
 An exact isomorphism test then confirmed that every one of the $841$
 groups of molecules sharing a hash consists of isomorphic graphs. The
 grouping is exact.
@@ -822,27 +841,32 @@ should simply use the ten counts.
 
 \paragraph{What a new degree-based index must show.} On molecular
 graphs (maximum degree four) a new BID index cannot be linearly
-independent of a baseline that includes ten generic classical
-degree-based indices; this is a theorem, not an empirical finding. We
-will put the consequence bluntly. A correlation table between a new
-Sombor-type variant and its predecessors, computed on a set of octane
-isomers, is not evidence of anything, because the certificate has
-already fixed the answer before the table is computed. The
-justification for such an index has to come from parsimony and
-interpretability (one number that summarises the ten counts for a
-given property), from mathematical properties, or from behaviour
-under models that are not linear in the descriptors. Every proposal
-should report the weight vector $(f(i,j))_{(i,j)\in P_4}$, which
-places the index exactly in the common ten-dimensional space and makes
-coincidences between differently named indices visible at once. We
-expect this to be unwelcome in a literature that produces several such
-indices a year. We also think the field is better served by it than
-by another correlation table.
+independent of a baseline that includes ten classical degree-based
+indices whose weight matrix has rank ten; this is a theorem, not an
+empirical finding. The
+consequence is worth stating plainly. A correlation table between a
+new Sombor-type variant and its predecessors, computed on a set of
+octane isomers, cannot show that the variant carries anything its
+predecessors do not, because on those graphs the certificate settles
+that question before the table is computed. Such a table can still
+bear on parsimony, on how well one number tracks a property, and that
+is a legitimate but different claim. The justification for a new BID
+index has to come from parsimony and interpretability (one number that
+summarises the ten counts for a given property), from mathematical
+properties, or from behaviour under models that are not linear in the
+descriptors. Every proposal should report the weight vector
+$(f(i,j))_{(i,j)\in P_4}$, which places the index exactly in the
+common ten-dimensional space and makes coincidences between
+differently named indices visible at once. This asks more of a
+proposal than the current convention does. We think the field is
+better served by it.
 
 \paragraph{What the target-aware screen adds.} For indices outside
 the BID class the question is empirical, and the answer depends on the
-baseline and on the uncertainty. Against a chemistry-aware baseline
-none of our $20$ candidates passes (Table~\ref{tab:chem}). Against the
+baseline and on the uncertainty. Against RDKit descriptors alone,
+eight candidate--dataset pairs pass; against RDKit descriptors
+together with the classical indices, none does
+(Table~\ref{tab:chem}). Against the
 topological baseline, the point-estimate ``passers'' of an earlier
 version of this analysis do not survive on ESOL or FreeSolv once
 intervals are reported, and most linear signals do not survive
@@ -853,7 +877,9 @@ multivariate baseline and the target; it is not a novelty criterion.
 these benchmarks are indistinguishable to every hydrogen-suppressed,
 unlabelled-graph descriptor (Section~\ref{sec:ceiling}). This is not a
 defect of any particular index. It bounds the whole class, and on
-FreeSolv it is the main reason topological indices predict poorly.
+FreeSolv it caps every topology-only model below what chemistry-aware
+descriptors reach out of sample; the shortfall of the indices below
+that cap is a separate matter.
 
 % =====================================================================
 \section{Limitations}\label{sec:limitations}
@@ -878,8 +904,8 @@ whose null widths for columns carrying no information beyond the
 baseline reach $0.17$ (entropy-type functions of the certified counts).
 Effects below that width are not resolved. With \nullKB{} (linear) or
 \nullKC{} (non-linear) draws per dataset the smallest attainable
-$p$-values are \nullPmin{} and $0.005$, so after correction over $80$
-pairs no single pair can reach $q<0.05$. The check bounds effects and
+$p$-values are \nullPmin{} and $0.005$; the smallest $q$ reached after
+correction over $80$ pairs is \qFourBbbp. The check bounds effects and
 exposes artefacts; it cannot establish a non-linear signal.
 \item BBBP partial correlations use a linear probability model.
 \item The candidate set of Section~\ref{sec:nonbid} is illustrative,
@@ -899,9 +925,10 @@ information about any target. The certificate held on \nGenCertified{}
 of \nGenDatasets{} MoleculeNet datasets and on every published index we
 tested; the one failure was diagnosed, and the spurious partial
 correlations of an earlier draft were traced to an absolute tolerance.
-Outside the class, no candidate passed against a chemistry-aware
-baseline, and the one non-linear signal that survived our nulls was
-too weak to survive that baseline either. Graph collisions bounded
+Outside the class, no candidate passed against RDKit descriptors
+combined with the classical indices, and the one non-linear signal
+that survived our nulls did not pass against RDKit descriptors
+alone. Graph collisions bounded
 every topology-only descriptor on two benchmarks below what
 chemistry-aware descriptors reached out of sample. The practical
 advice is short. Use the ten counts and report the weight vector.
@@ -912,7 +939,7 @@ Correlation tables are not evidence of novelty.
 
 Code, curated-data scripts, results and figures are available at
 \url{https://github.com/Singati2/topological-index-orthogonality};
-the snapshot reported here is git tag \texttt{v2.2-paper2}. Datasets
+the snapshot reported here is git tag \texttt{v2.2.1-paper2}. Datasets
 are downloaded from the MoleculeNet distribution by
 \texttt{src/load\_data.py}. The analyses of this paper are produced
 by the following scripts in \texttt{scripts/}: \texttt{70} (certificate,
@@ -950,6 +977,11 @@ K.~C.~Das, I.~Gutman, and A.~Ali,
 \emph{Augmented {Sombor} index},
 MATCH Commun.~Math.~Comput.~Chem.~\textbf{95}(2) (2026), 523--547.
 \url{https://doi.org/10.46793/match.95-2.20125}.
+
+\bibitem{GutmanMilovanovic2020AKCE}
+I.~Gutman, E.~Milovanovi\'c, and I.~Milovanovi\'c,
+\emph{Beyond the {Zagreb} indices},
+AKCE Int.~J.~Graphs Comb.~\textbf{17}(1) (2020), 74--85.
 
 \bibitem{GutmanRedzepovicKizilirmakKulli2025Euler}
 I.~Gutman, I.~Red\v{z}epovi\'c, G.~O.~Kizilirmak, and V.~R.~Kulli,
