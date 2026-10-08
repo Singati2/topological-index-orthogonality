@@ -50,7 +50,7 @@ An Exact Redundancy Certificate and What It Leaves for New Molecular Descriptors
   Michael Arockiaraj\footnotemark[2]
 }
 
-\date{Draft v2.2 of \today}
+\date{Draft v2.3 of \today}
 
 \begin{document}
 \maketitle
@@ -611,7 +611,7 @@ Benjamini--Hochberg adjustment over the $80$ pairs (the four in-span
 harmonic-centrality pairs included) it reaches $q=\qFourBbbp$ against
 null~B and $q=0.4$ and $0.2$ against nulls C and D, and it is negligible
 against the chemistry-aware baseline below (partial correlation
-$-0.02$ given RDKit descriptors alone). The degree entropy on FreeSolv
+$-0.05$ given RDKit descriptors alone). The degree entropy on FreeSolv
 ($p=\pInfoFsv$ against null~B) is the only other pair below $0.05$
 on any null, and it is inside nulls C and D. (The
 empirical $p$-values use the $100$-tree statistic of the null runs;
@@ -659,7 +659,7 @@ and it does not reach $q<0.05$ over the $80$ pairs.}
 
 \paragraph{Against a chemistry-aware baseline.} A QSPR practitioner's
 baseline is not thirty topological indices but a standard descriptor
-set. So we repeated the screen with RDKit 2D descriptors (the $180$ of
+set. So we repeated the screen with RDKit 2D descriptors (the $217$ of
 Section~\ref{sec:ceiling}), on the curated data and with the hygiene
 of the benchmark: folds grouped by isomorphism class, with removal of
 non-finite, constant and collinear columns, scaling and penalty
@@ -667,22 +667,24 @@ selection all inside the training folds (Table~\ref{tab:chem}). Two
 baselines are informative. Given RDKit descriptors \emph{alone},
 \chemPassRdTotal{} candidate--dataset pairs pass the interval screen
 (\chemPassRdEsol{} on ESOL, \chemPassRdFsv{} on FreeSolv, none
-elsewhere). The passers are distance-based and eccentricity-based
-information indices, plus the two product controls; they carry signal
-that RDKit's descriptor set does not. Given RDKit descriptors
-\emph{and} the $30$ classical indices, \chemPassTotal{} pairs pass.
-The classical indices absorb that signal; we did not isolate which of
-them do so, but the passers are themselves distance- and
-eccentricity-based, like the classical Wiener, Harary and Estrada
-indices, and among the $30$ only the Mostar index on ESOL passes the
-same interval screen against RDKit alone. On ESOL and
+elsewhere). The passers are three information indices on ESOL
+(distance-, spectral- and eccentricity-based), the Estrada--Wiener
+product control on ESOL, and harmonic centrality on FreeSolv; they
+carry signal that RDKit's descriptor set does not. Given RDKit
+descriptors \emph{and} the $30$ classical indices, \chemPassTotal{}
+pairs pass. The classical indices absorb that signal. On FreeSolv the
+mechanism is explicit: harmonic centrality is twice the Harary index,
+and the Harary index is the one classical index that itself passes
+against RDKit alone. On ESOL we did not isolate which indices absorb
+it; the passers are distance-, spectral- and eccentricity-based, like
+the classical Wiener, Harary and Estrada indices. On ESOL and
 FreeSolv most verdicts become inconclusive at these sample sizes
 (\chemIncEsol{} and \chemIncFsv{} of $20$) rather than negligible. Out
 of sample the verdict does not change. Adding the $30$ indices and the
 $20$ candidates to the RDKit descriptors changes grouped
-cross-validated RMSE by at most $\chemCvGainMax$ (ESOL), makes
-Lipophilicity slightly worse ($+\chemCvLossLipo$), and changes BBBP's
-AUC by $\chemCvAucGain$. Two practical points follow. The classical
+cross-validated RMSE by between $-\chemCvGainMax$ and
+$+\chemCvLossMax$ across the three regression sets and BBBP's AUC by
+at most $\chemCvAucAbs$. Two practical points follow. The classical
 distance and spectral indices earn their place beside a
 chemistry-aware descriptor set only where they fill a gap in it. And a
 new topology-only index that passes against RDKit alone should still
@@ -783,15 +785,19 @@ one-sided tests (TOST)~\cite{Schuirmann1987TOST} against a margin of
 $5\%$ of the reference RMSE, or $0.05\,(\mathrm{AUC}_{\mathrm{ref}}-0.5)$
 for BBBP; the two one-sided tests at level $0.05$ correspond to the
 reported $90\%$ intervals. As a chemistry-aware reference we used a
-random forest on RDKit two-dimensional descriptors ($180$ of RDKit's
-$208$).\footnote{The remaining $28$ (EState- and VSA-EState-type
-descriptors, BalabanJ, BertzCT and Ipc) terminate the process under
-the RDKit~2022.09 / NumPy~2 combination used here and were excluded.
-Three of them are topological; their absence can only weaken the
-reference, which still leads by $0.37$--$2.18$ RMSE.}
+random forest on all $217$ two-dimensional descriptors of
+RDKit~2026.03.\footnote{An earlier version of this analysis, run under
+RDKit~2022.09 with NumPy~2, had to exclude $28$ EState-, VSA-EState-,
+Balaban-, Bertz- and Ipc-type descriptors that crashed under that
+combination. Rerunning with all $217$ descriptors changed the
+reference RMSE by at most $0.03$ (FreeSolv) and no verdict. The Ipc
+descriptor, which reaches $10^{41}$ on these molecules, is entered as
+$\log(1+\mathrm{Ipc})$; tree ensembles are invariant to this monotone
+transform, and the linear screens of Section~\ref{sec:nonbid} need
+it.}
 
 The chemistry-aware reference is far ahead of every topology-only
-model: by $0.81$ RMSE on ESOL, $2.18$ on FreeSolv, $0.37$ on
+model: by $0.81$ RMSE on ESOL, $2.14$ on FreeSolv, $0.37$ on
 Lipophilicity and $0.10$ AUC on BBBP. On ESOL and FreeSolv it exceeds,
 out of sample, the in-sample graph oracle of the topology-only
 representation. A second result concerns the counts. In a random
@@ -864,7 +870,7 @@ better served by it.
 \paragraph{What the target-aware screen adds.} For indices outside
 the BID class the question is empirical, and the answer depends on the
 baseline and on the uncertainty. Against RDKit descriptors alone,
-eight candidate--dataset pairs pass; against RDKit descriptors
+\chemPassRdTotal{} candidate--dataset pairs pass; against RDKit descriptors
 together with the classical indices, none does
 (Table~\ref{tab:chem}). Against the
 topological baseline, the point-estimate ``passers'' of an earlier
@@ -894,9 +900,8 @@ certificate itself was checked on thirteen; datasets with hypervalent
 or metal centres (HIV) leave $\Gc_4$ and require either a larger
 baseline or the counts $m_{ij}$ themselves, which the data-level rank
 check of Proposition~\ref{prop:cert} detects.
-\item The graph oracle is an in-sample bound for a given dataset; the
-RDKit reference omits $28$ descriptors for software reasons
-(footnote in Section~\ref{sec:ceiling}).
+\item The graph oracle is an in-sample bound for a given dataset, not
+a population quantity.
 \item The effect-size margin $\tau=0.10$ is a convention; we report
 intervals so that readers can apply their own.
 \item The non-linear check relies on random-forest residualization,
@@ -939,7 +944,7 @@ Correlation tables are not evidence of novelty.
 
 Code, curated-data scripts, results and figures are available at
 \url{https://github.com/Singati2/topological-index-orthogonality};
-the snapshot reported here is git tag \texttt{v2.2.1-paper2}. Datasets
+the snapshot reported here is git tag \texttt{v2.3-paper2}. Datasets
 are downloaded from the MoleculeNet distribution by
 \texttt{src/load\_data.py}. The analyses of this paper are produced
 by the following scripts in \texttt{scripts/}: \texttt{70} (certificate,
@@ -955,8 +960,14 @@ $\rho_{\mathrm{nl}}$), \texttt{84} (graph oracle), \texttt{81}
 (figures) and \texttt{75} (tables and the numerical macros used in the
 text); the one-function certificate is \texttt{src/certify.py}. The four datasets are included in \texttt{data/},
 verified byte-identical to the MoleculeNet distribution. All analyses
-used Python~3.11, RDKit~2022.09, scikit-learn~1.8 and NumPy~2.4 with
-the seeds recorded in each script ($20261005$ unless stated).
+used Python~3.11, scikit-learn~1.8 and NumPy~2.4 with the seeds
+recorded in each script ($20261005$ unless stated). The RDKit
+reference and the chemistry-aware screen (scripts \texttt{72},
+\texttt{79}, \texttt{82}) were run under RDKit~2026.03; the
+remaining analyses under RDKit~2022.09, whose parsing, canonical
+SMILES and hydrogen-suppressed graphs are identical to those of
+RDKit~2026.03 on these datasets (same curated sets, molecule for
+molecule).
 
 \section*{Acknowledgements}
 Funding sources and institutional support to be acknowledged in the

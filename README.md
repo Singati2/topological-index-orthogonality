@@ -94,10 +94,12 @@ pytest -q
 cd docs && pdflatex paper2_orthogonality_screening.tex   # main text + SI in one PDF (or tectonic)
 ```
 
-Results were produced with Python 3.11, RDKit 2022.09, scikit-learn 1.8 and
-NumPy 2.4. Under that RDKit/NumPy combination 28 RDKit EState/VSA-EState/
-Balaban/Bertz/Ipc descriptors cannot be computed and are excluded from the
-RDKit-2D reference (documented in `scripts/72_benchmark_v2.py`).
+Results were produced with Python 3.11, scikit-learn 1.8 and NumPy 2.4.
+The RDKit-2D reference and the chemistry-aware screens (scripts 72, 79, 82)
+use all 217 descriptors of RDKit 2026.03; the other analyses were run under
+RDKit 2022.09, which yields the same curated sets and graphs molecule for
+molecule. (RDKit 2022.09 with NumPy 2 crashes on 28 EState/VSA-EState/
+Balaban/Bertz/Ipc descriptors; use RDKit >= 2024 for scripts 72, 79, 82.)
 
 ## History
 

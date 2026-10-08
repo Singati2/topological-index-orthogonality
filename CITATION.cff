@@ -31,5 +31,5 @@ abstract: >-
   on four MoleculeNet benchmarks, a target-aware screen with intervals and a
   cross-fitted non-linear check for non-degree-based candidates, and a
   graph-collision information ceiling with a graph-grouped benchmark.
-version: "2.1.0"
+version: "2.3.0"
 date-released: "2026-10-05"

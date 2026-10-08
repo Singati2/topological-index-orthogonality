@@ -84,10 +84,10 @@ MIJ_COLS = [f"m{i}{j}" for i, j in MIJ_PAIRS]
 # Descriptors that segfault in this environment (rdkit 2022.09 compiled against
 # numpy 1.x, running under numpy 2.x: they call numpy-returning C routines such as
 # GetDistanceMatrix). Probed one by one; excluded from the ceiling and reported.
-RDKIT_EXCLUDED = {"MaxEStateIndex", "MinEStateIndex", "MaxAbsEStateIndex",
-                  "MinAbsEStateIndex", "BalabanJ", "BertzCT", "Ipc"}
-RDKIT_EXCLUDED |= {f"EState_VSA{i}" for i in range(1, 12)}
-RDKIT_EXCLUDED |= {f"VSA_EState{i}" for i in range(1, 11)}
+# v2.3: no descriptors are excluded.  Under RDKit 2022.09 with NumPy 2 the
+# 28 EState/VSA-EState/BalabanJ/BertzCT/Ipc descriptors crashed the process
+# and were excluded; with RDKit >= 2024 all descriptors evaluate.
+RDKIT_EXCLUDED: set[str] = set()
 RDKIT_DESC = [(n, f) for n, f in Descriptors.descList if n not in RDKIT_EXCLUDED]
 RDKIT_NAMES = [n for n, _ in RDKIT_DESC]
 
@@ -157,11 +157,20 @@ def mij_counts(G):
     return c
 
 
+# Ipc (Bonchev-Trinajstic information content) grows exponentially with
+# molecule size and reaches 1e31-1e41 on these datasets, which swamps the
+# double-precision linear algebra of the chemistry-aware screens (scripts
+# 79/82).  It is entered as log(1 + Ipc).  Tree ensembles are invariant to
+# this monotone transform, so the RDKit reference is unaffected.
+LOG_TRANSFORMED = {"Ipc"}
+
+
 def rdkit_desc(mol):
     out = []
-    for _, fn in RDKIT_DESC:
+    for name, fn in RDKIT_DESC:
         try:
-            out.append(float(fn(mol)))
+            v = float(fn(mol))
+            out.append(np.log1p(v) if name in LOG_TRANSFORMED and v >= 0 else v)
         except Exception:
             out.append(np.nan)
     return out
@@ -492,8 +501,7 @@ def main():
                  "filtering + median imputation) fit on the training fold only. Zero-feature "
                  "combined-pruned folds use an intercept-only model and are counted.\n")
         fh.write(f"- RDKit ceiling uses {len(RDKIT_NAMES)} of {len(Descriptors.descList)} "
-                 f"descriptors: {len(RDKIT_EXCLUDED)} EState/BalabanJ/BertzCT/Ipc descriptors "
-                 "segfault under the rdkit-2022.09/numpy-2 ABI mismatch and were excluded.\n")
+                 f"descriptors ({len(RDKIT_EXCLUDED)} excluded).\n")
         fh.write("- m_ij: edge counts by sorted end-vertex degree pair, degrees capped at 4.\n")
         fh.write("- Tests: Nadeau-Bengio corrected repeated k-fold t (variance factor "
                  "1/(k r) + n_test/n_train, df = k r - 1); 90% corrected CI; TOST margin = "

@@ -441,10 +441,12 @@ def numbers_macros():
         m("chemPassTotal", str(int(G.both_PASS.sum()))); m("chemPassRdTotal", str(int(G.rdkit_PASS.sum())))
         for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo"), ("bbbp", "Bbbp")]:
             m(f"chemPassRd{tag}", str(int(G.loc[d, "rdkit_PASS"]))); m(f"chemInc{tag}", str(int(G.loc[d, "both_INCONCLUSIVE"])))
-        deltas = [cv[(d, "rdkit")] - min(cv[(d, "rdkit+topo")], cv[(d, "rdkit+topo+cands")]) for d in ("esol", "freesolv", "lipophilicity")]
-        m("chemCvGainMax", f"{max(deltas):.3f}")
-        m("chemCvAucGain", f"{max(cv[('bbbp','rdkit+topo')], cv[('bbbp','rdkit+topo+cands')]) - cv[('bbbp','rdkit')]:.3f}")
-        m("chemCvLossLipo", f"{cv[('lipophilicity','rdkit+topo')] - cv[('lipophilicity','rdkit')]:.3f}")
+        reg = ("esol", "freesolv", "lipophilicity")
+        gains = [cv[(d, "rdkit")] - min(cv[(d, "rdkit+topo")], cv[(d, "rdkit+topo+cands")]) for d in reg]
+        losses = [max(cv[(d, "rdkit+topo")], cv[(d, "rdkit+topo+cands")]) - cv[(d, "rdkit")] for d in reg]
+        m("chemCvGainMax", f"{max(0.0, max(gains)):.3f}")      # largest RMSE improvement over any regression set
+        m("chemCvLossMax", f"{max(0.0, max(losses)):.3f}")     # largest RMSE deterioration over any regression set
+        m("chemCvAucAbs", f"{max(abs(cv[('bbbp', k)] - cv[('bbbp', 'rdkit')]) for k in ('rdkit+topo', 'rdkit+topo+cands')):.3f}")
     open(os.path.join(OUT, "numbers.tex"), "w").write("\n".join(L) + "\n")
 
 
