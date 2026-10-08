@@ -1,0 +1,17 @@
+dataset,feature_set,n,n_groups,metric,value
+esol,rdkit,1115,628,rmse,0.7071631707955726
+esol,rdkit+topo,1115,628,rmse,0.6984742585227444
+esol,rdkit+topo+cands,1115,628,rmse,0.6931486777090943
+esol,topo,1115,628,rmse,1.5721071963204902
+freesolv,rdkit,639,236,rmse,1.065060990951204
+freesolv,rdkit+topo,639,236,rmse,1.05802482707034
+freesolv,rdkit+topo+cands,639,236,rmse,1.0618650176474291
+freesolv,topo,639,236,rmse,3.5980687532380156
+lipophilicity,rdkit,4200,3472,rmse,0.8239802379976215
+lipophilicity,rdkit+topo,4200,3472,rmse,0.8328821693511326
+lipophilicity,rdkit+topo+cands,4200,3472,rmse,0.8325492892301213
+lipophilicity,topo,4200,3472,rmse,1.1345764469821533
+bbbp,rdkit,1955,1693,auc,0.9030242444833563
+bbbp,rdkit+topo,1955,1693,auc,0.9023636120766508
+bbbp,rdkit+topo+cands,1955,1693,auc,0.9046823592272198
+bbbp,topo,1955,1693,auc,0.8112594993132327

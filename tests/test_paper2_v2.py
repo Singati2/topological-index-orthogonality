@@ -118,7 +118,7 @@ def test_census_in_span_and_controls_not():
     assert bid.rel_resid_on_baseline30.max() < 1e-10
     ctrl = v[v.family == "non-BID control"]
     assert (~ctrl.in_span).all() and ctrl.rel_resid_on_baseline30.min() > 1e-4
-    assert v[v.family == "published BID"]["index"].nunique() == 15
+    assert v[v.family == "published BID"]["index"].nunique() >= 18
 
 
 def test_loyola_grid_pcor_exactly_zero():
@@ -219,3 +219,13 @@ def test_graph_oracle_floor_consistent_with_curation():
         # in-sample group-mean RMSE equals sqrt(SS_within / N) reported by scripts/72
         assert o.loc[d, "oracle_in_sample_rmse"] == pytest.approx(
             cur.loc[d, "graph_only_rmse_floor(sqrt SSwithin/N)"], rel=1e-3)
+
+
+def test_generic_subset_count_and_oracle_script_consistency():
+    g = _csv("bid_generic_subsets.csv").iloc[0]
+    assert int(g.total_subsets) == 43758 and 37000 <= int(g.full_rank_subsets) <= 37400
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("s84", os.path.join(PROJECT, "scripts", "84_graph_oracle_floor.py"))
+    assert os.path.exists(spec.origin)
+    o = _csv("graph_oracle_floor.csv").set_index("dataset")
+    assert 0.5 < o.loc["freesolv", "oracle_in_sample_r2"] < 0.6

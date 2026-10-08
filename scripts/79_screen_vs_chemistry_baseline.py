@@ -76,20 +76,24 @@ def pcor_row(z, X, y):
     return c["pcor"], lo, hi, c["rel_resid"], verdict(c, lo, hi)
 
 
-def drop_collinear(X, names, rtol=1e-9):
-    """Greedy QR-style removal of columns that are (numerically) linear
-    combinations of the columns kept before them.  Returns kept indices."""
+def drop_collinear(X, names, rtol=1e-8):
+    """Greedy removal of columns that are (numerically) linear combinations of
+    the columns kept before them.  Each candidate column is regressed on the
+    kept block with a rank-revealing least-squares solve (stable, unlike a
+    single-pass Gram-Schmidt); it is dropped when its relative residual
+    ||r|| / ||x - mean(x)|| is below ``rtol``.  Returns kept indices."""
     Xc = X - X.mean(0)
     norms = np.linalg.norm(Xc, axis=0)
-    keep, Q = [], np.zeros((X.shape[0], 0))
+    keep = []
     for j in range(X.shape[1]):
         if norms[j] == 0:
             continue
-        v = Xc[:, j] / norms[j]
-        r = v - Q @ (Q.T @ v)
-        if np.linalg.norm(r) > rtol:
+        if not keep:
+            keep.append(j); continue
+        A = np.column_stack([np.ones(X.shape[0]), Xc[:, keep]])
+        beta, *_ = np.linalg.lstsq(A, Xc[:, j], rcond=None)
+        if np.linalg.norm(Xc[:, j] - A @ beta) / norms[j] > rtol:
             keep.append(j)
-            Q = np.column_stack([Q, r / np.linalg.norm(r)])
     return keep
 
 

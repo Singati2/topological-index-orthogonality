@@ -85,6 +85,9 @@ python scripts/77_isomorphism_and_r2_bound.py         # exact isomorphism of gra
 python scripts/78_certificate_generality.py           # certificate on 13 MoleculeNet datasets (~15 min; downloads 9 files)
 python scripts/79_screen_vs_chemistry_baseline.py     # screen against RDKit-2D + topology baseline (~10 min)
 python scripts/80_nonlinear_noise_floor.py            # null distribution of rho_nl (~30 min)
+python scripts/82_screen_vs_chemistry_grouped.py       # chemistry-aware screen, curated + graph-grouped (~30 min)
+python scripts/83_nonlinear_null_functions.py         # non-linear in-span nulls C/D for rho_nl (~40 min)
+python scripts/84_graph_oracle_floor.py               # graph-oracle floors
 python scripts/81_make_figures.py                     # figures
 python scripts/75_make_v2_tables.py                   # LaTeX tables and numerical macros from results/
 pytest -q

@@ -125,7 +125,7 @@ def nonbid_table():
                    f"${r.rho_nl:+.3f}$ $[{r.ci_lo:+.3f},{r.ci_hi:+.3f}]$\\\\")
     refs = n[n.candidate.str.startswith("REF")]
     rng = lambda key: (refs[refs.candidate == key].rho_nl.min(), refs[refs.candidate == key].rho_nl.max())
-    a, b = rng("REF_invNirmala"); c1, c2 = rng("REF_noise"); l1, l2 = rng("REF_leak")
+    a, b = rng("REF_SCI_inspan"); c1, c2 = rng("REF_noise"); l1, l2 = rng("REF_leak")
     tex = r"""\begin{table}[h]
 \centering
 \small
@@ -225,13 +225,14 @@ def bench_table():
                 cells.append("--"); continue
             r = r.iloc[0]
             eq = "eq." if r.tost_verdict == "equivalent" else ""
-            cells.append(f"${r.mean_diff:+.3f}$ $[{r.ci90_lo:+.3f},{r.ci90_hi:+.3f}]$ {eq}")
+            ph = "<0.001" if r.p_holm < 0.001 else f"{r.p_holm:.3f}"
+            cells.append(f"${r.mean_diff:+.3f}$ $[{r.ci90_lo:+.3f},{r.ci90_hi:+.3f}]$ {eq} ($p_H$={ph})")
         trows.append(lab + " & " + " & ".join(cells) + "\\\\")
     nint = int(sm[(sm.dataset == "lipophilicity") & (sm.model == "c_combined_lasso")].n_intercept_only_folds.iloc[0])
     tex = r"""\begin{table}[h]
 \centering
 \footnotesize
-\caption{Downstream benchmark on the curated data: $5\\times5$ repeated cross-validation with folds grouped by graph, all preprocessing and selection inside the training folds. Top: mean RMSE (ESOL, FreeSolv, Lipophilicity) or ROC-AUC (BBBP), with the mean number of active features in parentheses. Bottom: mean paired difference (model minus reference; lower RMSE and higher AUC are better) with Nadeau--Bengio corrected $90\\%$ intervals; ``eq.'' marks equivalence (TOST) within $5\\%$ of the reference RMSE or $5\\%$ of the reference AUC above $0.5$.""" + f" $^{{\\ast}}$On Lipophilicity the combined screen kept no feature in {nint} of 25 folds (intercept-only model)." + r"""}
+\caption{Downstream benchmark on the curated data: $5\\times5$ repeated cross-validation with folds grouped by graph, all preprocessing and selection inside the training folds. Top: mean RMSE (ESOL, FreeSolv, Lipophilicity) or ROC-AUC (BBBP), with the mean number of active features in parentheses. Bottom: mean paired difference (model minus reference; lower RMSE and higher AUC are better) with Nadeau--Bengio corrected $90\\%$ intervals; ``eq.'' marks equivalence (TOST) within $5\\%$ of the reference RMSE or $5\\%$ of the reference AUC above $0.5$; $p_H$ is the Holm-adjusted $p$-value of the corrected paired $t$-test within the dataset (equivalence and a nonzero difference can both hold).""" + f" $^{{\\ast}}$On Lipophilicity the combined screen kept no feature in {nint} of 25 folds (intercept-only model)." + r"""}
 \label{tab:bench}
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{lcccc}
@@ -274,7 +275,7 @@ def fb_table():
     head = " & ".join(f"$({i},{j})$" for i, j in cert.P4)
     rows = []
     for k, name in enumerate(cert.BID18):
-        vals = " & ".join(("$0$" if abs(x) < 1e-12 else f"${x:.3g}$") for x in F[k])
+        vals = " & ".join(("$0$" if abs(x) < 1e-12 else f"${x:.4g}$") for x in F[k])
         rows.append(f"{LABEL.get(name, name)} & ${FORMULAS[name]}$ & {vals}\\\\")
     sv = np.linalg.svd(F, compute_uv=False)
     tex = r"""\begin{table}[h]
@@ -298,28 +299,32 @@ Index & $f(a,b)$ & """ + head + r"""\\\\
 
 
 def chem_table():
-    S = pd.read_csv(os.path.join(R, "screen_vs_chemistry_summary.csv")).set_index("dataset")
-    T = pd.read_csv(os.path.join(R, "screen_vs_chemistry_topo30.csv"))
+    """Chemistry-aware screen (scripts/82: curated data, graph-grouped folds, in-fold
+    column cleaning); verdict counts against RDKit alone and RDKit + topology."""
+    sp = os.path.join(R, "screen_vs_chemistry_grouped_summary.csv")
+    if not os.path.exists(sp):
+        return
+    S = pd.read_csv(sp).set_index("dataset")
+    CV = pd.read_csv(os.path.join(R, "screen_vs_chemistry_grouped_cv.csv"))
+    cv = {(r.dataset, r.feature_set): r.value for r in CV.itertuples()}
     rows = []
     for d in DS:
         r = S.loc[d]
-        metric = "AUC" if d == "bbbp" else "RMSE"
-        rows.append(f"{NICE[d]} & ${int(r.n_rdkit_cols)}$ & ${int(r.n_both_cols)}$ & "
-                    f"${r.r2_rdkit:.3f}$ & ${r.r2_rdkit_topo:.3f}$ & ${r.r2_rdkit_topo_cands:.3f}$ & "
-                    f"${r.cv_rdkit:.3f}$ & ${r.cv_rdkit_topo:.3f}$ & ${r.cv_rdkit_topo_cands:.3f}$ & "
-                    f"${int(r.cand_pass_both)}$ / ${int(r.cand_inconclusive_both)}$ / ${int(r.cand_negligible_both)}$ & "
-                    f"${int(r.topo_pass_given_rdkit)}$\\\\")
+        rows.append(f"{NICE[d]} & ${int(r.n)}$ & ${int(r.n_groups)}$ & ${int(r.n_rdkit)}$ & ${int(r.n_both)}$ & "
+                    f"${cv[(d,'topo')]:.3f}$ & ${cv[(d,'rdkit')]:.3f}$ & ${cv[(d,'rdkit+topo')]:.3f}$ & ${cv[(d,'rdkit+topo+cands')]:.3f}$ & "
+                    f"${int(r.rdkit_PASS)}$ / ${int(r.rdkit_INCONCLUSIVE)}$ / ${int(r.rdkit_NEGLIGIBLE)}$ & "
+                    f"${int(r.both_PASS)}$ / ${int(r.both_INCONCLUSIVE)}$ / ${int(r.both_NEGLIGIBLE)}$\\\\")
     tex = r"""\begin{table}[h]
 \centering
 \footnotesize
-\caption{The target-aware screen against a chemistry-aware baseline. $p_{\\mathrm{RD}}$: RDKit 2D descriptors retained (finite, non-constant, not collinear); $p_{\\mathrm{both}}$: columns of the union with the $30$ topological indices after removing exact collinearity (none of the $30$ was collinear with the RDKit block). $R^2$: in-sample OLS. CV: $5$-fold cross-validated RMSE (ridge, penalty by inner CV) or ROC-AUC (BBBP, $\\ell_2$-logistic). Candidates: interval verdicts given the union baseline (pass / inconclusive / negligible; the remaining candidate is in span). Last column: number of the $30$ topological indices whose interval for $|\\pcor|$ given the RDKit block lies above $0.10$.}
+\caption{The target-aware screen against a chemistry-aware baseline, on the curated data. $n$: molecules; groups: isomorphism classes; $p_{\\mathrm{RD}}$, $p_{\\mathrm{both}}$: RDKit 2D columns, and columns of the union with the $30$ topological indices, after removing non-finite, constant and collinear columns on the full sample (the $18$ degree-based indices contribute ten independent columns). CV: $5$-fold cross-validation grouped by isomorphism class, column cleaning, scaling and penalty selection inside the training folds; RMSE for the regression sets (ridge), ROC-AUC for BBBP ($\\ell_2$-logistic). Candidates: interval verdicts (pass / inconclusive / negligible; the remaining candidate is in span) given RDKit alone and given the union.}
 \label{tab:chem}
 \setlength{\\tabcolsep}{3pt}
 \resizebox{\\textwidth}{!}{%
-\begin{tabular}{lrrccccccccc}
+\begin{tabular}{lrrrrcccccc}
 \toprule
- & & & \\multicolumn{3}{c}{in-sample $R^2$} & \\multicolumn{3}{c}{CV RMSE / AUC} & candidates & topo.\\\\
-Dataset & $p_{\\mathrm{RD}}$ & $p_{\\mathrm{both}}$ & RD & RD+topo & RD+topo+cand & RD & RD+topo & RD+topo+cand & pass/inc./negl. & beyond RD\\\\
+ & & & & & \\multicolumn{4}{c}{grouped CV RMSE / AUC} & \\multicolumn{2}{c}{candidates pass/inc./negl.}\\\\
+Dataset & $n$ & groups & $p_{\\mathrm{RD}}$ & $p_{\\mathrm{both}}$ & topo & RD & RD+topo & RD+topo+cand & given RD & given RD+topo\\\\
 \midrule
 """ + "\n".join(rows) + r"""
 \bottomrule
@@ -327,7 +332,7 @@ Dataset & $p_{\\mathrm{RD}}$ & $p_{\\mathrm{both}}$ & RD & RD+topo & RD+topo+can
 \end{table}
 """
     tex = tex.replace("\\\\\\\\", "\\\\")
-    for a in ["mathrm", "ell", "multicolumn", "tabcolsep", "textwidth", "pcor"]:
+    for a in ["mathrm", "ell", "multicolumn", "tabcolsep", "textwidth"]:
         tex = tex.replace("\\\\" + a, "\\" + a)
     open(os.path.join(OUT, "chem.tex"), "w").write(tex)
 
@@ -378,11 +383,29 @@ def numbers_macros():
         m(f"oracleRmse{tag}", f"{o.loc[d, 'oracle_in_sample_rmse']:.2f}")
         m(f"oracleRsq{tag}", f"{o.loc[d, 'oracle_in_sample_r2']:.2f}")
         m(f"looRmse{tag}", f"{o.loc[d, 'oracle_loo_rmse']:.2f}")
-    m("oracleAucBbbp", f"{o.loc['bbbp', 'oracle_in_sample']:.3f}"); m("looAucBbbp", f"{o.loc['bbbp', 'oracle_loo']:.2f}")
+    m("oracleAucBbbp", f"{o.loc['bbbp', 'oracle_in_sample']:.3f}")
     sm = pd.read_csv(os.path.join(R, "benchmark_v2_summary.csv")); cur = pd.read_csv(os.path.join(R, "benchmark_v2_curation.csv")).set_index("dataset")
     for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo")]:
         rd = sm[(sm.dataset == d) & (sm.model == "f_rdkit2d_rf")]["mean"].iloc[0]
         m(f"rdkitRsq{tag}", f"{1 - (rd / cur.loc[d, 'overall_target_sd']) ** 2:.2f}")
+    v = pd.read_csv(os.path.join(R, "bid_variant_screen.csv")); pb = v[v.family == "published BID"]
+    inst = pb["index"].unique(); base = {k.split(" (")[0].split(", p=")[0].split("_lambda")[0] for k in inst}
+    m("nCensusInst", str(len(inst))); m("nCensusIdx", str(len(base)))
+    m("nSomborInst", str(sum(1 for k in inst if "Sombor" in k or "SO" in k.split(" (")[0])))
+    gs = pd.read_csv(os.path.join(R, "bid_generic_subsets.csv")).iloc[0]
+    m("nGenericSubsets", f"{int(gs.full_rank_subsets):,}".replace(",", "\\,")); m("nAllSubsets", f"{int(gs.total_subsets):,}".replace(",", "\\,"))
+    cp = os.path.join(R, "nonlinear_nullC_summary.csv")
+    if os.path.exists(cp):
+        c3 = pd.read_csv(cp)
+        for nl, tag in [("C_nonlinear_inspan", "C"), ("D_entropy_type", "D")]:
+            for d, dt in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo"), ("bbbp", "Bbbp")]:
+                rr = c3[(c3.null == nl) & (c3.dataset == d)]
+                if len(rr): m(f"null{tag}{dt}", f"{rr.p99_abs.iloc[0]:.2f}")
+            m(f"nullK{tag}", str(int(c3[c3.null == nl].K.iloc[0])))
+        cc = pd.read_csv(os.path.join(R, "nonlinear_nullC_candidates.csv"))
+        for d, k, tag in [("esol", "InfoH_deg", "InfoEsol"), ("bbbp", "FourCyc", "FourBbbp")]:
+            rr = cc[(cc.dataset == d) & (cc.candidate == k)]
+            if len(rr): m("pC" + tag, f"{rr.p_emp_nullC.iloc[0]:.3f}"); m("pD" + tag, f"{rr.p_emp_nullD.iloc[0]:.3f}")
     g = pd.read_csv(os.path.join(R, "certificate_generality.csv"))
     m("nGenDatasets", str(len(g))); m("nGenCertified", str(int(g.certificate_holds.sum())))
     m("nGenMolecules", f"{int(g.n_graphs.sum()):,}".replace(",", "\\,"))
@@ -395,7 +418,6 @@ def numbers_macros():
     fp = os.path.join(R, "nonlinear_noise_floor_summary.csv")
     if os.path.exists(fp):
         s = pd.read_csv(fp); b = s[s.null == "B_inspan"]; a = s[s.null == "A_noise"]
-        m("nullBandB", f"{b.p99_abs.max():.3f}"); m("nullBandA", f"{a.p99_abs.max():.3f}")
         m("nullKB", str(int(b.K.iloc[0]))); m("nullKA", str(int(a.K.iloc[0])))
         m("nullPmin", f"{1.0 / (int(b.K.iloc[0]) + 1):.3f}")
         for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo"), ("bbbp", "Bbbp")]:
@@ -406,10 +428,20 @@ def numbers_macros():
             rr = c[(c.dataset == d) & (c.candidate == k)]
             if len(rr):
                 m("q" + tag, f"{rr.q_bh.iloc[0]:.2f}"); m("p" + tag, f"{rr.p_emp_nullB.iloc[0]:.3f}")
-        m("nullExceedAll", str(int((c.p_emp_nullB <= 1.0 / (int(b.K.iloc[0]) + 1) + 1e-12).sum())))
+
     S = pd.read_csv(os.path.join(R, "screen_vs_chemistry_summary.csv")).set_index("dataset")
-    m("chemPassTotal", str(int(S.cand_pass_both.sum()))); m("chemTopoBeyond", str(int(S.topo_pass_given_rdkit.sum())))
-    m("chemCvGainMax", f"{(S.cv_rdkit - S.cv_rdkit_topo_cands)[['esol','freesolv','lipophilicity']].max():.3f}")
+    m("chemTopoBeyond", str(int(S.topo_pass_given_rdkit.sum())))
+    gp = os.path.join(R, "screen_vs_chemistry_grouped_summary.csv")
+    if os.path.exists(gp):
+        G = pd.read_csv(gp).set_index("dataset"); CV = pd.read_csv(os.path.join(R, "screen_vs_chemistry_grouped_cv.csv"))
+        cv = {(r.dataset, r.feature_set): r.value for r in CV.itertuples()}
+        m("chemPassTotal", str(int(G.both_PASS.sum()))); m("chemPassRdTotal", str(int(G.rdkit_PASS.sum())))
+        for d, tag in [("esol", "Esol"), ("freesolv", "Fsv"), ("lipophilicity", "Lipo"), ("bbbp", "Bbbp")]:
+            m(f"chemPassRd{tag}", str(int(G.loc[d, "rdkit_PASS"]))); m(f"chemInc{tag}", str(int(G.loc[d, "both_INCONCLUSIVE"])))
+        deltas = [cv[(d, "rdkit")] - min(cv[(d, "rdkit+topo")], cv[(d, "rdkit+topo+cands")]) for d in ("esol", "freesolv", "lipophilicity")]
+        m("chemCvGainMax", f"{max(deltas):.3f}")
+        m("chemCvAucGain", f"{max(cv[('bbbp','rdkit+topo')], cv[('bbbp','rdkit+topo+cands')]) - cv[('bbbp','rdkit')]:.3f}")
+        m("chemCvLossLipo", f"{cv[('lipophilicity','rdkit+topo')] - cv[('lipophilicity','rdkit')]:.3f}")
     open(os.path.join(OUT, "numbers.tex"), "w").write("\n".join(L) + "\n")
 
 

@@ -67,6 +67,10 @@ VARIANTS = {
     # KG-Sombor summed over vertex-edge incidences, edge degree d_e = a + b - 2
     "KG-SO (KG-Sombor)":            lambda a, b: (math.sqrt(a * a + (a + b - 2) ** 2)
                                                   + math.sqrt(b * b + (a + b - 2) ** 2)),
+    # 2025-2026 Sombor-type variants
+    "ASO (augmented Sombor)":       lambda a, b: math.sqrt((a * a + b * b) / (a + b - 2)) if a + b > 2 else 0.0,
+    "CoRSO_60 (cosine-rule Sombor, theta=60)":  lambda a, b: math.sqrt(a * a + b * b - a * b),
+    "EU_lambda=1/2 (variable Euler-Sombor)":    lambda a, b: math.sqrt(a * a + b * b + 0.5 * a * b),
     # other degree-based indices
     "ISI (inverse sum indeg)":      lambda a, b: a * b / (a + b),
     "SDD (symm. division deg)":     lambda a, b: a / b + b / a,
@@ -148,9 +152,23 @@ def universal_identities():
     return rank, float(sv[-1] / sv[0]), pd.DataFrame(rows)
 
 
+def generic_subsets(tol=1e-9):
+    """How many 10-element subsets of the 18 baseline indices have full rank 10 on P4,
+    at the relative tolerance used for all numerical ranks in the paper."""
+    from itertools import combinations
+    FB = f_matrix(BID18); total = full = 0
+    for c in combinations(range(18), 10):
+        sv = np.linalg.svd(FB[list(c)], compute_uv=False)
+        full += int((sv > sv[0] * tol).sum() == 10); total += 1
+    return full, total
+
+
 def main():
     cert_rows, var_rows, lines = [], [], []
     rank_FB, cond_FB, coef = universal_identities()
+    gfull, gtot = generic_subsets()
+    pd.DataFrame([dict(tolerance=1e-9, full_rank_subsets=gfull, total_subsets=gtot)]).to_csv(
+        os.path.join(RES, "bid_generic_subsets.csv"), index=False)
     coef.to_csv(os.path.join(RES, "bid_universal_identities.csv"), index=False)
     lines.append(f"Data-free certificate: rank of the 18 x 10 f-matrix of the BID baseline over P4 = {rank_FB} "
                  f"(sigma_min/sigma_max = {cond_FB:.2e}); hence every BID index is an exact linear combination "

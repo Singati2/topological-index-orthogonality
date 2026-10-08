@@ -1,0 +1,5 @@
+dataset,n,n_groups,n_rdkit,n_both,rdkit_PASS,rdkit_INCONCLUSIVE,rdkit_NEGLIGIBLE,rdkit_IN_SPAN,both_PASS,both_INCONCLUSIVE,both_NEGLIGIBLE,both_IN_SPAN
+esol,1115,628,149,168,7,8,5,0,0,12,7,1
+freesolv,639,236,133,151,1,17,2,0,0,18,1,1
+lipophilicity,4200,3472,146,164,0,1,19,0,0,3,16,1
+bbbp,1955,1693,164,183,0,6,14,0,0,1,18,1

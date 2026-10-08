@@ -117,6 +117,7 @@ def main():
         r["orig_ci_verdict"] = r["candidate"].map(orig["pcor_ci_verdict"])
         out.append(r)
         changed = r[(r.pairwise != r.orig_pairwise) | (r.ci_verdict != r.orig_ci_verdict)]
+        info["n_screened"] = int(r.n.iloc[0]) if len(r) else None
         lines.append(f"{name}: {info}; max |pcor change| = "
                      f"{(r.pcor - r.orig_pcor).abs().max():.4f}; verdict changes: "
                      + (", ".join(f"{c} {a}->{b}" for c, a, b in

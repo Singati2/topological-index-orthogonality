@@ -86,9 +86,10 @@ None of these twenty candidates is claimed as a newly invented
 index. The information-theoretic family follows the information-theoretic descriptor tradition~\cite{TodeschiniConsonniHandbook};
 the centrality family follows the standard graph-theory
 literature; the motif and eccentricity families are textbook
-graph invariants; the spectral-hybrid combinations are
-deliberately constructed novel pairings to test whether
-non-standard product indices escape the redundancy ceiling. They
+graph invariants; the two spectral-hybrid product indices
+($\mathrm{Rho}\times\mathrm{Dia}$ and $\mathrm{EE}\times\mathrm{W}$) are
+constructed here as controls, to test whether product indices escape
+the redundancy ceiling; they are not proposed as descriptors. They
 appear here purely as screening targets to test the generality
 of the target-aware screen, and the
 verdict reported in Section~\ref{sec:nonbid} is a statement about
@@ -126,6 +127,8 @@ diagnostic and not a feature selector: on Lipophilicity it removes every
 feature in $24$ of $25$ folds.
 
 \section{Datasets used for the generality check}\label{sup:data}
+\input{tables_v2/general.tex}
+
 The nine additional MoleculeNet files (BACE, ClinTox, SIDER, Tox21,
 ToxCast, HIV, MUV, QM8, QM9) are downloaded from the DeepChem mirror by
 script \texttt{78} of the repository; their SHA-256 digests are recorded

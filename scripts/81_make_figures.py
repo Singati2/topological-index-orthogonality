@@ -7,7 +7,7 @@ fig1  (a) conventional pairwise screen (max |r| with the 30-index baseline)
       (b) forest plot of the candidate-dataset pairs of Table nonbid: linear
           partial correlation (hollow) and non-linear rho_nl (filled) with 95%
           intervals, the null band from results/nonlinear_noise_floor_summary.csv
-          (99.5th percentile of |rho_nl| under the in-span null) if present.
+          (99th percentile of |rho_nl| under the in-span null) if present.
 fig2  information ceiling: per dataset, overall target SD, in-sample
           graph-oracle RMSE, best topology-only model, RDKit-2D reference.
 """
@@ -33,7 +33,8 @@ plt.rcParams.update({"font.size": 8.5, "axes.spines.top": False, "axes.spines.ri
 def fig1():
     v = pd.read_csv(os.path.join(R, "bid_variant_screen.csv"))
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.5), gridspec_kw={"width_ratios": [1, 1.25]})
-    style = {"published BID": ("o", "tab:blue", "published BID index (15)"),
+    npub = v[v.family == "published BID"]["index"].nunique()
+    style = {"published BID": ("o", "tab:blue", f"published BID index ({npub})"),
              "Loyola grid": (".", "tab:gray", "Loyola grid (100 points)"),
              "non-BID control": ("s", "tab:red", "non-BID control (2)")}
     for fam, (mk, col, lab) in style.items():
@@ -41,7 +42,7 @@ def fig1():
         a.scatter(s.max_abs_r_baseline30, np.log10(s.rel_resid_on_baseline30.clip(lower=1e-16)),
                   marker=mk, s=14 if fam != "Loyola grid" else 8, c=col, alpha=0.75, label=lab, linewidths=0)
     a.axvline(0.95, ls=":", c="k", lw=0.8); a.axhline(-8, ls="--", c="k", lw=0.8)
-    a.text(0.9515, -10.5, "pairwise threshold", fontsize=6.5, rotation=90, va="top")
+    a.text(0.9515, -9.0, "pairwise threshold", fontsize=6.5, rotation=90, va="top")
     a.text(0.893, -8.5, "certificate tolerance", fontsize=6.5, va="top")
     a.set_xlabel(r"max $|r|$ with the 30-index baseline (pairwise screen)")
     a.set_ylabel(r"$\log_{10}$ relative residual on baseline (certificate)")
@@ -58,8 +59,11 @@ def fig1():
     fp = os.path.join(R, "nonlinear_noise_floor_summary.csv")
     if os.path.exists(fp):
         s = pd.read_csv(fp); band = float(s[s.null == "B_inspan"].p99_abs.max())
+        cp = os.path.join(R, "nonlinear_nullC_summary.csv")
+        if os.path.exists(cp):
+            c3 = pd.read_csv(cp); band = max(band, float(c3.p99_abs.max()))
     y = np.arange(len(sel))[::-1]
-    b.axvspan(-band, band, color="0.9", lw=0, label=f"in-span null band (±{band:.3f})")
+    b.axvspan(-band, band, color="0.9", lw=0, label=f"widest null band (±{band:.3f})")
     b.axvline(0, c="k", lw=0.6)
     b.errorbar(sel.partial_corr_target, y + 0.18, xerr=[sel.partial_corr_target - sel.pcor_ci_lo, sel.pcor_ci_hi - sel.partial_corr_target],
                fmt="o", mfc="white", mec="tab:blue", ecolor="tab:blue", ms=4, lw=1, label="linear pcor (OLS residuals)")
@@ -70,7 +74,7 @@ def fig1():
     b.legend(frameon=False, fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, -0.17), ncol=3); b.set_title("(b) non-BID candidates: linear vs non-linear", fontsize=9, loc="left")
     fig.tight_layout()
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, f"fig1_certificate_and_screen.{ext}"), dpi=300)
+        fig.savefig(os.path.join(OUT, f"fig1_certificate_and_screen.{ext}"), dpi=300, bbox_inches="tight")
 
 
 def fig2():
@@ -93,10 +97,10 @@ def fig2():
         for i, v in enumerate(vals):
             ax.text(i, v, f"{v:.2f}", ha="center", va="bottom", fontsize=7)
         ax.set_xticks(range(len(vals))); ax.set_xticklabels([l.replace("\n", " ") for l in labs], fontsize=6, rotation=30, ha="right")
-        ax.set_title(f"{NICE[d]}\n{cur.loc[d, 'pct_mols_graph_shared']:.0f}% of molecules share a graph", fontsize=7.5)
+        ax.set_title(f"{NICE[d]}\n{cur.loc[d, 'pct_mols_graph_shared']:.0f}% share a graph", fontsize=7.5)
     fig.tight_layout()
     for ext in ("pdf", "png"):
-        fig.savefig(os.path.join(OUT, f"fig2_information_ceiling.{ext}"), dpi=300)
+        fig.savefig(os.path.join(OUT, f"fig2_information_ceiling.{ext}"), dpi=300, bbox_inches="tight")
 
 
 if __name__ == "__main__":

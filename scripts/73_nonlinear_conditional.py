@@ -17,7 +17,7 @@ Method (double-ML / cross-fitted residualization):
     datasets with n > 2000 are subsampled to 2000 molecules (fixed seed);
     rho_nl uses all molecules.
   * linear_pcor: OLS residualization of y and z on [1, X] (in-sample), Pearson.
-  * Reference cases: REF_invNirmala (sum over edges 1/sqrt(du+dv); certified
+  * Reference cases: REF_SCI_inspan (sum over edges 1/sqrt(du+dv); certified
     exactly in span([1,X]) by scripts/70), REF_noise (N(0,1) column),
     REF_leak (z = y + N(0, sd(y))).
   * BH adjustment of perm_p across all real candidates x datasets
@@ -162,7 +162,7 @@ def run_dataset(name):
                 vals.append(float("nan"))
         cands[cname] = impute(vals)
     rng_ref = np.random.default_rng(SEED)
-    cands["REF_invNirmala"] = impute([inverse_nirmala(G) for G in graphs])
+    cands["REF_SCI_inspan"] = impute([inverse_nirmala(G) for G in graphs])
     cands["REF_noise"] = rng_ref.standard_normal(n)
     cands["REF_leak"] = y + rng_ref.normal(0.0, y.std(), n)
 
@@ -226,7 +226,7 @@ def main():
          f"{DCOR_MAX_N} molecules with a fixed seed**; rho_nl uses all molecules.",
          "- linear_pcor = Pearson of OLS residuals of y and z on [1, X] (in-sample).",
          "- BH adjustment across all real candidates x datasets (reference rows excluded from the family).",
-         "- Reference rows: REF_invNirmala (sum 1/sqrt(du+dv); exactly in linear span of X), "
+         "- Reference rows: REF_SCI_inspan (sum 1/sqrt(du+dv); exactly in linear span of X), "
          "REF_noise (N(0,1) column; calibration), REF_leak (z = y + N(0, sd(y)); positive control).\n",
          "Caveat: a candidate's non-linear residual rz is exactly zero only if the RF reproduces z perfectly; "
          "RF cannot extrapolate/represent exact linear identities, so an in-span index has rz != 0 "
